@@ -1,4 +1,4 @@
-var settings      = require('./../config'),
+var settings      = require('./../settings'),
     couchOpts   = settings.config.couchOptions,
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),

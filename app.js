@@ -9,7 +9,7 @@
  */
 
 var express     = require('express'),
-    settings      = require('./config'),
+    settings      = require('./settings'),
     redisOpts   = settings.config.redisOptions,
     couchOpts   = settings.config.couchOptions,
     RedisStore  = require('connect-redis')(express),
@@ -24,7 +24,9 @@ var express     = require('express'),
     User        = require('./models/user'),
     CoordelApp  = require('./models/coordelapp'),
     nls         = require('i18n'),
-    passHash    = require('password-hash');
+    passHash    = require('password-hash'),
+    loggly      = require('loggly'),
+    log         = loggly.createClient(settings.config.logglyOptions);
     
 
 //set the redis and couch properties on the users
@@ -33,6 +35,33 @@ CoordelApp.setRedis(redis);
 
 //settings.auth contains all the security strings 
 var auth = settings.auth;
+
+// Configuration
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'html');
+  app.use(express.logger());
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.session({ 
+    secret: 'coordelsecretpassword',
+    store: new RedisStore(options)
+  }));
+  app.use(everyauth.middleware());
+  app.use(app.router);
+  app.use(express["static"](__dirname + '/public'));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler()); 
+});
+
+app.register('.html', require('ejs'));
 
 //configure everyauth email
 /*
@@ -159,25 +188,7 @@ var options = {
   prefix: redisOpts.expressSessionPrefix
  };
 
-// Configuration
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'html');
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ 
-    secret: 'coordelsecretpassword',
-    store: new RedisStore(options)
-  }));
-  app.use(everyauth.middleware());
-  app.use(app.router);
-  app.use(express["static"](__dirname + '/public'));
-  
-});
 
-app.register('.html', require('ejs'));
 
 function validate(req, res, next){
   if (req.session.auth && req.session.auth.loggedIn){

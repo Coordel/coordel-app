@@ -1,4 +1,4 @@
-var CoordelApp = require('coordelapp');
+var CoordelApp = require('./coordelapp');
 
 var redis;
 
