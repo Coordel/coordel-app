@@ -1,0 +1,38 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+	<div dojoAttachPoint="titleBar" class="dijitDialogTitleBar">
+		<span dojoAttachPoint="closeButtonNode" class="coordelDialogButton c-float-l" dojoAttachEvent="ondijitclick: onCancel">${cancelText}
+			<span dojoAttachPoint="closeText" class="closeText hidden" title="${buttonCancel}"></span>
+		</span>
+		<span dojoAttachPoint="titleNode" class="dijitDialogTitle" id="${id}_title"></span>
+		<span dojoAttachPoint="dialogConfirm" class="${executeCss} coordelDialogButton c-float-r">${executeText}</span>
+	</div>
+	<div dojoAttachPoint="confirmText" class="coordelDialogConfirmText">${confirmText}</div>
+	<div dojoAttachPoint="containerNode" class="coordelDialogPaneContent">
+		<div style="width: 28em" dojoAttachPoint="dialog" dojoType="app.views.ConfirmDialog">
+			<div class="c-padding" style="border-bottom: 1px solid #A3AAB1;background-color: #eaeaea; color: #66727F">${destinationInstructions}</div>
+			<ul class="task-form">
+				<li class="field task-project">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormProject" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none" placeHolder="${coordel.taskForm.phProject}" taskFormField="project" showAddButton="true"></div>
+						<div dojoAttachPoint="taskFormProjectValue" dojoType="app.views.TaskFormPill" taskFormField="project" class="hidden"></div>
+					</div>
+					<div dojoAttachPoint="projectTip" class="hidden"></div>
+				</li>
+				<li class="field task-project">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormProject" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none" placeHolder="${coordel.taskForm.phProject}" taskFormField="project" showAddButton="true"></div>
+						<div dojoAttachPoint="taskFormProjectValue" dojoType="app.views.TaskFormPill" taskFormField="project" class="hidden"></div>
+					</div>
+					<div dojoAttachPoint="projectTip" class="hidden"></div>
+				</li>
+			</ul>
+
+			<div class="c-padding" style="border-top: 1px solid #A3AAB1; border-bottom: 1px solid #A3AAB1; background-color: #eaeaea; color: #66727F">${fileInstructions}</div>
+			<div class="c-padding-large" dojoAttachPoint="filesContainer" dojoType="app.widgets.ContainerPane">
+				<div><a href="image.png" class="attachment">test file one</a></div>
+				<div><a href="imgag.xls" class="attachment">test file two</a></div>
+			</div>
+		</div>
+	</div>
+	<div dojoAttachPoint="footerNode" class="dialog-footer ui-corner-bottom"></div>
+</div>

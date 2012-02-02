@@ -1,0 +1,74 @@
+<div>
+			<ul class="task-form">
+				
+				<li dojoAttachPoint="nameAround" class="field task-name">
+					<div dojoAttachPoint="showReuseTemplates" class="reuse c-float-r" title="${coordel.reuse}"></div>
+					<div dojoAttachPoint="taskNameInnerNode" style="display: inline-block; width:90%" class="c-margin-t">
+						
+						<div dojoAttachPoint="taskFormName" placeHolder="${coordel.taskForm.phName}"  dojoType="dijit.form.Textarea" class="taskFormName"></div>
+					</div>
+					
+					<div dojoAttachPoint="nameTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="purposeAround" class="field task-purpose">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormPurpose" dojoType="dijit.form.Textarea" placeHolder="${coordel.taskForm.phPurpose}" value="${coordel.taskForm.phPurpose}" class="c-placeholder"></div>
+					</div>
+					<div dojoAttachPoint="purposeTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="deadlineAround" class="field task-deadline">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormDeadline" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" constraints="{formatLength:'medium'}" placeHolder="${coordel.taskForm.phDeadline}" layoutAlign="bottom" taskFormField="deadline" openOnClick="true"></div>
+					</div>
+					<div dojoAttachPoint="deadlineTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="projectAround" class="field task-project">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormProject" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none" placeHolder="${coordel.taskForm.phProject}" taskFormField="project" showAddButton="true"></div>
+						<div dojoAttachPoint="taskFormProjectValue" dojoType="app.views.TaskFormPill" taskFormField="project" class="hidden"></div>
+					</div>
+					<div dojoAttachPoint="projectTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="delegateAround" class="field task-delegate">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormDelegate" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none"  placeHolder="${coordel.taskForm.phDelegate}" taskFormField="delegate"  showAddButton="true"></div>
+						<div dojoAttachPoint="taskFormDelegateValue" dojoType="app.views.TaskFormPill" taskFormField="delegate" class="hidden"></div>
+					</div>
+					<div dojoAttachPoint="delegateTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="deferAround" class="field task-defer">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormDefer" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" placeHolder="${coordel.taskForm.phDefer}" constraints="{formatLength:'medium'}"  layoutAlign="bottom" taskFormField="defer"></div>
+					</div>
+					<div dojoAttachPoint="deferTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="deliverablesAround" class="field task-deliverables">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormDeliverablesValue" dojoType="app.widgets.ContainerPane" style="padding:0"></div>
+						<div dojoAttachPoint="taskFormDeliverables" taskFormField="deliverables" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none"  placeHolder="${coordel.taskForm.phDeliverables}"></div>
+					</div>
+					<div dojoAttachPoint="deliverablesTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="blockersAround" class="field task-blockers">
+					<div class="field-inner">
+					<div dojoAttachPoint="taskFormBlockersValue" dojoType="app.widgets.ContainerPane" style="padding:0"></div>
+					<div dojoAttachPoint="taskFormBlockers" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none" placeHolder="${coordel.taskForm.phBlockers}" taskFormField="blockers"></div>
+					</div>
+					<div dojoAttachPoint="blockersTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="attachmentsAround" class="field task-attachments">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormAttachments" dojoType="app.views.TaskFormAttachments" hasDownArrow="false" placeHolder="${coordel.taskForm.phAttachments}"></div>
+					</div>
+					<div dojoAttachPoint="attachmentsTip" class="hidden"></div>
+				</li>
+			</ul>
+</div>

@@ -1,0 +1,21 @@
+<div class="c-float-l logo">&nbsp;</div>
+<div class="c-float-l signin-form">
+	<div class="handwritten">Enter your email and we'll send you instructions how to reset your password</div>
+	<form action="/login" method="post">
+		<div class="full" style="padding-bottom:1em">
+			<input name="email" type="text" class="text x-large">
+		</div>
+		<div>
+  		<input type="submit" class="submit-button c-margin-b c-float-r" value="Reset">
+			<div class="clear"></div>
+		</div>
+	</form>
+	<%if ('undefined' !== typeof errors && errors.length){%>
+	<div class="feedback c-color-error c-text-center c-padding-large-t">
+		<% for (var key in errors) {%>
+			<span class="error"><%=errors[key]%>.</span>
+		<%}%>
+		<span>Please try again.
+	</div>
+	<%}%>
+</div>

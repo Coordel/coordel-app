@@ -1,0 +1,43 @@
+<div>	
+	<div>
+		<div dojoAttachPoint="nameField" class="select-field">
+			<div class="desc">
+				<span class="name">${coordel.deliverableFieldSettings.name}</span>
+				<em class="required">&#149;</em>
+			</div>
+			<div>
+				<input dojoType="dijit.form.TextBox" dojoAttachPoint="nameSetting" name="deliverableName" class="text" tabindex="1"/>
+			</div>
+		</div>
+		<div dojoAttachPoint="defaultField" class="select-field">
+			<div class="desc">
+				<span class="name">${coordel.deliverableFieldSettings.defaultValue}</span>
+			</div>
+			<div>
+				<input dojoAttachPoint="defaultValueSetting" dojoType="dijit.form.TextBox" name="defaultValue" class="text" tabindex="2"/>
+			</div>
+		</div>
+		<div dojoAttachPoint="choicesField" class="select-field">
+			<fieldset class="task-form-fieldset">
+				<legend>${coordel.deliverableFieldSettings.choices}</legend>
+				<div dojoType="app.widgets.ContainerPane" dojoAttachPoint="choicesContainer" style="padding:0"></div>
+			</fieldset>
+		</div>
+		<div dojoAttachPoint="sizeField" class="select-field">
+			<div class="desc">
+				<span class="name">${coordel.deliverableFieldSettings.size}</span>
+			</div>
+			<div>
+				<select dojoAttachPoint="sizeSetting" dojoType="dijit.form.FilteringSelect" name="defaultValue" class="select" tabindex="4"></select>
+			</div>
+		</div>
+		<div class="select-field c-padding-large-b">
+			<div class="desc">
+				<span class="name">${coordel.deliverableFieldSettings.required}</span>
+			</div>
+			<div>
+				<input dojoAttachPoint="requiredSetting" dojoType="dijit.form.CheckBox" name="required" tabindex="5"/>
+			</div>
+		</div>
+	</div>
+</div>

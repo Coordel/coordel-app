@@ -1,0 +1,12 @@
+<div>	
+	<div dojoAttachPoint="focusNode"></div>
+	<div dojoAttachPoint="noFiles" class="none-found c-color-label">${coordel.taskFormAttachments.noFilesMessage}</div>
+	
+	<div dojoAttachPoint="attachedFiles" class="hidden c-padding-large"></div>
+	
+	<div dojoAttachPoint="loadingFiles" class="hidden c-padding-large"></div>
+
+	<div class="footer-button c-text-center ui-corner-bottom task-form-button">
+		<input dojoAttachPoint="uploader" url="${url}" multiple="true" type="file" dojoType="app.form.Uploader" uploadOnSelect="true" label="${coordel.taskFormAttachments.attachFiles}"/>
+	</div>   
+</div>

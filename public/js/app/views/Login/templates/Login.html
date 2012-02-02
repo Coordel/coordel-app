@@ -1,0 +1,29 @@
+<div class="signin coordel-body">
+	<fieldset class="signin-wrap large-shadow ui-corner-all">
+		<div class="c-float-l logo">&nbsp;</div>
+		<div id="userSignInForm" class="c-float-l signin-form">
+			<div class="full" style="padding-bottom:1em">
+	  		<p><label>${coordel.username}</label></p> 
+				<input id="username" dojoType="dijit.form.TextBox" class="text x-large">
+			</div>
+			<div class="full" style="padding-bottom:1.5em">
+	  		<p><label for="password">${coordel.password}</label></p> 
+				<input id="password" type="password" class="text x-large" dojoType="dijit.form.TextBox">
+			</div>
+			<div class="full" style="padding-bottom:2em">
+				<input id="rememberMe" dojoType="dijit.form.CheckBox"><label style="padding-left: 4px">${coordel.rememberMe}</label>
+			</div>
+			<div>
+	  		<input id="submitLogin" dojoType="dijit.form.Button" class="c-float-r" label="Login">
+				<div class="clear"></div>
+			</div>
+			<div id="loginError" class="feedback c-color-error c-text-center c-padding-large-t hidden"><span id="loginErrorMessage"></span> Please try again.</div>
+		</div>
+	</fieldset>
+	<!--
+	<div class="links">
+		<a id="signUp">Sign Up</a>
+		<span class="c-padding-large-lr"></span>
+		<a id="forgotPassword">Forgot Password</a>
+	</div> -->
+</div>

@@ -1,0 +1,21 @@
+.project-info {
+  background-color: #ffffff;
+  font-size: 10px;
+  color: #5c5c5c;
+  border-bottom: 1px solid #a3aab1;
+}
+
+.project-info li {
+  line-height: 20px;
+}
+
+.project-info .field-inner {
+  line-height: 10px;
+  padding-left: 24px;
+  padding-top: 2px;
+  min-height: 20px;
+}
+
+.project-info span {
+  line-height: 12px;
+}

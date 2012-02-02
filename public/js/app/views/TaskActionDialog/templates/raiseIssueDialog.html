@@ -1,0 +1,19 @@
+<div class="c-padding-large task-form">
+	<h3 class="no-background">${task.name}</h3>
+	<div class="desc">
+		<span class="name">${coordel.issue}</span>
+		<em class="required">•</em>
+	</div>
+	<div class="instructions">${issueInstructions}</div>
+	<div class="textarea-holder">
+		<textarea dojoAttachPoint="issueText" dojoType="dijit.form.Textarea"></textarea>
+	</div>
+	<div class="desc c-padding-large-t">
+		<span class="name">${coordel.proposedSolution}</span>
+		<em class="required">•</em>
+	</div>
+	<div class="instructions">${solutionInstructions}</div>
+	<div class="textarea-holder">
+		<textarea dojoAttachPoint="solutionText" dojoType="dijit.form.Textarea"></textarea>
+	</div>
+</div>

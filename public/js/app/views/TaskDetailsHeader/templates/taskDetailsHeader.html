@@ -1,0 +1,30 @@
+<div class="c-text-center">
+	<div dojoAttachPoint="backToFocus" dojoType="dijit.form.Button" label="${focus}" iconClass="coordelHeaderIcon coordelHeaderIconBack" class="c-float-l"></div>
+	
+	<div class="c-float-r">
+		<span  dojoAttachPoint="editTask" style="margin-right: 2px" dojoType="dijit.form.DropDownButton" title="Edit Task" class="coordelHeaderDropDown" dropDownPosition="below" iconClass="coordelHeaderIcon coordelHeaderIconEdit" showLabel="false">
+		    <div dojoAttachPoint="editTaskDialog" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog popout">
+					<div class="task-form-outline">
+						<div class="task-form-header ui-corner-top">
+							<div dojoAttachPoint="taskFormCancel" dojoType="dijit.form.Button" style="float: left">${coordel.taskForm.cancel}</div>
+						  <h2>${taskFormTitle}</h2>
+							<div class="highlight-button c-float-r" dojoAttachPoint="taskFormSave" dojoType="dijit.form.Button">${coordel.taskForm.save}</div>
+					</div>
+			  	<div dojoAttachPoint="taskFormContainer"  dojoType="app.widgets.ContainerPane"></div>
+					<div class="task-form-footer ui-corner-bottom">&nbsp;</div>
+				</div>
+			</div>
+		</span>
+	
+		<span dojoAttachPoint="chooseAction" dojoType="dijit.form.DropDownButton" iconClass="coordelHeaderIcon coordelHeaderIconActions" style="margin-right: 2px" class="coordelHeaderDropDown" title="${coordel.taskDetails.chooseAction}" showLabel="false">
+			<div dojoAttachPoint="actionsMenu" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden"></div>
+		</span>
+
+
+		<span dojoAttachPoint="acceptTask" title="${coordel.taskDetails.acceptTask}" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconAccept" style="margin-right: 2px"></span>
+
+		<span dojoAttachPoint="declineTask" title="${coordel.taskDetails.declineTask}" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconDecline" style="margin-right: 2px"></span>
+
+		<span dojoAttachPoint="markDone" dojoType="dijit.form.Button" label="${coordel.done}" iconClass="coordelHeaderIcon coordelHeaderIconDone"></span>
+	</div>
+</div>

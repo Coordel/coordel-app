@@ -1,0 +1,65 @@
+<div>
+			<ul>
+				<li dojoAttachPoint="nameAround" class="field project-name">
+					<div dojoAttachPoint="showReuseTemplates" class="reuse c-float-r" title="${coordel.reuse}"></div>
+					<div dojoAttachPoint="projectNameInnerNode" style="display: inline-block; width:90%" class="c-margin-t">
+						
+						<div dojoAttachPoint="projectFormName" placeHolder="${coordel.projectForm.phName}"  dojoType="dijit.form.Textarea" class="projectFormName"></div>
+					</div>
+					
+					<div dojoAttachPoint="nameTip" style="visibility:hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="purposeAround" class="field project-purpose">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormPurpose" dojoType="dijit.form.Textarea" placeHolder="${coordel.projectForm.phPurpose}" value="${coordel.projectForm.phPurpose}" class="c-placeholder"></div>
+					</div>
+					<div dojoAttachPoint="purposeTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="deadlineAround" class="field project-deadline">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormDeadline" baseForm="project" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" constraints="{formatLength:'medium'}" placeHolder="${coordel.projectForm.phDeadline}" layoutAlign="bottom" taskFormField="deadline" openOnClick="true"></div>
+					</div>
+					<div dojoAttachPoint="deadlineTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="responsibleAround" class="field project-responsible">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormResponsible" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none"  placeHolder="${coordel.projectForm.phResponsible}" taskFormField="responsible" showAddButton="true" baseForm="project"></div>
+						<div dojoAttachPoint="projectFormResponsibleValue" dojoType="app.views.ProjectFormPill" formField="responsible" class="hidden"></div>
+					</div>
+					<div dojoAttachPoint="responsibleTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="peopleAround" class="field project-people">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormPeopleValue" style="padding:0"></div>
+						<div dojoAttachPoint="projectFormPeople" taskFormField="people" dojoType="app.widgets.PositionFilteringSelect" hasDownArrow="false" highlightMatch="none"  placeHolder="${coordel.projectForm.phPeople}" showAddButton="true" baseForm="project"></div>
+					</div>
+					<div dojoAttachPoint="peopleTip" class="hidden"></div>
+				</li>
+				
+				<li id="rolesAround" dojoAttachPoint="rolesAround" class="field project-roles">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormRolesValue"></div>
+						<div dojoAttachPoint="projectFormRoles" dojoType="app.views.ProjectFormRoles" placeHolder="${coordel.projectForm.phRoles}"></div>
+					</div>
+					<div dojoAttachPoint="rolesTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="deferAround" class="field project-defer">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormDefer" baseForm="project" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" placeHolder="${coordel.projectForm.phDefer}" constraints="{formatLength:'medium'}"  layoutAlign="bottom" taskFormField="defer"></div>
+					</div>
+					<div dojoAttachPoint="deferTip" class="hidden"></div>
+				</li>
+				
+				<li dojoAttachPoint="attachmentsAround" class="field project-attachments">
+					<div class="field-inner">
+						<div dojoAttachPoint="projectFormAttachments" dojoType="app.views.ProjectFormAttachments" placeHolder="${coordel.projectForm.phAttachments}"></div>
+					</div>
+					<div dojoAttachPoint="attachmentsTip" class="hidden"></div>
+				</li>
+			</ul>
+</div>

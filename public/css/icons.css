@@ -1,0 +1,227 @@
+
+
+.arrow-icon {
+  background-image: url(images/icons/spriteArrows.png);
+  height: 7px;
+  width: 7px;
+  background-repeat: no-repeat;
+  display: block;
+}
+
+.icon-arrow-r {background-position: -14px;}
+.icon-arrow-l{background-position: -7px;}
+
+.field-icon {
+	background-image: url(images/icons/task_form_icons.png);
+	height: 20px;
+	width: 20px;
+	background-repeat: no-repeat;
+	display:block;
+	float:left;
+	margin-right: 4px;
+}
+
+.dark-purpose {
+  background-position: 0 -20px;
+}
+
+.field-icon-purpose {
+	background-position: 0 0;
+}
+
+.dark-project {
+	background-position: -20px -20px;
+}
+
+.field-icon-project {
+	background-position: -20px 0;
+}
+
+.dark-deadline {
+	background-position: -40px -20px;
+}
+
+.field-icon-deadline {
+	background-position: -40px 0;
+}
+
+.dark-delegate {
+	background-position: -60px -20px;
+}
+
+.field-icon-delegate {
+	background-position: -60px 0;
+}
+
+.dark-defer {
+	background-position: -80px -20px;
+}
+
+.field-icon-defer {
+	background-position: -80px 0;
+}
+
+.dark-deliverables {
+	background-position: -100px -20px;
+}
+
+.field-icon-deliverables {
+	background-position: -100px 0;
+}
+
+.dark-attachments {
+	background-position: -120px -20px;
+}
+
+
+.field-icon-attachments {
+	background-position: -120px 0;
+}
+
+.dark-blockers {
+	background-position: -140px -20px;
+}
+
+.field-icon-blockers {
+	background-position: -140px 0;
+}
+
+.dark-responsible {
+	background-position: -160px -20px;
+}
+
+.field-icon-responsible {
+	background-position: -160px 0;
+}
+
+.dark-user {
+	background-position: -180px -20px;
+}
+
+.field-icon-user {
+	background-position: -180px 0;
+}
+
+.dark-calendar {
+	background-position: -200px -20px;
+}
+
+.field-icon-calendar {
+	background-position: -200px 0;
+}
+
+.small-task-icon {
+  height: 12px;
+  width: 12px;
+  background-image: url(images/icons/task-actions.png);
+}
+
+.icon-edit {background-position: 0;}
+.icon-actions {background-position: -24px;}
+.icon-delete{background-position: -48px;}
+.icon-blockers {background-position: -72px;}
+.icon-resources {background-position: -96px;}
+.icon-stream {background-position: -120px;}
+.icon-info {background-position: -144px;}
+.icon-turbo {background-position: -168px;}
+.icon-add {background-position: -192px;}
+.icon-filter {background-position: -264px;}
+.icon-thumbs-down {background-position:-288px;}
+.icon-thumbs-up {background-position:-312px; }
+.icon-sort {background-position:-336px; }
+.icon-remove-defer {background-position: -384px}
+
+.icon-turbo.active {background-position: -360px;}
+
+
+.ui-icon-contact {
+  height: 16px;
+  width: 16px;
+  background-image: url(images/icons/contact.png);
+  display:block;
+  margin-right: 4px;
+}
+
+.ui-icon-project {
+
+  height: 18px;
+  width: 20px;
+  background-image: url(images/icons/project.png);
+  background-repeat: no-repeat;
+  display:inline-block;
+  vertical-align: middle;
+  background-position: center -2px;
+}
+
+.ui-icon-participate {
+
+  height: 18px;
+  width: 20px;
+  background-image: url(images/icons/participate.png);
+  background-repeat: no-repeat;
+  display:inline-block;
+  vertical-align: middle;
+  background-position: center -2px;
+}
+
+.ui-icon-follow {
+
+  height: 18px;
+  width: 20px;
+  background-image: url(images/icons/follow.png);
+  background-repeat: no-repeat;
+  display:inline-block;
+  vertical-align: middle;
+  background-position: center -2px;
+}
+
+
+.icon-email {background-position:0;}
+.icon-phone {background-position:-16px;}
+.icon-im {background-position:-32px;} 
+.icon-skype {background-position:-48px;} 
+.icon-web {background-position:-64px;}
+.icon-linked {background-position:-80px;}
+.icon-responsible-16 {background-position: -96px;}
+
+
+.default-user {
+  height: 32px;
+  width: 32px;
+  background-image: url(images/icons/default-user.png);
+}
+
+.icon-default-user {background-position: 0 0;}
+.active .icon-default-user {background-position: 0 -34px;}
+
+.primary-nav-icon {
+  height: 20px;
+  width: 20px;
+  background-image: url(images/icons/primaryNavIcons.png);
+  display:block;
+}
+
+.icon-current {background-position:0;}
+.icon-blocked {background-position:-20px;}
+.icon-deferred {background-position:-40px;}
+.icon-delegated {background-position:-60px;}
+.icon-private {background-position:-80px;}
+.icon-project {background-position:-100px;}
+.icon-owner-project {background-position:-160px;}
+.icon-owner-project-pending {background-position: -320px;}
+.icon-owner-project.invite {background-position: -400px;}
+.icon-owner-project.invite-error {background-position: -440px;}
+.icon-project-actions {background-position:-220px;}
+
+.icon-project-following {background-position: -360px;}
+
+.active .icon-project {background-position:-120px;}
+.active .icon-owner-project {background-position:-180px;}
+.active .icon-project-actions {background-position:-240px;}
+.active .icon-owner-project-pending {background-position: -340px;}
+.active .icon-project-following {background-position: -380px;}
+.active .icon-owner-project.invite {background-position: -420px;}
+.active .icon-owner-project.invite-error {background-position: -460px;}
+
+.highlight .icon-project, .active.highlight .icon-project {background-position:-140px;}
+.highlight .icon-owner-project, .active.highlight .icon-owner-project {background-position:-200px;}

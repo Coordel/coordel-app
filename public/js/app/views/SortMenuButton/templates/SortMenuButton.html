@@ -1,0 +1,23 @@
+<div id="sortMenuButton" class="c-float-r">
+	<div dojoAttachPoint="sortDropdown" dojoType="dijit.form.DropDownButton" title="Sort Tasks" class="coordelHeaderDropDown" iconClass="coordelHeaderIcon coordelHeaderIconSort" showLabel="false">
+	    <div dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden">
+	    <h3 class="menu-header">${sort.sortBy}</h3>
+			<ul class="menu-items">
+				<li dojoAttachPoint="byDeadline" id="byDeadline" class="sort-attribute selected"><ins></ins><a>${sort.byDeadline}</a></li>
+				<li dojoAttachPoint="byCreated" id="byCreated" class="sort-attribute"><ins></ins><a>${sort.byCreated}</a></li>
+				<li dojoAttachPoint="byUpdated" id="byUpdated" class="sort-attribute"><ins></ins><a>${sort.byUpdated}</a></li>
+			</ul>
+			<h3 class="menu-header">${sort.groupBy}</h3>
+				<ul class="menu-items">
+					<li dojoAttachPoint="grpProject" id="byProject" class="group"><ins></ins><a>${sort.byProject}</a></li>
+					<li dojoAttachPoint="grpUsername" id="byUsername" class="group hidden"><ins></ins><a>${sort.byUsername}</a></li>
+					<li dojoAttachPoint="grpTimeline" id="byTimeline" class="group"><ins></ins><a>${sort.byTimeline}</a></li>
+				</ul>
+			<h3 class="menu-header">${sort.sortOptions}</h3>
+			<ul class="menu-items opt">
+				<li dojoAttachPoint="optShowChecklist" id="optShowChecklist" class="option"><ins></ins><a>${sort.optShowChecklist}</a></li>
+				<li dojoAttachPoint="optDescending" id="optDescending" class="option"><ins></ins><a>${sort.optDescending}</a></li>
+			</ul>
+	   </div>
+	</div>
+</div>

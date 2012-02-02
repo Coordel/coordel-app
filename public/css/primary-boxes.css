@@ -1,0 +1,89 @@
+/*Primary boxes include current, upcoming, delegated, and private in the left nav*/
+
+ul.primary-boxes li {
+	padding: 0px 0px 0px 8px;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #f9f9f9;
+	display: block;
+	height:2.6em;
+	line-height: 2.6em;
+	font-size: 11px;
+	color: #000;
+}
+ul.primary-boxes li:last-child{
+  border-bottom: 0px solid #eaeaea;
+}
+ul.primary-boxes li.active {
+	background: url(images/primaryNavActive-bg.png);
+	color: #fff;
+	font-weight: bold;
+	border-top: 1px solid #ccc;
+}
+ul.primary-boxes li a{
+	padding: 2px 8px 2px 22px;
+}
+ul.primary-boxes li.active a span{
+	text-shadow: rgba(0, 0, 0, 0.3) 0px 1px 0px;
+	
+}
+ul.primary-boxes li a b{
+	position: absolute;
+	right:8px;
+	margin-top: 8px;
+	border-radius: 16px;
+	height: 1.2em;
+	line-height: 1.2em;
+	background-color: #66727F;
+	font-weight: bold;
+	color: #fff;
+	padding: 0px 4px;
+	min-width: 1.2em;
+	text-align: center;
+	text-shadow: #000 0px 1px 0px;
+	font-family: helvetica;
+}
+ul.primary-boxes li.active a b{
+	background-color: #f9f9f9;
+	color:#666;
+	text-shadow: rgba(0, 0, 0, 0.3) 0px 1px 0px;
+}
+
+li.current a {
+	background: url(images/primaryBoxes/current.png) no-repeat left center;
+}
+li.invited a {
+	background: url(images/primaryBoxes/invited.png) no-repeat left center;
+}
+li.deferred a {
+	background: url(images/primaryBoxes/deferred.png) no-repeat left center;
+}
+li.delegated a {
+	background: url(images/primaryBoxes/delegated1.png) no-repeat left center;
+}
+li.blocked a {
+	background: url(images/primaryBoxes/blocked.png) no-repeat left center;
+}
+li.private a {
+	background: url(images/primaryBoxes/private.png) no-repeat left center;
+}
+
+li.task-invited a {
+	background: url(images/primaryBoxes/task-invited.png) no-repeat left center;
+}
+
+li.project-invited a {
+	background: url(images/primaryBoxes/project-invited.png) no-repeat left center;
+}
+
+ul.primary-boxes {
+	list-style: none;
+	width: 100%;
+}
+
+ul.primary-boxes li.box:hover {
+  cursor: pointer;
+}
+
+ul.primary-boxes li.box.selected:hover{
+  cursor: default;
+}

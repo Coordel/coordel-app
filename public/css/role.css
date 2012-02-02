@@ -1,0 +1,60 @@
+.project-assignment {
+  background-color: #ffffff;
+  border-bottom: 1px solid #A3AAB1;
+}
+
+.project-assignment:last-child{
+  margin-bottom: 1.8em;
+}
+
+.assignment-role {
+  margin: 8px; 
+  border: 1px solid #eaeaea;
+  padding-top: 4px;
+  badding-bottom: 4px;
+}
+
+.assignment-contact.followers .contactlist-details {
+  border-bottom: 1px solid #cccccc;
+}
+
+.assignment-contact.followers .contactlist-details:last-child {
+  border-bottom: none;
+}
+
+.role-responsibility{
+  padding: 8px;
+  border-bottom: 1px solid #eaeaea; 
+  color: #666;
+  font-size: 10px;
+}
+
+.role-responsibility:last-child{
+  border-bottom: none;
+}
+
+.responsibility-name{
+  padding-bottom: 6px;
+  font-size: 10px; 
+  font-weight: bold;
+}
+
+.responsibility-purpose{
+  padding-left: 14px;
+  background: #ffffff url(images/icons/purpose-10x10.png) left 2px no-repeat;
+  padding-bottom: 6px;
+}
+
+.responsibility-deliverables{
+  padding-left: 14px;
+  background: #ffffff url(images/icons/deliverables-10x10.png) left 2px no-repeat;
+}
+
+.deliverable-name {
+  line-height: normal;
+}
+
+.deliverable-instructions{
+  line-height: normal;
+  padding-bottom: 4px;
+}

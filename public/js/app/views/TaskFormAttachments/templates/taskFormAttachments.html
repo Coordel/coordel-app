@@ -1,0 +1,16 @@
+<div>
+	<div class="c-color-label" style="font-size: 10px" dojoAttachPoint="attachLabel"></div>
+	<div dojoAttachPoint="attachmentsPill" dojoType="app.views.TaskFormPill" taskFormField="attachments" class="hidden"></div>
+	<div dojoAttachPoint="attachDropDown" dojoType="app.widgets.ContainerPane" style="padding:0; display: none">
+		
+		<div dojoAttachPoint="noFiles" class="none-found c-color-label">${coordel.taskFormAttachments.noFilesMessage}</div>
+		
+		<div dojoAttachPoint="attachedFiles" dojoType="app.widgets.ContainerPane" class="hidden"></div>
+		
+		<div dojoAttachPoint="loadingFiles" dojoType="app.widgets.ContainerPane" class="hidden"></div>
+	
+		<div class="footer-button c-text-center ui-corner-bottom task-form-button">
+			<input dojoAttachPoint="uploader" url="${url}" multiple="true" type="file" dojoType="app.form.Uploader" uploadOnSelect="true" label="${coordel.taskFormAttachments.attachFiles}"/>
+		</div>   
+	</div>
+</div>

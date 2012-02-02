@@ -1,0 +1,157 @@
+.task-form, .project-form, .contact-form, .action-form{
+  list-style: none;
+}
+
+.task-form .dijitComboBoxHover, .project-form .dijitComboBoxHover{
+	background: #fff;
+}
+
+.task-form .dijitValidationContainer, .project-form .dijitValidationContainer{
+  display: none;
+}
+
+.task-form .dijitInputContainer, .project-form .dijitInputContainer{
+  width: 90%;
+}
+
+.task-form .dijitComboBox, .task-form .dijitTextBox, 
+.project-form .dijitComboBox, .project-form .dijitTextBox,
+.action-form .dijitTextBox{
+	border: none;
+	outline: none;
+	background: #fff;
+}
+
+.task-form .dijitTextArea, .project-form .dijitTextArea, .action-form  {
+	border: none;
+	background: #fff;
+}
+
+.task-form .dijitPlaceHolder, .project-form .dijitPlaceHolder, .c-placeholder{
+	font-style: normal;
+	font-size: 10px;
+	color: #a9a9a9 !important;
+}
+
+.task-name .c-placeholder {
+	font-size: 14px;
+}
+
+.quick-entry .task-name .c-placeholder {
+	font-size: 12px;
+}
+
+.task-form li.field, .project-form li.field {
+	border-bottom: 1px solid #ccc;
+	padding: 0 0 0 25px;
+	min-height: 30px;
+	max-height: 120px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+}
+
+.quick-entry .task-form li.field{
+  min-height: 20px;
+  padding: 0 0 0 14px;
+}
+
+.quick-entry .task-form .note .field-inner{
+  min-height: 40px;
+}
+
+.action-form-header .coordelDialogConfirmText{
+  background: #ccc url(images/titlebar1.png) repeat-x;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  padding: 16px 8px;
+}
+
+.action-form{
+  border-top: 1px solid #999;
+}
+
+.action-form .field {
+  min-height: 30px;
+  max-height: 120px;
+  padding: 0 8px;
+}
+
+.task-form li.field .field-inner, .project-form li.field .field-inner{
+  padding: 5px 5px 0 5px;
+}
+
+.quick-entry .task-form li.field .field-inner{
+  padding: 0 0 0 4px;
+}
+
+
+.task-form li:last-child, .project-form li:last-child {
+	border: none;
+}
+
+.textarea-holder {
+  min-height: 30px;
+  max-height: 120px;
+  border: 1px solid #ccc;
+  overflow-x: hidden;
+	overflow-y: scroll;
+  
+}
+
+.checkbox, .radio {
+  padding-left: 4px;
+  padding-top: 2px;
+}
+
+/*-------------------------------------------TIPS----------------------------------------------*/
+.form-tip{
+  background: #000;
+  border: none;
+  width: 24em;
+  color: #fff;
+  padding: 12px;
+  filter:alpha(opacity=85);
+  opacity:0.85;
+}
+
+.form-tip .tip-title {
+  font-size: 14px;
+  font-weight: 400;
+  
+}
+
+.form-tip h4 {
+  font-size: 12px;
+}
+
+.form-tip-pointer {
+  position: absolute;
+  top: 10px;
+  left: -11px;
+  background: url(images/tooltip-3.png) no-repeat;
+  display: block;
+  height: 14px;
+  width: 12px;
+}
+
+
+
+
+/*-------------------------------------------REUSE---------------------------------------------*/
+
+.reuse {
+  background-image: url(images/icons/form/reuse.png);
+  cursor: pointer;
+  height: 22px;
+  width: 20px;
+  background-position: 0px 7px;
+  background-repeat: no-repeat;
+}
+
+.reuse:hover{
+  background-image: url(images/icons/form/reuse-h.png);
+}
+
+

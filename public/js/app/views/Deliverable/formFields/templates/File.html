@@ -1,0 +1,19 @@
+<div>
+	<div dojoAttachPoint="uploadingButton" style="padding-bottom: 6px" class="hidden">
+		<input style="font-size: 10px; height: 21px" showLabel="true" iconClass="button-file-loading" dojoType="dijit.form.Button"/>
+	</div>
+	<div dojoAttachPoint="uploadButton">
+		<input style="margin-top: 2px; width:60px; font-size: 10px; height: 21px" dojoAttachPoint="uploader, focusNode" multiple="false" type="file" dojoType="app.form.Uploader" uploadOnSelect="true" label="Upload..."/>
+	</div>
+	<div dojoAttachPoint="filesContainer" class="file-border">
+		<div dojoAttachPoint="currentContainer" style="padding: 8px">
+			<label dojoAttachPoint="currentLabel" class="instructions c-title">Current</label><span dojoAttachPoint="deleteCurrent" title="${coordel.fileAction.deleteTip}" class="c-small-button ui-icon-circle-close c-float-l"></span>
+			<div dojoAttachPoint="current"></div>
+		</div>
+		<div dojoAttachPoint="notStarted" class="not-started hidden">${coordel.notStarted}</div>
+		<div style="padding: 0 8px 8px 8px;" dojoAttachPoint="versionsContainer">
+			<label class="instructions c-title">Versions</label>
+			<div dojoAttachPoint="versions"></div>
+		</div>
+	</div>
+</div>

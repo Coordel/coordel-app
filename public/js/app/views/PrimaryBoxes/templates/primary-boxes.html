@@ -1,0 +1,64 @@
+<div id="sidebar-primary">
+	<h3>${coordel.focus}</h3>
+	<ul class="primary-boxes">
+		<li id="current" dojoAttachPoint="showCurrent" class="box current active selected">
+			<a>
+				<ins class="pb-icon pb-icon-current"></ins>
+				<span>${coordel.current}<span>
+				<b id="currentCount" dojoAttachPoint="currentCount" class="badge hidden"></b>
+			</a>
+		</li>
+		<li id="deferred" dojoAttachPoint="showDeferred" class="box deferred">
+			<a>
+				<span>${coordel.deferred}<span>
+				<b id="deferredCount" dojoAttachPoint="deferredCount" class="badge hidden"></b>
+			</a>
+		</li>
+		<li id="delegated" dojoAttachPoint="showDelegated" class="box delegated">
+			<a>
+				<span>${coordel.delegated}<span>
+				<b id="delegatedCount" dojoAttachPoint="delegatedCount" class="badge hidden"></b>
+			</a>
+		</li>
+		<li id="invited" dojoAttachPoint="showInvited" class="box invited hidden">
+			<a>
+				<ins class="pb-icon pb-icon-invited"></ins>
+				<span>${coordel.invited}<span>
+				<b id="invitedCount" dojoAttachPoint="invitedCount" class="badge hidden"></b>
+			</a>
+		</li>
+		<li id="blocked" dojoAttachPoint="showBlocked" class="box blocked">
+			<a>
+				<span>${coordel.blocked}<span>
+				<b id="blockedCount" dojoAttachPoint="blockedCount" class="badge hidden"></b>
+			</a>
+		</li>
+		<li id="private" dojoAttachPoint="showPrivate" class="box private">
+			<a>
+				<span>${coordel.myPrivate}<span>
+				<b id="privateCount" dojoAttachPoint="privateCount" class="badge hidden"></b>
+			</a>
+		</li>
+	</ul>
+	<div dojoAttachPoint="invitations">
+		<h3 style="border-top: 1px solid #66727F;">${coordel.invitations}</h3>
+		<ul class="primary-boxes">
+			
+			<li id="task-invited" dojoAttachPoint="showTaskInvited" class="box task-invited">
+				<a>
+					<ins class="pb-icon pb-icon-task-invite"></ins>
+					<span>${coordel.tasks}<span>
+					<b id="taskInvitedCount" class="badge hidden"></b>
+				</a>
+			</li>
+			
+			<li id="project-invited" dojoAttachPoint="showProjectInvited" class="box project-invited">
+				<a>
+					<ins class="pb-icon pb-icon-project-invite"></ins>
+					<span>${coordel.projects}<span>
+					<b id="projectInvitedCount" class="badge hidden"></b>
+				</a>
+			</li>
+		</ul>
+	
+</div>

@@ -1,0 +1,136 @@
+/* TitlePane 
+ * 
+ * Styling TitlePane means styling the TitlePane title and its content container  (dijitTitlePane)
+ * 
+ * TitlePane title:
+ * 1. TitlePane title (default styling): 
+ * 		.dijitTitlePaneTitle - TitlePane's title div style: background-color, border
+ *
+ * 2. hovered TitlePane title (ie, mouse hover on a title bar)
+ * 		.dijitTitlePaneTitleHover - styles when mouse hover on the title div
+ * 
+ * 3. active TitlePane title (ie, mouse down on a title bar)
+ * 		.dijitTitlePaneTitleActive - styles when mouse down on the title div
+ * 
+ * 
+ * TitlePane Content Container:
+ * 1. outer/inner container: 
+ * 		.dijitTitlePaneContentOuter / dijitTitlePaneContentInner - styles for the content outer div
+ */
+.tasklist-titlepane .dijitTitlePaneTitle {
+
+  text-transform: uppercase;
+  text-shadow: #fff 0px 1px 0px;
+  white-space: nowrap;
+  background-color: #e5e5e5;
+  background-image: url(images/titlebar1.png);
+  background-repeat: repeat-x;
+  border: none;
+  border-bottom: 1px solid #a3aab1;
+  font-size: .9em;
+  padding: 2px 8px 0px 8px;
+  font-family: helvetica;
+  min-height: 1.8em;
+	font-weight:bold;
+}
+
+.tasklist-titlepane .turboWizard .dijitTitlePaneTitle, .tasklist-titlepane .turboInfo .dijitTitlePaneTitle,
+.tasklist-titlepane .taskDetailsInfo .dijitTitlePaneTitle, .tasklist-titlepane .taskInfo .dijitTitlePaneTitle{
+  color: #00629B;
+}
+
+.claro .overdue .dijitTitlePaneTitle, .claro .overdue .dijitTitlePaneFocused .dijitTitlePaneTextNode{
+  color: #DA291C !important;
+}
+
+.tasklist-titlepane .taskInfo .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+  color: #00629B !important;
+  /* TODO: do we need this?   we usually don't change text color on focus */
+
+}
+
+.claro .dijitTitlePaneTitle{
+  color: #66727F;
+}
+
+.claro .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+  color: #66727F;
+}
+
+
+.dj_ie6 .tasklist-titlepane .dijitTitlePaneTitle {
+  background-image: none;
+}
+.tasklist-titlepane .dijitTitlePaneTitleHover {
+  background-color: #b4b4b4;
+  border-color: #66727F;
+  color: #66727F;
+}
+
+.tasklist-titlepane .dijitTitlePaneTitleActive {
+  background-color: #e5e5e5;
+  border-color: #a3aab1;
+  color: #82898E;
+  background-position: 0 -136px;
+}
+.tasklist-titlepane .dijitTitlePaneTitleFocus {
+  margin-top: 3px;
+  padding-bottom: 2px;
+}
+
+.tasklist-titlepane .dijitTitlePaneTitle * {
+  vertical-align: baseline;
+}
+
+.tasklist-titlepane .dijitTitlePane .dijitArrowNode {
+  filter:alpha(opacity=70);
+  opacity:0.7;
+}
+/*
+.tasklist-titlepane .dijitTitlePane .dijitOpen .dijitArrowNode {
+  background-position: 0 0;
+}
+.tasklist-titlepane .dijitTitlePane .dijitClosed .dijitArrowNode {
+  background-position: -14px 0;
+}
+*/
+.tasklist-titlepane .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+  color: #66727F;
+  /* TODO: do we need this?   we usually don't change text color on focus */
+
+}
+.tasklist-titlepane .dijitTitlePaneContentOuter {
+  background: #ffffff;
+  border: none;
+  
+}
+.tasklist-titlepane:last-child .dijitTitlePaneContentOuter {
+  border-bottom: none;
+  
+}
+
+.tasklist-titlepane .dijitTitlePaneContentInner {
+  padding: 4px 8px 8px 8px;
+  border-bottom: 1px solid #a3aab1;
+}
+
+.tasklist-titlepane .task-details .dijitTitlePaneContentInner {
+  padding: 0;
+}
+
+.tasklist-titlepane .dijitTitlePaneTextNode {
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: text-top;
+}
+
+.tasklist-titlepane .task-info {
+  border-bottom: 1px solid #A3AAB1;
+  padding-bottom: 12px;
+  margin-bottom: 2px;
+}
+
+.tasklist-titlepane .task-info:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}

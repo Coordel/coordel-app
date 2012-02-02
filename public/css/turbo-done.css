@@ -1,0 +1,32 @@
+.checklist-done {
+  border-bottom: 1px solid #a3aab1;
+}
+
+.turbo-done{
+  width: 280px;
+  color: #5c5c5c;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 8px auto;
+  text-shadow: #E7EDF5 0px 1px 0px;
+  top: 60px;
+  word-wrap: break-word;
+}
+
+.turbo-done .text {
+  background-position: 8px 8px;
+  background-repeat: no-repeat;
+  min-height: 50px;
+  padding: 8px 8px 8px 40px;
+}
+
+.turbo-done .text {
+  background-image:url(images/icons/turbo.png);
+}
+
+.turbo-done p {
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 16px;
+  color: #5c5c5c;
+}

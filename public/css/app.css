@@ -1,0 +1,383 @@
+/*
+
+If you are developing a project that makes use of Dojo's built-in widgets,
+you will probably want to include these two files.
+*/
+
+@import '../js/dojo-release-1-1.6.1-src/dojo/resources/dojo.css';
+@import '../js/dojo-release-1-1.6.1-src/dijit/themes/claro/claro.css';
+
+@import 'header.css';
+@import 'menu.css';
+@import 'popout.css';
+@import 'layout.css';
+@import 'coordel-logos.css';
+@import 'leftNav.css';
+@import 'primary-boxes.css';
+@import 'primary-list.css';
+/*@import 'fonts.css';*/   /* not currently using the Danube fonts in the app */
+@import 'tab-container.css';
+@import 'main-header.css';
+@import 'stream.css';
+@import 'task.css';
+@import 'loginForm.css';
+@import 'projectlist-item.css';
+@import 'contactlist-item.css';
+@import 'empty-tasklist.css';
+@import 'jquery/jquery.css';
+@import 'jquery/coordel.css';
+@import 'calendar.css';
+@import 'task-form.css';
+@import 'header-button.css';
+@import 'toolbar-button.css';
+@import 'icons.css';
+@import 'contactlist-details.css';
+@import 'tasklist-titlepane.css';
+@import 'empty-deliverable.css';
+@import 'quick-entry.css';
+@import 'dialog.css';
+@import 'task-info.css';
+@import 'FileInput.css';
+@import 'body-button.css';
+@import 'menu-button.css';
+@import 'task-workspace.css';
+@import 'deliverable.css';
+@import 'task-form-button.css';
+@import 'project-form.css';
+@import 'form.css';
+@import 'role.css';
+@import 'turbo-done.css';
+@import 'project-info.css';
+
+/*FEEDBACK tab should hide when loading*/
+.loading #fdbk_tab, .login #fdbk_tab{
+  display: none;
+}
+
+a#fdbk_tab {
+  top: 50% !important;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.claro {
+  font-family: "Lucida Grande", Verdana,Arial,Helvetica,sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.claro .dijitTextBoxDisabled, .claro .dijitTextBoxDisabled .dijitButtonNode {
+  border-color: #eaeaea;
+}
+
+/* webkit does the annoying focus thing */
+*:focus{
+  outline: none;
+}
+
+.dijitTextBoxFocused {
+	outline: none;
+	margin-right: 1px;
+}
+
+.claro .dijitTextBoxDisabled, .claro .dijitTextBoxDisabled .dijitInputContainer {
+background-color: #fdfdfd;
+background-image: none;
+color: #5c5c5c;
+}
+
+
+
+/* used when text is uses as a button */
+.c-text-button {
+  color: #000;
+  opacity: .7;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.c-text-button:hover {
+  opacity: 1;
+}
+
+.c-text-button-small {
+  color: #000;
+  cursor: pointer;
+}
+
+.c-text-button-small:hover {
+  font-weight:bold;
+}
+
+.c-title {
+	color: #5c5c5c;
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+.c-ellipsis{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* borders */
+.c-border-b {
+  border-bottom: 1px solid #ccc;
+}
+
+.c-border-t {
+  border-top: 1px solid #ccc;
+}
+
+.c-border-t-tp {
+  border-top: 1px solid #a3aab1;
+}
+
+.c-border {
+  border: 1px solid #EAEAEA;
+}
+
+.c-border-none {
+  border: none;
+  outline: none;
+}
+
+.c-border-top-none{
+  border-top: none;
+}
+
+.c-border-bottom-none{
+  border-bottom: none;
+}
+
+
+/* font size */
+.c-font-xx-large{
+	font-size: 3em;
+}
+.c-font-x-large{
+	font-size: 2.5em;
+}
+.c-font-large{
+	font-size: 1.5em;
+}
+.c-font-medium{
+	font-size: 1.2em;
+}
+.c-font-small{
+	font-size: .8em;
+}
+.c-font-x-small{
+	font-size: .5em;
+}
+
+/* float */
+
+.c-float-l{
+  float: left;
+}
+
+.c-float-r{
+  float: right;
+}
+
+/* text */
+
+.c-text-center{
+  text-align: center;
+}
+
+.c-text-right{
+  text-align: right;
+}
+
+.c-text-left{
+  text-align: left;
+}
+
+.c-text-justify{
+  text-align: justify;
+}
+
+/* margin */
+.c-margin-large-t {
+  margin-top: 8px;
+}
+.c-margin-large-b {
+  margin-bottom: 8px;
+}
+.c-margin-b{
+	margin-bottom: 4px;
+}
+.c-margin-t{
+	margin-top: 4px;
+}
+.c-margin-r{
+	margin-right: 4px;
+}
+.c-margin-l{
+	margin-left: 4px;
+}
+.c-margin-lr{
+  margin-right: 6px !important;
+  margin-left: 6px !important;
+}
+.c-margin {
+  margin: 4px;
+}
+
+/* padding */
+.c-padding-large-lr{
+	padding-left: 8px;
+	padding-right: 8px;
+}
+.c-padding-large-tb{
+	padding-top:8px;
+	padding-bottom: 8px;
+}
+.c-padding-large-t {
+  padding-top: 8px;
+}
+.c-padding-large-b {
+  padding-bottom: 8px;
+}
+.c-padding-large {
+  padding: 8px;
+}
+.c-padding-none: {
+  padding: 0;
+}
+.c-padding {
+  padding: 4px;
+}
+.c-padding-t{
+	padding-top:4px;
+}
+.c-padding-b{
+	padding-bottom:4px;
+}
+.c-padding-l{
+	padding-left:4px;
+}
+.c-padding-r{
+	padding-right:4px;
+}
+.hidden{
+  display: none !important;
+}
+
+.clear {
+  clear: both;
+}
+
+/*colors*/
+.c-color-label{
+	color: #a9a9a9;
+}
+.c-color-light {
+  color: #5C5C5C;
+}
+.c-color-default{
+	color: #333;
+}
+.c-color-active{
+	color: #00629B !important;
+}
+.c-color-highlight{
+	color: #000;
+}
+.c-color-header{
+	color:#fff;
+}
+.c-color-disabled{
+	color: #ccc;
+}
+.c-color-error{
+  color: #DA291C;
+}
+.c-color-purple{
+  color: #642F6C;
+}
+.c-color-green{
+  color: #97D700;
+}
+
+
+
+.file-loading{
+  background: transparent url(images/ajax-loader.gif) no-repeat;
+  height: 16px;
+  width: 16px;
+}
+
+.button-file-loading {
+  background: transparent url(images/ajax-loader.gif) no-repeat;
+  height: 16px;
+  width: 16px;
+  margin-left: 16px;
+  margin-right: 12px;
+}
+
+/* default document links */
+.attachment {
+background:transparent url(file-types/page_white.png) center left no-repeat;
+display:inline-block;
+padding-left:22px;
+line-height:16px;
+padding-right: 4px;
+margin-right: 4px;
+text-decoration:none;
+color: #000;
+}
+
+/* PDF document links */
+a[href$='.pdf'] {
+background:transparent url(file-types/page_white_acrobat.png) center left no-repeat;
+}
+ 
+/* Excel Documents links */
+a[href$='.xls'],a[href$='.xlsx'], a[href$='.csv'], a[href$='.xlw'], a[href$='.xlt'] {
+background:transparent url(file-types/page_white_excel.png) center left no-repeat !important;
+}
+ 
+/* Word Document Links */
+a[href$='.doc'],a[href$='.docx'], a[href$='.rtf'], a[href$='.wps'] {
+background:transparent url(file-types/page_white_word.png) center left no-repeat !important;
+
+}
+
+/* Text Document Links */
+a[href$='.txt'] {
+background:transparent url(file-types/page_white_text.png) center left no-repeat !important;
+}
+
+/* PowerPoint Document Links */
+a[href$='.ppt'],a[href$='.pptx'] {
+background:transparent url(file-types/page_white_powerpoint.png) center left no-repeat !important;
+}
+
+/* Image Links */
+a[href$='.png'], a[href$='.gif'], a[href$='.jpg'], a[href$='.jpeg'] {
+background:transparent url(file-types/image.png) center left no-repeat !important;
+}
+ 
+/* mailto: links */
+a[href^="mailto:"] {
+background:transparent url(file-types/email.png) center left no-repeat !important;
+}
+a[href^="mailto:"].no-image {
+background:transparent none !important;
+}
+
+/* Gravatar Link */
+/* mailto: links */
+a[href$="gravatar.com"] {
+background:transparent url(connections/gravatar.jpg) center left no-repeat !important;
+}
+
+

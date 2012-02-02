@@ -1,0 +1,38 @@
+#addObject {
+  width: 1.8em;
+  height: 1.8em;
+  background: #ccc url(images/footerButtons/add.png) no-repeat;
+  border-right:1px solid #999;
+  /* for IE */
+  filter:alpha(opacity=60);
+  /* CSS3 standard */
+  opacity:0.6;
+  float:left;
+}
+
+#addObject:hover {
+  background-color: #e5e5e5;
+  /* for IE */
+  filter:alpha(opacity=100);
+  /* CSS3 standard */
+  opacity:1;
+}
+
+#showOtherLists {
+  width: 1.8em;
+  background: #ccc url(images/footerButtons/showOtherLists.png) no-repeat;
+  border-right:1px solid #999;
+  /* for IE */
+  filter:alpha(opacity=60);
+  /* CSS3 standard */
+  opacity:0.6;
+  float:left;
+}
+
+#showOtherLists:hover {
+  background-color: #e5e5e5;
+  /* for IE */
+  filter:alpha(opacity=100);
+  /* CSS3 standard */
+  opacity:1;
+}

@@ -1,0 +1,135 @@
+/* temporary for jonas demo remove when controls styling done */
+.claro .dijitTextBoxFocused{
+  border-color: #B5BCC7;
+}
+/*********************/
+
+#showNotifications .dijitButtonText {
+  font-family: helvetica; 
+  font-size:9px;
+  text-shadow: #333 0px 1px 0px;
+  position: absolute;
+  left: 17px;
+  top: 14px;
+  width: 18px;
+  text-align: center;
+}
+
+#streamMessages, #streamActivity {
+  padding: 0;
+}
+
+
+.stream-entry:last-child{
+  border-bottom: 1px solid #a3aab1;
+  margin-bottom: 1.8em;
+}
+
+/*the stream entry can be a single activity or message entry or a collection of them*/
+.stream-entry {
+  color:#555555;
+  background: #fafafa;
+  border-bottom: 1px solid #cccccc;
+  font-size: 10px;
+}
+
+.stream-entry .entry-header {
+  border-bottom: 1px solid #eaeaea;
+  padding: 4px;
+}
+
+
+.stream-entry .entry-project, .stream-entry .entry-contact {
+  cursor: pointer;
+}
+
+.stream-entry .entry-project:hover, .stream-entry .entry-contact:hover{
+  color: #000000;
+}
+
+.stream-entry .entry-contact {
+  font-weight: bold;
+  color: #333333;
+  font-size: 12px;
+}
+
+.stream-entry .entry-children {
+  padding: 0;
+}
+
+.stream-entry .stream-message:last-child, .stream-entry .stream-activity:last-child{
+  border-bottom: none;
+}
+
+.stream-entry .stream-message, .stream-entry .stream-activity {
+  border-bottom: 1px solid #eaeaea;
+}
+
+.stream-message .message-body{
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 11px;
+  padding: 4px 4px 0 8px;
+}
+
+.stream-activity .activity-message {
+  color: #333333;
+  font-size: 11px;
+  padding: 4px 4px 0 8px;
+}
+
+.stream-message .message-footer {
+  background-color: #ffffff;
+  color: #a9a9a9;
+  padding: 2px 4px 4px 8px;
+}
+
+.stream-activity .activity-body{
+  padding: 4px 4px 0 8px;
+}
+
+
+.stream-activity .activity-verb{
+  color: #000000;
+  font-weight: bold;
+}
+
+.stream-activity .activity-footer{
+  color: #a9a9a9;
+  padding: 2px 4px 4px 8px;
+}
+
+.stream-footer .footer-reply{
+  margin-left: 4px;
+  color: #555555;
+  cursor: pointer;
+}
+.stream-footer .footer-reply:hover{
+  color: #000000;
+}
+
+#streamHeader {
+  padding: 0;
+}
+
+#streamContainer {
+  background-color: transparent;
+}
+
+#toggleStream {
+  width: 1.8em;
+  background: #ccc url(images/footerButtons/rightArrow.png) no-repeat;
+  border-right:1px solid #999;
+  /* for IE */
+  filter:alpha(opacity=60);
+  /* CSS3 standard */
+  opacity:0.6;
+}
+
+#toggleStream:hover {
+  background: #e5e5e5 url(images/footerButtons/rightArrow.png) no-repeat;
+  /* for IE */
+  filter:alpha(opacity=100);
+  /* CSS3 standard */
+  opacity:1;
+}

@@ -1,0 +1,34 @@
+.task-info {
+  font-size: 10px;
+  color: #5c5c5c;
+}
+
+.task-info.done {
+  background: url(images/icons/taskinfo-done.png) no-repeat center center;
+}
+
+.task-info.cancelled {
+  background: url(images/icons/taskinfo-cancelled.png) no-repeat center center;
+}
+
+.task-info .status {
+  margin-top: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-top: 1px solid #eaeaea;
+}
+
+.task-info li {
+  line-height: 20px;
+}
+
+.task-info .field-inner {
+  line-height: 10px;
+  padding-left: 24px;
+  padding-top: 2px;
+  min-height: 20px;
+}
+
+.task-info span {
+  line-height: 12px;
+}

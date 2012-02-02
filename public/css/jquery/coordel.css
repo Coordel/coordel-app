@@ -1,0 +1,89 @@
+.c-small-icon {
+	background-image: url(images/ui-icons_a3aab1_256x240.png);
+	background-repeat: no-repeat;
+	display:inline-block;
+	height: 16px;
+	width:16px;
+}
+.ui-widget-content .c-small-icon {background-image: url(images/ui-icons_0078a3_256x240.png); }
+.ui-widget-header .c-small-icon {background-image: url(images/ui-icons_ffffff_256x240.png); }
+.ui-state-default .c-small-icon { background-image: url(images/ui-icons_cccccc_256x240.png); }
+.ui-state-hover .c-small-icon, .ui-state-focus .c-small-icon {background-image: url(images/ui-icons_ffffff_256x240.png); }
+.ui-state-active .c-small-icon {background-image: url(images/ui-icons_ffffff_256x240.png); }
+.ui-state-highlight .c-small-icon {background-image: url(images/ui-icons_ffffff_256x240.png); }
+.ui-state-error .c-small-icon, .ui-state-error-text .c-small-icon {background-image: url(images/ui-icons_a83300_256x240.png); }
+
+.c-small-icon2 {
+	background-image: url(images/c-icons_0078a3_160x160.png);
+	background-repeat: no-repeat;
+	display:inline-block;
+	height: 16px;
+	width:16px;
+}
+
+.ui-widget-content .c-small-icon2 {background-image: url(images/c-icons_0078a3_160x160.png); }
+.ui-widget-header .c-small-icon2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-default .c-small-icon2 { background-image: url(images/c-icons_cccccc_160x160.png); }
+.ui-state-hover .c-small-icon2, .ui-state-focus .c-small-icon2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-active .c-small-icon2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-highlight .c-small-icon2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-error .c-small-icon2, .ui-state-error-text .c-small-icon2 {background-image: url(images/ui-icons_a83300_160x160.png); }
+
+.c-small-button {
+	background-image: url(images/ui-icons_5c5c5c_256x240.png);
+	background-repeat: no-repeat;
+	display:inline-block;
+	height: 16px;
+	width:16px;
+	cursor: pointer;
+	opacity: .7;
+}
+.c-small-button2 {
+	background-image: url(images/c-icons_0078a3_160x160.png);
+	background-repeat: no-repeat;
+	display:inline-block;
+	height: 16px;
+	width:16px;
+	cursor: pointer;
+}
+
+.ui-widget-content .c-small-button2 {background-image: url(images/c-icons_0078a3_160x160.png); }
+.ui-widget-header .c-small-button2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-default .c-small-button2 { background-image: url(images/c-icons_cccccc_160x160.png); }
+.ui-state-hover .c-small-button2, .ui-state-focus .c-small-button2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-active .c-small-button2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-highlight .c-small-button2 {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-error .c-small-button2, .ui-state-error-text .c-small-button2 {background-image: url(images/ui-icons_a83300_160x160.png); }
+
+.c-small-button:hover, 
+.c-small-button:focus, 
+.c-small-button:active {background-image: url(images/ui-icons_000000_256x240.png); opacity: 1 }
+
+.c-small-button2:hover, 
+.c-small-button2:focus, 
+.c-small-button2:active {background-image: url(images/c-icons_f58400.png); }
+
+/* coordel regular button */
+.c-icon { width: 16px; height: 16px; background-image: url(images/c-icons_0078a3_160x160.png) repeat:none; }
+.ui-widget-content .c-icon {background-image: url(images/c-icons_0078a3_160x160.png); }
+.ui-widget-header .c-icon {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-default .c-icon { background-image: url(images/c-icons_cccccc_160x160.png); }
+.ui-state-hover .c-icon, .ui-state-focus .c-icon {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-active .c-icon {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-highlight .c-icon {background-image: url(images/c-icons_ffffff_160x160.png); }
+.ui-state-error .c-icon, .ui-state-error-text .c-icon {background-image: url(ui-icons_a83300_160x160.png); }
+
+/* positioning */
+.c-icon-coord { background-position: 0 0; }
+.c-icon-group { background-position: -64px 0;}
+.c-icon-target { background-position: -32px 0;}
+.c-icon-task { background-position: -48px 0;}
+.c-icon-new { background-position: -80px 0;}
+.c-icon-action { background-position: -96px 0;}
+.c-icon-issue { background-position: -96px -16px}
+.c-icon-goal { background-position: -112px 0;}
+.c-icon-deadline {background-position: -128px 0;}
+.c-icon-new-project {background-position: -144px 0;}
+.c-icon-reuse {background-position: -32px -16px;}
+.c-icon-todo {background-position: -48px -16px;}
+.c-icon-todo-checked {background-position: -64px -16px;}

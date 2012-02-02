@@ -1,0 +1,14 @@
+<div>
+	
+	<div class="c-text-center c-float-r" dojoAttachPoint="buttonContainer">
+		<span dojoAttachPoint="markDone" dojoType="dijit.form.Button" label="${coordel.done}" iconClass="coordelHeaderIcon coordelHeaderIconDone" class="c-float-r"></span>
+		<span dojoAttachPoint="send" dojoType="dijit.form.Button" label="${coordel.send}" iconClass="coordelHeaderIcon coordelHeaderIconSend" class="c-float-r hidden"></span>
+		<span dojoAttachPoint="decline" title="${coordel.projectActions.decline}" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconDecline" style="margin-right: 6px" class="c-float-r hidden"></span>
+		<span dojoAttachPoint="participate" title="${coordel.projectActions.participate}" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconAccept" style="margin-right: 6px" class="c-float-r hidden"></span>
+		<span dojoAttachPoint="follow" title="${coordel.projectActions.follow}" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconAccept" style="margin-right: 6px" class="c-float-r hidden"></span>
+		<span dojoAttachPoint="chooseAction" dojoType="dijit.form.DropDownButton" iconClass="coordelHeaderIcon coordelHeaderIconActions"  style="margin-right: 6px" class="coordelHeaderDropDown c-float-r" title="${coordel.projDetails.chooseAction}" showLabel="false">
+			<div dojoAttachPoint="actionsMenu" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden"></div>
+		</span>
+		<span dojoAttachPoint="editProject" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconEdit" style="margin-right: 6px" class="c-float-r hidden" title="${coordel.projDetails.editProject}" showLabel="false"></span>
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<div class="coordel-body">
+	<div dojoAttachPoint="message" class="hidden"></div>
+	<div class="workspace-header no-background" dojoAttachPoint="workspaceHeader">
+		<div class="c-title c-float-l">${coordel.taskWorkspace.total}: 
+			<span dojoAttachPoint="totalCount">&nbsp;</span>
+		</div>
+		<div class="c-title c-float-r">${coordel.taskWorkspace.blocked}: 
+			<span dojoAttachPoint="blockedCount">&nbsp;</span>
+		</div>
+	</div>
+	<div style="margin-top: 8px" dojoAttachPoint="workspaceForm"></div>
+	<div class="clear">
+		<button dojoAttachPoint="saveButton" class="c-float-r" dojoType="dijit.form.Button" type="submit">${coordel.taskWorkspace.save}</button>
+		<div dojoAttachPoint="blockMessage" class="hidden instructions">
+			<em class="required">&#149;</em> <span>${coordel.taskWorkspace.blockMessage}</span>
+		</div>
+	</div>
+	<div class="clear"></div>
+<div>

@@ -1,0 +1,67 @@
+.empty-tasklist{
+  min-width: 420px;
+  position: relative;
+  -webkit-box-shadow: #aaa 0px 1px 0px inset, #CCC 0px 1px 1px;
+  background: #dcdcdc;
+  border: 1px solid #ccc;
+  border-bottom-left-radius: 5px 5px;
+  border-bottom-left-radius: 5px 5px;
+  border-bottom-right-radius: 5px 5px;
+  border-bottom-right-radius: 5px 5px;
+  border-top: 1px solid #ccc;
+  border-top-left-radius: 5px 5px;
+  border-top-left-radius: 5px 5px;
+  border-top-right-radius: 5px 5px;
+  border-top-right-radius: 5px 5px;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0px auto;
+  text-shadow: #E7EDF5 0px 1px 0px;
+  top: 60px;
+  width: 280px;
+  word-wrap: break-word;
+}
+
+.empty-tasklist .text {
+  width: 300px;
+  background-position: 20px 13px;
+  background-repeat: no-repeat;
+  min-height: 50px;
+  padding: 15px 20px 15px 90px;
+}
+
+.empty-tasklist.current .text {
+background-image:url(images/emptyList/current.png);
+}
+
+.empty-tasklist.invited .text {
+background-image:url(images/emptyList/invited.png);
+}
+
+
+.empty-tasklist.blocked .text {
+background-image:url(images/emptyList/blocked.png);
+}
+
+.empty-tasklist.deferred .text {
+background-image:url(images/emptyList/deferred.png);
+}
+
+.empty-tasklist.delegated .text {
+background-image:url(images/emptyList/delegated.png);
+}
+
+.empty-tasklist.private .text {
+background-image:url(images/emptyList/private.png);
+}
+
+.empty-tasklist.project-tasks .text {
+background-image: url(images/emptyList/taskList.png);
+}
+
+.empty-tasklist p {
+font-size: 12px;
+font-weight: normal;
+line-height: 16px;
+}

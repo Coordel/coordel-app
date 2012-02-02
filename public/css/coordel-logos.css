@@ -1,0 +1,24 @@
+.coordel-logo-signin{
+	font-size: 3.5em;
+}
+.coordel-logo-profile{
+	font-size: 2em;
+}
+.coordel-logo-footer{
+	background: url(images/logo-12-black.png) no-repeat center right;
+	margin: 0 4px;
+}
+
+.coordel-logo-white{
+	font-family: "DanubeRegular";
+	color:#fff;
+	text-decoration:none;
+	text-transform: upper;
+	
+}
+.coordel-logo-black{
+	font-family: "DanubeRegular";
+	color: #000;
+	text-decoration:none;
+	text-transform: upper;
+}

@@ -1,0 +1,179 @@
+/* Button | DropDownButton | ComboButton | ToggleButton
+ * 
+ * Styling Buttons mainly includes:
+ * 
+ * 1. Containers
+ * 		.dijitButton
+ * 		.dijitDropDownButton
+ * 		.dijitComboButton
+ * 		.dijitButtonNode - common button/arrow wrapper shared across all three button types 
+ *
+ * 2. Button text
+ * 		.dijitButtonText
+ * 
+ * 3. Arrows - only for DropDownButton and ComboButton
+ * 	     There are total four directions arrows - down, left, right, up:
+ * 		.dijitArrowButtonInner - down arrow by default
+ *      .dijitLeftArrowButton .dijitArrowButtonInner - left arrow
+ *      .dijitRightArrowButton .dijitArrowButtonInner - right arrow
+ *      .dijitUpArrowButton .dijitArrowButtonInner - up arrow
+ * 
+ * 4. States - Hover, Active, Disabled, e.g.
+ * 		.dijitButtonHover .dijitButtonNode
+ * 		.dijitButtonActive .dijitButtonNode
+ * 		.dijitButtonDisabled .dijitButtonNode
+ *      
+ *      .dijitDisabled .dijitArrowButtonInner  - disabled arrow states 
+ */
+.coordel-header .dijitButtonNode {
+  /* rules for dijit.form.*Button widgets and arrow nodes on ComboBox, Spinner etc. */
+
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+.coordel-header .dijitButton .dijitButtonNode,
+.coordel-header .dijitDropDownButton .dijitButtonNode,
+.coordel-header .dijitComboButton .dijitButtonNode,
+.coordel-header .dijitToggleButton .dijitButtonNode {
+  /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
+
+  border: 1px solid #333;
+  padding: 1px 5px 1px 5px;
+  background-image: url("images/button_background.png");
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #101010;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  text-transform: capitalize;
+  font-weight: bold;
+}
+/*
+.coordel-header .dijitComboButton .dijitArrowButton {
+  border-left-width: 0;
+  padding: 4px 2px 4px 2px;
+ 
+
+}
+*/
+/*arrow styles for down/up/left/right directions*/
+.coordel-header .dijitArrowButtonInner {
+  width: 15px;
+  height: 15px;
+  margin: 0 auto;
+  /*background-image: url("images/buttonArrows.png");*/
+  background-repeat: no-repeat;
+  background-position: -51px 53%;
+}
+.coordel-header .dijitLeftArrowButton .dijitArrowButtonInner {
+  background-position: -77px 53%;
+}
+.coordel-header .dijitRightArrowButton .dijitArrowButtonInner {
+  background-position: -26px 53%;
+}
+.coordel-header .dijitUpArrowButton .dijitArrowButtonInner {
+  background-position: 0 53%;
+}
+.coordel-header .dijitDisabled .dijitArrowButtonInner {
+  background-position: -151px 53%;
+}
+.coordel-header .dijitDisabled .dijitLeftArrowButton .dijitArrowButtonInner {
+  background-position: -177px 53%;
+}
+.coordel-header .dijitDisabled .dijitRightArrowButton .dijitArrowButtonInner {
+  background-position: -126px 53%;
+}
+.coordel-header .dijitDisabled .dijitUpArrowButton .dijitArrowButtonInner {
+  background-position: -100px 53%;
+}
+.coordel-header .dijitButtonText {
+  /*padding: 0 0.3em;*/
+  text-align: center;
+}
+/* hover status */
+.coordel-header .dijitButtonHover .dijitButtonNode,
+.coordel-header .dijitDropDownButtonHover .dijitButtonNode,
+.coordel-header .dijitComboButton .dijitButtonNodeHover,
+.coordel-header .dijitComboButton .dijitDownArrowButtonHover,
+.coordel-header .dijitToggleButtonHover .dijitButtonNode {
+  background-color: #222;
+  color: #fff;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+/* checked status */
+.coordel-header .dijitButtonActive .dijitButtonNode,
+.coordel-header .dijitDropDownButtonActive .dijitButtonNode,
+.coordel-header .dijitComboButtonActive .dijitButtonNode,
+.coordel-header .dijitToggleButtonActive .dijitButtonNode {
+  background-color: #333;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+/* disabled status */
+.coordel-header .dijitButtonDisabled,
+.coordel-header .dijitDropDownButtonDisabled,
+.coordel-header .dijitComboButtonDisabled,
+.coordel-header .dijitToggleButtonDisabled {
+  background-image: none;
+  outline: none;
+}
+.coordel-header .dijitButtonDisabled .dijitButtonNode,
+.coordel-header .dijitDropDownButtonDisabled .dijitButtonNode,
+.coordel-header .dijitComboButtonDisabled .dijitButtonNode,
+.coordel-header .dijitToggleButtonDisabled .dijitButtonNode {
+  background-color: #333;
+  border: solid 1px #222;
+  background-image: none;
+  color: #818181;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.coordel-header .dijitComboButtonDisabled .dijitArrowButton {
+  border-left-width: 0;
+}
+/* for ComboButton */
+.coordel-header table.dijitComboButton {
+  border-collapse: separate;
+  /* override dijit.css so that ComboBox rounded corners work */
+
+}
+.dj_ie6 .coordel-header .dijitButtonNode {
+  background-image: none;
+}
+.coordel-header .dijitComboButton .dijitStretch {
+  -moz-border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px;
+}
+.coordel-header .dijitComboButton .dijitArrowButton {
+  -moz-border-radius: 0 4px 4px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Buttons */
+
+.coordel-header .dijitToggleButton,
+.coordel-header .dijitButton,
+.coordel-header .dijitDropDownButton,
+.coordel-header .dijitComboButton {
+	/* outside of button */
+	margin: 0;
+	vertical-align: middle;
+}
+
+.coordel-header .dijitArrowButtonInner {
+  background-image: url("images/icons/headerButtonArrows.png");
+}

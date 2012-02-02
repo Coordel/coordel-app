@@ -1,0 +1,306 @@
+.task-form-outline {
+  border-radius: 4px;
+  border-color: #000; 
+  border-left-width: 1px; 
+  border-right-width: 1px; 
+  border-bottom-width: 1px; 
+  border-style: solid;
+}
+
+.task-form-header{
+	background: #000 url(images/titlebar-2.png) repeat-x;
+	border: none;
+	text-align: center;
+	border-bottom: 1px solid #333;
+	padding: 6px;
+}
+.task-form-header h2 {
+	color: #fff;
+	text-align: center;
+	display: inline;
+	font-size: 16px;
+}
+
+.task-form-header .dijitButton {
+  margin: 0;
+}
+
+.task-form-header .dijitButton .dijitButtonNode{
+	border: 1px solid #666;
+	background-color: #333;
+	background-image: url(images/button_background.png);
+  color: #fff;
+  width: 4em;
+  padding-bottom: 4px;
+  font-family: helvetica;
+  text-shadow: rgba(0, 0, 0, 0.3) 0px 1px 0px;
+  font-weight: bold;
+}
+
+.task-form-header .dijitButton .dijitButtonNode:hover {
+	background-color: #444;
+}
+
+.highlight-button.dijitButton .dijitButtonNode {
+  background-color: #00629B;
+  border: 1px solid #59b4d4;
+  
+}
+
+.highlight-button.dijitButton .dijitButtonNode:hover {
+  background-color: #008ABB;
+  border: 1px solid #59b4d4;
+}
+
+.warning-button.dijitButton .dijitButtonNode {
+  background-color: #DA291C;
+  border: 1px solid #FF4438;
+  
+}
+
+.warning-button.dijitButton .dijitButtonNode:hover {
+  background-color: #E03E34;
+  border: 1px solid #FF4438;
+}
+
+
+.task-form-footer{
+	background: #ccc url(images/titlebar1.png) repeat-x;
+  border-top: 1px solid #999;
+  padding: 0;
+  color: #444;
+  line-height: 1em;
+	padding: 4px;
+}
+
+.task-form li.field.task-name {
+  padding-left: 5px;
+}
+
+.quick-entry .task-form li.field.task-name{
+  padding: 0 2px 2px 2px;
+}
+
+.taskFormName {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.quick-entry .taskFormName{
+  font-size: 12px;
+}
+
+/*-------------------- Task Icons ------------------------------------------------------------------------*/
+
+.task-purpose{
+  background-image: url(images/icons/form/purpose.png);
+}
+
+.task-purpose-small{
+ background-image: url(images/icons/purpose-10x10.png);
+}
+
+.task-deadline{
+  background-image: url(images/icons/form/deadline.png);
+} 
+ 
+.task-delegate{
+  background-image: url(images/icons/task-form/delegate.png);
+}
+
+.task-defer{
+  background-image: url(images/icons/form/defer.png);
+} 
+
+.task-deliverables{
+  background-image: url(images/icons/task-form/deliverables.png);
+}
+
+.task-blockers{
+  background-image: url(images/icons/task-form/blockers.png);
+}
+
+.task-attachments{
+  background-image: url(images/icons/form/attachments.png);
+}
+
+.task-project{
+  background-image: url(images/icons/task-form/project.png);
+}
+
+
+.task-form .task-form-dropdown {
+  border: none;
+}
+
+/* menus for the task form */
+
+.task-form-dropdown.dijitMenu {
+  background-repeat: repeat-y;
+  background-color: #ffffff;
+  border-top: 1px solid #cccccc;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+  border-bottom: 1px solid #999;
+  /* so adjoining borders of MenuBar/ComboBox and Menu overlap, avoiding double border */
+
+  margin: -1px 0 1px 0;
+  
+  -webkit-box-shadow: 0 2px 5px #666;
+  -moz-box-shadow: 0 2px 5px #666;
+  box-shadow: 0 2px 5px #666;
+  
+  -moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+   border-bottom-right-radius: 4px;
+   border-bottom-left-radius: 4px;
+  
+}
+
+.task-form-dropdown .dijitMenuItem {
+  height: 20px;
+  line-height: 20px;
+}
+
+.task-form-dropdown .none-found {
+  height: 20px;
+  line-height: 20px;
+  padding: 4px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.task-form-dropdown .footer-button {
+  background: #ccc url(images/titlebar1.png) repeat-x;
+  border-top: 1px solid #999;
+  color: #666;
+  line-height: 20px;
+  height: 20px;
+  font-size: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.task-form-dropdown .footer-button:hover {
+  color: #000;
+  background-color: #eaeaea;
+}
+
+.task-form-dropdown .header-menu {
+  background: #ccc url(images/titlebar1.png) repeat-x;
+  border-bottom: 1px solid #999;
+  color: #666;
+  line-height: 16px;
+  height: 16px;
+  font-size: 10px;
+  font-weight: bold;
+  padding-left: 8px;
+}
+
+.task-form-dropdown .header-menu-item {
+  cursor: pointer;
+}
+
+/*ComboBox Menu*/
+.task-form-dropdown.dijitComboBoxMenu {
+  margin-left: 0;
+  background-image: none;
+}
+.task-form-dropdown.dijitComboBoxMenu .dijitMenuItem {
+  padding: 4px;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #eaeaea;
+}
+
+.task-form-dropdown.dijitComboBoxMenu .dijitMenuItemSelected {
+  color: #ffffff;
+  text-shadow: #333 0px 1px 0px;
+  border-color: none;
+  background-color: #7C8590;
+}
+.task-form-dropdown.dijitComboBoxMenuActive .dijitMenuItemSelected {
+  background-position: 0 -177px;
+  background-color: #7C8590;
+  /* TODO: why is this a different color than normal .dijitMenuItemSelected? */
+
+}
+
+.task-form-dropdown .deliverable-field-settings {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+}
+
+.task-form-dropdown .deliverable-field-settings:last-child {
+  border-bottom: none;
+}
+
+.task-form-dropdown .deliverable-field-settings:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+.task-form-dropdown .settings-nav {
+  line-height: 16px;
+  height: 16px;
+  border-top: 1px solid #ccc;
+  background-color: #fdfdfd;
+}
+
+.task-form-fieldset {
+  border: 1px solid #B5BCC7;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.task-form-fieldset legend {
+  color: #666;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.task-form-pill {
+  height:16px;
+  line-height: 16px;
+  border:1px solid #A3AAB1;
+  background: #b4b4b4 url(images/titlebar1.png) repeat-x; 
+  font-size: 10px;
+  color: #5c5c5c;
+  font-family: helvetica;
+  padding-left: 4px;
+  font-weight:bold;
+}
+
+.task-form-pill.selected {
+  background-color: #eaeaea;
+  color: #000;
+}
+
+.pill-project-label {
+  max-width: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pill-task-label {
+  max-width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pill-divider {
+  font-weight: bold;
+  padding: 0 2px 0 2px;
+}
+
+.task-form-pill .pill-blocker {
+  background: url(images/icons/task-form/pill-blocker.png) no-repeat;
+  height: 9px;
+  width: 9px;
+  display: block;
+  margin: 4px;
+}
+
+

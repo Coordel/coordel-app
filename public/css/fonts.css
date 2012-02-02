@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'DanubeBold';
+    src: url('fonts/danub___-webfont.eot?') format('eot'),
+         url('fonts/danub___-webfont.woff') format('woff'),
+         url('fonts/danub___-webfont.ttf') format('truetype'),
+         url('fonts/danub___-webfont.svg#webfontF3uTRhbB') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'DanubeRegular';
+    src: url('fonts/danube__-webfont.eot?') format('eot'),
+         url('fonts/danube__-webfont.woff') format('woff'),
+         url('fonts/danube__-webfont.ttf') format('truetype'),
+         url('fonts/danube__-webfont.svg#webfontvSI50l3t') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}

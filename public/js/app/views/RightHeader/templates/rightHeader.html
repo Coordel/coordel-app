@@ -1,0 +1,16 @@
+<div id="rightHeader" style="padding:8px">
+		<span id="showNotifications" dojoAttachPoint="showNotifications" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconNotify"  class="c-float-l" title="${coordel.stream.showNotifications}" label="0" showLabel="false"></span>
+	<div dojoAttachPoint="coordelUserPreferences" dojoType="dijit.form.DropDownButton" title="User Preferences" class="c-float-r" label="${userFullName}" iconClass="coordelHeaderIcon coordelHeaderIconBlank" showLabel="true" style="margin-left: 6px">
+	   <div id="coordelUserPreferencesMenu" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden">
+			<h3 class="menu-header">${coordel.options}</h3>
+			<ul class="menu-items">
+				<li dojoAttachPoint="optPreferences" id="optPreferences" class="option"><ins></ins><a>${coordel.preferences}...</a></li>
+				<li dojoAttachPoint="doNotDisturb" class="option"><ins></ins><a>${coordel.doNotDisturbOff}</a></li>
+				<li dojoAttachPoint="doNotDisturbOff" class="option"><ins></ins><a>${coordel.doNotDisturb}...</a></li>
+				<li dojoAttachPoint="optLogout" id="optLogout" class="option"><ins></ins><a>${coordel.logout}</a></li>
+			</ul>
+		</div>
+	</div>
+	<span id="hideRightColumn" dojoAttachPoint="hideRight" dojoType="dijit.form.Button" title="${coordel.hideRightColumn}" iconClass="coordelHeaderIcon coordelHeaderIconHide" class="c-float-r hidden" showLabel="false"></span>
+	<span id="showRightColumn" dojoAttachPoint="showRight" dojoType="dijit.form.Button" title="${coordel.showRightColumn}" iconClass="coordelHeaderIcon coordelHeaderIconShow" class="c-float-r" showLabel="false"></span>
+</div>

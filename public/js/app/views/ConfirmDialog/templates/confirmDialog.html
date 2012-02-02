@@ -1,0 +1,15 @@
+<div class="dijitDialog coordelConfirmDialog" role="dialog" aria-labelledby="${id}_title">
+	<div dojoAttachPoint="titleBar" class="dijitDialogTitleBar">
+		<span dojoAttachPoint="closeButtonNode" class="coordelDialogButton c-float-l" dojoAttachEvent="ondijitclick: onCancel">${cancelText}
+			<span dojoAttachPoint="closeText" class="closeText hidden" title="${buttonCancel}"></span>
+		</span>
+		<span dojoAttachPoint="titleNode" class="dijitDialogTitle" id="${id}_title"></span>
+		<span dojoAttachPoint="dialogConfirm" class="${executeCss} coordelDialogButton c-float-r">${executeText}</span>
+		<span dojoAttachPoint="dialogConfirmDisabled" class="disabled-button coordelDialogButton c-float-r hidden">${executeText}</span>
+	</div>
+	<div dojoAttachPoint="confirmTextContainer">
+		<div class="coordelDialogConfirmText">${confirmText}</div>
+	</div>
+	<div dojoAttachPoint="containerNode" class="coordelDialogPaneContent"></div>
+	<div dojoAttachPoint="footerNode" class="dialog-footer ui-corner-bottom"></div>
+</div>

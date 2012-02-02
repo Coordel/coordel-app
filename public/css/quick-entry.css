@@ -1,0 +1,240 @@
+#taskListDetails{
+   border-top: 1px solid #a3aab1;
+}
+
+#taskDetailsChecklist .dijitTitlePaneContentOuter {
+  border: none;
+}
+
+
+/* use quick entry style when a user can click in a textbox, type something, and press enter to add
+to a list (i.e. private tasks, checklist, choices, etc)*/
+.c-quick-entry{
+  width: 100%; 
+  color: #66727F;
+  
+  border-bottom: 1px solid #a3aab1;
+  border-top: 1px solid #a3aab1;
+
+  white-space: nowrap;
+  font-size: .9em;
+  font-family: helvetica;
+  line-height: 2em; 
+}
+
+.c-quick-entry.inactive{
+  padding: 1px 10px 1px 20px;
+  background-image: url(images/footerButtons/add.png);
+  background-color: #fafafa;
+  background-position: left center;
+  background-repeat: no-repeat;
+  opacity: .6;
+  font-weight: bold;
+}
+
+.c-quick-entry.inactive:hover{
+  background-color: #ffffff;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.c-quick-entry.active{
+  background-image: url(images/titlebar1.png);
+  background-color: #ffffff;
+  opacity: 1;
+}
+
+.c-quick-entry .dijitPlaceHolder {
+  margin-top: 1px;
+}
+
+.c-quick-entry .dijitTextBoxHover {
+  background: none;
+}
+
+.note {
+  padding: 8px;
+  background-color: #fff;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 10px;
+}
+
+.note .title, .note .by {
+  font-size: 10px;
+  padding-bottom: 4px;
+  color: #5c5c5c;
+}
+
+.quick-entry .note {
+  padding-left: 14px;
+  background: #ffffff url(images/icons/note-10x10.png) 4px 5px no-repeat !important;
+  padding-bottom: 6px;
+}
+
+
+.quick-entry .purpose {
+  padding-left: 14px;
+  background: #ffffff url(images/icons/purpose-10x10.png) 4px 5px no-repeat !important;
+  padding-bottom: 6px;
+}
+
+.quick-entry .task-deadline {
+  padding-left: 14px;
+  background: #ffffff url(images/icons/deadline-10x10.png) 4px 5px no-repeat !important;
+  padding-bottom: 6px;
+}
+
+
+
+.task-and-checklist .todo-item{
+  padding-left: 35px;
+}
+
+.todo-item{
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  font-color: #333333;
+  font-size: 10px;
+  padding:6px 8px;
+}
+
+.todo-item.glow {
+  background: #fdfdfd;
+  background-image: url(images/taskGlow.png);
+  background-repeat: repeat-y;
+}
+
+.todo-item:last-child, .note:last-child{
+  border-bottom: none;
+}
+
+.task-and-checklist .checklist {
+  margin-bottom: 0;
+}
+
+.checklist{
+  margin-bottom: 8px;
+}
+
+.task-and-checklist .checklist.no-add {
+  border-bottom: 1px solid #eaeaea ;
+}
+
+.checklist.no-add, .task-notes.no-add {
+  border-bottom: 1px solid #a3aab1 ;
+}
+
+.todo-item:hover{
+  background: #fdfdfd;
+}
+
+.todo-item .task-container{
+  width: 93%;
+}
+
+.todo-item .task{
+
+}
+
+.todo-item .checkbox {
+  margin-right: 4px;
+}
+
+.todo-item .sortable {
+  background: url(images/sortable.png) no-repeat;
+  background-position: left center;
+  margin-right: 2px;
+  filter:alpha(opacity=40);
+  opacity:0.4;
+}
+
+.todo-item .deadline {
+  font-size: 10px;
+  text-align: right;
+  margin-left: 8px;
+}
+
+.todo-item .meta-turbo{
+  margin-left: 4px;
+  background: url(images/icons/meta-turbo.png) center center no-repeat;
+  opacity: 0.4;
+  padding: 2px;
+}
+
+.todo-item .purpose{
+  color: #666;
+}
+
+/* override the claro checkbox styles*/
+.claro .dijitCheckBox, .claro .dijitCheckBoxIcon {
+  background-image: url('images/checkboxStates-small.png');
+  /* checkbox sprite image */
+
+  background-repeat: no-repeat;
+  width: 12px;
+  height: 12px;
+  margin-top: -2px;
+  padding: 0;
+}
+.claro .dijitCheckBox, .claro .dijitToggleButton .dijitCheckBoxIcon {
+  /* unchecked */
+
+  background-position: -12px;
+}
+.claro .dijitCheckBoxChecked, .claro .dijitToggleButtonChecked .dijitCheckBoxIcon {
+  /* checked */
+
+  background-position: 0;
+}
+.claro .dijitCheckBoxDisabled {
+  /* disabled */
+
+  background-position: -60px;
+}
+.claro .dijitCheckBoxCheckedDisabled {
+  /* disabled but checked */
+
+  background-position: -48px;
+}
+.claro  .dijitCheckBoxHover {
+  /* hovering over an unchecked enabled checkbox */
+
+  background-position: -36px;
+}
+.claro  .dijitCheckBoxCheckedHover {
+  /* hovering over an checked enabled checkbox */
+
+  background-position: -24px;
+}
+
+/* use quick entry style when a user can click in a textbox, type something, and press enter to add
+to a list (i.e. private tasks, checklist, choices, etc)*/
+.c-quick-search{
+  background-color: #ffffff;
+  background-image: url(images/icons/search.png);
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding: 1px 8px 1px 16px;
+  border: 1px solid #ccc;
+  border-radius: 14px;
+  width: 18em;
+  margin-top: 1px;
+  font-size: 10px;
+  
+}
+
+.quick-search{
+display: inline-block;
+}
+ 
+.c-quick-search .dijitPlaceHolder {
+  margin-top: 1px;
+}
+ 
+.c-quick-search .dijitTextBoxHover {
+  background: none;
+}
+
+
+
+

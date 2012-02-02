@@ -1,0 +1,283 @@
+.name {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 1em;
+}
+
+.file-border {
+  border: 1px solid #eaeaea;
+}
+
+.select-field .name {
+  font-size: .8em;
+  color: #666;
+}
+
+.file-version {
+  font-size: 10px; 
+  padding: 2px 4px;
+}
+
+.text-version {
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+.version{
+	font-size: 8px;
+	color:#5c5c5c;
+	padding-right:2px;
+}
+
+.timeago {
+  color: #5c5c5c;
+  margin-left: 8px;
+}
+
+.current-file{
+  font-weight: bold;
+}
+
+.blocker-info, .blocker-info .current-file{
+  color: #5c5c5c;
+}
+
+.instructions {
+ font-size: 10px;
+ margin-left: 2px;
+ margin-bottom: 2px;
+}
+
+.deliverable {
+  margin-bottom: 16px;
+}
+
+.block-info .required {
+  opacity: .7;
+}
+
+.blocker-header {
+  border-top: 1px solid #B5BCC7;
+  margin-top: 24px;
+  font-size: 10px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #cccccc;
+  padding: 4px 8px;
+  font-weight: bold;
+}
+
+.blocker-info .deliverable {
+  padding: 8px 8px 0 8px;
+}
+
+.blocker-header .blocker-username {
+ font-weight: normal;
+}
+.not-started {
+  /*color: #DA291C;*/
+  padding: 2px;
+}
+
+.checkbox-list .not-started, .radio-list .not-started {
+  border: 1px solid #eaeaea;
+}
+
+.blocker-header .icon-info {
+  margin-left: 4px;
+  display: inline-block;
+  opacity: .3;
+  cursor: pointer;
+}
+
+.blocker-header .icon-info:hover {
+  margin-left: 4px;
+  display: inline-block;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.blocker-header:first-child{
+  border-top: none;
+  margin-top: 0;
+}
+
+.select-field {
+  padding: 6px 10px 0 10px;
+}
+
+.select-field:last-child {
+  padding-bottom: 6px;
+}
+
+.deliverable-field{
+  margin-bottom: 4px;
+  margin-top:4px;
+}
+
+.deliverable-fields .dijitContentPane{
+  padding-left: 0px;
+}
+
+.required {
+  font-size: 1.3em;
+  color:#d33;
+  font-style: normal;
+}
+
+.required.ready {
+  color: #B5BCC7;
+}
+
+/* style main form sub-control description */
+label.sub-desc {
+	border:medium none;
+	display:block;
+	line-height:100%;
+	padding:2px 0px 6px 2px;
+}
+
+label.choice {
+	display:block;
+	font-size:100%;
+	line-height:1.4em;
+	margin:-19px 0 0 25px;
+	padding:4px 0 5px;
+	width:90%;
+}
+
+
+/* styles for positioning deliverable fields */
+.third {
+	width:32% !important;
+}
+
+.two-third {
+		width:64% !important;
+}
+
+.half {
+	width:48% !important;
+}
+
+.full {
+	width:100% !important;
+}
+
+.deliverable .left {
+	display:inline;
+	float:left;
+	width:48%;
+}
+
+.deliverable .left-third {
+	display:inline;
+	float:left;
+	width:32%;
+}
+
+.deliverable .right {
+	display:inline;
+	float:right;
+	width:48%;
+}
+
+.deliverable .right-two-third {
+	display:inline;
+	float:right;
+	width:64%;
+}
+
+.deliverable .left .medium, form div.right .medium {
+	width:100%;
+}
+
+/* styles for specific form controls */
+
+input, textarea{
+	border: 1px solid #eaeaea;
+	padding-top: 4px;
+}
+
+input.text, textarea.textarea {
+	color:#5c5c5c;
+	font-size:100%;
+}
+
+.select-field input, .select-field textarea{
+	border: 1px solid #eaeaea;
+	padding-top: 4px;
+}
+
+.select-field input.text, .select-field textarea.textarea {
+	color:#5c5c5c;
+	font-size:80%;
+}
+
+input.file {
+	border: medium none;
+}
+input.text{
+	padding:4px 0;
+}
+input.currency {
+	text-align:right;
+}
+input.checkbox, input.radio {
+	display:block;
+	height:13px;
+	line-height:1.4em;
+	margin:8px 0 0 3px;
+	width:13px;
+}
+input.x-small, select.x-small, div.x-small {
+	width:25%;
+}
+input.small, select.small, div.small {
+	width:33%;
+}
+input.medium, select.medium, div.medium {
+	width:50%;
+}
+input.large, select.large, div.large{
+	width:75%;
+}
+input.x-large, select.x-large, div.x-large{
+	width:100%;
+}
+
+textarea.textarea {
+	font-family: inherit;
+	margin-top:1px;
+}
+textarea {
+	width: 98%;
+}
+
+textarea.display-version {
+  width: 75%;
+}
+
+textarea.x-small {
+	min-height:2em;
+}
+textarea.small {
+	min-height:4em;
+}
+textarea.medium {
+	min-height:8em;
+}
+textarea.large {
+	min-height:16em;
+}
+textarea.x-large{
+	min-height:32em;
+}
+
+select.select {
+	margin:1px 0;
+	padding:1px 0 0;
+}
+select.select[class] {
+	margin:0;
+	padding:1px 0;
+}

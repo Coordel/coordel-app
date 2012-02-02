@@ -1,0 +1,85 @@
+h3.menu-header{
+	color: #999;
+	background-image: none;
+	background-color: #fff;
+	border: none;
+	padding: 0px 0px 0px 0px;
+	margin-left: 8px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	font-size: 11px;
+}
+
+.menu-items li {
+	border: none;
+	background-image: none;
+	padding: 4px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+
+.menu-items li:hover {
+	border: none;
+	background: #66727F url(images/menu_background.png);
+	color: #fff;
+	text-shadow: #333 0px 1px 0px;
+	cursor: pointer;
+}
+
+.menu-items a {
+	padding-left: 20px;
+	display: inline-block;
+}
+
+.menu-items li.selected a {
+	background-image: url(images/small-check.png);
+	background-repeat: no-repeat;
+	background-position: left-center;
+}
+
+.menu-items li.selected:hover a {
+	background-image: url(images/small-check-white.png);
+}
+
+.claro .menu.dijitTooltipAbove .dijitTooltipContainer {
+  margin-top: 4px;
+}
+.claro .menu.dijitTooltipBelow .dijitTooltipContainer {
+  margin-bottom: 4px;
+}
+
+
+.claro .menu .dijitTooltipContainer {
+  /* the part with the text */
+  background-color: #ffffff;
+  background-image: none;
+  background-repeat: repeat-x;
+  background-position: bottom;
+  border: 1px solid #ffffff;
+  padding: 6px 8px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: #555 0px 0px 4px;
+  -moz-box-shadow: #555 0px 0px 4px;
+  box-shadow: #555 0px 0px 4px;
+  font-size: 1em;
+  min-width: 160px;
+  margin-right: 4px;
+  padding: 0;
+}
+.dj_ie6 .claro .menu .dijitTooltipContainer {
+  background-image: none;
+}
+.claro .menu .dijitTooltipConnector {
+  /* the arrow piece */
+
+  border: 0;
+  z-index: 2;
+  background-image: url("images/tooltip-1.png");
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 14px;
+}

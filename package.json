@@ -1,0 +1,13 @@
+{
+  "name": "coordel-app",
+  "author": "Coordel <support@coordel.com>",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "./app.js"
+  },
+  "dependencies": {
+    "express": "2.5.0",
+    "jade": ">= 0.0.1"
+  },
+  "analyze": false
+}

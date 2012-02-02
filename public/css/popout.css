@@ -1,0 +1,65 @@
+.popout-header{
+	background: #000 url(images/titlebar-2.png) repeat-x;
+	border: none;
+	text-align: center;
+	padding: 4px;
+	border-bottom: 1px solid #333;
+}
+.popout h2 {
+	color: #fff;
+	text-align: center;
+	display: inline;
+	font-size: 16px;
+}
+.popout-content{
+	padding: 4px;
+}
+
+.popout-footer{
+	background: #ccc url(images/titlebar1.png) repeat-x;
+  border-top: 1px solid #999;
+  color: #444;
+  line-height: 1.8em;
+	padding: 2px 4px;
+}
+
+.popout-footer:hover{
+	background-color: #eaeaea;
+}
+
+
+.popout .dijitTooltipFocusNode {
+	padding: 0;
+}
+
+.popout .dijitContentPane {
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+}
+
+.popout .dijitTooltipConnector {
+
+  background-image: url(images/tooltip-2.png);
+  background-repeat: no-repeat;
+
+}
+
+.popout .dijitTooltipContainer {
+  border: none;
+  font-size:11px;
+	background-image: none;
+	border: none;
+	background-color: #fff;
+	-webkit-box-shadow: 0 1px 5px #666;
+  -moz-box-shadow: 0 1px 5px #666;
+  box-shadow: 0 1px 5px #666;
+	margin-right: 12px;
+	margin-bottom: 12px;
+	width: 30em;
+	padding: 0;
+}
+
+.popout .dijitDialogPaneContent{
+  width: 30em;
+}

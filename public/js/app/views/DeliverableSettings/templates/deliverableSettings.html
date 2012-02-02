@@ -1,0 +1,73 @@
+<div>	
+	<div dojoAttachPoint="wizardHead" class="header-menu c-text-justify c-border-b">
+		<span dojoAttachPoint="detailsMenu" class="header-menu-item">${coordel.deliverableSettings.details}</span>
+		<span dojoAttachPoint="fieldsMenu" class="header-menu-item"><span class="c-padding-l c-padding-r">></span>${coordel.deliverableSettings.fields}</span>
+		<span dojoAttachPoint="blockersMenu" class="header-menu-item"><span class="c-padding-l c-padding-r">></span>${coordel.deliverableSettings.blockers}</span>
+		<div class="clear"></div>
+	</div>
+	<div dojoAttachPoint="settingsStack" doLayout="false" dojoType="dijit.layout.StackContainer" style="padding:0">
+		<div dojoAttachPoint="simplePane" dojoType="dijit.layout.ContentPane" style="padding:0">
+			<div class="select-field">
+				<div class="desc">
+					<span class="name">${coordel.deliverableSettings.name}</span>
+					<em class="required">&#149;</em>
+				</div>
+				<div>
+					<input dojoType="dijit.form.TextBox" dojoAttachPoint="simpleName" class="text" tabindex="1"/>
+				</div>
+			</div>
+			<div class="select-field">
+				<div class="desc">
+					<span class="name">${coordel.deliverableSettings.instructions}</span>
+					<em class="required">&#149;</em>
+				</div>
+				<div>
+					<textarea dojoType="dijit.form.Textarea" dojoAttachPoint="simpleInstructions" class="textarea" tabindex="2"></textarea>
+				</div>
+			</div>
+			<div dojoType="app.widgets.ContainerPane" dojoAttachPoint="simpleFieldContainer" style="padding:0"></div>
+		</div>
+		<div dojoAttachPoint="detailsPane" selected="true" dojoType="dijit.layout.ContentPane" title="Details" style="padding:0 0 4px 0">
+			<div class="select-field">
+				<div class="desc">
+					<span class="name">${coordel.deliverableSettings.name}</span>
+					<em class="required">&#149;</em>
+				</div>
+				<div>
+					<input dojoType="dijit.form.TextBox" dojoAttachPoint="detailsName" class="text" tabindex="1"/>
+				</div>
+			</div>
+			<div class="select-field">
+				<div class="desc">
+					<span class="name">${coordel.deliverableSettings.instructions}</span>
+					<em class="required">&#149;</em>
+				</div>
+				<div>
+					<textarea dojoType="dijit.form.Textarea" dojoAttachPoint="detailsInstructions" class="textarea" tabindex="2"></textarea>
+				</div>
+			</div>
+		</div>
+		<div dojoAttachPoint="fieldsPane" dojoType="app.widgets.ContainerPane" title="Fields" style="padding:0; max-height: 300px"></div>
+		<div dojoAttachPoint="blockersPane" dojoType="app.widgets.ContainerPane" title="Blockers" style="max-height: 150px"></div>
+	</div>
+	<div dojoAttachPoint="navButtons" class="settings-nav">
+		<div dojoAttachPoint="navDetails" class="c-float-l select-field">
+			<div class="c-small-button ui-icon-circle-triangle-w c-float-l"></div>
+			<div class="c-float-l name">${coordel.deliverableSettings.details}</div>
+		</div>
+		<div dojoAttachPoint="navFieldsPrev" class="c-float-l select-field">
+			<div class="c-small-button ui-icon-circle-triangle-w c-float-l"></div>
+			<div class="c-float-l name">${coordel.deliverableSettings.fields}</div>
+		</div>
+		<div dojoAttachPoint="navFieldsNext" class="c-float-r select-field">
+			<div class="c-small-button ui-icon-circle-triangle-e c-float-r"></div>
+			<div class="c-float-r name">${coordel.deliverableSettings.fields}</div>
+		</div>
+		<div dojoAttachPoint="navBlockers" class="c-float-r select-field">
+			<div class="c-small-button ui-icon-circle-triangle-e c-float-r"></div>
+			<div class="c-float-r name">${coordel.deliverableSettings.blockers}</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+</div>

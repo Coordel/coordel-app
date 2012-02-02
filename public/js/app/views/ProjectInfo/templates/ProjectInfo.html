@@ -1,0 +1,38 @@
+<div>
+	<div class="c-padding">
+		<h3 class="no-background">
+			<span dojoAttachPoint="name" dojoType="app.views.Label"></span>
+		</h3>
+		<div>
+			<ul class="task-form">
+				<li dojoAttachPoint="infoPurpose">
+					<span title="${coordel.projDetails.purpose}" class="field-icon dark-purpose"></span>
+					<div class="field-inner">
+						<span dojoAttachPoint="purpose" dojoType="app.views.Label"></span>
+					</div>
+				</li>
+			
+				<li dojoAttachPoint="infoDeadline">
+					<span class="field-icon dark-deadline"></span>
+					<span>${coordel.projDetails.deadline} <span><span dojoAttachPoint="deadline" dojoType="app.views.Label"></span>
+				</li>
+					
+				<li dojoAttachPoint="infoResponsible">
+					<span class="field-icon dark-responsible"></span>
+					<span dojoAttachPoint="responsible" dojoType="app.views.Label"></span>
+				</li>
+			
+				<li dojoAttachPoint="infoDeferDate">
+					<span class="field-icon dark-defer"></span>
+					<span>${coordel.projDetails.starts} </span><span dojoAttachPoint="deferred" dojoType="app.views.Label"></span>
+				</li>
+					
+				<li dojoAttachPoint="infoAttachments">
+					<span class="field-icon dark-attachments"></span>
+					<span>${coordel.projDetails.attachments} </span>
+					<div dojoAttachPoint="attachments" style="padding-left: 24px"></div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

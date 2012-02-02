@@ -1,0 +1,20 @@
+<div>
+	<div class="select-field">
+		<div class="desc">
+			<span class="name">${coordel.projectForm.role.name}</span>
+		</div>
+		<div>
+			<input dojoType="dijit.form.TextBox" dojoAttachPoint="focusPoint" name="roleName" class="text" tabindex="1"/>
+		</div>
+	</div>
+	<div class="select-field c-padding-large-b">
+		<div class="desc">
+			<span class="name">${coordel.projectForm.role.person}</span>
+		</div>
+		<div>
+			<select dojoAttachPoint="people" dojoType="dijit.form.FilteringSelect" name="username" class="select" tabindex="2"></select>
+		</div>
+	</div>
+
+	<div dojoAttachPoint="save" class="footer-button c-text-center ui-corner-bottom task-form-button c-margin-large-t">${coordel.save}</div>   
+</div>

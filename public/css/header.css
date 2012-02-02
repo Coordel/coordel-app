@@ -1,0 +1,173 @@
+/* Style for the left and right headers */
+.outer-header {
+  color: #66727F;
+	text-transform: uppercase;
+	text-shadow: #fff 0px 1px 0px;
+	border-bottom: 1px solid #66727F;
+	padding: 2px 8px 0px 8px;
+	white-space: nowrap;
+	background: #b4b4b4 url(images/titlebar1.png) repeat-x;
+	font-size: .9em;
+	font-family: helvetica;
+	line-height: 1.8em;
+	font-weight: bold;
+}
+
+.outer-tab {
+  text-align: center;
+  background-color: #dcdcdc;
+  background-image: url(images/titlebar1.png) repeat-x;
+  border-bottom: 1px solid #A3AAB1;
+}
+
+.outer-tab.has-bar {
+  border-bottom: 1px solid #ccc;
+}
+
+.outer-tab.tab-bar {
+  line-height: 25px;
+  background-color: #eaeaea;
+  border-bottom: 1px solid #A3AAB1;
+  font-weight: bold;
+  height: 25px;
+  color: #66727F;
+	text-transform: uppercase;
+	font-size: .9em;
+	font-family: helvetica;
+}
+
+.outer-tab.left.inactive {
+  border-right: 1px solid #66727F;
+  border-bottom: 1px solid #66727F;
+  background: #b4b4b4 url(images/titlebar1.png) repeat-x;
+}
+
+.outer-tab.right.inactive {
+  border-left: 1px solid #66727F;
+  border-bottom: 1px solid #66727F;
+  background: #b4b4b4 url(images/titlebar1.png) repeat-x;
+}
+
+.outer-tab:hover.inactive {
+  background: #ccc url(images/titlebar1.png) repeat-x !important;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+.coordelHeaderIcon {
+	background-image: url(images/icons/header_icons_25x25.png);
+	height: 25px;
+	width: 25px;
+	background-repeat: no-repeat;
+	text-align: center;
+}
+
+.coordelHeaderIconAdd {
+	background-position: 0;
+}
+.coordelHeaderIconNotify {
+	background-position: -25px;
+}
+.coordelHeaderIconNotifyActive {
+	background-position: -50px;
+}
+.coordelHeaderIconSearch {
+	background-position: -75px;
+}
+.coordelHeaderIconFilter {
+	background-position: -100px;
+}
+.coordelHeaderIconSort {
+	background-position: -125px;
+}
+.dijitDropDownButtonDisabled .dijitButtonNode .coordelHeaderIconSort {
+  background-position: -675px;
+}
+.coordelHeaderIconReuse {
+	background-position: -150px;
+}
+.coordelHeaderIconActions {
+	background-position: -175px;
+}
+.coordelHeaderIconEdit {
+	background-position: -200px;
+}
+.coordelHeaderIconTurbo {
+	background-position: -225px;
+}
+.coordelHeaderIconBlocker {
+	background-position: -250px;
+}
+.coordelHeaderIconBlocked {
+	background-position: -275px;
+}
+.coordelHeaderIconInfo {
+	background-position: -300px;
+}
+.coordelHeaderIconBlank {
+	background-position: -325px;
+	width: 1px;
+}
+.coordelHeaderIconBack {
+	background-position: -350px;
+}
+.coordelHeaderIconDone {
+	background-position: -375px;
+}
+.dijitButtonDisabled .dijitButtonNode .coordelHeaderIconTurbo {
+  background-position: -400px;
+}
+.dijitButtonDisabled .dijitButtonNode .coordelHeaderIconCancelTurbo {
+  background-position: -400px;
+}
+.coordelHeaderIconHide {
+	background-position: -425px;
+}
+.coordelHeaderIconShow {
+	background-position: -450px;
+}
+.coordelHeaderIconStream {
+	background-position: -475px;
+}
+.coordelHeaderIconDNDOff {
+  background-position: -500px;
+}
+.coordelHeaderIconDND {
+  background-position: -525px;
+}
+.coordelHeaderIconUser {
+  background-position: -550px;
+}
+.coordelHeaderIconDecline{
+  background-position: -575px;
+}
+.coordelHeaderIconAccept {
+  background-position: -600px;
+}
+.coordelHeaderIconSend {
+  background-position: -625px;
+}
+.coordelHeaderIconCancelTurbo {
+  background-position: -650px;
+}
+
+
+
+.header.dijitDropDownButtonFocused .dijitButtonNode, .header .dijitDropDownButtonFocused .dijitButtonNode, .header.dijitButtonFocused {
+	background-color: #333;
+}
+
+.coordelHeaderDropDown, .coordelHeaderButton {
+  margin:0;
+}
+
+.coordelHeaderDropDown .dijitArrowButtonInner {
+	background-image: none;
+	display:none;
+}

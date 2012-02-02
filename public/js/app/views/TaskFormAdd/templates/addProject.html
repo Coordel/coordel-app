@@ -1,0 +1,30 @@
+<div>	
+	<div class="task-form-dropdown ui-corner-bottom dijitMenu">
+		<div class="select-field">
+			<div class="desc">
+				<span class="name">${coordel.taskFormAdd.project.name}</span>
+			</div>
+			<div>
+				<input dojoType="dijit.form.TextBox" dojoAttachPoint="projectName" name="projectName" class="text" tabindex="1"/>
+			</div>
+		</div>
+		<div class="select-field">
+			<div class="desc">
+				<span class="name">${coordel.taskFormAdd.project.purpose}</span>
+			</div>
+			<div>
+				<textarea dojoType="dijit.form.Textarea" dojoAttachPoint="projectPurpose" name="projectPurpose" class="textarea" tabindex="2"></textarea>
+			</div>
+		</div>
+		<div class="select-field c-padding-large-b">
+			<div class="desc">
+				<span class="name">${coordel.taskFormAdd.project.deadline}</span>
+				<em class="required">&#149;</em>
+			</div>
+			<div>
+				<input dojoType="dijit.form.DateTextBox" dojoAttachPoint="projectDeadline" name="projectDeadline" hasDownArrow="false" class="text" tabindex="3"/>
+			</div>
+		</div>
+		<div dojoAttachPoint="saveFieldValue" class="footer-button c-text-center ui-corner-bottom">${coordel.save}</div>
+	</div>
+</div>

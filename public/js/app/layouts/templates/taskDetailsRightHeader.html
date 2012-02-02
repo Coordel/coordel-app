@@ -1,0 +1,22 @@
+<table style='width:100%;' cellpadding='0' cellspacing='0'>
+	<tr>
+		<td id="checklistTab" style='width:34%' class='listHeader left-tab active double c-text-center'>${checklist}</td>
+		<td id="notesTab" style='width:33%' class='listHeader center-tab inactive double c-text-center'>${notes}</td>
+		<td id="streamTab" style='width:33%' class='listHeader right-tab inactive double c-text-center'>${streamHeader}</td>
+	</tr>
+</table>
+<div style='background:#e5e5e5;border-bottom: 1px solid #a3aab1' class="coordel-toolbar">
+	<div>
+		
+		<div id="taskListDetailsSearch" class="c-padding hidden" dojoType="app.views.QuickSearch"></div>
+		<div id="taskListDetailsTurbo" dojoAttachPoint="goTurbo" title="${goTurbo}" dojoType="dijit.form.Button" iconClass="small-task-icon icon-turbo" showLabel="false"></div>
+		<div id="taskListDetailsFilter" dojoAttachPoint="filter" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" showLabel="false"></div>
+		<div id="taskListDetailsSort" dojoAttachPoint="sort" dojoType="dijit.form.DropDownButton" iconClass="small-task-icon icon-sort" showLabel="false">
+			<div id="taskListDetailsSortMenu" dojoAttachPoint="sortDialog" class="menu" layoutAlign="top" dojoType="dijit.TooltipDialog">
+				
+			</div>
+		</div>
+		<div id="taskListDetailsInput" class="c-padding hidden"></div>
+	</div>
+	
+</div>

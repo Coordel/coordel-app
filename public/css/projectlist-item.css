@@ -1,0 +1,43 @@
+
+
+.projectlist-item{
+	font-size: 11px;
+	color: #000;
+	border-bottom: 1px solid transparent;
+	border-top: 1px solid transparent;
+	padding: 2px 8px 0px 8px;
+}
+
+.projectlist-item a {
+  margin-left: 4px;
+  line-height: 20px;
+}
+
+.projectlist-item.active{
+  background-image: url(images/primaryNavActive-bg.png);
+	color: #fff;
+	font-weight: bold;
+	border-bottom: 1px solid #666;
+	border-top: 1px solid #ccc;
+	text-shadow: rgba(0, 0, 0, 0.292969) 0px 1px 0px;
+}
+
+.projectlist-item:hover{
+  cursor: pointer;
+}
+
+.projectlist-item.selected:hover{
+  cursor: default;
+}
+
+.projectlist-item.active:hover a, .projectlist-item.active:hover a.unseen-messages{
+  /*background-image: url(images/leftLayout/proj_3_own_active.png);*/
+}
+
+.projectlist-item a.unseen-messages {
+  background-image: url(images/leftLayout/proj_3_h.png);
+}
+
+.projectlist-item a.unseen-messages-own {
+  background-image: url(images/leftLayout/proj_3_own_h.png);
+}

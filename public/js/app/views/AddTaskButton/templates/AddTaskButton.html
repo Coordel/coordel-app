@@ -1,0 +1,22 @@
+<div>
+	<div id="addTaskDropdown" dojoAttachPoint="addTaskDropdown"  dojoType="dijit.form.DropDownButton" title="Add Task" class="coordelHeaderDropDown" iconClass="coordelHeaderIcon coordelHeaderIconAdd" showLabel="false">
+	  <div id="addTaskDialog" dojoAttachPoint="addTaskDialog" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog popout">
+			<div class="task-form-outline">
+				 <div class="task-form-header ui-corner-top">
+						<div dojoAttachPoint="taskFormCancel" dojoType="dijit.form.Button" style="float: left">${coordel.taskForm.cancel}</div>
+				    <h2>${taskFormTitle}</h2>
+						<div class="highlight-button c-float-r" dojoAttachPoint="taskFormSave" dojoType="dijit.form.Button">${coordel.taskForm.save}</div>
+				</div>
+				<div dojoAttachPoint="taskFormContainer" dojoType="app.widgets.ContainerPane"></div>
+				<div class="task-form-footer ui-corner-bottom">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+

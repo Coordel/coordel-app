@@ -1,0 +1,35 @@
+<div>
+	<div class="c-float-l c-quick-entry inactive" dojoAttachPoint="quickEntry">
+		<div dojoAttachPoint="entryEdit">${addTitle}...</div>
+		<div dojoAttachPoint="taskEnter" class="hidden">
+			<ul class="task-form">
+				<li dojoAttachPoint="nameAround" class="field task-name">
+					<div dojoAttachPoint="taskNameInnerNode" class="c-margin-t">
+						<div dojoAttachPoint="taskName" placeHolder="${coordel.taskForm.phName}"  dojoType="dijit.form.Textarea" class="taskFormName" tabindex="0"></div>
+					</div>
+				</li>
+				
+				<li dojoAttachPoint="purposeAround" class="field purpose">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskPurpose" dojoType="dijit.form.Textarea" placeHolder="${coordel.taskForm.phPurpose}" value="${coordel.taskForm.phPurpose}" class="c-placeholder" tabindex="0"></div>
+					</div>
+				</li>
+				
+				<li dojoAttachPoint="deadlineAround" class="field task-deadline">
+					<div class="field-inner">
+						<div dojoAttachPoint="taskFormDeadline" dojoType="dijit.form.DateTextBox" hasDownArrow="false" constraints="{formatLength:'medium'}" placeHolder="${coordel.taskForm.phDeadline}" layoutAlign="bottom" taskFormField="deadline"></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div dojoAttachPoint="noteEnter" class="hidden">
+			<ul class="task-form">
+				<li dojoAttachPoint="noteAround" class="field note">
+					<div class="field-inner">
+						<div dojoAttachPoint="note" dojoType="dijit.form.Textarea" tabindex="0"></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

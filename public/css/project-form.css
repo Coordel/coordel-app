@@ -1,0 +1,57 @@
+.project-form {
+  width: 30em;
+}
+
+.projectFormName {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.project-name .c-placeholder {
+	font-size: 14px;
+}
+
+.project-form li.field.project-name{
+  padding-left: 5px;
+}
+
+/* ---------------------------- ICONS ------------------------------------------------------*/
+
+.project-purpose{
+  background-image: url(images/icons/form/purpose.png);
+}
+
+.project-deadline{
+  background-image: url(images/icons/form/deadline.png);
+} 
+ 
+.project-responsible{
+  background-image: url(images/icons/project-form/responsible.png);
+}
+
+.project-defer{
+  background-image: url(images/icons/form/defer.png);
+} 
+
+.project-roles{
+  background-image: url(images/icons/project-form/roles.png);
+}
+
+.project-people{
+  background-image: url(images/icons/project-form/people.png);
+}
+
+.project-attachments{
+  background-image: url(images/icons/form/attachments.png);
+}
+
+.project-form .pill-role {
+  background: url(images/icons/project-form/pill-role-blue.png) no-repeat;
+  height: 9px;
+  width: 9px;
+  display: block;
+  margin: 4px;
+}
+
+
+

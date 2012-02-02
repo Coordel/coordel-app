@@ -1,0 +1,67 @@
+<div>
+	<div dojoAttachPoint="step1">
+		<h2 class="c-text-center">${nls.title}</h2>
+		<div class="c-center-text coordel-body c-padding-large-t">
+			<fieldset class="ui-corner-all c-padding-large-tb" style="border: 1px solid #eaeaea; background-color:#fff;margin-bottom: 16px;">
+				<legend class="c-text-center"><strong>${nls.yes}</strong></legend>
+				<div dojoAttachPoint="doContain" class="c-padding c-text-center">
+					<span>${nls.doText} &rarr;</span>
+					<span dojoAttachPoint="doTask" dojoType="dijit.form.Button">${nls.doLabel}</span>
+				</div>
+				
+				<div class="c-padding c-text-center">
+					<span>${nls.skipText} &rarr;</span>
+					<span dojoAttachPoint="skipTask" dojoType="dijit.form.Button">${nls.skipLabel}</span>
+				</div>
+				
+				<div dojoAttachPoint="deferContain" class="c-padding c-text-center">
+					<span>${nls.deferText}</span>
+					<div dojoAttachPoint="deferDropDown" dojoType="dijit.form.DropDownButton" label="${nls.deferLabel}">
+						<div dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu">
+							<h3 class="menu-header">${nls.deferLabel}</h3>
+							<ul class="menu-items">
+								<li dojoAttachPoint="deferOneDay">${coordel.turbo.oneDay}</li>
+								<li dojoAttachPoint="deferOneWeek">${coordel.turbo.oneWeek}</li>
+								<li dojoAttachPoint="deferTwoWeeks">${coordel.turbo.twoWeeks}</li>
+								<li dojoAttachPoint="deferOther">${coordel.turbo.other}...</li>
+							</ul>
+						</div>
+					</div>
+					<div dojoAttachPoint="deferTaskDialog" title="${coordel.taskDetails.editTask}" dojoType="app.views.ConfirmDialog">
+				  	<div style="padding:0; width: 30em" dojoAttachPoint="deferTaskFormContainer" dojoType="app.widgets.ContainerPane"></div>
+					</div>
+				</div>
+				<div class="c-padding c-text-center">
+					<span>${nls.delegateText} &rarr;</span>
+					<span dojoAttachPoint="delegateTask" dojoType="dijit.form.Button">
+						<span>${nls.delegateLabel}</span>
+						<div dojoAttachPoint="delegateTaskDialog" title="${coordel.taskDetails.editTask}" dojoType="app.views.ConfirmDialog">
+					  	<div style="padding:0; width: 30em" dojoAttachPoint="delegateTaskFormContainer" dojoType="app.widgets.ContainerPane"></div>
+						</div>
+					</span>
+				</div>
+				
+			</fieldset>
+			<fieldset class="ui-corner-all c-padding-large-tb" style="border: 1px solid #eaeaea; background-color:#fff">
+				<legend class="c-text-center"><strong>${nls.no}</strong></legend>
+				<div dojoAttachPoint="transferTaskNode" class="c-padding-large c-text-center">
+					<span>${nls.transferText} &rarr;</span>
+					<div dojoAttachPoint="transferTask" dojoType="dijit.form.Button">${nls.transferLabel}</div>
+				</div>
+				<div dojoAttachPoint="somedayContain" class="c-padding c-text-center">
+					<span>${nls.somedayText} &rarr;</span>
+					<span dojoAttachPoint="somedayTask" dojoType="dijit.form.Button">${nls.somedayLabel}</span>
+				</div>
+				<div  dojoAttachPoint="archiveContain" class="c-padding c-text-center">
+					<span>${nls.archiveText} &rarr;</span>
+					<span dojoAttachPoint="archiveTask" dojoType="dijit.form.Button">${nls.archiveLabel}</span>
+				</div>
+				<div class="c-padding c-text-center">
+					<span>${nls.deleteText} &rarr;</span>
+					<span dojoAttachPoint="deleteTask" dojoType="dijit.form.Button">${nls.deleteLabel}</span>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+
+</div>

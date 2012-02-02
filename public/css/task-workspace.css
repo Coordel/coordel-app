@@ -1,0 +1,7 @@
+#workspaceMain .dijitTitlePane:last-child .dijitTitlePaneContentInner{
+  border-bottom: 1px solid #B5BCC7;
+}
+
+.task-workspace {
+  color: #000;
+}

@@ -1,0 +1,10 @@
+<div>		
+	<span class="version">${fileVersion}</span>
+	<a class="attachment" target="_blank" href="${fileUrl}">
+		<span>${fileName}</span> <span dojoAttachPoint="timeago" class="timeago">${prettyDate}</span> 
+	</a>
+	<span dojoAttachPoint="buttons" class="hidden">
+		<a dojoAttachPoint="promoteVersion" title="${coordel.fileAction.promoteTip}" class="c-text-button">${coordel.fileAction.promote}</a>
+		<a dojoAttachPoint="deleteVersion" title="${coordel.fileAction.deleteVersionTip}" class="c-text-button">${coordel.fileAction.deleteFile}</a>
+	</span>
+</div>
