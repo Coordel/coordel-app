@@ -1,15 +1,12 @@
 module.exports = {
-  app : {
-    
-  },
   privateProject : {
-    responsible: "jeff.gorder@coordel.com",
+    responsible: "sample@coordel.com",
     users: [
-      "jeff.gorder@coordel.com"
+      "sample@coordel.com"
     ],
     assignments: [
      {
-       username: "jeff.gorder@coordel.com",
+       username: "sample@coordel.com",
        role: "f8a9a249eb18c06b6abec010ee60bb83",
        status: "ACCEPTED"
      }
@@ -18,22 +15,47 @@ module.exports = {
     purpose: "",
     status: "ACTIVE",
     substatus: "SENT",
-    deadline: "2012-01-31",
+    deadline: "",
     isMyDelegated: false,
     isMyPrivate: true,
     docType: "project",
     isTemplate: false,
-    created: "2012-01-24T05:35:04.682+01:00",
-    updated: "2012-01-24T06:08:15.789+01:00",
-    creator: "jeff.gorder@coordel.com",
-    updater: "jeff.gorder@coordel.com",
     isNew: false,
     history: []
   },
   privateRole : {
-    
+    characteristics: [],
+    docType: "role",
+    history: [],
+    isTemplate: false,
+    name: "Private Role",
+    project: "1b4d593ad598c7d627c7b91eef0379ac",
+    qualifications: [],
+    responsibilities: [],
+    username: "sample@sample.com"
   },
   delegatedProject : {
-    
+    responsible: "sample@coordel.com",
+    users: [
+      "sample@coordel.com"
+    ],
+    assignments: [
+     {
+       username: "sample@coordel.com",
+       role: "RESPONSIBLE",
+       status: "ACCEPTED"
+     }
+     ],
+    name: "Delegated",
+    purpose: "",
+    status: "ACTIVE",
+    substatus: "SENT",
+    deadline: "",
+    isMyDelegated: true,
+    isMyPrivate: false,
+    docType: "project",
+    isTemplate: false,
+    isNew: false,
+    history: []
   }
 };

@@ -1,5 +1,6 @@
 module.exports = {
   //keys for authenticating with providers
+  
   auth : {
     fb: {
       appId: '145674338818252', 
@@ -32,13 +33,21 @@ module.exports = {
       port: 5984,
       auth: { username: 'admin', password: 'password' }
     },
-    couchName: "coordel",
+    couchName: "testing",
     logglyOptions: {
       subdomain: "coordel",
       auth: {
         username: "coordelloggly",
         password: "coordel1129"
       }
+    },
+    sendgridOptions: {
+      host : "smtp.sendgrid.net",              // smtp server hostname
+      port : "587",
+      domain : "coordel.com", 
+      username : "dev@coordel.com",
+      password: "dev1129",
+      url: "dev.coordel.com:8080"
     }
   },
   
@@ -52,6 +61,6 @@ module.exports = {
   //when true, allowed users can log in via google, linkedin, and facebook
   allowProviderLogin: false,
   
-  admins: []
+  admins: ["jeff.gorder@coordel.com"]
     
 };

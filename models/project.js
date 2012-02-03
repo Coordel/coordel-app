@@ -1,6 +1,10 @@
 require('date-utils');
 
-var db;
+var settings    = require('./../settings'),
+    couchOpts   = settings.config.couchOptions,
+    cradle      = require('cradle').setup(couchOpts),
+    cn          = new cradle.Connection(),
+    db          = cn.database(settings.config.couchName);
 
 var Project = exports = module.exports = function Project(args){
 
@@ -21,10 +25,6 @@ var Project = exports = module.exports = function Project(args){
   this.users = args.users;
 };
 
-exports.setCouch = function(couch){
-  db = couch;
-};
-
 Project.prototype.add = function(fn){
   
   if (this.assignments && this.creator && this.responsible && this.users){
@@ -35,3 +35,4 @@ Project.prototype.add = function(fn){
         'myDelegatedProject, myPrivateProject, and myPrivateRole are all required', false);
   }
 };
+

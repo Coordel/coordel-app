@@ -22,58 +22,16 @@ var express     = require('express'),
     util        = require('util'),
     Promise     = everyauth.Promise,
     User        = require('./models/user'),
-    CoordelApp  = require('./models/coordelapp'),
+    Invite      = require('./models/invite'),
     nls         = require('i18n'),
     passHash    = require('password-hash'),
     loggly      = require('loggly'),
     log         = loggly.createClient(settings.config.logglyOptions);
     
-
-//set the redis and couch properties on the users
-User.setRedis(redis);
-CoordelApp.setRedis(redis);
-
 //settings.auth contains all the security strings 
 var auth = settings.auth;
 
-// Configuration
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'html');
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ 
-    secret: 'coordelsecretpassword',
-    store: new RedisStore(options)
-  }));
-  app.use(everyauth.middleware());
-  app.use(app.router);
-  app.use(express["static"](__dirname + '/public'));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
-});
-
-app.configure('production', function(){
-  app.use(express.errorHandler()); 
-});
-
-app.register('.html', require('ejs'));
-
-//configure everyauth email
-/*
-everyauth.everymodule
-  .findUserById( function (id, fn) {
-    User.get(id, function(err, res){
-      if (err) return fn([err], false);
-      return fn(null, res);
-    });
-  });
-*/
-
+//configure everyauth
 everyauth
   .password
     .loginWith('email')
@@ -87,6 +45,7 @@ everyauth
       if (errors.length) return errors;
       var promise = new Promise();
       User.get(login, function(err, user){
+        console.log("USER", user);
         if (err) promise.fulfill([err]);
         if (user.password !== password){
           promise.fulfill(['Login failed: invalid username or password']);
@@ -121,8 +80,9 @@ everyauth
     .registerUser( function (newUserAttrs) {
       var login = newUserAttrs[this.loginKey()];
       var promise = new Promise();
-      
+      newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){
+        console.log("REGISTERED USER", user);
         if (err) return promise.fulfill([err]);
         return promise.fulfill(user);
       });
@@ -177,7 +137,7 @@ everyauth.facebook
     return promise;
   })
   .redirectPath('/');
-  
+
 //authenticate the redis client
 redis.auth(redisOpts.auth);
 
@@ -188,9 +148,35 @@ var options = {
   prefix: redisOpts.expressSessionPrefix
  };
 
+// Configuration
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'html');
+  app.use(express.logger());
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.session({ 
+    secret: 'coordelsecretpassword',
+    store: new RedisStore(options)
+  }));
+  app.use(everyauth.middleware());
+  app.use(app.router);
+  app.use(express["static"](__dirname + '/public'));
+});
 
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler()); 
+});
+
+app.register('.html', require('ejs'));
 
 function validate(req, res, next){
+  console.log("USER SESSION", req.session);
   if (req.session.auth && req.session.auth.loggedIn){
     next();
   } else {
@@ -203,53 +189,132 @@ app.get('/', validate, function(req, res){
   //console.log("/GET", req.user, req.session);
   //res.render('index', { user: req.user});
   
-  console.log("/GET", req.session.auth);
-  res.render('index', {everyauth: everyauth, layout: 'app'});
+  res.render('index', {everyauth: everyauth, layout: 'preview'});
+  //res.render('index', {everyauth: everyauth, layout: 'app'});
   
-  //res.redirect('http://dev.coordel.com:8095/coordel/view/userTasks?include_docs=true');
-  //res.redirect('http://dev.coordel.com:8095/coordel/view/userTasks?startkey=%5B%22jeff.gorder%40coordel.com%22%5D&endkey=%5B%22jeff.gorder%40coordel.com%22%2C%7B%7D%5D&include_docs=true');
-  //http://localhost:5984/coordel/_design/coordel/_view/userTasks?startkey=%5B%22jeff.gorder%40coordel.com%22%5D&endkey=%5B%22jeff.gorder%40coordel.com%22%2C%7B%7D%5D&include_docs=true
 });
 
-app.get('/login',function(req, res){
-  console.log("USER", req.session);
+app.get('/login', function(req, res){
   //res.render('login', {auth: req.session.user});
   res.render('login');
 });
 
-app.get('/reset',function(req, res){
+app.get('/reset', function(req, res){
   //res.render('login', {auth: req.session.user});
   res.render('reset');
 });
 
-app.get('/flushdb', function(req, res){
-  redis.flushdb();
-  console.log('redis flushed');
-  res.redirect('/logout');
+app.get('/invite', function(req, res){
+  res.render('invite');
 });
 
-app.get('/coordel/uuids', function(req, res){
-  console.log("UUIDS", req.query.count);
+app.get('/invite/:id', function(req, res){
+  //this is the link that is sent in the invitation email
+  console.log("CLAIM INVITE", req.params.id);
+  
+  Invite.get(req.params.id, function(err, invite){
+    if(err) {
+      
+    } else {
+      User.get(invite.to, function(err, user){
+        var invite = {
+          id: req.params.id,
+          firstName: user.firstName,
+          email: user.email
+        };
+        req.session.invite = invite;
+        res.render('confirmInvite', {firstName: user.firstName, layout: 'confirm'});
+      });
+    }
+  });
+});
+
+app.post('/password', function(req, res){
+  //this updates the user password. 
+  var newPass = req.body.newPass,
+      oldPass = req.body.oldPass,
+      login = req.body.login,
+      invite = req.session.invite;
+      
+  if (invite){
+    Invite.get(invite.id, function(err, i){
+      if (err){
+
+      } else {
+        User.get(i.to, function(err, user){
+          user.password = newPass;
+          var u = new User(user);
+          u.update(function(err, reply){
+            if (err){
+              console.log("ERROR: ", err);
+            } else {
+              delete req.invite;
+              res.redirect('/logout');
+            }
+
+          });
+        });
+      }
+    });
+  } else {
+    User.get(login, function(err, user){
+      if (user.password === oldPass){
+        user.password = newPass;
+        var u = new User(user);
+        u.update(function(err, reply){
+          res.redirect('/logout');
+        });
+      }
+    });
+  }
+      
+  
+  
+});
+
+app.post('/invite', function(req, res){
+  var inv = {to:{}, from:{}};
+  inv.to.firstName = req.body.firstName;
+  inv.to.lastName = req.body.lastName;
+  inv.to.email = req.body.email;
+  inv.from.appId = req.body.fromAppId;
+  inv.from.firstName = req.body.fromFirstName;
+  inv.from.lastName = req.body.fromLastName;
+  inv.from.email    = req.body.fromEmail;
+      
+  //this is where the invite is added
+  //console.log("SEND INVITE", inv);
+  User.invite(inv, function(err, reply){
+    if (err){
+      res.json({error: err});
+    } else {
+      res.redirect('/');
+    }
+  });
+});
+
+app.get('/coordel/uuids', validate, function(req, res){
+  //console.log("UUIDS", req.query.count);
   cn.uuids(req.query.count, function(err, uuids){
-    console.log("UUID response", uuids);
+    //console.log("UUID response", uuids);
     res.json({uuids:uuids});
   });
 });
 
-app.get('/coordel/:id', function(req, res){
-  console.log('GET ID', req.params.id);
+app.get('/coordel/:id', validate, function(req, res){
+  //console.log('GET ID', req.params.id);
   couch.get(req.params.id, function(err, obj){
     if (err) console.log("ERROR getting " + req.params.id);
     res.json(obj);
   });
 });
 
-app.get('/coordel/view/:id', function(req, res){
+app.get('/coordel/view/:id', validate, function(req, res){
   var view = req.params.id;
   view = 'coordel/' + view;
-  console.log('GET VIEW', view);
+  //console.log('GET VIEW', view);
   var opts = {};
-  console.log('queryString params', req.query);
+  //console.log('queryString params', req.query);
   for (var key in req.query){
     opts[key] = req.query[key];
   }
@@ -258,16 +323,25 @@ app.get('/coordel/view/:id', function(req, res){
     if (err){
       ret.push({error: err});
     } else {
-      console.log("VIEW ROWS", resView);
+      //console.log("VIEW ROWS", resView);
       resView.rows.forEach(function(row){
         ret.push(row);
       });
     }
     var toReturn = {rows: ret};
-    console.log("returning", toReturn);
+    //console.log("returning", toReturn);
     res.json(toReturn);
   });
 });
 
-app.listen(8095);
+app.get('/flushdb', function(req, res){
+  redis.flushdb();
+  console.log('redis flushed');
+  couch.destroy();
+  couch.create();
+  console.log('couch recreated');
+  res.redirect('/logout');
+});
+everyauth.helpExpress(app);
+app.listen(8080);
 console.log("Coordel App Server listening on port %d in %s mode", app.address().port, app.settings.env);
