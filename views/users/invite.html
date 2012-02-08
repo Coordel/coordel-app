@@ -1,0 +1,49 @@
+
+<!--        *************************** users/invite.html ************************       -->
+<div class="c-float-l register-form">
+	<form action="/invite" method="post">
+		<div style="padding-bottom: 1em">
+			<a class="no-decoration" href='/'><img src="/css/images/black-20.png"><a class="no-decoration" href='/'></a>
+		</div>
+		<ul>
+			<li>
+  			<label for="regFirstName">First Name</label>
+				<div>
+					<input id="regFirstName" name="firstName" type="text" value="Dev"/>
+				<div>
+			</li>
+			<li>
+  			<label for="regLastName">Last Name</label>
+				<div>
+					<input id="regLastName" name="lastName" type="text" value="Coordel">
+				<div>
+			</li>
+			<li>
+  			<label for="regEmail">Email</label>
+				<div>
+					<input id="regEmail" name="email" type="text" value="dev@coordel.com">
+				<div>
+			</li>
+		</ul>
+		<div>
+  		<input type="submit" class="submit-button c-margin-b c-float-r" value="Invite">
+			<div class="clear"></div>
+		</div>
+		<input type="hidden" name="fromAppId" value="1"/>
+		<input type="hidden" name="fromFirstName" value="Jeff"/>
+		<input type="hidden" name="fromLastName" value="Gorder">
+		<input type="hidden" name="fromEmail" value="jeff.gorder@coordel.com">
+	</form>
+	<%if ('undefined' !== typeof errors && errors.length){%>
+	<div class="feedback c-color-error c-text-center c-padding-large-t">
+		<% for (var key in errors) {%>
+			<span class="error"><%=errors[key]%>.</span>
+		<%}%>
+		<span>Please try again.
+	</div>
+	<%}%>
+</div>
+<div class="c-float-l alt-signup">
+	
+</div>
+	

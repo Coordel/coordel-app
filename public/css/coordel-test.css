@@ -1,0 +1,27 @@
+.coordel-test li {
+  margin-bottom: 10px
+}
+
+.coordel-test li input {
+  width: 20px; 
+  margin-right: 0; 
+  float:left;
+  text-align:right;
+  font-weight: bold;
+}
+
+.coordel-test li div {
+  margin-left: 24px; 
+}
+
+.coordel-test li label {
+  width: 180px; 
+}
+
+.coordel-test {
+  font-size: 12px;
+}
+
+.coordel-test .reg-field{
+  padding-bottom: .5em;
+}

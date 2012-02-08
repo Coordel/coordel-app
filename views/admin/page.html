@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<title>
+			Coordel...and we're done!
+		</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="/css/main.css" type="text/css">
+		<link rel="stylesheet" href="/css/demo.css" type="text/css">
+		<link rel="shortcut icon" href="images/favicon.gif">
+	</head>
+	<body>
+		<div id="body-container">
+			<div id="header-container" class="ui-corner-all large-shadow">
+				<div id="header">
+					<div id="site-links">
+						<span><a href="">Demos</a></span>
+					</div>
+					<a class="no-decoration" href='/'><div id="site-logo">
+						&nbsp;
+					</div></a>
+				</div><!-- #header -->
+			</div><!-- #header-container -->
+			<div id="container admin">
+				<div id="content" class="hfeed content">
+					<div id="column-right">
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right login admin">
+								<h4>
+									Invite User
+								</h4>
+								<div class="register-form">
+									<form action="/invite" method="post">
+										<ul>
+											<li>
+								  			<label for="regFirstName">First Name</label>
+												<div>
+													<input id="regFirstName" name="firstName" type="text" value="Dev"/>
+												<div>
+											</li>
+											<li>
+								  			<label for="regLastName">Last Name</label>
+												<div>
+													<input id="regLastName" name="lastName" type="text" value="Coordel">
+												<div>
+											</li>
+											<li>
+								  			<label for="regEmail">Email</label>
+												<div>
+													<input id="regEmail" name="email" type="text" value="dev@coordel.com">
+												<div>
+											</li>
+										</ul>
+										<div>
+								  		<input type="submit" class="submit-button c-margin-b c-float-r" value="Invite">
+											<div class="clear"></div>
+										</div>
+										<input type="hidden" name="fromAppId" value="1"/>
+										<input type="hidden" name="fromFirstName" value="Jeff"/>
+										<input type="hidden" name="fromLastName" value="Gorder">
+										<input type="hidden" name="fromEmail" value="jeff.gorder@coordel.com">
+									</form>
+									<%if ('undefined' !== typeof errors && errors.length){%>
+									<div class="feedback c-color-error c-text-center c-padding-large-t">
+										<% for (var key in errors) {%>
+											<span class="error"><%=errors[key]%>.</span>
+										<%}%>
+										<span>Please try again.
+									</div>
+									<%}%>
+								</div>
+							</div>
+						</div>
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right">
+								<h4>
+									Commands
+								</h4>
+								<div>
+									<div>Delete all test data</div>
+									<form action="http://dev.coordel.com:8080/clean" method="get">
+										<input type="submit" class="submit-button" value="Clean" />
+									</form>
+								</div>
+								<div>
+									<div>Load Default Templates</div>
+									<form action="http://dev.coordel.com:8080/loadTemplates" method="get">
+										<input type="submit" class="submit-button" value="Submit" />
+									</form>
+								</div>
+								<div>
+									<div>Reset Databases</div>
+									<form action="http://dev.coordel.com:8080/flushdb" method="get">
+										<input type="submit" class="submit-button" value="Submit" />
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right">
+								<h4>
+									Documentation
+								</h4>
+								<div>
+									<a href="/?p=getstarted">Getting Started</a>
+								</div>
+								<div>
+									<a href="/?p=faq">FAQ and Case Studies</a>
+								</div>
+								<div>
+									<a href="/?p=manual">User Manual</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="column-left">
+						<%- body %>
+					</div><!-- #column-left -->
+				</div><!-- .content .hfeed -->
+			</div><!-- #container -->
+			<div id="footer-container">
+				<div id="footer" class="ui-corner-all large-shadow">
+					<div class="footer-insert">
+						<div class="copyright">
+							© Coordel 2012 <span id="footer-links"><a href="/?p=disclaimer">Disclaimer</a></span>
+						</div>
+					</div>
+				</div><!-- #footer -->
+			</div><!-- #footer-container -->
+		</div><!-- #body-container -->
+	</body>
+</html>

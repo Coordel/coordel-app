@@ -105,11 +105,7 @@ strong{
 								
 								<tr style="margin: 0; padding: 0; border: 0;">
 									<td colspan="2" style="margin: 0; padding: 0; border: 0;">
-										<p style="margin: 0; padding: 0; font-size: 16px; padding-bottom: 10px; font-family: Helvetica, Arial, sans-serif; color:#222222">Hello {{firstName}}, </p>
-
-										<p style="margin: 0; padding: 0; font-size: 16px; padding-bottom: 10px; font-family: Helvetica, Arial, sans-serif; color:#222222">{{fromFirstName}} {{fromLastName}} invited you to join Coordel to get work done.</p>
-										<p style="margin: 0; padding: 0; font-size: 16px; padding-bottom: 10px; font-family: Helvetica, Arial, sans-serif; color:#222222">Click the following link to find out more!</p>
-										<p style="margin: 0; padding: 0; font-size: 16px; padding-bottom: 10px; font-family: Helvetica, Arial, sans-serif; color:#222222"><a style="color: #00629B; text-decoration: underline; " href="http://{{url}}/invite/{{inviteId}}">http://{{url}}/invite/{{inviteId}}</a></p>
+										
 		
 									</td>
 								</tr>

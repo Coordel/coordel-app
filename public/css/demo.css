@@ -1,0 +1,24 @@
+.test-entry{
+  padding: 8px 8px 8px 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.test-entry form {
+  margin-bottom: 8px;
+}
+
+.test-entry:first-child{
+  border-top: 1px solid #ccc;
+}
+
+.test-entry:last-child{
+  border-bottom: none;
+}
+
+.test-title{
+  line-height: 20px;
+}
+
+ol {
+  padding-left: 40px;
+}

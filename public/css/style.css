@@ -1,0 +1,625 @@
+/**
+ * Theme Name: Coordel
+ * Theme URI: http://coordel.com/themes/corporate
+ * Description: Coordel corporate site
+ * Author: Jeff Gorder
+ * Author URI: http://jeffgorder.com
+ * Version: 0.0
+ * Tags: threaded-comments
+ * Template: hybrid
+ *
+ */
+
+/**
+* Import pre-made styles from Hybrid
+************************************************/
+
+/* Eric Meyer's reset.css */
+	@import url('reset.css');
+
+/* 18px, 20px, 21px, 22px, 24px or 25px margins and line-height (don't use reset.css with these) */
+	/* @import url('../hybrid/library/css/18px.css'); */
+	/* @import url('../hybrid/library/css/20px.css'); */
+	/* @import url('../hybrid/library/css/21px.css'); */
+	/* @import url('../hybrid/library/css/22px.css'); */
+	/* @import url('../hybrid/library/css/24px.css'); */
+	/* @import url('../hybrid/library/css/25px.css'); */
+
+/* Layout */
+	/* @import url('../hybrid/library/css/2c-l-fixed.css'); */
+	/* @import url('../hybrid/library/css/2c-r-fixed.css'); */
+	/* @import url('../hybrid/library/css/3c-l-fixed.css'); */
+	/* @import url('../hybrid/library/css/3c-r-fixed.css'); */
+	/* @import url('../hybrid/library/css/3c-c-fixed.css'); */
+
+/* Plugins CSS */
+	/* @import url('../hybrid/library/css/plugins.css'); */
+
+/* Drop-downs CSS */
+	/* @import url('../hybrid/library/css/drop-downs.css'); */
+
+/* Hybrid's default CSS */
+	/* @import url('../hybrid/library/css/screen.css'); */
+	
+.hidden {display: none;}
+
+/**
+* Body
+************************************************/
+
+/* Contains everything */
+body {
+	font-family: "Lucida Grande", Verdana,Arial,Helvetica,sans-serif;
+  	-webkit-font-smoothing: antialiased;
+  	background: #eaeaea url(images/body-background.png);
+  	color: #333333;
+}
+
+	/* Wrapper for everything inside of the body */
+	#body-container {
+		padding: 10px 0;
+	}
+
+/**
+* Elements
+************************************************/
+
+/* Hyperlinks */
+a:link { 
+	color: #000000; cursor: pointer;
+	text-decoration: none;
+	text-shadow: #fff 1px 1px;
+}
+a:visited {color: #000000;}
+a:hover {text-decoration: underline;}
+a:active {}
+
+a.no-decoration{
+  text-decoration: none !important;
+  color: transparent !important;
+  text-shadow: none !importants;
+}
+
+/* Headers */
+h1 {
+	font-size: 18px;
+}
+h1.bullet {
+  background: url(images/checkbox.gif) no-repeat center left;
+	padding-left: 28px;
+}
+h2 { 
+	font-size: 18px;
+	padding-bottom: 16px;
+
+}
+h3 { 
+	padding-top: 16px;
+	font-size: 18px;
+}
+h4 {
+	font-size: 16px;
+	padding-bottom: 8px;
+}
+h5 {font-size: 14px; padding-bottom: 4px;}
+h6 {}
+
+/* Text elements */
+strong {}
+em {}
+cite {}
+abbr {}
+acronym {}
+sup {}
+sub {}
+address {}
+ins {}
+dfn {}
+del {}
+
+/* Paragraphs */
+p {
+	padding-bottom: 8px;
+	font-size: 12px;
+}
+
+/* Unordered lists */
+ul {}
+	ul li {}
+
+/* Ordered lists */
+ol {}
+	ol li {}
+
+/* Defition lists */
+dl {}
+	dt {}
+	dd {}
+
+/* Blockquotes */
+blockquote {}
+	blockquote blockquote {}
+	blockquote em {}
+
+/* Object */
+object {}
+
+/* Code */
+code {}
+pre {}
+pre code {}
+
+/* Tables */
+table {}
+	caption {}
+	tr {}
+	th {}
+	td {}
+
+/* Forms */
+.form {
+  border:1px solid #ddd;background-color: #f5f5f5;
+  padding: 16px;
+}
+
+
+
+	
+	textarea {}
+	input {font-size: 14px;}
+	input.text{width: 260px;}
+	input.submit{float: right;}
+	label {font-size: 12px;}
+	option {}
+
+/* Notes */
+.note {}
+
+/* Warnings/Alerts */
+.warning, .alert {}
+
+/* Errors */
+.error {}
+
+/* Downloads */
+.download {}
+
+/* Alignment */
+.left, .alignleft {}
+.right, .alignright {}
+.center, .aligncenter {}
+.block, .alignnone {}
+.clear {}
+
+/**
+* Images
+************************************************/
+
+/* Normal images */
+img {}
+a img {}
+
+/* WP Smilies */
+img.wp-smiley {}
+
+/* Thumbnails */
+.thumbnail {}
+
+/* WP Captions [caption] */
+.wp-caption {}
+	.wp-caption img {}
+	.wp-caption p {}
+
+/* Gallery [gallery] */
+.gallery {}
+	.gallery img {}
+
+/* Avatars */
+.avatar {}
+
+/**
+* Header
+************************************************/
+
+/* Contains entire header */
+#header-container{
+	height: 108px;
+	width: 960px;
+	margin: 0 auto;
+	background-color: #00629B;
+	padding-top: 6px;
+	
+}
+
+#header-container.visual{
+  height: 460px;
+}
+
+
+	/* Contains site title and tagline */
+	#header {
+		border-bottom: 2px solid #000000;
+		border-top: 2px solid #000000;
+	}
+		/* Site Logo */
+		#site-logo {
+			background: #ffffff url(images/coordel-done.png) no-repeat 16px center;
+			height: 82px;
+			padding: 8px;
+			
+		}
+		
+		/*site links */
+		#site-links {
+			float: right;
+			line-height: 98px;
+			padding-right: 16px;
+		}
+		
+		#site-links span {
+			margin-left: 100px;
+		}
+		
+		/* Site visual */
+		#header-visual {
+			height: 350px;		
+		}
+			#visual-title {
+				color: #ffffff;
+				font-weight: bold;
+				font-size: 48px;
+				padding: 48px 8px 4px 4px;
+				width: 320px;
+				float: right;
+				text-align: center;
+				text-shadow: #000000 2px 2px;
+			}
+		/* Site title */
+		#site-title {}
+			#site-title a {}
+				#site-title a span {}
+
+		/* Site description/tagline */
+		#site-description {}
+		
+
+/**
+* Primary Menu
+************************************************/
+
+/* Wrapper for entire menu area */
+#primary-menu {}
+
+	/* Wrapper for unordered list of menu items */
+	#primary-menu div.menu {}
+
+		/* Menu list. */
+		#primary-menu ul {}
+			#primary-menu li {}
+				#primary-menu li a {}
+			#primary-menu li.current-menu-item {}
+
+/**
+* Containers below the header and navigation
+************************************************/
+
+/* Wrapper for the content and primary/secondary widget sections */
+#container {}
+
+	/**
+	* Content
+	************************************************/
+
+	/* Contains site's main content */
+	#content {
+		min-height: 300px;
+		width: 960px;
+		margin: 0 auto;
+	}
+	
+	#content.page {
+	  margin-top: 16px;
+	  margin-bottom: 16px;
+	  background-color: #ffffff;
+	}
+	
+	#content.blank {
+	  margin-top: 16px;
+	  margin-bottom: 16px;
+	}
+	
+	.content-panel {
+		background-color: #ffffff;
+		padding: 32px 16px;
+		margin-bottom: 16px;
+	}
+	
+		.bullet-content {
+			margin: 8px 0 0 8px;
+		}
+		
+		.see-more {
+		  float: right;
+		  font-size: 12px;
+		  font-weight: bold;
+		  padding-top: 4px;
+		}
+		.see-more a {
+		  margin-right: 2px;
+		}
+	
+	.side-panel-container {
+		background-color: #00629B;
+		padding-left: 6px;
+		margin-bottom: 16px;
+	}
+	
+	.side-panel {
+		background-color: #eaeaea;
+		padding: 16px;
+	}
+	
+	.highlight-panel {
+		background-color: #642F6C;
+		color: #ffffff;
+	}
+	
+	.inverse-panel {
+		background-color: #00629B;
+		color: #ffffff;
+	}
+	
+	#column-left {
+		width: 620px;
+		float: left;
+		padding-top: 20px;
+	}
+	
+	#single-column {
+		padding: 16px;
+		min-height: 240px;	
+	}
+	
+	#column-right {
+		padding-top: 20px;
+		width: 320px;
+		float: right;
+		margin:0;
+		min-height: 300px;			
+	}
+
+	#done-logo {
+		width: 300px;
+		height: 110px;
+		margin-top: 40px;
+		margin-bottom: 20px;
+		background: url(images/coordel-done.png) no-repeat right center;
+	}
+
+		/* Breadcrumb trail */
+		.breadcrumb {}
+			.breadcrumb-trail {}
+
+		/* Archive and search <div> before posts are listed */
+		.archive-info
+		.author-info {}
+		.term-info
+		.category-info {}
+		.tag-info {}
+		.date-info {}
+		.search-info {}
+
+			/* Archive and search page titles. */
+			.archive-title
+			.author-title {}
+			.term-title {}
+			.category-title {}
+			.tag-title {}
+			.date-title {}
+			.search-title {}
+
+		/* Entry wrapper <div> */
+		.hentry {}
+		.post {}
+		.page {}
+
+			/* Post, page, and 404 page titles */
+			.entry-title {}
+			.post-title {}
+			.page-title {}
+			.attachment-title {}
+			.error-404-title {}
+
+			/* Author and date byline */
+			.byline {}
+
+			/* Full entries */
+			.entry-content {}
+
+			/* Excerpts (introduced) */
+			.entry-summary {}
+
+				/* Using <!--nextpage--> */
+				p.page-links a {}
+
+				/* More link <!--more--> */
+				a.more-link {}
+
+			/* Entry metadata */
+			.entry-meta {}
+
+		/* Post series */
+		.series {} 
+			.series-title {}
+
+		/* Navigation links */
+		.navigation-links {}
+			.navigation-links .previous {}
+			.navigation-links .next {}
+
+		/* WP PageNavi (plugin) */
+		.wp-pagenavi {}
+			.wp-pagenavi .pages {}
+			.wp-pagenavi .current {}
+			.wp-pagenavi .extend {}
+			.wp-pagenavi a {}
+
+		/* Attachment image navigation */
+		.navigation-attachment {}
+
+		/**
+		* Comments template
+		************************************************/
+
+		/* Wrapper for entire comments area */
+		#comments-template {}
+
+			/* Comments section headers/titles */
+			.comments-header {}
+			#comments-number {}
+
+			/* Comments closed paragraph */
+			p.comments-closed {}
+
+				/* Main comments section */
+				#comments {}
+					#comments ol {}
+
+						/* Individual comments (note that WordPress has even/odd backwards) */
+						#comments li {}
+							#comments li li {}
+								#comments li li li {}
+									#comments li li li li {}
+						#comments li.even {}
+						#comments li.odd {}
+						#comments li.thread-even {}
+						#comments li.thread-odd {}
+						#comments li.author {}
+						#comments li.trackback {}
+						#comments li.pingback {}
+
+							/* Comment avatars */
+							#comments .avatar {}
+
+							/* Comment metadata */
+							#comments .comment-meta {}
+								#comments .comment-meta cite {}
+
+							/* Comment text */
+							#comments .comment-text {}
+
+					/* Paged comments navigation */
+					#comments-template .paged-navigation {}
+						#comments-template .paged-navigation .page-numbers {}
+						#comments-template .paged-navigation .next {}
+						#comments-template .paged-navigation .prev {}
+
+				/* Main comment form div */
+				#respond {}
+
+					/* Comment form title */
+					#reply {}
+
+					/* Comment form elements */
+					p#cancel-comment-reply {}
+					#respond form {}
+						#respond .form-author {}
+							#respond input {}
+						#respond .form-email {}
+						#respond .form-url {}
+						#respond .form-textarea {}
+							#respond textarea {}
+						#respond #submit {}
+							#respond #submit:hover {}
+
+		/**
+		* Utility widget sections (see other widget code below)
+		************************************************/
+
+		/* All utility widget sections (except widgets template) */
+		.utility {}
+
+		/* Before content */
+		#utility-before-content {}
+
+		/* After content */
+		#utility-after-content {}
+
+		/* After post but before comments */
+		#utility-after-single {}
+
+		/* After page but before comments */
+		#utility-after-page {}
+
+		/* Widgets page template widgets */
+		.page-template-widgets #content .widget {}
+
+	/**
+	* Widget sections (Primary and Secondary)
+	************************************************/
+
+	/* Widgets in general */
+	.widget {}
+		.widget-inside {}
+			.widget-title {}
+
+	/* Primary widget section */
+	#primary {}
+		#primary .widget {}
+			#primary .widget-inside {}
+				#primary .widget-title {}
+				#primary .widget ul {}
+					#primary .widget ul li {}
+
+	/* Secondary widget section */
+	#secondary {}
+		#secondary .widget {}
+			#secondary .widget-inside {}
+				#secondary .widget-title {}
+				#secondary .widget ul {}
+					#secondary .widget ul li {}
+
+/**
+* Footer
+************************************************/
+
+/* Wrapper for the entire footer */
+#footer-container {
+
+}
+
+	/* Subsidiary widget section */
+	#subsidiary {}
+		#subsidiary .widget {}
+			#subsidiary .widget-inside {}
+				#subsidiary .widget-title {}
+
+	/* Footer section */
+	#footer {
+		width: 960px;
+		margin: 0 auto;
+		line-height: 50px;
+		background: #00629B;
+		color: #ffffff;
+		clear: both;
+		
+	}
+	
+	#footer a:link { 
+	color: #ffffff; cursor: pointer;
+	text-decoration: none;
+	text-shadow: #000000 1px 1px;
+}
+	#footer a:visited {color: #ffffff;}
+	#footer a:hover {text-decoration: underline;}
+	
+	#footer-links {float: right;}
+	
+	.footer-insert {
+		padding: 0 16px;
+	}
+
+		/* Footer extra */
+		#footer .copyright {font-weight: bold}
+		#footer .credit {}
+/**

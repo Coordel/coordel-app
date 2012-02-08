@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<title>
+			Coordel...and we're done!
+		</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/main.css" type="text/css">
+		<link rel="stylesheet" href="css/coordel-test.css" type="text/css">
+		<link rel="shortcut icon" href="images/favicon.gif">
+	</head>
+	<body>
+		<div id="body-container">
+			<div id="header-container" class="ui-corner-all large-shadow visual">
+				<div id="header">
+					<div id="site-links">
+						<span><a href="/register">Join Us</a></span><span><a href="/login">Sign In</a></span><span><a href="/?p=contact">Contact Us</a></span>
+					</div>
+					<a class="no-decoration" href='/'><div id="site-logo">
+						&nbsp;
+					</div></a>
+				</div><!-- #header -->
+				<div id="header-visual" class="<%=color%>">
+					<div id="visual-title">
+						Get More Done &amp; Make Work Fun
+					</div>
+				</div>
+			</div><!-- #header-container -->
+			<div id="container">
+				<div id="content" class="hfeed content">
+					<div id="column-right">
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right">
+								<form method="get" action="/register">
+								<input style="width: 280px; font-size: 18px" type="submit" class="submit-button" value="Sign up in seconds &rarr;">
+								</form>
+							</div>
+						</div>
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right">
+								<h4>
+									Do the Coordel test!
+								</h4>
+								<p>
+									Check the statements you have heard in the last month.
+								</p>
+								<ul class="coordel-test">
+									<li>
+										<input type="checkbox" id="1">
+										<div>
+											<label for="1">"Did you get my email?"</label>
+										</div>
+									</li>
+									<li>
+										<input type="checkbox" id="2">
+										<div>
+											<label for="2">"Was I supposed to do that? I thought John was going to do that."</label>
+										</div>
+									</li>
+									<li>
+										<input type="checkbox" id="3">
+										<div>
+											<label for="3">“Here’s the first of the 532 e-mails that should get you up to speed on the project.”</label>
+										</div>
+									</li>
+								</ul>
+
+								<input type="submit" class="submit-button c-float-r" value="Next">
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right highlight-panel <%=color%>">
+								<h4>
+									Take a tour
+								</h4><img src="http://www.placehold.it/280x180/000000/ffffff">
+							</div>
+						</div>
+						<div class="ui-corner-all large-shadow side-panel-container">
+							<div class="side-panel ui-corner-right">
+								<h4>
+									Documentation
+								</h4>
+								<div>
+									<a href="/?p=getstarted">Getting Started</a>
+								</div>
+								<div>
+									<a href="/?p=faq">FAQ and Case Studies</a>
+								</div>
+								<div>
+									<a href="/?p=manual">User Manual</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="column-left">
+						<%- body %>
+					</div><!-- #column-left -->
+				</div><!-- .content .hfeed -->
+			</div><!-- #container -->
+			<div id="footer-container">
+				<div id="footer" class="ui-corner-all large-shadow">
+					<div class="footer-insert">
+						<div class="copyright">
+							© Coordel 2012 <span id="footer-links"><a href="/?p=disclaimer">Disclaimer</a></span>
+						</div>
+					</div>
+				</div><!-- #footer -->
+			</div><!-- #footer-container -->
+		</div><!-- #body-container -->
+	</body>
+</html>

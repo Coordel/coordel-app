@@ -24,7 +24,6 @@ var User = exports = module.exports = function User(args){
 };
 
 User.prototype.add = function(fn){
-  
   _save(data, function(err, res){
     if (err){
       fn(err, false);
@@ -71,6 +70,7 @@ exports.register = function(userData, fn){
           var app = new App({
             id : userData.appId,
             user: objIds.user,
+            email: userData.email,
             firstName : userData.firstName,
             lastName : userData.lastName,
             myDelegatedProject : objIds.delegatedProject,
@@ -165,7 +165,7 @@ exports.invite = function(inviteData, fn){
                       to: inviteData.to.email,
                       from: inviteData.from.email,
                       subject: "Check out Coordel ...and we're done!",
-                      template: './lib/templates/invite-html.txt',
+                      template: './lib/templates/invite2-html.txt',
                       firstName: inviteData.to.firstName,
                       fromFirstName: inviteData.from.firstName,
                       fromLastName: inviteData.from.lastName,
@@ -198,13 +198,13 @@ function _save(user, fn){
     var multi = redis.multi(),
         key = 'user:' + user.email;
         
-    multi.hset(key, 'id', data.id);
-    multi.hset(key, 'appId', data.appId);
-    multi.hset(key, 'email', data.email);
-    multi.hset(key, 'password', data.password);
-    multi.hset(key, 'invited', data.invited);
-    if (user.firstName) multi.hset(key, 'firstName', data.firstName);
-    if (user.lastName) multi.hset(key, 'lastName', data.lastName);
+    multi.hset(key, 'id', user.id);
+    multi.hset(key, 'appId', user.appId);
+    multi.hset(key, 'email', user.email);
+    multi.hset(key, 'password', user.password);
+    multi.hset(key, 'invited', user.invited);
+    if (user.firstName) multi.hset(key, 'firstName', user.firstName);
+    if (user.lastName) multi.hset(key, 'lastName', user.lastName);
     multi.sadd('coordel-users', key);
     multi.exec(function(err, replies){
       if (err) fn(err, false);
@@ -232,6 +232,7 @@ function _getUser(args, fn){
       var key = 'user:' + args.id;
       //console.log("key for get", key);
       redis.hgetall(key, function(err, user){
+        console.log("got the user from redis in _getUser", user);
         if (err){
           //console.log("couldn't load existing user from store",err);
           fn(err, false);

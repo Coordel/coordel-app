@@ -9,35 +9,44 @@
  */
 
 var express     = require('express'),
-    settings      = require('./settings'),
+    settings    = require('./settings'),
     redisOpts   = settings.config.redisOptions,
     couchOpts   = settings.config.couchOptions,
     RedisStore  = require('connect-redis')(express),
-    redis       = require('redis').createClient(redisOpts.port, redisOpts.host),
+    store       = require('redis').createClient(redisOpts.port, redisOpts.host),
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),
     couch       = cn.database(settings.config.couchName),
+    ddoc        = require('./couchdb/ddoc'),
+    follow      = require('follow'),
     everyauth   = require('everyauth'),
     app         = module.exports = express.createServer(),
+    io          = require('socket.io').listen(app),
     util        = require('util'),
     Promise     = everyauth.Promise,
     User        = require('./models/user'),
-    Invite      = require('./models/invite'),
+    Alert       = require('./models/alert'),
     nls         = require('i18n'),
     passHash    = require('password-hash'),
     loggly      = require('loggly'),
-    log         = loggly.createClient(settings.config.logglyOptions);
+    log         = loggly.createClient(settings.config.logglyOptions),
+    home        = true;
     
 //settings.auth contains all the security strings 
 var auth = settings.auth;
 
+//make sure the couchdb dbase exists and that the design doc has the latest views
+ddoc.update();
+
 //configure everyauth
+everyauth.everymodule.logoutRedirectPath('/login');
+
 everyauth
   .password
     .loginWith('email')
     .getLoginPath('/login')
     .postLoginPath('/login')
-    .loginView('login')
+    .loginView('users/login', {layout: 'users/layout'})
     .authenticate( function (login, password) {
       var errors = [];
       if (!login) errors.push('Missing login');
@@ -56,7 +65,7 @@ everyauth
     })
     .getRegisterPath('/register')
     .postRegisterPath('/register')
-    .registerView('register')
+    .registerView('users/register', {layout: 'users/layout'})
     .extractExtraRegistrationParams( function (req) { 
       return { 
           firstName: req.body.firstName,
@@ -90,8 +99,8 @@ everyauth
       return promise;
     })
 
-    .loginSuccessRedirect('/')
-    .registerSuccessRedirect('/');
+    .loginSuccessRedirect('/web')
+    .registerSuccessRedirect('/web');
 
 
 everyauth.linkedin
@@ -105,7 +114,7 @@ everyauth.linkedin
     });
     return promise;
   })
-  .redirectPath('/');
+  .redirectPath('/web');
 
 everyauth.google
   .appId(auth.google.clientId)
@@ -121,7 +130,7 @@ everyauth.google
     });
     return promise;
   })
-  .redirectPath('/');
+  .redirectPath('/web');
   
 //configure everyauth facebook
 everyauth.facebook
@@ -136,14 +145,14 @@ everyauth.facebook
     });
     return promise;
   })
-  .redirectPath('/');
+  .redirectPath('/web');
 
-//authenticate the redis client
-redis.auth(redisOpts.auth);
+//authenticate the redis clients
+store.auth(redisOpts.auth);
 
-//express redis store options
+//express redis store options 
 var options = {
-  client: redis,
+  client: store,
   db: redisOpts.db,
   prefix: redisOpts.expressSessionPrefix
  };
@@ -175,173 +184,100 @@ app.configure('production', function(){
 
 app.register('.html', require('ejs'));
 
-function validate(req, res, next){
+var validate = function(req, res, next){
   console.log("USER SESSION", req.session);
   if (req.session.auth && req.session.auth.loggedIn){
     next();
   } else {
-    res.redirect('/login');
+    req.session.auth = {};
+    req.session.auth.loggedIn = true;
+    req.session.auth.userId = 'jeff.gorder@coordel.com';
+    next();
+    //res.redirect('/login');
   }
-}
+};
 
 // Routes
-app.get('/', validate, function(req, res){
-  //console.log("/GET", req.user, req.session);
-  //res.render('index', { user: req.user});
-  
-  res.render('index', {everyauth: everyauth, layout: 'preview'});
-  //res.render('index', {everyauth: everyauth, layout: 'app'});
-  
-});
+require('./routes/users')(app, validate); //login, registration, invites
+require('./routes/userApp')(app, validate); //app settings, people, vips
+require('./routes/clients')(app, validate); //web NOTE provide acces to others (i.e. mobile)
+require('./routes/coordeldb')(app, validate); //all couch access
+require('./routes/admin')(app, validate);//admin features
 
-app.get('/login', function(req, res){
-  //res.render('login', {auth: req.session.user});
-  res.render('login');
-});
-
-app.get('/reset', function(req, res){
-  //res.render('login', {auth: req.session.user});
-  res.render('reset');
-});
-
-app.get('/invite', function(req, res){
-  res.render('invite');
-});
-
-app.get('/invite/:id', function(req, res){
-  //this is the link that is sent in the invitation email
-  console.log("CLAIM INVITE", req.params.id);
-  
-  Invite.get(req.params.id, function(err, invite){
-    if(err) {
-      
+//root 
+app.get('/', function(req, res){
+  if (home){
+    home = false;
+    if (req.query.p){
+      //this is a request for a page
+      res.render('corp/page/' + req.query.p, {layout: 'corp/page'});
     } else {
-      User.get(invite.to, function(err, user){
-        var invite = {
-          id: req.params.id,
-          firstName: user.firstName,
-          email: user.email
-        };
-        req.session.invite = invite;
-        res.render('confirmInvite', {firstName: user.firstName, layout: 'confirm'});
-      });
+      //show the home page
+      res.render('corp/home/content-a', {layout: 'corp/home', color: 'c-bg-purple'});
     }
-  });
-});
-
-app.post('/password', function(req, res){
-  //this updates the user password. 
-  var newPass = req.body.newPass,
-      oldPass = req.body.oldPass,
-      login = req.body.login,
-      invite = req.session.invite;
-      
-  if (invite){
-    Invite.get(invite.id, function(err, i){
-      if (err){
-
-      } else {
-        User.get(i.to, function(err, user){
-          user.password = newPass;
-          var u = new User(user);
-          u.update(function(err, reply){
-            if (err){
-              console.log("ERROR: ", err);
-            } else {
-              delete req.invite;
-              res.redirect('/logout');
-            }
-
-          });
-        });
-      }
-    });
   } else {
-    User.get(login, function(err, user){
-      if (user.password === oldPass){
-        user.password = newPass;
-        var u = new User(user);
-        u.update(function(err, reply){
-          res.redirect('/logout');
-        });
+    home = true;
+    if (req.query.p){
+      //this is a request for a page
+      res.render('corp/page/' + req.query.p, {layout: 'corp/page'});
+    } else {
+      //show the alt home page
+      res.render('corp/home/content-b', {layout: 'corp/home', color: 'c-bg-green'});
+    }
+    
+  }
+});
+
+/* *********************************************** CHANGES AND ALERTS ****************************/
+
+var changesIO = io.sockets.on('connection', function (client) {
+  
+});
+
+//Get the the update sequence of the dbase
+couch.info(function(err, info){
+  var since = info.update_seq;
+  //start the changes stream using the latest sequence
+  var dbUrl = 'http://'+ couchOpts.host + ':' + couchOpts.port + '/' + settings.config.couchName;
+  //console.log("URL", dbUrl);
+  follow({db:dbUrl, since: since, include_docs:true}, function(error, change) {
+    if(!error) {
+      var map = Alert.getChangeAlertMap(change.doc);
+      //console.log("ALERT MAP", map);
+      for (var key in map){
+        //console.log("ALERT TO", key);
+        changesIO.emit('changes:' + key, change.doc);
       }
-    });
-  }
-      
-  
-  
-});
-
-app.post('/invite', function(req, res){
-  var inv = {to:{}, from:{}};
-  inv.to.firstName = req.body.firstName;
-  inv.to.lastName = req.body.lastName;
-  inv.to.email = req.body.email;
-  inv.from.appId = req.body.fromAppId;
-  inv.from.firstName = req.body.fromFirstName;
-  inv.from.lastName = req.body.fromLastName;
-  inv.from.email    = req.body.fromEmail;
-      
-  //this is where the invite is added
-  //console.log("SEND INVITE", inv);
-  User.invite(inv, function(err, reply){
-    if (err){
-      res.json({error: err});
-    } else {
-      res.redirect('/');
-    }
+    } 
   });
 });
 
-app.get('/coordel/uuids', validate, function(req, res){
-  //console.log("UUIDS", req.query.count);
-  cn.uuids(req.query.count, function(err, uuids){
-    //console.log("UUID response", uuids);
-    res.json({uuids:uuids});
-  });
-});
-
-app.get('/coordel/:id', validate, function(req, res){
-  //console.log('GET ID', req.params.id);
-  couch.get(req.params.id, function(err, obj){
-    if (err) console.log("ERROR getting " + req.params.id);
-    res.json(obj);
-  });
-});
-
-app.get('/coordel/view/:id', validate, function(req, res){
-  var view = req.params.id;
-  view = 'coordel/' + view;
-  //console.log('GET VIEW', view);
-  var opts = {};
-  //console.log('queryString params', req.query);
-  for (var key in req.query){
-    opts[key] = req.query[key];
-  }
-  couch.view(view, req.query, function(err, resView){
-    var ret = [];
-    if (err){
-      ret.push({error: err});
-    } else {
-      //console.log("VIEW ROWS", resView);
-      resView.rows.forEach(function(row){
-        ret.push(row);
-      });
-    }
-    var toReturn = {rows: ret};
-    //console.log("returning", toReturn);
-    res.json(toReturn);
-  });
-});
+/* ****************************  UTILITY DELETE FOR PRODUCTION  *************************/
 
 app.get('/flushdb', function(req, res){
-  redis.flushdb();
+  store.flushdb();
   console.log('redis flushed');
   couch.destroy();
   couch.create();
   console.log('couch recreated');
-  res.redirect('/logout');
+  delete req.session.auth;
+  res.redirect('/admin');
 });
+
+app.get('/loadTemplates', function(req, res){
+  var templates = require('./couchdb/defaultTemplates');
+  couch.save(templates, function(err, reply){
+    if (err) {
+      console.log("ERROR adding temlates");
+      res.redirect('/admin');
+    } else {
+      console.log("Loaded default templates");
+      res.redirect('/admin');
+    }
+  });
+});
+/* ************************************************************************************/
+
 everyauth.helpExpress(app);
 app.listen(8080);
 console.log("Coordel App Server listening on port %d in %s mode", app.address().port, app.settings.env);

@@ -1,0 +1,25 @@
+<a class="no-decoration" href='/'><div class="c-float-l logo">&nbsp;</div></a>
+<div class="c-float-l signin-form">
+	<form action="/login" method="post">
+		<div class="full" style="padding-bottom:1em">
+  		<p><label>Email</label></p> 
+			<input name="email" type="text" class="text x-large">
+		</div>
+		<div class="full" style="padding-bottom:2em">
+  		<p><label for="password">Password</label></p> 
+			<input name="password" type="password" class="text x-large">
+		</div>
+		<div>
+  		<input id="submitLogin" type="submit" class="submit-button c-margin-b c-float-r" value="Login">
+			<div class="clear"></div>
+		</div>
+	</form>
+	<%if ('undefined' !== typeof errors && errors.length){%>
+	<div class="feedback c-color-error c-text-center c-padding-large-t">
+		<% for (var key in errors) {%>
+			<span class="error"><%=errors[key]%>.</span>
+		<%}%>
+		<span>Please try again.
+	</div>
+	<%}%>
+</div>

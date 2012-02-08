@@ -1,6 +1,6 @@
 module.exports = {
   //keys for authenticating with providers
-  
+  url : "dev.coordel.com:8080",
   auth : {
     fb: {
       appId: '145674338818252', 
@@ -47,7 +47,7 @@ module.exports = {
       domain : "coordel.com", 
       username : "dev@coordel.com",
       password: "dev1129",
-      url: "dev.coordel.com:8080"
+      url: "dev.coordel.com:8085"
     }
   },
   

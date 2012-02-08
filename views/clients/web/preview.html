@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<title>
+			Coordel...and we're done!
+		</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="/css/main.css" type="text/css">
+		<link rel="stylesheet" href="/css/coordel-test.css" type="text/css">
+		<link rel="shortcut icon" href="images/favicon.gif">
+		<!-- load dojo and other components via require-->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true"></script>		
+		<!-- load socket.io -->																			
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+		  var socket = io.connect(window.location.host);
+		  
+			//load
+	    require(["dojo/dom", "dojo/dom-construct", "dojo/domReady!"], function(dom, con){
+				socket.on('changes:<%=appId%>', function (change) {
+			    console.log(change);
+					var changes = dom.byId("changes");
+			    con.create("div",{innerHTML: change.name}, changes);
+			  });
+			});
+		</script>
+	</head>
+	<body>
+		<div id="body-container">
+			<div id="header-container" class="ui-corner-all large-shadow">
+				<div id="header">
+					<div id="site-links">
+						<span><a href="/logout">Logout</a></span>
+					</div>
+					<a class="no-decoration" href='/'><div id="site-logo">
+						&nbsp;
+					</div></a>
+				</div><!-- #header -->
+			</div><!-- #header-container -->
+			<div id="container">
+				<div id="content" class="content ui-corner-all large-shadow page">
+					<div id="single-column">	
+						<%- body %>
+					</div>
+				</div><!-- .content .hfeed -->
+			</div><!-- #container -->
+			<div id="footer-container">
+				<div id="footer" class="ui-corner-all large-shadow">
+					<div class="footer-insert">
+						<div class="copyright">
+							© Coordel 2012 <span id="footer-links"><a href="/?p=disclaimer">Disclaimer</a></span>
+						</div>
+					</div>
+				</div><!-- #footer -->
+			</div><!-- #footer-container -->
+		</div><!-- #body-container -->
+	</body>
+</html>
