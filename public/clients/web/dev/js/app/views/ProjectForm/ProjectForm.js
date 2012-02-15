@@ -40,13 +40,15 @@ define(
         
         if (!self.project._id){
           var id = db.uuid();
-          //console.debug("created new uuid for ProjectForm",id);
+          console.debug("created new uuid for ProjectForm",id);
           self.project._id = id;
         }
         
         if (self.project.users && self.project.users.length > 0){
           self._setPills("people");
         }
+        
+        
         
         if (self.project.responsible){
           self._setPills("responsible");
@@ -59,6 +61,8 @@ define(
         //set the project of roles dropdown and the attachments dropdown
         self.projectFormRoles.setDropDown(self.project);
         self.projectFormAttachments.setDropDown(self.project);
+        
+        
         
         if (!self.isNew){
           //hide the reuse button
@@ -83,6 +87,8 @@ define(
         //set the contacts into the responsible and people filtering selects
         self._setFilteringSelect(self.projectFormPeople, db.contacts(), true);
         self._setFilteringSelect(self.projectFormResponsible, db.contacts(), true);
+        
+        console.log("after filtering selects", self.project);
         
         dojo.connect(self.projectFormRoles, "closeDropDown", this, function(){
           dojo.forEach(this.rolePills, function(pill){
@@ -504,11 +510,17 @@ define(
       
       _setFilteringSelect: function(control, list, isContact){
         
-         var store = new ws({data: {identifier: "_id", items:[]}});
+        console.log("control", control, "list", list, "isContact", isContact);
+        var ident = "_id";
+        if (isContact){
+          ident = "id";
+        }
+        
+         var store = new ws({data: {identifier: ident, items:[]}});
          
          dojo.forEach(list, function(obj, key){
            if (isContact){
-             store.newItem({name: obj.first + " " + obj.last, _id: obj._id});
+             store.newItem({name: obj.firstName + " " + obj.lastName, id: obj.id});
            } else {
              store.newItem({name: obj.name, _id: obj._id});
            }

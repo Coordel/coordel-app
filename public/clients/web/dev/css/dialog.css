@@ -1,11 +1,11 @@
-.claro .dijitDialog {
+.coordel .dijitDialog {
   border: none;
   -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
 }
 
-.claro .dijitDialogPaneContent {
+.coordel .dijitDialogPaneContent {
   background: #ffffff repeat-x top left;
   border:none;
   padding: 0;
@@ -34,7 +34,7 @@
   background-color: #ffffff;
 }
 
-.claro .dijitDialogPaneContentArea {
+.coordel .dijitDialogPaneContentArea {
   /* trick to get action bar (gray bar at bottom with OK/cancel buttons) to span from
 	 * left to right but still indent dialog content
 	 */
@@ -42,7 +42,7 @@
   padding: 10px 8px;
 }
 
-.claro .dijitDialogTitleBar {
+.coordel .dijitDialogTitleBar {
   /* outer container for the titlebar of the dialog */
   
   background: #000 url(images/titlebar-2.png) repeat-x;
@@ -63,12 +63,13 @@
  	text-overflow: ellipsis;
  
 }
-.claro .dijitDialogTitle {
+.coordel .dijitDialogTitle {
   /* typography and styling of the dialog title */
   padding: 0;
   font-size: 1.091em;
+  color: #ffffff;
 }
-.claro .dijitDialogCloseIcon {
+.coordel .dijitDialogCloseIcon {
   /* the default close icon for the dialog */
 
   background: url("images/icons/dialogCloseIcon.png");
@@ -78,17 +79,17 @@
   height: 15px;
   width: 21px;
 }
-.dj_ie6 .claro .dijitDialogCloseIcon {
+.dj_ie6 .coordel .dijitDialogCloseIcon {
   background-image: url("images/icons/dialogCloseIcon.png");
 }
-.claro .dijitDialogCloseIconHover {
+.coordel .dijitDialogCloseIconHover {
   background-position: -21px;
 }
-.claro .dijitDialogCloseIconActive {
+.coordel .dijitDialogCloseIconActive {
   background-position: -42px;
 }
 
-.claro .dijitDialogUnderlay {
+.coordel .dijitDialogUnderlay {
   background: transparent;
 }
 

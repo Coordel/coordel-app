@@ -30,11 +30,9 @@ define(["dojo",
             },
             _loadContacts: function(username){
               this.memory = new mem({idProperty: "id"});
-              this.remote = new json({target: "/app/people/", idProperty: "id", queryEngine: dojo.store.util.QueryResults});
-              this.remote = new obs(this.remote);
+              this.remote = new json({target: "/app/people/"+username, idProperty: "id", queryEngine: dojo.store.util.QueryResults});
+              this.memory = new obs(this.memory);
               this.store = new cache(this.remote, this.memory);
-              
-              
             	return this.store.query();
             },
             _loadTasks: function(contact, userProjects){

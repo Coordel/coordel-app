@@ -39,7 +39,7 @@
   color: #00629B;
 }
 
-.claro .overdue .dijitTitlePaneTitle, .claro .overdue .dijitTitlePaneFocused .dijitTitlePaneTextNode{
+.coordel .overdue .dijitTitlePaneTitle, .coordel .overdue .dijitTitlePaneFocused .dijitTitlePaneTextNode{
   color: #DA291C !important;
 }
 
@@ -49,11 +49,11 @@
 
 }
 
-.claro .dijitTitlePaneTitle{
+.coordel .dijitTitlePaneTitle{
   color: #66727F;
 }
 
-.claro .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+.coordel .dijitTitlePaneFocused .dijitTitlePaneTextNode {
   color: #66727F;
 }
 

@@ -13,7 +13,13 @@ define(["dojo",
     postCreate: function(){
       this.inherited(arguments);
       //console.debug("in the new uploader", this);
+    },
+    
+    onProgress: function(customEvt){
+      this.inherited(arguments);
+      console.log("onProgress", customEvt);
     }
+    
     
   });
   return app.form.Uploader;    

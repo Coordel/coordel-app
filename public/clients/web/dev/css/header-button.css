@@ -27,7 +27,6 @@
  */
 .coordel-header .dijitButtonNode {
   /* rules for dijit.form.*Button widgets and arrow nodes on ComboBox, Spinner etc. */
-
   -webkit-transition-property: background-color;
   -moz-transition-property: background-color;
   transition-property: background-color;
@@ -47,6 +46,7 @@
   background-position: center top;
   background-repeat: repeat-x;
   background-color: #101010;
+  color: #ffffff;
   -moz-border-radius: 4px;
   border-radius: 4px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -141,26 +141,6 @@
   -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-}
-.coordel-header .dijitComboButtonDisabled .dijitArrowButton {
-  border-left-width: 0;
-}
-/* for ComboButton */
-.coordel-header table.dijitComboButton {
-  border-collapse: separate;
-  /* override dijit.css so that ComboBox rounded corners work */
-
-}
-.dj_ie6 .coordel-header .dijitButtonNode {
-  background-image: none;
-}
-.coordel-header .dijitComboButton .dijitStretch {
-  -moz-border-radius: 4px 0 0 4px;
-  border-radius: 4px 0 0 4px;
-}
-.coordel-header .dijitComboButton .dijitArrowButton {
-  -moz-border-radius: 0 4px 4px 0;
-  border-radius: 0 4px 4px 0;
 }
 
 /* Buttons */

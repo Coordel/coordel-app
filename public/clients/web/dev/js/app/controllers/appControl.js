@@ -10,14 +10,14 @@ define(['dojo',
         'app/controllers/primaryNavControl',
         'app/controllers/streamControl',
         'app/views/RightHeader/RightHeader',
-        'dojox/socket',
+    
         'dijit/Dialog',
         'app/views/TaskActionDialog/TaskActionDialog',
         "i18n!app/nls/coordel",
         "app/views/ConfirmDialog/ConfirmDialog",
         "app/views/ProjectForm/ProjectForm",
         "app/views/ProjectAction/ProjectAction"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, socket, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction) {
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -45,7 +45,7 @@ define(['dojo',
 	        def = db.init();
 	    
 	    def.then(function(res){
-	      console.debug("database loaded..", db);
+	      console.log("DATABASE LOADED: ", res);
 	      app.username = db.appStore.username;
 	      app.showApp();
 	    });
@@ -261,12 +261,14 @@ define(['dojo',
 	  
 	  _showProjectForm: function(){
 	    //console.debug("create a project");
-	    
+	    var id = db.uuid();
+	    console.debug("create a project with this _id", id, "username", db.username());
 	    //when we create a new project, by default, the current user is
 	    //set as the responsible and a responsible role is created for them
 	    var proj = new ProjectForm({
+	      
 	      project: {
-	        _id: db.uuid(),
+	        _id: id,
 	        responsible: db.username(),
 	        users: [db.username()],
 	        assignments: [{

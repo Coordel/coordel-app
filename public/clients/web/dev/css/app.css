@@ -5,7 +5,7 @@ you will probably want to include these two files.
 */
 
 @import '../js/dojo-release-1-1.6.1-src/dojo/resources/dojo.css';
-@import '../js/dojo-release-1-1.6.1-src/dijit/themes/claro/claro.css';
+@import '../js/dojo-release-1-1.6.1-src/dijit/themes/coordel/coordel.css';
 
 @import 'header.css';
 @import 'menu.css';
@@ -15,8 +15,6 @@ you will probably want to include these two files.
 @import 'leftNav.css';
 @import 'primary-boxes.css';
 @import 'primary-list.css';
-/*@import 'fonts.css';*/   /* not currently using the Danube fonts in the app */
-@import 'tab-container.css';
 @import 'main-header.css';
 @import 'stream.css';
 @import 'task.css';
@@ -38,7 +36,6 @@ you will probably want to include these two files.
 @import 'dialog.css';
 @import 'task-info.css';
 @import 'FileInput.css';
-@import 'body-button.css';
 @import 'menu-button.css';
 @import 'task-workspace.css';
 @import 'deliverable.css';
@@ -62,14 +59,6 @@ ul {
   list-style-type: none;
 }
 
-.claro {
-  font-family: "Lucida Grande", Verdana,Arial,Helvetica,sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-.claro .dijitTextBoxDisabled, .claro .dijitTextBoxDisabled .dijitButtonNode {
-  border-color: #eaeaea;
-}
 
 /* webkit does the annoying focus thing */
 *:focus{
@@ -80,14 +69,6 @@ ul {
 	outline: none;
 	margin-right: 1px;
 }
-
-.claro .dijitTextBoxDisabled, .claro .dijitTextBoxDisabled .dijitInputContainer {
-background-color: #fdfdfd;
-background-image: none;
-color: #5c5c5c;
-}
-
-
 
 /* used when text is uses as a button */
 .c-text-button {

@@ -1,9 +1,14 @@
 var settings    = require('./../settings'),
     couchOpts   = settings.config.couchOptions,
     cradle      = require('cradle').setup(couchOpts),
+    nano        = require('nano')('http://'+couchOpts.host + ':' + couchOpts.port),
+    nanoCouch   = nano.use(settings.config.couchName),
     cn          = new cradle.Connection(),
     couch       = cn.database(settings.config.couchName),
-    App        = require('./../models/app');
+    App         = require('./../models/app'),
+    fs          = require('fs'),
+    Deferred    = require('promised-io/promise').Deferred,
+    promise     = require('promised-io/promise');
 
 module.exports = function(app, validate){
   app.post('/coordel', validate, function(req, res){
@@ -11,7 +16,7 @@ module.exports = function(app, validate){
   });
   
   app.put('/coordel/:id', validate, function(req, res){
-    console.log("PUT", req.body);
+    console.log("PUT coordel/:id", req.body);
     couch.save(req.body, function(err, putRes){
       console.log("PUT RESPONSE", putRes, err);
       if (err){
@@ -20,6 +25,55 @@ module.exports = function(app, validate){
         res.json(putRes);
       }
     });
+  });
+  
+  app.get('/coordel/files/:id', validate, function(req, res){
+    
+    couch.get(req.params.id, function(err, doc){
+      if (err){
+        
+      } else {
+        res.json(doc);
+      }
+    });
+  });
+  
+  app.put('/coordel/files/:id/:name', validate, function(req, res){
+    var id = req.params.id,
+        name = req.params.name,
+        rev = req.query.rev,
+        type = req.headers['content-type'];
+        
+    couch.saveAttachment(id, rev, name, type, req, function(err, attachRes){
+      if (err) {
+        console.log("ERROR", err);
+        res.json({error: err});
+      } else {
+        console.log("RESPONSE", attachRes);
+        res.json(attachRes);
+      }
+    });
+  });
+  
+  app.del('/coordel/files/:id/:name', validate, function(req, res){
+    var id = req.params.id,
+        name = req.params.name,
+        rev = req.query.rev;
+        
+    console.log("delete called", id, name, rev);
+    
+    var url = '/' + id + '/'+name;
+    url = url + '?rev=' + rev;
+    
+    nanoCouch.attachment.destroy(id, name, rev, function(e,b,h){
+      if (e){
+        console.log("ERROR", e);
+      } else {
+        console.log("RESPONSE", b);
+        res.json(b);
+      }
+    });
+
   });
    
   app.get('/coordel/uuids', validate, function(req, res){

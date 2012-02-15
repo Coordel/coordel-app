@@ -220,42 +220,41 @@ border-bottom: 1px solid #a3aab1;
 }
 
 /* override the claro checkbox styles*/
-.claro .tasklist-item .dijitCheckBox, .claro .dijitCheckBoxIcon {
+.coordel .tasklist-item .dijitCheckBox, .coordel .dijitCheckBoxIcon {
   background-image: url('images/checkboxStates.png');
   /* checkbox sprite image */
-
+  
   background-repeat: no-repeat;
   width: 20px;
   height: 16px;
   margin-top: -2px;
   padding: 0;
 }
-.claro .tasklist-item .dijitCheckBox, .claro .dijitToggleButton .dijitCheckBoxIcon {
+.coordel .tasklist-item .dijitCheckBox, .coordel .dijitToggleButton .dijitCheckBoxIcon {
   /* unchecked */
-
   background-position: -20px;
 }
-.claro .tasklist-item .dijitCheckBoxChecked, .claro .dijitToggleButtonChecked .dijitCheckBoxIcon {
+.coordel .tasklist-item .dijitCheckBoxChecked, .coordel .dijitToggleButtonChecked .dijitCheckBoxIcon {
   /* checked */
 
   background-position: 0;
 }
-.claro .tasklist-item .dijitCheckBoxDisabled {
+.coordel .tasklist-item .dijitCheckBoxDisabled {
   /* disabled */
 
   background-position: -100px;
 }
-.claro .tasklist-item .dijitCheckBoxCheckedDisabled {
+.coordel .tasklist-item .dijitCheckBoxCheckedDisabled {
   /* disabled but checked */
 
   background-position: -80px;
 }
-.claro .tasklist-item .dijitCheckBoxHover {
+.coordel .tasklist-item .dijitCheckBoxHover {
   /* hovering over an unchecked enabled checkbox */
 
   background-position: -60px;
 }
-.claro .tasklist-item .dijitCheckBoxCheckedHover {
+.coordel .tasklist-item .dijitCheckBoxCheckedHover {
   /* hovering over an checked enabled checkbox */
 
   background-position: -40px;

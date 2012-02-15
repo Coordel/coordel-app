@@ -48,6 +48,11 @@ module.exports = {
       username : "dev@coordel.com",
       password: "dev1129",
       url: "dev.coordel.com:8085"
+    },
+    s3Options: {
+      key: 'AKIAJIHREYPSRX3VGQOQ', 
+      secret: '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', 
+      bucket: 'coordel-files'
     }
   },
   

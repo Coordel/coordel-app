@@ -1,0 +1,50 @@
+/* Editor 
+ * 
+ * Styling Editor means styling the Editor inside iframe container (dijitEditorIFrameContainer)
+ * 
+ * 1. Editor iframe container (default styling): 
+ * 		.dijitEditorIFrameContainer - normal state styles: background-color, border, padding
+ *
+ * 2. hovered Editor iframe container (ie, mouse hover on editor)
+ * 		.dijitEditorHover .dijitEditorIFrameContainer/dijitEditorIFrame - styles when mouse hover on the container
+ * 
+ * 3. focused Editor iframe container (ie, mouse focus on the editor pane)
+ * 		.dijitEditorFocused .dijitEditorIFrameContainer/dijitEditorIFrame - styles when container focused
+ * 
+ * 3. disabled Editor iframe container 
+ * 		.dijitEditorDisabled - editor's inner iframe container disable status styles: background, border
+ */
+.coordel .dijitEditorIFrameContainer {
+  padding: 3px 3px 1px 10px;
+}
+.coordel .dijitEditorIFrame {
+  background-color: #ffffff;
+}
+.coordel .dijitEditor {
+  border: 1px solid #a3aab1;
+}
+.coordel .dijitEditor .dijitEditorIFrameContainer {
+  background-color: #ffffff;
+  background-image: url("form/images/textBox_back.png");
+  background-repeat: repeat-x;
+}
+.dj_ie6 .coordel .dijitEditor .dijitEditorIFrameContainer {
+  background-image: none;
+}
+.coordel .dijitEditorHover .dijitEditorIFrameContainer, .coordel .dijitEditorHover .dijitEditorIFrameContainer .dijitEditorIFrame {
+  background-color: #fdfdfd;
+}
+.coordel .dijitEditorFocused .dijitEditorIFrameContainer, .coordel .dijitEditorFocused .dijitEditorIFrameContainer .dijitEditorIFrame {
+  /* TODO: contradicts rule above, which background-color do you want? */
+
+  background-color: #ffffff;
+}
+/* Disabled */
+.coordel .dijitEditorDisabled {
+  border: 1px solid #cccccc;
+  color: #777777;
+}
+.coordel .dijitDisabled .dijitEditorIFrame, .coordel .dijitDisabled .dijitEditorIFrameContainer, .coordel .dijitDisabled .dijitEditorIFrameContainer .dijitEditorIFrame {
+  background-color: #e5e5e5;
+  background-image: none;
+}

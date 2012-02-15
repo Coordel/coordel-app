@@ -5,9 +5,11 @@
 //
 
 // for now, we publish dojox into the global namespace because so many tests and apps expect it.
+/*
 define(["dojo"], function(dojo) {
 	// the current dojo bootstrap defines dojox; this may change and this module provides a little
 	// future-proof with the disjunction.
 	dojox= dojo._dojox || {};
 	return dojox;
 });
+*/

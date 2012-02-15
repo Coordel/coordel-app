@@ -24,6 +24,8 @@ define(
       
       coordel: coordel,
       
+      pillConnections: [],
+      
       project: null,
       
       placeHolder: "",
@@ -52,6 +54,12 @@ define(
        
         this.attachmentsPill.showPill(count + " " + label.toLowerCase(), this.db);
         
+        if (this.pillConnections.length > 0){
+          dojo.forEach(this.pillConnections, function(c){
+            dojo.disconnect(c);
+          });
+        }
+        
         //delete all attachments when the remove x is clicked on the pill
         var rem = dojo.connect(this.attachmentsPill.removeValue, "onclick", this, function(evt){
           evt.stopPropagation();
@@ -74,6 +82,7 @@ define(
           dojo.disconnect(rem);
           
         });
+        this.pillConnections.push(rem);
       },
       
       setDropDown: function(project){
@@ -83,7 +92,7 @@ define(
           rev: project._rev
         }).placeAt(this.attachDropDown);
         
-        this.dropDown.setUrl(db.db + this.project._id);
+        this.dropDown.setUrl(db.db + "files/" + this.project._id);
         
         dojo.connect(this.dropDown, "onShowPill", this, function(count){
           //console.debug("got onShowPill", count);

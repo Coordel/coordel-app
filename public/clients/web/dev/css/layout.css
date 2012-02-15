@@ -23,10 +23,8 @@ html, body {
   margin: 0;
   overflow: hidden;
   padding: 0;
-}
-
-body{
-  background: #000;
+  font-family: "Lucida Grande", Verdana,Arial,Helvetica,sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 body.coordel-admin{
@@ -279,17 +277,3 @@ h3 {
   border-left: 1px solid #66727F;
   background: #eaeaea;
 }
-
-.claro .dijitSplitterV, .claro .dijitGutterV {
-  width: 0px;
-  background: transparent;
-}
-
-.claro .dijitSplitContainer-child, .claro .dijitBorderContainer-child {
-  border: none; 
-}
-
-
-.dijitBorderContainer { padding: 0px !important; }
-.dijitGutterH { height: 0px !important; }
-.dijitGutterV { width: 0px !important; }

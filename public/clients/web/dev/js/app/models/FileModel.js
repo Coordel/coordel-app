@@ -16,7 +16,13 @@ define(
     },
     
     getTask: function(id){
-      return this.db.get(id);
+      //return this.db.get(id);
+      
+      return dojo.xhrGet({
+        url: "/coordel/" + id,
+        handleAs: "json"
+      });
+      
     },
     
     getProject: function(id){
@@ -93,20 +99,36 @@ define(
     },
     
     removeFile: function(task, file){
-      
+
       var def = new dojo.Deferred();
       
+      if (task._attachments){
+        for (var name in task._attachments){
+          if (name === file){
+            delete task._attachments[name];
+          }
+        }
+      }
+      
       var args = {
-         url: this.db.target + task._id + "/" + file + "?rev=" + task._rev,
-         handleAs: "json",
-         load: function(resp){
-           delete task._attachments[file];
-           task._rev = resp.rev;
-           def.callback(task);
-         }
+        url: this.db.target + task._id,
+        handleAs: "json",
+        putData: dojo.toJson(task),
+        headers:{
+					"Content-Type": "application/json; charset=UTF-8",
+					"Accept": "application/json"
+				},
+        load: function(resp){
+          //console.debug("got response in removeAll", resp);
+          task._rev = resp.rev;
+          def.callback(task);
+        }
       };
-      dojo.xhrDelete(args);
+      
+      dojo.xhrPut(args);
+  
       return def;
+    
     },
     
     promoteFile: function(fileId, username){

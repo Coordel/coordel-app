@@ -8,44 +8,6 @@
   background:#000 url(images/headerButtons/add_task_h.png);
 }
 
-/*
-
-#searchTaskList {
-  background:#000 url(images/headerButtons/search_task.png);
-  width: 46px;
-  height: 28px;
-  float:right;
-}
-
-#searchTaskList:hover {
-  background:#000 url(images/headerButtons/search_task_h.png);
-}
-
-#sortTaskList {
-  background:#000 url(images/headerButtons/sort_task.png);
-  width: 46px;
-  height: 28px;
-  float: right;
-  margin-right: 8px;
-}
-
-#sortTaskList:hover {
-  background:#000 url(images/headerButtons/sort_task_h.png);
-}
-
-#turboTaskList {
-  background:#000 url(images/headerButtons/turbo.png);
-  width: 46px;
-  height: 28px;
-  float:right;
-  margin-right: 8px;
-}
-
-#turboTaskList:hover {
-  background:#000 url(images/headerButtons/turbo_h.png);
-}
-*/
-
 #filterStream {
   background:#000 url(images/headerButtons/filter_stream.png);
   width: 46px;
@@ -58,21 +20,3 @@
   background:#000 url(images/headerButtons/filter_stream_h.png);
 }
 
-
-/*
-.claro .dijitTooltipConnector {
-
-  background-image: url("images/tooltip.png");
-  background-repeat: no-repeat;
-}
-
-.claro .dijitTooltipContainer {
-  border: 1px solid #ffaf0f;
-  font-size:11px;
-  font-family:helvetica;
-  font-weight: bold;
-  text-shadow: rgba(0, 0, 0, 0.292969) 0px 1px 0px;
-  color:#fff;
-  background: #f58400 url(images/ui-bg_highlight-soft_40_f58400_1x100.png) 70% top repeat-x;
-}
-*/

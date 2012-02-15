@@ -97,7 +97,7 @@ define(
         }
           
         //set the url for attachments
-        self.taskFormAttachments.setUrl(db.db + self.task._id);
+        self.taskFormAttachments.setUrl(db.db + "files/" + escape(self.task._id));
         self.taskFormAttachments.set("task", self.task);
         self.taskFormAttachments.set("username",db.username());
         
@@ -122,7 +122,7 @@ define(
         self._setFilteringSelect(self.taskFormProject, db.projects());
         self._setFilteringSelect(self.taskFormDelegate, db.contacts(), true);
         self._setFilteringSelect(self.taskFormBlockers, db.projects());
-        self._setFilteringSelect(self.taskFormDeliverables, db.templates("deliverables"));
+        self._setFilteringSelect(self.taskFormDeliverables, db.templates("deliverable"));
         
         //if this isn't a new task, then hide the templates button. 
         if (!this.isNew){
@@ -799,12 +799,18 @@ define(
       },
       
       _setFilteringSelect: function(control, list, isContact){
+        
+        var ident = "_id";
+        if (isContact){
+          ident = "id";
+        }
          
-         var store = new ws({data: {identifier: "_id", items:[]}});
+         var store = new ws({data: {identifier: ident, items:[]}});
+         
          
          dojo.forEach(list, function(obj, key){
            if (isContact){
-             store.newItem({name: obj.first + " " + obj.last, _id: obj._id});
+             store.newItem({name: obj.firstName + " " + obj.lastName, id: obj.id});
            } else {
              store.newItem({name: obj.name, _id: obj._id});
            }

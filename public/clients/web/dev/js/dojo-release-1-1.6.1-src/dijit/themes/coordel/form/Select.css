@@ -1,0 +1,109 @@
+/* Select
+ * 
+ * Styling Select mainly includes:
+ * 
+ * 1. Containers
+ * 		.dijitSelect - for border, background-color
+ * 		.dijitButtonContents - for border
+ *
+ * 2. Arrow
+ * 		.dijitArrowButton - for border, padding and background-color|image
+ * 		.dijitArrowButtonInner - for border, background-color|image, display and width|height
+ * 
+ * 3. Menu
+ * 		.dijitSelectMenu .* - for border, padding
+ * 
+ * 4. Various states
+ * 		.dijitSelectHover|.dijitSelectFocused|.dijitSelectDisabled .* - for border, padding and background-color|image 
+ */
+.coordel .dijitSelect .dijitButtonText {
+  padding: 2px;
+}
+/* normal status */
+.coordel .dijitSelect {
+  border: 1px solid #a3aab1;
+  background-color: #ffffff;
+  border-collapse: separate;
+}
+.dj_ie6 .coordel .dijitSelect, .dj_ie6 .coordel .dijitSelect .dijitButtonNode {
+  background-image: none;
+}
+.coordel .dijitSelect .dijitButtonContents {
+  border: 0 solid #a3aab1;
+  border-right-width: 1px;
+}
+.coordel .dijitSelect .dijitArrowButton {
+  padding: 0;
+  border: 1px solid #ffffff;
+  border-top: none;
+  background-color: #e5e5e5;
+  background-image: url("../form/images/formHighlight.png");
+  background-repeat: repeat-x;
+}
+.coordel .dijitSelect .dijitArrowButton .dijitArrowButtonInner {
+  background-image: url("../form/images/commonFormArrows.png");
+  background-position: -35px 70%;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+}
+/* hover status */
+.coordel .dijitSelectHover {
+  border: 1px solid #a3aab1;
+  background-color: #fdfdfd;
+  background-image: url("../form/images/textBox_back.png");
+  background-repeat: repeat-x;
+}
+.coordel .dijitSelectHover .dijitButtonContents {
+  border-color: #a3aab1;
+}
+.coordel .dijitSelectHover .dijitArrowButton {
+  background-color: #e5e5e5;
+}
+.coordel .dijitSelectHover .dijitArrowButton .dijitArrowButtonInner {
+  background-position: -70px 70%;
+}
+/* focused status */
+.coordel .dijitSelectFocused {
+  border: 1px solid #a3aab1;
+}
+.coordel .dijitSelectFocused .dijitButtonContents {
+  border-color: #a3aab1;
+}
+.coordel .dijitSelectFocused .dijitArrowButton {
+  background-color: #7dbefa;
+  background-position: 0 -177px;
+  border: none;
+  padding: 0 1px;
+}
+.coordel .dijitSelectFocused .dijitArrowButton .dijitArrowButtonInner {
+  background-position: -70px 70%;
+  margin-bottom: 1px;
+}
+/* disable status */
+.coordel .dijitSelectDisabled {
+  border: 1px solid #cccccc;
+  background-color: #e5e5e5;
+  background-image: none;
+  color: #777777;
+}
+.coordel .dijitSelectDisabled .dijitArrowButton {
+  background-color: #e5e5e5;
+}
+.coordel .dijitSelectDisabled .dijitArrowButton .dijitArrowButtonInner {
+  background-position: 0 70%;
+}
+/* Dropdown menu style for select */
+.coordel .dijitSelectMenu td.dijitMenuItemIconCell, .coordel .dijitSelectMenu td.dijitMenuArrowCell {
+  /* so that arrow and icon cells from MenuItem are not displayed */
+
+  display: none;
+}
+.coordel .dijitSelectMenu td.dijitMenuItemLabel {
+  /* line up menu text with text in select box (in LTR and RTL modes) */
+
+  padding: 2px;
+}
+.coordel .dijitSelectMenu .dijitMenuSeparatorTop {
+  border-bottom: 1px solid #a3aab1;
+}

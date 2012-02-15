@@ -34,10 +34,12 @@ dojo.declare("app.form.plugins.HTML5", [], {
 	 *************************/
 	 onBeginFile: function(file){
 	   //this indicates that there is a file starting to upload
+
 	 },
 	 
 	 onCompleteFile: function(file){
 	   //this indicates that the file has uploaded
+	
 	 },
 	 
 	/*************************
@@ -51,8 +53,10 @@ dojo.declare("app.form.plugins.HTML5", [], {
 		//console.log("upload html5");
 		this.onBegin(this.getFileList());
 		if(this.supports("FormData")){
+		  console.log("sending with formdata");
 			this.uploadWithFormData(formData);
 		}else if(this.supports("sendAsBinary")){
+		  console.log("sending as binary");
 			this.sendAsBinary(formData);
 		}
 	},
@@ -94,7 +98,9 @@ dojo.declare("app.form.plugins.HTML5", [], {
 			xhr.sendAsBinary(msg);
 		}
 	},
-	uploadWithFormData: function(/* Object */data){
+	
+
+	uploadWithFormData: function(data){
 		// summary
 		// 		Used with WebKit and Firefox 4+
 		// 		Upload files using the much friendlier FormData browser object.
@@ -149,10 +155,7 @@ dojo.declare("app.form.plugins.HTML5", [], {
 		    self.onComplete();
 		  }
 		};
-		
-		
-
-		
+	
 		dojo.forEach(this.inputNode.files, function(f, i){
 		  var file = {
 		    onLoading: function(){},
@@ -175,6 +178,48 @@ dojo.declare("app.form.plugins.HTML5", [], {
    
 	},
 
+	/*
+	uploadWithFormData: function(data){
+		// summary
+		// 		Used with WebKit and Firefox 4+
+		// 		Upload files using the much friendlier FormData browser object.
+		// tags:
+		// 		private
+		//
+		if(!this.getUrl()){
+			console.error("No upload url found.", this); return;
+		}
+
+		var fd = new FormData();
+		dojo.forEach(this.inputNode.files, function(f, i){
+		  var file = {
+		    onLoading: function(){},
+		    onError: function(){},
+		    onComplete: function(){}
+		  };
+		  
+		  file.fd = f;
+		  if (data){
+			  file.info = data[i];
+			}
+		  
+			fd.append(this.name+"s[]", f);
+			
+			console.log("FILES", fd, file);
+		}, this);
+
+		if(data){
+			for(var nm in data){
+				fd.append(nm, data[nm]);
+			}
+		}
+
+		var xhr = this.createXhr();
+		console.log("SENDING", fd);
+		xhr.send(fd);
+	},
+  */
+  
 	_xhrProgress: function(evt){
 		if(evt.lengthComputable){
 			var o = {
@@ -194,7 +239,45 @@ dojo.declare("app.form.plugins.HTML5", [], {
 			this.onProgress(o);
 		}
 	},
+	
+	/*
+	createXhr: function(){
+		var xhr = new XMLHttpRequest();
+		var timer;
+        xhr.upload.addEventListener("progress", dojo.hitch(this, "_xhrProgress"), false);
+        xhr.addEventListener("load", dojo.hitch(this, "_xhrProgress"), false);
+        xhr.addEventListener("error", dojo.hitch(this, function(evt){
+			this.onError(evt);
+			clearInterval(timer);
+		}), false);
+        xhr.addEventListener("abort", dojo.hitch(this, function(evt){
+			this.onAbort(evt);
+			clearInterval(timer);
+		}), false);
+        xhr.onreadystatechange = dojo.hitch(this, function() {
+			if (xhr.readyState === 4) {
+				console.info("COMPLETE");
+				clearInterval(timer);
+				console.log("XHR responseText", xhr.responseText);
+				this.onComplete(dojo.eval(xhr.responseText));
+			}
+		});
+        xhr.open("POST", this.getUrl());
 
+		timer = setInterval(dojo.hitch(this, function(){
+			try{
+				if(typeof(xhr.statusText)){} // accessing this error throws an error. Awesomeness.
+			}catch(e){
+				//this.onError("Error uploading file."); // not always an error.
+				clearInterval(timer);
+			}
+		}),250);
+
+		return xhr;
+	},
+  */
+  
+ 
 	createXhr: function(def, file, rev){
 		//console.debug("in modified createXhr");
     
@@ -224,21 +307,16 @@ dojo.declare("app.form.plugins.HTML5", [], {
 				//console.debug("COMPLETE", resp);
 				def.callback(resp);
 			} else if (xhr.readyState === 1){
-  		  //console.debug("OPENED", file.info.type);
+  		  console.debug("OPENED", file.info.type);
   		  xhr.setRequestHeader("Content-Type", file.info.type);
   		}
 		});
 		
-		//console.debug("in createXhr rev", rev);
+		var url = this.getUrl() + "/" + escape(file.info.name);
+		
 		if (rev){
-		  rev = "?rev=" + rev;
-		} else {
-		  rev = "";
+		  url = url + '/?rev=' + rev;
 		}
-		
-		var url = this.getUrl() + "/" + file.info.name + rev;
-		
-		//console.debug("url", url);
 		
     xhr.open("PUT", url);
 
@@ -254,6 +332,7 @@ dojo.declare("app.form.plugins.HTML5", [], {
 		return xhr;
 	},
 
+	
 	_buildRequestBody : function(data, boundary) {
 		var EOL  = "\r\n";
 		var part = "";

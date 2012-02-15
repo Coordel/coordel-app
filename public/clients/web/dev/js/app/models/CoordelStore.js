@@ -12,10 +12,8 @@ define(["dojo",
         "app/models/ContactStore",
         "app/models/StreamStore",
         "app/models/RoleStore",
-        "i18n!app/nls/coordel",
-        "dojox/encoding/digests/_base",
-        "dojox/encoding/digests/SHA1"
-        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, tModel, dm, cStore, sStore,rStore, coordel,dxd, sha1) {
+        "i18n!app/nls/coordel"
+        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, tModel, dm, cStore, sStore,rStore, coordel) {
       
         var uuidCache = [];
         var CoordelStore = {
@@ -58,7 +56,7 @@ define(["dojo",
               if (username !== "UNASSIGNED"){
                 c = this.contactStore.store.get(username);;
               } else {
-                c = {_id: "UNASSIGNED", email: ""};
+                c = {id: "UNASSIGNED", email: ""};
               }
               this._setFullName(c, noYou);
               return c;
@@ -76,14 +74,14 @@ define(["dojo",
               
               contact.fullName = coordel.you;
               
-              if (contact._id === "UNASSIGNED"){
+              if (contact.id === "UNASSIGNED"){
                 contact.fullName = coordel.unassigned;
               } else {
                 //console.debug("wasn't unassigned", noYou, contact._id, this.user._id);
                 
-                if (contact._id !== this.user._id || noYou){
+                if (contact.id !== this.user._id || noYou){
                   //console.debug("shouldn't be you");
-                  contact.fullName = contact.first + " " + contact.last; 
+                  contact.fullName = contact.firstName + " " + contact.lastName; 
                 }
               }
               
@@ -133,6 +131,8 @@ define(["dojo",
                 ]);
 
                 list.then(function(resp){
+
+                  
                   //console.debug("user and appStore loaded, other stores set", resp);
                   def.callback(self);
                 });
@@ -141,7 +141,7 @@ define(["dojo",
             },
             
             uuid: function(){
-              return this.newUUID(10);
+              return this.newUUID();
             },
             
             allDocs: function(options) {
@@ -166,9 +166,9 @@ define(["dojo",
             
             newUUID: function(cacheNum) {
               if (cacheNum === undefined) {
-                cacheNum = 1;
+                cacheNum = 10;
               }
-              if (!uuidCache.length) {
+              if (uuidCache.length < 2) {
                 dojo.xhrGet ({
                   headers: this.headers,
                   url: "/coordel/uuids",
@@ -322,7 +322,7 @@ define(["dojo",
             
             contacts: function(){
               var contacts = this.contactStore.memory.query(null, {sort:[{attribute:"last", descending: false},{attribute:"first", descending: false}]});
-              //console.debug("contacts", contacts);
+              //console.debug("contacts", this.contactStore.memory);
               return contacts;
             },
             

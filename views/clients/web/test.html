@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Coordel Test</title>
+  <link rel="stylesheet" href="/clients/web/dev/css/app.css">
+	<script type="text/javascript">
+    var djConfig = {
+      couchdb: "coordel",
+			parseOnLoad: true
+    };
+  </script>
+</head>
+<body class="coordel c-padding-large">
+  <script data-main="/clients/web/dev/js/app/_baseTest" src="/clients/web/dev/js/requirejs-0.24.0/require.js"></script>
+	
+
+	    <fieldset>
+	        <legend>Form Post Test</legend>
+	        <input name="uploadedfile" url="/coordel/upload" multiple="true" type="file" id="uploader"
+	        dojoType="app.form.Uploader" label="Select Some Files" >
+	        
+	    </fieldset>
+
+</body>
+</html>
+	

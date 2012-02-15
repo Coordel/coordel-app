@@ -1,0 +1,71 @@
+/* TitlePane 
+ * 
+ * Styling TitlePane means styling the TitlePane title and its content container  (dijitTitlePane)
+ * 
+ * TitlePane title:
+ * 1. TitlePane title (default styling): 
+ * 		.dijitTitlePaneTitle - TitlePane's title div style: background-color, border
+ *
+ * 2. hovered TitlePane title (ie, mouse hover on a title bar)
+ * 		.dijitTitlePaneTitleHover - styles when mouse hover on the title div
+ * 
+ * 3. active TitlePane title (ie, mouse down on a title bar)
+ * 		.dijitTitlePaneTitleActive - styles when mouse down on the title div
+ * 
+ * 
+ * TitlePane Content Container:
+ * 1. outer/inner container: 
+ * 		.dijitTitlePaneContentOuter / dijitTitlePaneContentInner - styles for the content outer div
+ */
+.coordel .dijitTitlePaneTitle {
+  background-color: #e5e5e5;
+  background-image: url("images/titlebar.png");
+  background-repeat: repeat-x;
+  border: 1px solid #a3aab1;
+  padding: 0 7px 3px 7px;
+  min-height: 17px;
+}
+.dj_ie6 .coordel .dijitTitlePaneTitle {
+  background-image: none;
+}
+.coordel .dijitTitlePaneTitleHover {
+  background-color: #e5e5e5;
+  border-color: #a3aab1;
+}
+.coordel .dijitTitlePaneTitleActive {
+  background-color: #8b8b8b;
+  border-color: #a3aab1;
+  background-position: 0 -136px;
+}
+.coordel .dijitTitlePaneTitleFocus {
+  margin-top: 3px;
+  padding-bottom: 2px;
+}
+.coordel .dijitTitlePane .dijitArrowNode {
+  background-image: url("images/spriteArrows.png");
+  background-repeat: no-repeat;
+  height: 8px;
+  width: 7px;
+}
+.coordel .dijitTitlePane .dijitOpen .dijitArrowNode {
+  background-position: 0 0;
+}
+.coordel .dijitTitlePane .dijitClosed .dijitArrowNode {
+  background-position: -14px 0;
+}
+.coordel .dijitTitlePane .dijitTitlePaneTextNode {
+  color: #333333;
+}
+.coordel .dijitTitlePaneContentOuter {
+  background: #ffffff;
+  border: 1px solid #a3aab1;
+  border-top: none;
+}
+.coordel .dijitTitlePaneContentInner {
+  padding: 10px;
+}
+.coordel .dijitTitlePaneTextNode {
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: text-top;
+}

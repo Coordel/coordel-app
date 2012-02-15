@@ -75,7 +75,8 @@ exports.register = function(userData, fn){
             lastName : userData.lastName,
             myDelegatedProject : objIds.delegatedProject,
             myPrivateProject : objIds.privateProject,
-            myPrivateRole : objIds.privateRole
+            myPrivateRole : objIds.privateRole,
+            people: [userData.appId]
           });
           app.add(function(err, reply){
             if (err){
@@ -230,9 +231,9 @@ function _getUser(args, fn){
     } else if (reply) {
       //console.log("user existed, loading");
       var key = 'user:' + args.id;
-      //console.log("key for get", key);
+      console.log("USER GET KEY", key);
       redis.hgetall(key, function(err, user){
-        console.log("got the user from redis in _getUser", user);
+        console.log("USER", user);
         if (err){
           //console.log("couldn't load existing user from store",err);
           fn(err, false);

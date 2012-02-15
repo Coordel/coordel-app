@@ -64,32 +64,32 @@
 
 
 
-.claro h3.dijitCalendarYearLabel {
+.coordel h3.dijitCalendarYearLabel {
 	border: none;
 	color: #333;
 }
 
-.claro .dijitCalendarMonthContainer {
+.coordel .dijitCalendarMonthContainer {
 	background-image: url(images/titlebar1.png);
 }
 
-.claro .task-form .dijitTextArea {
+.coordel .task-form .dijitTextArea {
 	border: none;
 	background: #fff;
 }
 
-.claro .dijitCalendar {
+.coordel .dijitCalendar {
 	border-radius: 0;
 	background-color: #ccc;
 	border: 1px solid #999;
 	padding: 0px;
 }
 
-.claro .dijitCalendarIncrementControl {
+.coordel .dijitCalendarIncrementControl {
 	background-image: url(images/calendarArrows.png);
 }
 
-.claro .dijitCalendarDayLabelTemplate{
+.coordel .dijitCalendarDayLabelTemplate{
 	color: #333;
 	text-transform: uppercase;
 	font-size: 12px;
@@ -99,23 +99,23 @@
 	
 }
 
-.claro .dijitCalendar,.claro .dijitCalendarActive,.claro .dijitCalendarHover {
+.coordel .dijitCalendar,.coordel .dijitCalendarActive,.coordel .dijitCalendarHover {
 	
 	background-image: url(images/titlebar1.png);
 	background-repeat: repeat-x;
 	
 }
-.claro .dijitCalendarPreviousMonth, .claro .dijitCalendarNextMonth {
+.coordel .dijitCalendarPreviousMonth, .coordel .dijitCalendarNextMonth {
 	background-color: #fff !important;
 	
 	color: #ccc;
 }
-.claro .dijitCalendarPreviousMonth .dijitCalendarDateLabel, .claro .dijitCalendarNextMonth .dijitCalendarDateLabel {
+.coordel .dijitCalendarPreviousMonth .dijitCalendarDateLabel, .coordel .dijitCalendarNextMonth .dijitCalendarDateLabel {
 	color: #ccc;
 	border: none;
 }
 
-.claro .dijitCalendarDateTemplate {
+.coordel .dijitCalendarDateTemplate {
 	border: none;
 	background-color: #e5e5e5;
 	

@@ -165,8 +165,8 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
   color: #666;
 }
 
-/* override the claro checkbox styles*/
-.claro .dijitCheckBox, .claro .dijitCheckBoxIcon {
+/* override the coordel checkbox styles*/
+.coordel .dijitCheckBox, .coordel .dijitCheckBoxIcon {
   background-image: url('images/checkboxStates-small.png');
   /* checkbox sprite image */
 
@@ -176,32 +176,32 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
   margin-top: -2px;
   padding: 0;
 }
-.claro .dijitCheckBox, .claro .dijitToggleButton .dijitCheckBoxIcon {
+.coordel .dijitCheckBox, .coordel .dijitToggleButton .dijitCheckBoxIcon {
   /* unchecked */
 
   background-position: -12px;
 }
-.claro .dijitCheckBoxChecked, .claro .dijitToggleButtonChecked .dijitCheckBoxIcon {
+.coordel .dijitCheckBoxChecked, .coordel .dijitToggleButtonChecked .dijitCheckBoxIcon {
   /* checked */
 
   background-position: 0;
 }
-.claro .dijitCheckBoxDisabled {
+.coordel .dijitCheckBoxDisabled {
   /* disabled */
 
   background-position: -60px;
 }
-.claro .dijitCheckBoxCheckedDisabled {
+.coordel .dijitCheckBoxCheckedDisabled {
   /* disabled but checked */
 
   background-position: -48px;
 }
-.claro  .dijitCheckBoxHover {
+.coordel  .dijitCheckBoxHover {
   /* hovering over an unchecked enabled checkbox */
 
   background-position: -36px;
 }
-.claro  .dijitCheckBoxCheckedHover {
+.coordel  .dijitCheckBoxCheckedHover {
   /* hovering over an checked enabled checkbox */
 
   background-position: -24px;

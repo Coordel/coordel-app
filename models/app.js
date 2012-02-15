@@ -19,7 +19,7 @@ var App = exports = module.exports = function App(args){
   data.user = args.user;
   data.email = args.email;
   data.auths = args.auths;
-  data.people = args.people;
+  data.people = args.people || [args.id];
   data.defaultTemplatesLoaded = args.defaultTemplatesLoaded || false;
   data.firstName = args.firstName || 'None';
   data.lastName = args.lastName || 'Given';
@@ -68,8 +68,13 @@ function _save(app, fn){
       }
     }
     
-    if (data.people){
-      multi.lpush(key, 'people', data.contacts);
+    if (data.people && data.people.length){
+      var peopleKey = key + ':people';
+      
+      data.people.forEach(function(p){
+        console.log("ADD PERSON, KEY ", peopleKey, p);
+        multi.sadd(peopleKey, p);
+      });
     }
     
     multi.hset(key, 'defaultTemplatesLoaded', data.defaultTemplatesLoaded);
@@ -81,8 +86,11 @@ function _save(app, fn){
     multi.hset(key, 'myPrivateProject', data.myPrivateProject);
     multi.hset(key, 'myPrivateRole', data.myPrivateRole);
     
-    if (data.vips){
-       multi.lpush(key, 'vips', data.vips);
+    if (data.vips && data.vips.length){
+      var vipsKey = key + ':vips';
+      data.vips.forEach(function(v){
+        multi.sadd( vipsKey, v);
+      });
     }
   
     multi.sadd('coordel-apps', key);
@@ -244,12 +252,6 @@ exports.addAppObjects = function(userData, fn){
   
 };
 
-function getKeyArray(key, fn){
-  var arr = redis.smembers(key, function(err, keyArr){
-    if (err) return fn(err, false);
-    return fn(null, keyArr);
-  });
-}
 
 exports.getVips = function(appId, fn){
   getUserApps(appId, 'vips', function(err, vips){
@@ -265,15 +267,26 @@ exports.getPeople = function(appId, fn){
   });
 };
 
+function getPeople(key, fn){
+  console.log("GET PEOPLE", key);
+  var arr = redis.smembers(key, function(err, keyArr){
+    console.log("after getKeyArray", err, keyArr);
+    if (err) return fn(err, false);
+    return fn(null, keyArr);
+  });
+}
+
+
 function getUserApps(appId, field, fn){
   var multi = redis.multi();
-      
-  getKeyArray('coordelapp:'+appId+':' + field, function(err, appIds){
+  var key = 'coordelapp:'+appId+':' + field;
+  getPeople(key, function(err, appIds){
     if (!appIds) appIds = [];
 
-    appIds.forEach(function(appId){
-      var key = 'coordelapp:' + appId;
-      multi.hgetall(key);
+    appIds.forEach(function(id){
+      var akey = 'coordelapp:' + id;
+      console.log("GET USER APP FOR KEY", akey);
+      multi.hgetall(akey);
     });
 
     multi.exec(function(err, apps){

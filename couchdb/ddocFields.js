@@ -1,6 +1,139 @@
 module.exports = {
+  version: "0.1.2",
   language: 'javascript',
   views: {
+    /******************************* CONTACTS *****************************************************/
+    
+    contactStream: {
+      map: function (doc){
+      	function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+
+      	if (doc.docType === "project"){
+
+      		doc.history.forEach(function(item){
+      			emit(
+      				[item.actor.id, toDateArray(new Date(item.time))],
+      				item
+      			);	
+      		});	
+
+      	}
+
+      	if (doc.docType === "role"){
+
+      		doc.history.forEach(function(item){
+      			emit(
+      				[item.actor.id, toDateArray(new Date(item.time))],
+      				item
+      			);
+      		});
+      	}
+
+
+      	if (doc.docType === "activity"){	
+      		emit(
+      			[doc.actor.id, toDateArray(new Date(doc.created))],
+      			doc
+      		);	
+      	}
+
+      	if (doc.docType === "task"){
+      		doc.history.forEach(function(item){
+
+      			emit(
+      				[item.actor.id, toDateArray(new Date(item.time))],
+      				item
+      			);
+
+      		});
+      	}
+      }
+    },
+    
+    contactTasks: {
+      map: function (doc){
+
+      	function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+
+      	if (doc.docType == "task" 
+      			&& doc.status !== "IN-ITEM"
+      			&& doc.status !== "TRASH"
+      			&& doc.status !== "ARCHIVE"
+      			&& doc.status !== "SOMEDAY"
+      			&& doc.substatus !== "TRASH"
+      			&& doc.substatus !== "ARCHIVE"
+      			&& doc.substatus !== "APPROVED"
+      			&& doc.substatus !== "CANCELLED"){
+      		var user = doc.username;
+      		if (doc.status == "CURRENT" && (doc.substatus == "DONE" || doc.substatus == "ISSUE" || doc.substatus == "DECLINED")){
+      			//the user has indicated they are done with the task, have flagged an issue, or declined a task
+      			//so if there is a delegator they get it back otherwise, the responsible now needs to take action
+      			user = doc.responsible;
+      			if (doc.delegator && doc.delegator !== ""){
+      			  user = doc.delegator;
+      			}
+
+      		}
+
+      		if (doc.status === "DELEGATED" && doc.substatus === "PROPOSED" || doc.substatus === "DECLINED"){
+      		  //before a user accepts a task, they can propose what they think they should do by creating
+      		  //deliverables, setting the defer date, refining the purpose, setting blockers etc
+      		  //it then goes back to the invited of the responsible or delegator to agree 
+      		  //or further refine and send back.
+
+      		  //a user can always decline to accept a task. if they do, it goes back to the responsible or delegator
+
+      		  //A user can't delegate the task to someone else until they have accepted
+      		  user = doc.responsible;
+      		  if (doc.delegator && doc.delegator !==""){
+      		    user = doc.delegator;
+      		  }
+      		}
+
+      		if (doc.status === "PENDING"){
+      		  //when a responsible creates a task as part of a project, it gets the pending status 
+      		  //when the user sends the project, then the task status is updated to CURRENT
+      		  user = doc.responsible;
+      		  if (doc.delegator && doc.delegator !==""){
+      		    user = doc.delegator;
+      		  }
+      		}
+
+      		//emit the task
+      		emit(
+      			[user, doc.status, doc._id, 0, toDateArray(new Date(doc.updated))],
+      			{"_id": doc._id}
+      		);
+
+
+      	}
+      }
+    },
+    
     /******************************* TEMPLATES ****************************************************/
     
     userTemplates:{
@@ -243,6 +376,31 @@ module.exports = {
       			[doc.project],
       			{"_id": doc._id}
       		);
+      	}
+      }
+    },
+    
+    /******************************* FIELDS *****************************************************/
+    
+    fieldFiles: {
+      map: function (doc){
+
+      	function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+
+      	if (doc.docType == "file"){
+      		emit([doc.field, toDateArray(new Date(doc.updated))],null);	
       	}
       }
     },
@@ -606,6 +764,58 @@ module.exports = {
         		);
       		}
       	}
+      }
+    },
+    
+    /******************************* ADMIN ********************************************************/
+    
+    allProjectFiles: {
+      map: function (doc){
+        //this view gets all the files related to a single project. it isn't used by the application
+        //but can be used to clean up
+
+        if (doc.project){
+          emit([doc.project], {_id:doc._id, docType:doc.docType});
+        }
+
+        if (doc.docType === "project"){
+          emit([doc._id], {_id:doc._id, docType:doc.docType});
+        }
+      }
+    },
+    
+    allProjects: {
+      map: function (doc){
+        if (doc.docType === "project"){
+          emit(["1"], doc);
+        }
+      }
+    },
+    
+    allRoles: {
+      map: function (doc){
+        if (doc.docType === "role"){
+          emit(["1"], doc);
+        }
+      }
+    },
+    
+    allTasks: {
+      map: function (doc){
+        if (doc.docType === "task"){
+          emit(["1"], doc);
+        }
+      }
+    },
+    
+    allTestData: {
+      map:function (doc){
+        //this function gets all documents that were added as test data
+
+        if (doc.isTest){
+          emit(null, doc);
+        }
+
       }
     }
   }

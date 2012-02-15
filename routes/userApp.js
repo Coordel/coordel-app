@@ -47,22 +47,22 @@ module.exports = function(app, validate){
     });
   });
   
-  app.get('/app/people', validate, function(req, res){
-    App.getPeople(req.session.auth.appId, function(err, people){
+  app.get('/app/people/:id', validate, function(req, res){
+    App.getPeople(req.params.id, function(err, people){
       if (err) {
-        res.json({error: 'Error getting people'});
+        res.json({rows: [], error: 'Error getting people'});
       } else {
-        res.json({rows: people});
+        res.json(people);
       }
     });
   });
   
-  app.get('/app/vips', validate, function(req, res){
-    App.getVips(req.session.auth.appId, function(err, vips){
+  app.get('/app/vips/:id', validate, function(req, res){
+    App.getVips(req.body.id, function(err, vips){
       if (err) {
-        res.json({error: 'Error getting vips'});
+        res.json({rows: [], error: 'Error getting vips'});
       } else {
-        res.json(vips);
+        res.json({rows: vips});
       }
     });
   });

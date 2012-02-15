@@ -18,6 +18,8 @@ define(
       
       id: null,
       
+      pillConnections: [],
+      
       //need the taskId to set the url of the uploader this will be set by the task form
       //if it's null when required, then a new uuid will be created.
       taskId: null,
@@ -42,25 +44,23 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         
-        
-        
         this.dropDown = this.attachDropDown;
         
         this.attachLabel.innerHTML = this.placeHolder;
         
         dojo.connect(this.uploader, "onChange", this, function(fileList){
-          //console.debug("got files to upload", fileList);
+          console.debug("got files to upload", fileList);
         });
         
         dojo.connect(this.uploader, "onBeginFile", this, function(file){
-          //console.debug("file upload started", file);
+          console.debug("file upload started", file);
           this.showLoading();
           
           this.loadingFiles.addChild(new UploaderFile({file:file}));
         });
         
         dojo.connect(this.uploader, "onComplete", this, function(){
-          //console.debug("all files uploaded");
+          console.debug("all files uploaded");
           var self = this;
           //clear the loading files (if there are any)
           if (this.loadingFiles.hasChildren()){
@@ -70,19 +70,18 @@ define(
           var getTask = this._getTask();
 
           getTask.then(function(resp){
-            //console.debug("in the _getTask deferred", resp, self.task);
+            console.debug("in the _getTask deferred", resp, self.task);
+            
             self.task._attachments = resp._attachments;
             self.task._rev = resp._rev;
             self.rev = resp._rev;
             self.setData();
             self.onChange(self.task);
-          }); 
+          });
+           
         });
         
         this.db = new FileModel().init({username: this.username});
-        
-        
-       
       },
       
       onChange: function(task){
@@ -129,12 +128,12 @@ define(
         var self = this;
         
         if (this.rev){
-          //console.debug("rev set", this.rev);
+          console.debug("rev set", this.rev);
           this.uploader.rev = this.rev;
         }
         
         if (self.task._attachments && this._attachmentsCount() > 0){
-          //console.debug("there are attachments");
+          console.debug("there are attachments");
           self.showData();
           if (self.attachedFiles.hasChildren()){
             self.attachedFiles.destroyDescendants();
@@ -169,8 +168,14 @@ define(
        
         this.attachmentsPill.showPill(count + " " + label.toLowerCase(), this.db);
         
+        if (this.pillConnections.length > 0){
+          dojo.forEach(this.pillConnections, function(c){
+            dojo.disconnect(c);
+          });
+        }
+        
         //delete all attachments when the remove x is clicked on the pill
-        dojo.connect(this.attachmentsPill.removeValue, "onclick", this, function(evt){
+        this.pillConnections.push(dojo.connect(this.attachmentsPill.removeValue, "onclick", this, function(evt){
           evt.stopPropagation();
           //console.debug("got click in on remove in pill");
           
@@ -187,7 +192,7 @@ define(
             self.setData();
           });
           
-        });
+        }));
       },
       
       setFiles: function(files){
@@ -198,17 +203,17 @@ define(
           var uf = new UploaderFile({file:file});
           uf.showComplete();
           dojo.connect(uf.deleteFile, "onclick", this, function(){
+            console.log("clicked");
           
             var def = self.db.removeFile(self.task, uf.file.info.name);
             def.then(function(task){
-              //console.debug("setFiles", task);
+              console.debug("setFiles", task);
               self.task = task;
               var rev = task._rev;
               self.rev = rev ;
               self.uploader.set("rev", rev);
               self.setData();
             });
-            
           });
           self.attachedFiles.addChild(uf);
         });

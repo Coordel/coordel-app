@@ -3,10 +3,8 @@ define(
   "i18n!app/nls/coordel",
   "text!app/views/Contact/templates/contact.html",
   "dijit/_Widget", 
-  "dijit/_Templated",
-  "dojox/encoding/digests/MD5",
-  "dojox/encoding/digests/_base"], 
-  function(dojo, coordel, html, w, t, md5, dxd) {
+  "dijit/_Templated"], 
+  function(dojo, coordel, html, w, t) {
   
   dojo.declare(
     "app.widgets.Contact", 
@@ -29,13 +27,14 @@ define(
       
       postMixInProperties : function() {
         this.inherited(arguments);
+        console.log("Contact",this.contact);
         var email = dojo.trim(this.contact.email.toLowerCase());
   
         //try and set the url to the gravatar of this user
-        var defaultUrl = "http%3A%2F%2Fapp.coordel.com%2Fcoordel%2F_design%2Fcoordel%2Fimages%2Fdefault_contact.png";
+        //var defaultUrl = "http%3A%2F%2Fapp.coordel.com%2Fcoordel%2F_design%2Fcoordel%2Fimages%2Fdefault_contact.png";
         
         if (this.contact.email !== ""){
-          this.url = 'http://www.gravatar.com/avatar/'+md5(this.contact.email, dxd.outputTypes.Hex)+'.jpg?s=32&d=' + defaultUrl;
+          //this.url = 'http://www.gravatar.com/avatar/'+md5(this.contact.email, dxd.outputTypes.Hex)+'.jpg?s=32&d=' + defaultUrl;
         }
       },
       

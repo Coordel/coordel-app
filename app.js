@@ -35,6 +35,9 @@ var express     = require('express'),
 //settings.auth contains all the security strings 
 var auth = settings.auth;
 
+//set io log level
+io.set('log level', 1);
+
 //make sure the couchdb dbase exists and that the design doc has the latest views
 ddoc.update();
 
@@ -161,7 +164,7 @@ var options = {
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'html');
-  app.use(express.logger());
+  //app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -185,7 +188,7 @@ app.configure('production', function(){
 app.register('.html', require('ejs'));
 
 var validate = function(req, res, next){
-  console.log("USER SESSION", req.session);
+  
   if (req.session.auth && req.session.auth.loggedIn){
     next();
   } else {

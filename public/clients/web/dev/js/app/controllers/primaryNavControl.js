@@ -414,17 +414,20 @@ define(['dojo',
 
     showContactList: function(){
       //console.debug("primayNav.showContactList");
-    
+      
       var cont = dijit.byId("otherListContacts");
       if (cont.hasChildren()){
         cont.destroyDescendants();
       }
     
       var cons = db.contacts();
-    
-      cons.forEach(function(con){
+      console.log("showContactList", cons);
+      
+      dojo.forEach(cons, function(con){
+        console.log("creating contact", con);
         cont.addChild(new c({contact: con, doNavigation: true}));
       });
+      
     }
   };
 });

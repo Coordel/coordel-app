@@ -95,6 +95,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 			dojo.place(this.domNode, position.node, position.pos);
 		}
 		this.inherited(arguments);
+		console.log("uploader", this);
 	},
 
 	/*************************

@@ -56,7 +56,7 @@ define(["dojo",
               this.memTemplates = new obs(this.memTemplates);
               this.templateStore = new cache(this.remTemplates, this.memTemplates);
               
-              this.memTemplates.deliverables = function(template){
+              this.memTemplates.deliverable = function(template){
                 return template.templateType === "deliverable";
               };
               
