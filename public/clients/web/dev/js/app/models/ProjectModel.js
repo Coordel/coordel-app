@@ -12,7 +12,11 @@ define("app/models/ProjectModel",
     [base], 
     {
       db: null,
+      
+      headers: {Accept: "application/json", "Content-Type": "application/json"},
+      
       project: null,
+      
       constructor: function(args){
         //console.debug("Project constructor called",args);
         if (!args.project){
@@ -355,6 +359,9 @@ define("app/models/ProjectModel",
     			});
     			doUpdate = true;
   	    }
+  	    
+  	    //set the roleid of the task
+  	    task.role = roleid;
 
   	    //update the role's responsibilities
   	    rm.updateResponsibilities(roleid, task, p.isMyPrivate);
@@ -363,10 +370,10 @@ define("app/models/ProjectModel",
       	if (doUpdate){
       	  //console.debug("saving project, assignment was added or updated", task.username);
       	  dojo.when(this.update(p), function(){
-      	    def.callback();
+      	    def.callback(task);
       	  });
         } else {
-      	  def.callback();
+      	  def.callback(task);
       	}
       	
       	return def;
@@ -622,6 +629,20 @@ define("app/models/ProjectModel",
     	  
     	  p.update(project);
     	  p.sendPendingTasks(username, project);
+    	},
+    	
+    	reuse: function(project){
+    	  console.log("reuse project", project);
+    	  
+    	  return  dojo.xhrPost({
+          url: "/blueprint",
+          handleAs: "json",
+          putData: dojo.toJson(project),
+          headers: this.headers,
+          load: function(res){
+            console.log("blueprint", res);
+          }
+        });
     	},
     	
     	addActivity: function(opts, project){

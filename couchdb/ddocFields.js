@@ -1,8 +1,29 @@
 module.exports = {
-  version: "0.1.2",
+  version: "0.1.5",
   language: 'javascript',
   views: {
+    /********************************* PROFILES ***************************************************/
+    users: {
+      map: function(doc){
+        if (doc.docType === "user"){
+        	//emit the contact
+      		emit(
+      			[doc.email], doc
+      		);
+      		if (doc.altEmails && doc.altEmails.length > 0){
+      		  //emit the contact
+      		  doc.altEmails.forEach(function(email){
+      		    emit(
+          			[email], doc
+          		);
+      		  });
+      		}
+        }
+      }
+    },
+    
     /******************************* CONTACTS *****************************************************/
+    
     
     contactStream: {
       map: function (doc){
@@ -167,6 +188,49 @@ module.exports = {
     },
     
     /******************************* PROJECTS *****************************************************/
+    
+    projects: {
+      //gets all the documents in the project (including attachments????)
+      map: function (doc){
+
+      	if (doc.docType === "project"){
+      		//emit the project
+      		emit(
+      			[doc._id, 0],
+      			{"_id": doc._id, "name": doc.name}
+      		);
+      	}
+
+      	if (doc.docType === "role"){
+      		//emit the roles for a project
+      		emit(
+      			[doc.project, 1],
+      			{"_id": doc._id, "name": doc.name}
+      		);
+
+      		doc.responsibilities.forEach(function(resp){
+      		  //emit the tasks
+      			emit(
+      				[doc.project, 3, resp.task, 0],
+      				{"_id": resp.task}
+      			);
+      		});
+      	}
+
+      	if (doc.docType === "task"){
+      		doc.coordinates.forEach(function(coord){
+      		  //emit the blockers. blockers have a lower number than tasks because when reused
+      		  //they need to be added before tasks without blockers. otherwise, the ui won't 
+      		  //find the blocker with the task is added.
+      			emit(
+      				[doc.project, 2, doc._id, 1],
+      				{"_id": coord}
+      			);
+      		});
+      	}
+      }
+    },
+    
     projectAssignments: {
       map: function (doc){
 

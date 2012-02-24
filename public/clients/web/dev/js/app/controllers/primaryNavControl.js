@@ -393,7 +393,7 @@ define(['dojo',
             insertedInto = 1;
             
           }
-          console.debug("adding to list", insertedInto);
+          //console.debug("adding to list", insertedInto);
           
           group.addChild(new p({
             project: proj
@@ -421,10 +421,10 @@ define(['dojo',
       }
     
       var cons = db.contacts();
-      console.log("showContactList", cons);
+      //console.log("showContactList", cons);
       
       dojo.forEach(cons, function(con){
-        console.log("creating contact", con);
+        //console.log("creating contact", con);
         cont.addChild(new c({contact: con, doNavigation: true}));
       });
       

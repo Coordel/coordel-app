@@ -203,25 +203,41 @@ define(['dojo',
     },
 	  
 	  doProjectAction: function(args){
-	    //console.debug("appControl should do project action", args);
+	    console.debug("appControl should do project action", args);
 	    var css = "highlight-button",
-	        d;
+	        d,
+	        proj;
 	        
 	    if (args.cssClass){
 	      css = args.cssClass;
 	    }
 	    
 	    //create the action for this project
-	    var proj = new ProjectAction({
-	      project: args.project,
-	      action: args.action
-	    });
-    
+	    /*
+	    if (args.action === "reuse"){
+	      proj = new ProjectForm({
+  	      project: args.project,
+  	      isNew: false
+  	    });
+	    } else {
+	      proj = new ProjectAction({
+  	      project: args.project,
+  	      action: args.action
+  	    });
+	    }
+	    */
+	     proj = new ProjectAction({
+  	      project: args.project,
+  	      action: args.action
+  	    });
+	    
+      
 	    d = new cDialog({
 	      title: "",
 	      confirmText: coordel.projectActions.confirmText[args.action],
 	      executeCss: css,
 	      executeText: coordel.projectActions[args.action],
+	      title:  coordel.projectActions[args.action],
 	      content: proj,
 	      onCancel: function(){
 	        d.destroy();
@@ -238,10 +254,13 @@ define(['dojo',
 	    if (args.validate){
   	    dojo.addClass(d.confirmTextContainer, "action-form-header");
   	    d.validate();
-  	    
 	    } else {
-	      //not validating, so hide the projectaction
-	      dojo.addClass(proj.domNode, "hidden");
+	      if (args.action === "reuse"){
+	        dojo.addClass(d.confirmTextContainer, "action-form-header");
+	      } else {
+	        //not validating, and not a resue so hide the projectaction
+    	    dojo.addClass(proj.domNode, "hidden");
+	      }
 	    }
 	    
 	    d.show();
@@ -352,6 +371,10 @@ define(['dojo',
   				  db.appStore.store.notify(chg, chg._id);
   				  //console.log("appStore notified", chg);
   					break;
+  				case "template":
+  				  db.appStore.templateStore.notify(chg, chg._id);
+  				  console.log("templateStore notified", chg);
+  				  break;
   				case "project":
   				
   				  var p = db.getProjectModel(chg, true);

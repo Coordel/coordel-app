@@ -1,3 +1,7 @@
+/**
+ * Coordel routes to CouchDb
+ */
+
 var settings    = require('./../settings'),
     couchOpts   = settings.config.couchOptions,
     cradle      = require('cradle').setup(couchOpts),
@@ -5,16 +9,24 @@ var settings    = require('./../settings'),
     nanoCouch   = nano.use(settings.config.couchName),
     cn          = new cradle.Connection(),
     couch       = cn.database(settings.config.couchName),
-    App         = require('./../models/app'),
+    App         = require('./../models/userApp'),
     fs          = require('fs'),
     Deferred    = require('promised-io/promise').Deferred,
     promise     = require('promised-io/promise');
 
 module.exports = function(app, validate){
+  
   app.post('/coordel', validate, function(req, res){
     console.log("POST", req.body);
   });
   
+  /**
+   * coordel put doc
+   *
+   * @param {uuid} id = id of the document
+   * @return {obj}
+   * @api validated
+   */
   app.put('/coordel/:id', validate, function(req, res){
     console.log("PUT coordel/:id", req.body);
     couch.save(req.body, function(err, putRes){
@@ -27,6 +39,13 @@ module.exports = function(app, validate){
     });
   });
   
+  /**
+   * Get the object that contains _attachments and return it
+   *
+   * @param {uuid} id
+   * @return {obj} project/task
+   * @api validated
+   */
   app.get('/coordel/files/:id', validate, function(req, res){
     
     couch.get(req.params.id, function(err, doc){
@@ -37,6 +56,7 @@ module.exports = function(app, validate){
       }
     });
   });
+  
   
   app.put('/coordel/files/:id/:name', validate, function(req, res){
     var id = req.params.id,

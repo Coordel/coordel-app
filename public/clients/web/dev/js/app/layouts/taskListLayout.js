@@ -3,10 +3,11 @@ define([
   "dijit",
   "i18n!app/nls/coordel",
   "text!app/layouts/templates/streamHeader.html",
+  "text!app/layouts/templates/taskListContainer.html",
   "dijit/layout/BorderContainer",
   "app/widgets/ContainerPane",
   "dijit/layout/ContentPane",
-  "dijit/layout/StackContainer"], function(dojo, dijit, coordel, streamHtmlHead, bc, cpane, pane, stack) {
+  "dijit/layout/StackContainer"], function(dojo, dijit, coordel, streamHtmlHead, listHtml, bc, cpane, pane, stack) {
   //return an object to define the "./newmodule" module.
   return {
     showLayout: function(focus, task) {
@@ -49,15 +50,11 @@ define([
       }).placeAt(list);
       
       //main workspace
-      
-      var listMain = new cpane({
+      var listMain = new pane({
         region: "center",
-        id: "taskListMain",
-        "class": "tasklist-titlepane",
-        style: "padding: 0 0 1.8em 0; background: transparent;"
-
+        content: listHtml,
+        style: "padding: 0 0 1.8em 0; background: transparent;" 
       }).placeAt(listCont);
-      
       
      
       //right messages and all activity container

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<link rel="shortcut icon" href="http://dev.coordel.com:8080/images/favicon.gif">
+		<style>
+			body {
+				background-color: #eaeaea;
+				font-size: 14px;
+				font-family: "Lucida Grande", Helvetica;
+				padding: 16px;
+				color: #222222;
+			}
+			
+			.large-shadow {
+				-moz-box-shadow: 4px 4px 12px #5c5c5c;
+				-webkit-box-shadow: 4px 4px 12px #5c5c5c;
+				box-shadow: 4px 4px 12px #5c5c5c;
+			}
+			
+			.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+			
+			.content-panel {
+				background-color: #ffffff;
+				padding: 32px 16px;
+				margin-bottom: 16px;
+			}
+			
+			.sub-content {
+				padding: 16px;
+				font-size: 12px;
+			}
+			
+			h1 {
+				font-size: 16px;
+			}
+			
+			h1.bullet {
+				font-size: 14px;
+				background: url(http://{{url}}/images/emails/bullet-checkbox.gif) no-repeat center left;
+				padding-left: 28px;
+			}
+			
+			a:link { 
+				color: #00629B; cursor: pointer;
+				text-decoration: none;
+				text-shadow: #fff 1px 1px;
+			}
+a:visited {color: #000000;}
+a:hover {text-decoration: underline;}
+a:active {}
+
+		</style>
+	</head>
+	<body>
+		<div id="body-container">
+			<div id="container">
+				
+				<div id="content" class="entry-content">
+					<div class="ui-corner-all large-shadow content-panel">
+						<div>
+							<h3 style="font-size:18px;-webkit-font-smoothing:antialiased">
+							<strong style="font-weight:bold;white-space:nowrap">{{fromFirstName}} {{fromLastName}}</strong> 
+							<span style="white-space:nowrap">  assigned you a task using <a href="http://www.coordel.com/">Coordel</a>&hellip;</span>
+							</h3>
+							
+							<div class="task-header">
+				    			<table width="100%" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc; padding: 12px 0px">
+				    			<tbody>
+				    				<tr>
+										<td valign="top" width="24px">
+				                    	<img src="https://{{url}}/images/emails/checkbox.png" border="0" style="border:0; outline:none; display:block;width:24px;height:24px;" />
+				                		</td>
+				                		<td valign="middle" style="font-size:16px;-webkit-font-smoothing:antialiased;padding-left:4px;color:#00629B;padding-top:4px;line-height:1.35em">
+				                		{{name}}
+				                		</td>
+				    				</tr>
+				    			</tbody>
+				    			</table>
+				    			<table width="100%" style="margin-top: 8px">
+				    			<tbody>
+				    				{{#purpose}}
+				    				<tr>
+				    					<td width="24px" style="color: #5c5c5c" align="right" valign="middle">Purpose:</td>
+				    					<td style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
+				    					{{purpose}}
+				    					</td>
+				    				</tr>
+				    				{{/purpose}}
+										{{#starts}}
+				    				<tr>
+				    					<td width="24px" style="color: #5c5c5c" align="right" valign="middle">Starts:</td>
+				    					<td colspan="2" style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
+				    				 	{{starts}}
+				    					</td>
+				    				</tr>
+				    				{{/starts}}
+										{{#deadline}}
+				    				<tr>
+				    					<td width="24px" style="color: #5c5c5c" align="right" valign="middle">Deadline:</td>
+				    					<td style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
+				    					{{deadline}}
+				    					</td>
+				    				</tr>
+				    				{{/deadline}}
+										
+				    			</tbody>
+				    			</table>
+				    		</div><!-- .task-header -->
+							
+							<div style="padding-top: 18px"><a href="http://{{url}}/invite/{{inviteId}}"><img title="Activate Your Free Account" href="http://{{url}}/images/emails/activate-button.png"></a></div>
+						</div>
+					</div>
+					<div class="sub-content">
+						<div class="">
+							<h1>
+								How does Coordel work for you?
+							</h1>
+						</div>
+						<div class="">
+							<h1 class="bullet">
+								Get Your Party Started
+							</h1>
+							<div class="bullet-content">
+								Not quite sure how to tackle an assignment?  Or do you know the beginning and the end but you are not quite sure what's in the middle? All you need is a talented team. Coordel allows you to plan and manage efforts that have not been predefined (yet). How’s that for getting things done? 
+							</div>
+						</div>
+						<div class="">
+							<h1 class="bullet">
+								Add Coordination to your Collaboration
+							</h1>
+							<div class="bullet-content">
+								How much effort does it take to coordinate all your e-mails, calendars, to do lists, phone calls,…? Coordel is your go-to place to manage all the work you could and should be doing, for yourself and as part of a team. It’s all your professional commitments in just one window. How’s that for efficiency?  
+							</div>
+						</div>
+						<div class="">
+							<h1 class="bullet">
+								Increase Return on Teamwork Investment
+							</h1>
+							<div class="bullet-content">
+								Working with others too often involves miscommunications, misunderstandings, and lacking or wrong information. Coordel includes and coordinates all the information and communication you and your team need to do deliver high quality results. How’s that for teamwork? 							
+							</div>
+						</div>
+						<div class="">
+							<h1 class="bullet">
+								Re-use Success Stories
+							</h1>
+							<div class="bullet-content">
+								Remember that perfect collaborative effort, the one where the team had it all figured out? Coordel lets you do it all over again with one-click blueprinting of successful projects. How’s that for making your success stories work for you?
+							</div>
+						</div>
+					</div>
+				</div><!-- .entry-conten
+				</div><!-- .content .hfeed -->
+			</div><!-- #container -->
+		</div><!-- #body-container -->
+	</body>
+</html>

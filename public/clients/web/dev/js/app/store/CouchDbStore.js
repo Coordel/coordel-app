@@ -37,25 +37,25 @@ function(dojo, JsonRest, stamp) {
       		var id = ("id" in options) ? options.id : this.getIdentity(object);
       		var hasId = typeof id != "undefined";
       		
-      	  console.debug("CouchDbStore put called object, options, id, hasId", object, options, id, hasId);
+      	  //console.debug("CouchDbStore put called object, options, id, hasId", object, options, id, hasId);
       		
       		dojo.when(dojo.xhr(hasId && !options.incremental ? "PUT" : "POST", {
-      				url: hasId ? this.target + id : this.target,
-      				putData: dojo.toJson(object),
-      				handleAs: "json",
-      				headers:{
-      					"Content-Type": "application/json; charset=UTF-8",
-      					"Accept": "application/json"
-      				}
-      			}), function(res){
-      			  console.debug("response received in CouchDBStore put", res);
-    				  if (object._id === res.id){
-    				    object._rev = res.rev;
-    				  }
-      			  //return object;
-      			  return object;
-      			});
-      			
+     				url: hasId ? this.target + id : this.target,
+    				putData: dojo.toJson(object),
+    				handleAs: "json",
+    				headers:{
+    					"Content-Type": "application/json; charset=UTF-8",
+    					"Accept": "application/json"
+    				}
+    			}), function(res){
+    			  //console.debug("response received in CouchDBStore put", res);
+  				  if (object._id === res.id){
+  				    object._rev = res.rev;
+  				  }
+    			  //return object;
+    			  return object;
+    			});
+    			
       	},
         query: function(query, options) {
             // summary:

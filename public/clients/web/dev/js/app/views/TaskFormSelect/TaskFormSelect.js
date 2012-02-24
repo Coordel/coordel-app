@@ -56,8 +56,6 @@ define(
         }
         
         
-        
-        
         /*
         //show the correct form when addObject is clicked
         dojo.connect(this.addTaskFieldValue, "onclick", this, function(){

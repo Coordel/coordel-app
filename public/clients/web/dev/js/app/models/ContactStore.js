@@ -28,12 +28,31 @@ define(["dojo",
               });
             	return def;
             },
+            addContact: function(appId){
+              var def = new dojo.Deferred(),
+                  self = this;
+              
+              var post =  dojo.xhrPost({
+                url: "/app/person",
+                handleAs: "json",
+                content: {userAppId: self.username, personAppId: appId},
+                headers: this.headers
+              });
+              
+              post.then(function(response){
+                console.log("added contact to user");
+                var query = self.store.get(appId);
+                //var query = self._loadContacts(self.username);
+                dojo.when(query, def.callback());
+              });
+              return def;
+            },
             _loadContacts: function(username){
               this.memory = new mem({idProperty: "id"});
-              this.remote = new json({target: "/app/people/"+username, idProperty: "id", queryEngine: dojo.store.util.QueryResults});
+              this.remote = new json({target: "/app/people/", idProperty: "id", queryEngine: dojo.store.util.QueryResults});
               this.memory = new obs(this.memory);
               this.store = new cache(this.remote, this.memory);
-            	return this.store.query();
+            	return this.store.query({appId: username});
             },
             _loadTasks: function(contact, userProjects){
               this.taskMemory = new mem({

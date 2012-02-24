@@ -123,8 +123,12 @@ dojo.declare(
     },
     
     _addContact: function(){
-      //console.debug("_addContact called");
- 
+      
+      
+      var email = this.altDropDown.contactEmail.get("value");
+         
+      this.onAddOption(email);
+      
     },
     
     onAddOption: function(obj){
@@ -148,7 +152,7 @@ dojo.declare(
 	      });
 	      
 	      dojo.connect(this.altDropDown.addFieldValue, "onclick", this, function(){
-	        //console.debug("add clicked in openAltDropDown");
+	        console.debug("add clicked in openAltDropDown");
 	        this.onAdd(this.taskFormField);
 	        this.closeAltDropDown();
 	        this.openAltDropDown("add");

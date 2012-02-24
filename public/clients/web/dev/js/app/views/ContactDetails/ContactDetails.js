@@ -20,7 +20,7 @@ define(
       
       templateString: html,
       
-      url: "images/default_contact.png",
+      url: "/images/default_contact.png",
       
       postMixInProperties : function() {
         
@@ -28,7 +28,7 @@ define(
         //var defaultUrl = escape("http://" + location.host + db.db + "_design/coordel/images/default_contact.png");
         
         if (this.contact.email && this.contact.email !== ""){
-          //this.url = 'http://www.gravatar.com/avatar/'+md5(this.contact.email, dxd.outputTypes.Hex)+'.jpg?s=32&d=' + defaultUrl;
+          this.url = '/gravatar?email='+ escape(this.contact.email) + '&s=32';
         }
         
         var c = this.contact;

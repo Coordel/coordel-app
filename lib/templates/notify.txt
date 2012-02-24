@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<style>
+			body {
+				background-color: #eaeaea;
+				font-size: 14px;
+				font-family: "Lucida Grande", Helvetica;
+				padding: 16px;
+				color:#333333;
+			}
+			
+			.large-shadow {
+				-moz-box-shadow: 4px 4px 12px #5c5c5c;
+				-webkit-box-shadow: 4px 4px 12px #5c5c5c;
+				box-shadow: 4px 4px 12px #5c5c5c;
+			}
+			
+			.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+			
+			.content-panel {
+				background-color: #ffffff;
+				padding: 32px 16px;
+				margin-bottom: 16px;
+			}
+			
+			.sub-content {
+				padding: 16px;
+				font-size: 12px;
+			}
+			
+			h1 {
+				font-size: 16px;
+			}
+			
+			h1.bullet {
+				font-size: 14px;
+				background: url(http://{{url}}/images/emails/bullet-checkbox.gif) no-repeat center left;
+				padding-left: 28px;
+			}
+			
+			a:link { 
+				color: #00629B; cursor: pointer;
+				text-decoration: none;
+				text-shadow: #ffffff 1px 1px;
+			}
+			a:visited {color: #000000;}
+			a:hover {text-decoration: underline;}
+			a:active {}
+
+		</style>
+	</head>
+	<body>
+		<div id="body-container">
+			<div id="container">
+				
+				<div id="content" class="entry-content">
+					<div class="ui-corner-all large-shadow content-panel">
+						<div>
+							<div style="font-size: 18px;padding-bottom: 12px;"><span style="font-weight: bold;">{{fromFirstName}} {{fromLastName}}</span> invited you to <a href="http://www.coordel.com">Coordel</a></div>
+							<div style="padding-bottom: 12px;">Coordel is the online partner that helps you redefine the way you innovate, execute and reuse your work and how you interact with others.</div>
+						</div>
+					</div>
+				</div><!-- .entry-content
+				</div><!-- .content .hfeed -->
+			</div><!-- #container -->
+		</div><!-- #body-container -->
+		
+	</body>
+</html>

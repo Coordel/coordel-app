@@ -814,9 +814,9 @@ define("app/models/TaskModel",
         var def = p.updateAssignments(task);
         
         //need to make sure the update to the project happens before the task is added
-        def.then(function(){
-          console.debug("adding task with status", task.status);
-          db.taskStore.store.add(task, {username: username});
+        def.then(function(taskResp){
+          console.debug("adding task with status", taskResp.status);
+          db.taskStore.store.add(taskResp, {username: username});
           dojo.publish("coordel/updatePrimaryBoxCount");
         });
     

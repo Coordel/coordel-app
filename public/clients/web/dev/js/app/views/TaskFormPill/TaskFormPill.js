@@ -43,12 +43,15 @@ define(
         dojo.removeClass(this.mainNode, "selected");
       },
       
-      showPill: function(value){
+      showPill: function(value, email){
         //the value will be the id used to create the actual display value of the pill based on
         //the taskFormField this is for except for deliverable which will be the deliverable itself
         
         //console.debug("showing the pill", value);
         
+        var self = this;
+        
+        dojo.addClass(this.image, "hidden");
         if (this.imageClass){
           dojo.removeClass(this.image, "hidden");
           dojo.addClass(this.image, this.imageClass);
@@ -63,9 +66,21 @@ define(
           this.displayValue.innerHTML = this.source.name;
           break;
           case "delegate":
-          //console.debug("showing a delegate pill");
-          this.source = db.contactFullName(value);
-          this.displayValue.innerHTML = this.source;
+          //console.debug("showing a delegate pill", value, email);
+          if (value === "pending"){
+            this.source = email;
+            this.displayValue.innerHTML = this.source;
+          } else {
+            //this.source = db.contactFullName(value);
+            //this.displayValue.innerHTML = this.source;
+            
+            var q = db.contactFullName(value);
+            q.then(function(fullName){
+              self.source = fullName ;
+              self.displayValue.innerHTML = self.source;
+            });
+          
+          }
           break;
           case "deliverables":
           //set the value (to be the id of the template)
@@ -80,7 +95,7 @@ define(
           //get the task, then the project and create a hybrid string
           var task = db.taskStore.blockStore.get(value);
           
-          var self = this;
+          
           
           dojo.when(task, function(task){
             var project = db.projectStore.store.get(task.project);

@@ -1,5 +1,8 @@
 var User        = require('./../models/user'),
-    Invite      = require('./../models/invite');
+    Invite      = require('./../models/invite'),
+    gravatar    = require('gravatar'),
+    request     = require('request'),
+    settings    = require('./../settings');
 
 module.exports = function(app, validate){
   
@@ -16,6 +19,17 @@ module.exports = function(app, validate){
   app.get('/reset', function(req, res){
     //res.render('login', {auth: req.session.user});
     res.render('users/reset');
+  });
+  
+  app.get('/gravatar', function(req, res){
+    
+    var defaultUrl = escape('http://' + settings.url + '/images/default_contact.png'),
+        url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
+        
+    var img = request(url);
+    req.pipe(img);
+    img.pipe(res);
+    
   });
 
   app.get('/invite', validate, function(req, res){
@@ -44,7 +58,7 @@ module.exports = function(app, validate){
   });
   
   app.post('/invite', function(req, res){
-     console.log("INVITED POSTED");
+     console.log("INVITE POSTED");
      var inv = {to:{}, from:{}};
      inv.to.firstName = req.body.firstName;
      inv.to.lastName = req.body.lastName;
@@ -53,17 +67,22 @@ module.exports = function(app, validate){
      inv.from.firstName = req.body.fromFirstName;
      inv.from.lastName = req.body.fromLastName;
      inv.from.email    = req.body.fromEmail;
+     inv.data = req.body.data;
+     inv.subject = req.body.subject;
 
      //this is where the invite is added
      console.log("SEND INVITE", inv);
+     
      User.invite(inv, function(err, reply){
        if (err){
          console.log("ERROR", err);
          res.json({error: err});
        } else {
-         res.render('users/confirmInvite', {firstName: inv.firstName, layout: 'users/layout'});
+         //res.render('users/confirmInvite', {firstName: inv.firstName, layout: 'users/layout'});
+         res.json(reply);
        }
      });
+     
    });
 
   app.post('/password', function(req, res){

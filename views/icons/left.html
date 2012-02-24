@@ -1,0 +1,121 @@
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-current"></div>
+	</div>
+	<div class="left-column">Current</div>
+	<div class="right-column">Current tasks are those from all of the users Coords that can be worked on now. This is a critical feature. We want to avoid the "Inbox" imagery because there is the invitation process that handles incoming tasks. This needs to indicate that work can be done on the task.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-deferred"></div>
+	</div>
+	<div class="left-column">Deferred</div>
+	<div class="right-column">Deferred means that a Task won't start until some time in the future.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-delegated"></div>
+	</div>
+	<div class="left-column">Delegated</div>
+	<div class="right-column">Delegated shows all tasks that are Delegated to someone else but that aren't part of any Coord.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-blocked"></div>
+	</div>
+	<div class="left-column">Blocked</div>
+	<div class="right-column">Blocked shows all Tasks that can't be worked on because another task isn't done that must be completed first.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-private"></div>
+	</div>
+	<div class="left-column">Private</div>
+	<div class="right-column">Private Tasks are those that I'm doing myself so don't involve anyone else.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<ul class="primary-boxes">
+			<li id="task-invited" dojoAttachPoint="showTaskInvited" class="box task-invited">
+				<a>
+					<ins class="pb-icon pb-icon-task-invite"></ins>
+					<span style="color: #fff">Task Invites<span>
+					<b id="taskInvitedCount" class="badge hidden"></b>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="left-column">Task Invites</div>
+	<div class="right-column">All new Tasks first come to this box.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<ul class="primary-boxes">
+			<li id="project-invited" dojoAttachPoint="showProjectInvited" class="box project-invited">
+				<a>
+					<ins class="pb-icon pb-icon-project-invite"></ins>
+					<span style="color: #fff">Coord Invites<span>
+					<b id="projectInvitedCount" class="badge hidden"></b>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="left-column">Coord Invites</div>
+	<div class="right-column">All new Coords first come to this box.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-owner-project"></div>
+	</div>
+	<div class="left-column">Coord Responsible</div>
+	<div class="right-column">If the user is responsible for a Coord, it looks like this. The Coord is something that will be branded so this is an important icon. It should avoid using project imagery of any kind. <br/><br/>The star is the element that indicates responsibility in the current application but can be changed.</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-owner-project invite"></div>
+	</div>
+	<div class="left-column">Coord Responsible with Invitations</div>
+	<div class="right-column">This is the icon that shows when there are invitations pending in a responsible's project</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-owner-project invite-error"></div>
+	</div>
+	<div class="left-column">Coord Responsible with Flags</div>
+	<div class="right-column">This is the icon that shows when invitations are declined, when someone leaves a project, etc in a responsible's project</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-project"></div>
+	</div>
+	<div class="left-column">Coord Participant</div>
+	<div class="right-column">This is the icon for Coords in which the user is a Participant</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-owner-project-pending"></div>
+	</div>
+	<div class="left-column">Coord Pending</div>
+	<div class="right-column">This is the icon for Coords that the responsible has created but hasn't yet sent to participants and followers</div>
+	<div class="clear"></div>
+</div>
+<div class="entry">
+	<div class="left-column primary-boxes">
+		<div dojoattachpoint="projectIcon" class="primary-nav-icon icon-project-following"></div>
+	</div>
+	<div class="left-column">Coord Following</div>
+	<div class="right-column">This is the icon for Coords that the user is Following</div>
+	<div class="clear"></div>
+</div>
+

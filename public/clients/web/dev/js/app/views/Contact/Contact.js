@@ -17,7 +17,7 @@ define(
       
       templateString: html,
       
-      url: "images/default_contact.png",
+      url: "/images/default_contact.png",
       
       doNavigation: false, //this might be used to navigate and if so, it should publish a nav select
       
@@ -27,14 +27,11 @@ define(
       
       postMixInProperties : function() {
         this.inherited(arguments);
-        console.log("Contact",this.contact);
+        //console.log("Contact",this.contact);
         var email = dojo.trim(this.contact.email.toLowerCase());
-  
-        //try and set the url to the gravatar of this user
-        //var defaultUrl = "http%3A%2F%2Fapp.coordel.com%2Fcoordel%2F_design%2Fcoordel%2Fimages%2Fdefault_contact.png";
         
         if (this.contact.email !== ""){
-          //this.url = 'http://www.gravatar.com/avatar/'+md5(this.contact.email, dxd.outputTypes.Hex)+'.jpg?s=32&d=' + defaultUrl;
+          this.url = '/gravatar?email='+ escape(this.contact.email) + '&s=32';
         }
       },
       

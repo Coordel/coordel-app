@@ -2,11 +2,13 @@ define([
   "dojo", 
   "i18n!app/nls/coordel",
   "text!app/views/ProjectAction/templates/ProjectAction.html",
+  "text!app/views/ProjectAction/templates/Blueprint.html",
   "dijit/_Widget", 
   "dijit/_Templated",
   "app/views/ConfirmDialog/ConfirmDialog",
   'app/widgets/ContainerPane',
-  'app/models/CoordelStore'], function(dojo, coordel, template, w, t, Dialog, ContainerPane, db) {
+  'app/models/CoordelStore',
+  'app/views/ProjectForm/ProjectForm'], function(dojo, coordel, template, blueprint, w, t, Dialog, ContainerPane, db, Form) {
   //return an object to define the "./newmodule" module.
   dojo.declare("app.views.ProjectAction", [w,t], {
     
@@ -30,6 +32,11 @@ define([
       if (i){
         this.instructions = i;
       }
+      
+      if (this.action === "reuse"){
+        this.templateString = blueprint;
+      }
+      
     },
     
     postCreate: function(){
@@ -42,6 +49,14 @@ define([
       
       //the message, issue and proposed solution need to be entered before this can be saved
       this.onValidate(false);
+      
+      //if we're reusing, then we need to show a project form
+      if (this.action === "reuse"){
+        var f = new Form({
+          project: this.project,
+          isNew: false
+        }).placeAt(this.containerNode);
+      }
       
     },
     

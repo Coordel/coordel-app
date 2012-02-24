@@ -116,6 +116,11 @@
   opacity:0.85;
 }
 
+.form-tip.inverse{
+  background: #ffffff;
+  color: #333;
+}
+
 .form-tip .tip-title {
   font-size: 14px;
   font-weight: 400;

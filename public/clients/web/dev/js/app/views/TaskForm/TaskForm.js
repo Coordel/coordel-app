@@ -57,6 +57,8 @@ define(
       
       showNoneFoundHandler: null,
       
+      pendingEmail: null,
+      
       postMixInProperties : function() {
         if (!this.isNew){
           //console.debug("not a new TaskForm");
@@ -418,6 +420,8 @@ define(
         dojo.connect(this.taskFormDelegateValue.removeValue, "onclick", this, function(){
           //console.debug("should remove the username value");
           
+          this.pendingEmail = null;
+          
           //get rid of the project
           delete this.task.username;
           
@@ -483,9 +487,40 @@ define(
           
           self._setPills("deliverables");
         });
-      
         
-        
+        //contacts
+        dojo.connect(this.taskFormDelegate, "onAddOption", this, function(email){
+          //a user adds an email when the user isn't already in their contact list. it might
+          //be that the user is already a coordel member, so need to check that first. then
+          //if they aren't found as a user, need to put a temporary placeholder in the pill
+          
+          //when the task is saved, an email invite will be sent to the saved user
+          
+          console.debug("adding contact", email);
+          
+          var query = db.getUser(email);
+          
+          dojo.when(query, function(user){
+            console.log("queried coordel user", user);
+            if (user){
+              console.log("coordel member, add to this user's app", user);
+              var add = db.contactStore.addContact(user.app);
+              dojo.when(add, function(){
+                self.task.username = user.app;
+                self.taskFormDelegate.reset();
+                self._setPills("delegate");
+              });
+            } else {
+              console.log("non-member, will do invite on save", email);
+              self.pendingEmail = email;
+              self.task.username = "pending";
+              self.taskFormDelegate.reset();
+              self._setPills("delegate");
+            }
+            
+          });
+        });
+       
     /*---------------------------------------------------------------------------------------*/
         //deliverables
         dojo.connect(this.taskFormDeliverables, "onEditOption", this, function(deliverable){
@@ -504,10 +539,16 @@ define(
         }); 
         
     /*----------------------------------------------------------------------------------------*/
-        dojo.connect(this.taskFormProject, "onAdd", this, function(evt){
+        dojo.connect(this.taskFormProject, "onAdd", this, function(field){
           //when a project is added, this event will fire, so show the instructions for the project
-          //console.debug("project change", evt);
-          this._showInstructions(evt);
+          console.debug("project change so show instructions", field);
+          this._showInstructions(field);
+        });
+        
+        dojo.connect(this.taskFormDelegate, "onAdd", this, function(field){
+          //when a project is added, this event will fire, so show the instructions for the project
+          console.debug("delegate change so show instructions", field);
+          this._showInstructions(field);
         });
         
     /*----------------------------------------------------------------------------------------*/
@@ -637,7 +678,13 @@ define(
           if (this.task.username){
             dojo.addClass(this.taskFormDelegate.domNode, "hidden");
             dojo.removeClass(this.taskFormDelegateValue.domNode, "hidden");
-            this.taskFormDelegateValue.showPill(this.task.username);
+            //if this is pending, show the invite image
+            if (this.task.username === "pending"){
+              this.taskFormDelegateValue.set("imageClass", "pill-invite");
+            } else {
+              this.taskFormDelegateValue.set("imageClass", false);
+            }
+            this.taskFormDelegateValue.showPill(this.task.username, self.pendingEmail);
           }
           break;
           case "deliverables":
@@ -858,14 +905,44 @@ define(
         //dojo.publish("coordel/addTask",[this.task]);
         
         //console.debug("task to save", this.task, this.task.username);
-    
-        var t = db.getTaskModel(this.task, true);
-        if (this.isNew){
-          t.add(this.task);
+        
+        var self = this,
+            t;
+        
+        // if this username is pending, then that means we need to do an invite before we save the task
+        if (this.task.username === "pending"){
+          
+          //make sure this task has a docType
+          this.task.docType = "task";
+          
+          var invite = db.inviteUser({
+            email: this.pendingEmail,
+            subject: this.task.name,
+            data: this.task});
+       
+          dojo.when(invite, function(resUser){
+              console.log("invited user", resUser);
+              self.task.username = resUser.appId;
+              t = db.getTaskModel(self.task, true);
+              if (self.isNew){
+                t.add(self.task);
+              } else {
+                t.update(self.task);
+              }
+              self.cancel();
+          });
+       
         } else {
-          t.update(this.task);
+          
+          t = db.getTaskModel(self.task, true);
+          if (self.isNew){
+            t.add(self.task);
+          } else {
+            t.update(self.task);
+          }
+          self.cancel();
         }
-        this.cancel(); 
+
       },
       
       _getTipTemplate: function(field){
@@ -936,8 +1013,8 @@ define(
         //call this to add instructions to the exposed tip. for example, if the user is adding
         //a new project, when the add project dropdown shows, the tip should get instructions 
         //about adding the project
-        
-        var tip = dojo.query(".task-form-tip", this[field+"Tip"])[0];
+  
+        var tip = this[field + "Tip"];//[0];
         
         var template = this._getInstructionsTemplate(field);
         
@@ -945,10 +1022,6 @@ define(
           id: field+"Instructions",
           innerHTML: template
         }, tip);
-      },
-      
-      _hideInstructions: function(field, template){
-        
       },
       
       _setTip: function(field, template){

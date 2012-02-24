@@ -137,6 +137,14 @@ exports.getChangeAlertMap = function(change){
 		  if (!map[doc.users[u]]) map[doc.users[u]] = true;
 		}
 	}
+	
+	//notify about new templates
+	if (doc.docType == "template"){
+	  //notify the user that a template is available
+		if (!map[doc.username]) map[doc.username] = true;
+		
+	}
+	
 	if (doc.docType == "file" && doc._attachments != undefined){
     if (!map[doc.updater]) map[doc.updater] = true;
 	}

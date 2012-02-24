@@ -12,7 +12,7 @@ define(["dojo",
             //store: null,
             username: null,
             init: function(){
-              console.debug("initializing appStore");
+              //console.debug("initializing appStore");
               //this.username = username;
               var self = this;
               var def = new dojo.Deferred();
@@ -22,9 +22,9 @@ define(["dojo",
               });
             	return def;
             },
+            
             app: function(){
               //console.debug("app", this._app);
-              
               return this._app;
           
             },
@@ -39,7 +39,7 @@ define(["dojo",
               
               get.then(function(app){
                 self._app = app;
-                console.log("APP LOADED", app);  
+                //console.log("APP LOADED", app);  
                 self.username = app.id;
                 var temp = self.loadTemplates();
                 temp.then(function(res){

@@ -3,6 +3,7 @@ var User        = require('./../models/user');
 module.exports = function(app, validate){
   
   app.get('/web', validate, function(req, res){
+    
     User.get(req.session.auth.userId, function(err, user){
       if (err) res.redirect('/logout');
       req.session.auth.appId = user.appId;

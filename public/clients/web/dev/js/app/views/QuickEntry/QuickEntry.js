@@ -24,7 +24,7 @@ define(
       
       isEdit: false,
       
-      addTitle: "New",
+      addTitle: coordel.taskDetails.newTodo,
       
       widgetsInTemplate: true,
       
@@ -70,6 +70,7 @@ define(
                 this.note.focus();
                 break;
               case "task":
+                this.taskName.focus();
                 break;
             }
           }
@@ -128,6 +129,43 @@ define(
       
       saveTask: function(){
         //console.debug("save task");
+        //add the task
+        var task = {
+          _id: db.uuid(),
+          name: this.taskName.get("value").trim(),
+          purpose: this.taskPurpose.get("value").trim()
+        };
+        
+        var deadline = this.taskFormDeadline.get("value");
+        //console.debug("deadline", deadline);
+        
+        if (deadline){
+          task.deadline = stamp.toISOString(new Date(deadline), {selector: "date"});
+        }
+        
+        //to enable placeholder on purpose
+        if (task.purpose === coordel.taskForm.phPurpose){
+          task.purpose = "";
+        }
+        
+        //console.debug("saved todo", todo);
+        this.onSave({
+          entryType: "task",
+          entry: task
+        });
+        var self = this;
+        
+        dojo.addClass(this.taskPurpose.domNode, "c-placeholder");
+        this.taskName.reset();
+        this.taskPurpose.reset();
+        this.taskFormDeadline.reset();
+        this.hideEdit();
+      
+        this.showEdit();
+        setTimeout(function(){
+          self.taskName.focus();
+        }, 100);
+        
       },
       
       saveNote: function(){
@@ -215,6 +253,7 @@ define(
               dojo.toggleClass(this.noteEnter, "hidden");
               break;
             case "task":
+              dojo.toggleClass(this.taskEnter, "hidden");
               break;
           }
         }
@@ -237,6 +276,7 @@ define(
               dojo.toggleClass(this.noteEnter, "hidden");
               break;
             case "task":
+              dojo.toggleClass(this.taskEnter, "hidden");
               break;
           }
         }

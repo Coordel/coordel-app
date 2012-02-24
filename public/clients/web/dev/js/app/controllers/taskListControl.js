@@ -15,14 +15,16 @@ define(["dojo",
         'app/models/CoordelStore',
         'app/views/Turbo/Turbo',
         'app/views/Calendar/Calendar',
+        'app/views/QuickEntry/QuickEntry',
         'dojo/date/locale',
-        'app/views/QuickSearch/QuickSearch'], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar) {
+        'app/views/QuickSearch/QuickSearch'], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry) {
   return {
     controllerName: "taskListControl",
     isIntialized: false,
-    listFocus: null,
+    focus: null,
     taskList: [], 
     emptyGroup: null,
+    isEmpty: true, 
     observeHandlers: [],
     subscribeHandlers: [],
     stream: null,
@@ -41,6 +43,8 @@ define(["dojo",
       //console.debug("init taskListControl focus", focus);
       var tlc = this;
       
+     
+      
       db.streamStore.currentContext = "userStream";
       
       this._clearSubscribeHandlers();
@@ -55,11 +59,16 @@ define(["dojo",
       //init also gets the name of the focus
       tlc.focus = focus;
       
+      
 	    //console.debug("focus tasks", focus, tasks);
       tlc._showHeader(focus, isTurbo);
   
       //show the task list
 	    tlc.showTaskList(focus);
+	    
+	    //show the quick entry
+      this._showQuickEntry();
+      
 	    
 	    //set the title
       document.title = "Coordel > " + txt[focus];
@@ -530,6 +539,23 @@ define(["dojo",
         }
       }
     },
+    
+    _showQuickEntry: function(){
+      //console.log("focus", this.focus);
+      if (this.focus === "private"){
+        console.debug("should show quickentry");
+       
+        var qe = new QuickEntry({
+          entryType: "task",
+          addTitle: txt.quickAddTask,
+          onSave: function(args){
+            var t = db.getTaskModel(args.entry, true);
+            t.add(args.entry);
+            qe.showEdit();
+          }
+        }).placeAt(dojo.byId("taskListQuickEntry"));
+      }
+    },
         
     _createInviteTask: function(proj, status){
       //it's possible that more than one person role is creating an invite of this type
@@ -678,8 +704,9 @@ define(["dojo",
         
     showEmptyTasks: function(){
       var self = this;
+      self.isEmpty = true;
       var cont = dijit.byId("taskListMain");
-      //console.debug("showing empty", this.emptyGroup);
+      console.debug("showing empty", this.emptyGroup);
       //if (!this.emptyGroup){
       //  console.debug("empty group didin't exist yet", self);
         this.emptyGroup = new etl({
@@ -692,7 +719,8 @@ define(["dojo",
     },
 
     hideEmptyTasks: function(){
-      //console.debug("in hideEmptyTasks, taskListControl");
+      this.isEmpty = false;
+      console.debug("in hideEmptyTasks, taskListControl");
       if (this.emptyGroup){
         this.emptyGroup.destroy();
         this.emptyGroup = null;

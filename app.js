@@ -5,7 +5,8 @@
  *
  * CRADLE WARNING: in cradle/lib/cradle.js, the key, startkey, and endkey options were JSON.stringified
  * which caused those parameters not to work. Had to comment out line 510 to stop that. make sure that if 
- * cradle is updated that that is either changed in the cradle code or that it is recommented
+ * cradle is updated that that is either changed in the cradle code or that it is recommented or figure
+ * out why I was so stupid
  */
 
 var express     = require('express'),
@@ -206,6 +207,10 @@ require('./routes/userApp')(app, validate); //app settings, people, vips
 require('./routes/clients')(app, validate); //web NOTE provide acces to others (i.e. mobile)
 require('./routes/coordeldb')(app, validate); //all couch access
 require('./routes/admin')(app, validate);//admin features
+require('./routes/blueprint')(app, validate);//blueprint and share objects
+require('./routes/icons')(app, validate);//listing of all app icons
+
+
 
 //root 
 app.get('/', function(req, res){
@@ -237,22 +242,27 @@ var changesIO = io.sockets.on('connection', function (client) {
   
 });
 
-//Get the the update sequence of the dbase
+//Get the the update sequence of the dbase and start following changes
 couch.info(function(err, info){
-  var since = info.update_seq;
-  //start the changes stream using the latest sequence
-  var dbUrl = 'http://'+ couchOpts.host + ':' + couchOpts.port + '/' + settings.config.couchName;
-  //console.log("URL", dbUrl);
-  follow({db:dbUrl, since: since, include_docs:true}, function(error, change) {
-    if(!error) {
-      var map = Alert.getChangeAlertMap(change.doc);
-      //console.log("ALERT MAP", map);
-      for (var key in map){
-        //console.log("ALERT TO", key);
-        changesIO.emit('changes:' + key, change.doc);
-      }
-    } 
-  });
+  if (err){
+    console.log("ERROR getting update sequence", err);
+  } else {
+    var since = info.update_seq;
+    //start the changes stream using the latest sequence
+    var dbUrl = 'http://'+ couchOpts.host + ':' + couchOpts.port + '/' + settings.config.couchName;
+    //console.log("URL", dbUrl);
+    follow({db:dbUrl, since: since, include_docs:true}, function(error, change) {
+      if(!error) {
+        var map = Alert.getChangeAlertMap(change.doc);
+        //console.log("ALERT MAP", map);
+        for (var key in map){
+          //console.log("ALERT TO", key);
+          changesIO.emit('changes:' + key, change.doc);
+        }
+      } 
+    });
+  }
+  
 });
 
 /* ****************************  UTILITY DELETE FOR PRODUCTION  *************************/
@@ -279,6 +289,9 @@ app.get('/loadTemplates', function(req, res){
     }
   });
 });
+
+
+
 /* ************************************************************************************/
 
 everyauth.helpExpress(app);

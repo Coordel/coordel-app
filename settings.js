@@ -31,7 +31,8 @@ module.exports = {
     couchOptions:{
       host: "localhost",
       port: 5984,
-      auth: { username: 'admin', password: 'password' }
+      auth: { username: 'admin', password: 'password' },
+      cache: false
     },
     couchName: "testing",
     logglyOptions: {

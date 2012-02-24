@@ -12,11 +12,14 @@ define(["dojo",
         "app/models/ContactStore",
         "app/models/StreamStore",
         "app/models/RoleStore",
-        "i18n!app/nls/coordel"
-        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, tModel, dm, cStore, sStore,rStore, coordel) {
+        "i18n!app/nls/coordel",
+        "app/util/dateFormat"
+        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, tModel, dm, cStore, sStore,rStore, coordel, dtFormat) {
       
         var uuidCache = [];
         var CoordelStore = {
+          
+            userStore: null,
           
             taskStore: null,
             
@@ -52,19 +55,27 @@ define(["dojo",
             db: "/" + djConfig.couchdb + "/",
             changes: null,
             contact: function(username, noYou){
-              
+              var def = new dojo.Deferred(),
+                  self = this;
               if (username !== "UNASSIGNED"){
-                c = this.contactStore.store.get(username);;
+                console.debug("getting contact from contactStore", username);
+                c = self.contactStore.store.get(username);
               } else {
                 c = {id: "UNASSIGNED", email: ""};
               }
-              this._setFullName(c, noYou);
-              return c;
+              dojo.when(c, function(con){
+                console.debug("when function", con);
+                con = self._setFullName(con, noYou);
+                def.callback(con);
+              });
+              return def;
             },
             
             _setFullName: function(contact, noYou){
               //unless noYou is true, if I'm this user i get "You" back
               //for the contact fullName.
+              
+              console.log("setting full name for ", contact);
               
               if (noYou === undefined) {
                 noYou = false;
@@ -89,20 +100,33 @@ define(["dojo",
             },
             
             contactFullName: function(username, noYou){
+              var def = new dojo.Deferred(),
+                  self = this;
+              
+              console.debug("testing contactFullName", username, noYou);
+              
               if (username !== "UNASSIGNED"){
-                c = this.contactStore.store.get(username);;
+                c = self.contact(username, noYou);
+                
+                dojo.when(c, function(con){
+                  console.debug("contact", con);
+                  con = self._setFullName(con, noYou);
+                  def.callback(con.fullName);
+                });
+                
+                
               } else {
                 c = {_id: "UNASSIGNED", email: ""};
               }
-              this._setFullName(c, noYou);
-              return c.fullName;
+            
+              return def;
             },
             
             
             
             init: function() {
               //this initializes all the stores and returns the logged on users app
-              console.debug("initializing CoordelStore");
+              //console.debug("initializing CoordelStore");
               var self = this;
               self.newUUID(10);
               self.taskStore = tStore;
@@ -117,9 +141,9 @@ define(["dojo",
               var a = aStore.init();
               
               a.then(function(app){
-                console.debug("APP", app);
+                //console.debug("APP", app);
                 self.user = app;
-                console.log("user",self.user);
+                //console.log("user",self.user);
                 var list = new dojo.DeferredList([
                   
                   pStore.init(app.id),
@@ -186,6 +210,72 @@ define(["dojo",
               return uuidCache.shift();
             },
             
+            getUser: function(email){
+              var store = new couch({
+                target: this.db, 
+                idProperty: "_id"
+              });
+              
+              var queryArgs = {
+                view: "coordel/users",
+            		startkey: [email],
+            		endkey: [email,{}]
+            	};
+            	
+            	var def = new dojo.Deferred();
+            	
+            	var query = store.query(queryArgs);
+            	
+            	query.then(function(res){
+            	  console.log("response", res);
+            	  if (res.length > 0){
+            	    def.callback(res[0]);
+            	  } else {
+            	    def.callback(false);
+            	  }
+            	});
+              
+              return def;
+            },
+            
+            inviteUser: function(invite){
+              
+              //the invite will have email, subject and optional data members
+           
+              var sender = this.user;
+              
+              var defInvite = {
+                firstName: "",
+                lastName: "",
+                email: "",
+                fromAppId: sender.id,
+                fromFirstName: sender.firstName,
+                fromLastName: sender.lastName,
+                fromEmail: sender.email,
+                subject: sender.firstName + " " + sender.lastName + " invited you to Coordel"
+              };
+              
+              invite = dojo.mixin(defInvite, invite);
+              
+              //format the start and deadline fields if present
+              if (invite.data.deadline){
+                invite.data.deadline = dtFormat.prettyISODate(invite.data.deadline);
+              }
+              
+              if (invite.data.calendar){
+                invite.data.calendar.start = dtFormat.prettyISODate(invite.data.calendar.start);
+              }
+              
+              
+              return dojo.xhrPost({
+                url: "/invite",
+                handleAs: "json",
+                putData: dojo.toJson(invite),
+                headers: this.headers
+              });
+              
+            },
+            
             bulkRemove: function(doc){
               
               dojo.forEach(doc.docs, function(d){
@@ -220,7 +310,7 @@ define(["dojo",
               if (isObject){
                 obj = task;
               } else {
-                console.debug("getTaskModel is loading the task");
+                //console.debug("getTaskModel is loading the task");
                 if (focus === "task"){
                   obj = db.taskStore.store.get(task);
                 } else if (focus === "project") {
@@ -272,7 +362,7 @@ define(["dojo",
             },
             
             getDeliverableBlockerModel: function(id, task){
-              console.debug("getDeliverableBlockerModel", id, task);
+              //console.debug("getDeliverableBlockerModel", id, task);
             },
             
             getProjectModel: function(project, isObject){

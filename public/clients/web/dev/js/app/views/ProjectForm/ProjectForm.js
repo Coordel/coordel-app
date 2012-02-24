@@ -48,8 +48,6 @@ define(
           self._setPills("people");
         }
         
-        
-        
         if (self.project.responsible){
           self._setPills("responsible");
         }
@@ -65,12 +63,16 @@ define(
         
         
         if (!self.isNew){
+          var purpose = self.project.purpose;
+          if (!purpose || purpose.length === 0){
+            purpose = coordel.projectForm.phPurpose;
+          }
           //hide the reuse button
           dojo.addClass(self.showReuseTemplates, "hidden");
           
           //set the values
           self.projectFormName.set("value", self.project.name);
-          self.projectFormPurpose.set("value", self.project.purpose);
+          self.projectFormPurpose.set("value", purpose);
           if (self.project.deadline){
             self.projectFormDeadline.set("value", stamp.fromISOString(self.project.deadline));
           }
@@ -101,38 +103,41 @@ define(
         //correct variables so just remove these two connections when a release comes
         //that has it fixed - textarea used for name and purpose
         dojo.connect(this.projectFormName, "onFocus", this.projectFormName, function(){
-          //console.debug ("onFocus taskFormPurpose", this);
+          console.debug ("onFocus projectFormName", this.value);
           if(this.value === coordel.projectForm.phName){
-            //console.debug("it was placeholder blank it");
-            this.setValue("");
+            console.debug("name was 'placeholder' blank it");
+            this.set("value", "");
             dojo.removeClass(this.domNode, "c-placeholder");
           }
         });
         
         dojo.connect(this.projectFormName, "onBlur", this.projectFormName, function() {
-          //console.debug ("onblur taskFormPurpose", this);
+          console.debug ("onblur projectFormName", this.value);
         
           if(dojo.trim(this.value).length == 0){
-            //console.debug("it was blank set it to the placeholder");
-            this.setValue(coordel.projectForm.phName);  
+            console.debug("name was blank set it to the placeholder");
+            
+            this.set("value", coordel.projectForm.phName); 
             dojo.addClass(this.domNode, "c-placeholder");
           }
         });
+        
         dojo.connect(this.projectFormPurpose, "onFocus", this.projectFormPurpose, function(){
-          //console.debug ("onFocus taskFormPurpose", this);
+          console.debug ("onFocus projectFormPurpose", this.value);
           if(this.value === coordel.projectForm.phPurpose){
-            //console.debug("it was placeholder blank it");
-            this.setValue("");
+            console.debug("purposse was 'placeholder' blank it");
+            this.set("value", "");
             dojo.removeClass(this.domNode, "c-placeholder");
           }
         });
         
         dojo.connect(this.projectFormPurpose, "onBlur", this.projectFormPurpose, function() {
-          //console.debug ("onblur taskFormPurpose", this);
+          console.debug ("onblur projectFormPurpose", this.value);
         
           if(dojo.trim(this.value).length == 0){
-            //console.debug("it was blank set it to the placeholder");
-            this.setValue(coordel.projectForm.phPurpose);  
+            console.debug("it was blank set it to the placeholder");
+
+            this.set("value", coordel.projectForm.phPurpose); 
             dojo.addClass(this.domNode, "c-placeholder");
           }
         });

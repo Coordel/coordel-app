@@ -299,7 +299,7 @@ function getUserApps(appId, field, fn){
 exports.addVip = function(args, fn){
   //args will have the appId of the vip and the appId of the user adding the vip
   var key = 'coordelapp:'+ args.userAppId+':vips';
-  redis.lpush(args.personAppId, function(err, reply){
+  redis.sadd(key, args.personAppId, function(err, reply){
     if (err) return fn(err, false);
     return fn(null, reply);
   });
@@ -308,8 +308,24 @@ exports.addVip = function(args, fn){
 exports.addPerson = function(args, fn){
   //args will have the appId of the person and the appId of the user adding the person
   var key = 'coordelapp:'+ args.userAppId+':people';
-  redis.lpush(args.personAppId, function(err, reply){
+  var multi = redis.multi();
+  multi.sadd(key, args.personAppId);
+  multi.exec(function(err, reply){
     if (err) return fn(err, false);
     return fn(null, reply);
   });
 };
+
+exports.remPerson = function(args, fn){
+  //args will have the appId of the person and the appId of the user adding the person
+  var key = 'coordelapp:'+ args.userAppId+':people';
+  var multi = redis.multi();
+  multi.srem(key, args.personAppId);
+  multi.exec(function(err, reply){
+    if (err) return fn(err, false);
+    return fn(null, reply);
+  });
+};
+
+
+

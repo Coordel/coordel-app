@@ -1,4 +1,4 @@
-var App         = require('./app'),
+var App         = require('./userApp'),
     settings    = require('./../settings'),
     redisOpts   = settings.config.redisOptions,
     couchOpts   = settings.config.couchOptions,
@@ -139,7 +139,7 @@ exports.invite = function(inviteData, fn){
           lastName: inviteData.to.lastName,
           password: password,
           invited: true
-        }, function(err, reply){
+        }, function(err, registeredUser){
           if (err){
             fn(err, false);
           } else {
@@ -157,7 +157,31 @@ exports.invite = function(inviteData, fn){
                   if (err){
                     fn(err, false);
                   } else {
-                    fn(null, true);
+                    fn(null, registeredUser);
+                    var template =  './lib/templates/invite.txt';
+                    if (inviteData.data.docType === 'task'){
+                      template = './lib/templates/taskInvite.txt';
+                    }
+                    
+                    var data = {
+                      firstName: inviteData.to.firstName,
+                      fromFirstName: inviteData.from.firstName,
+                      fromLastName: inviteData.from.lastName,
+                      inviteId: inviteid
+                    };
+                    
+                    if (inviteData.data.purpose){
+                      data.purpose = inviteData.data.purpose;
+                    }
+                    
+                    if (inviteData.data.deadline){
+                      data.deadline = inviteData.data.deadline;
+                    }
+                    
+                    if (inviteData.data.calendar){
+                      data.start = inviteData.data.calendar.start;
+                    }
+                    
                     //create a url to place in the user invitation email based on the user and invite
                     var url = 'http://dev.coordel.com:8080/invite/' + inviteid;
                     //send the user an email with the link
@@ -165,13 +189,10 @@ exports.invite = function(inviteData, fn){
                     Email.send({
                       to: inviteData.to.email,
                       from: inviteData.from.email,
-                      subject: "Check out Coordel ...and we're done!",
-                      template: './lib/templates/invite2-html.txt',
-                      firstName: inviteData.to.firstName,
-                      fromFirstName: inviteData.from.firstName,
-                      fromLastName: inviteData.from.lastName,
-                      inviteId: inviteid
-                    }, function(err, res){
+                      subject: inviteData.subject,
+                      template: template,
+                      data: data
+                      }, function(err, res){
                         
                     });
                   }
@@ -186,6 +207,22 @@ exports.invite = function(inviteData, fn){
 };
 
 exports.get = function(id, fn){
+  
+  
+    /*
+    var key = 'coordelapp:1:people';
+    var multi = redis.multi();
+    multi.srem(key, 2);
+    multi.exec(function(err, reply){
+      //if (err) return fn(err, false);
+      //return fn(null, reply);
+      console.log("user removed");
+    });
+    */
+  
+  
+  
+  
   //this defaults to getting a coordel user which uses email as the id. use specific functions otherwise
   _getUser({authGroup: 'coordel-users', id: id}, function(err, user){
     if (err) return fn(err, false);
