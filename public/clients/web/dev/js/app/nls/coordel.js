@@ -4,6 +4,7 @@ define({
 	  password: "Password",
 	  rememberMe: "Remember Me",
 	  by: "by",
+	  alerts: "Alerts",
 	  noDeadline: "No Deadline",
 	  quickAddTask: "Quick Add Task",
 	  "noName": "No Name",
@@ -458,7 +459,8 @@ define({
 		  "contact": {
 		    "firstName": "First Name",
 		    "lastName": "Last Name",
-		    "email": "Email"
+		    "email": "Email",
+		    name: "Name"
 		  },
 		  "blockers": {
 		    "instructions": "Select Blocking Tasks"
@@ -492,6 +494,8 @@ define({
 		  "headerTitle": "Full Stream",
 		  "showStream": "Show Stream",
 		  "showNotifications": "Show Notifications",
+		  "showAlerts": "Show Alerts",
+		  "clearAlerts": "Clear Alerts",
 		  "filterStream": "Filter Stream",
 		  "messages": "Messages",
   		"allActivity": "All Activity",

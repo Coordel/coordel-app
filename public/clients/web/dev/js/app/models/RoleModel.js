@@ -12,18 +12,18 @@ define("app/models/RoleModel",
       db: null,
       
       add: function(role){
-        //console.debug("adding ROLE", role);
+        console.debug("adding ROLE", role);
         this.role = role;
         this.role.docType = "role";
         var username = this.db.username();
-        var res = this.db.roleStore.store.add(role, {username: username});
+        return this.db.roleStore.store.add(role, {username: username});
       },
       
       update: function(role){
-        console.debug("updating ROLE", role);
+        role.isNew = false;
         this.role = role;
         var username = this.db.username();
-        var res = this.db.roleStore.store.put(role, {username: username});
+        return this.db.roleStore.store.put(role, {username: username});
       },
       
       updateResponsibilities: function(roleid, task, isMyPrivate){
@@ -34,38 +34,37 @@ define("app/models/RoleModel",
     	  //if there's no assignment
     	  var db = this.db,
     	      r = {},
-    	      isNew = false,
     	      self = this;
     	      
   		  var def = db.projectStore.loadProject(task.project);
 			  def.then(function(store){
-			    try {
+			    //try {
 			      
 			      //console.debug("loaded project, store", store);
 			      
 			      var hasRole = false;
 			      
-			      var roles = store.roleMemory.query();
-			      
-			      var updateRole = store.roleStore.get(roleid);
+			      var updateRole = db.projectStore.roleStore.get(roleid);
 			      
 			      dojo.when(updateRole, function(resRole){
 			        console.log("update role", resRole);
 			        if (resRole){
+			          console.log("hasRole set to true");
 			          hasRole = true;
 			          r = resRole;
+			          r.isNew = false;
 			        }
 			        
 			        //console.debug("hasRole in updateResponsibilities", hasRole);
 
   			      if (!hasRole){
-  			        isNew = true;
     			      r = {};
+    			      r.isNew = true;
     			      r._id = roleid;
     			      r.username = task.username;
     			      r.project = task.project;
     			      r.responsibilities = [];
-    			      //console.debug("didn't find the role, it's new", r);
+    			      console.debug("didn't find the role, it's new", r);
   			      }
 
        				//need to check if the responsibility exists in the role
@@ -93,7 +92,7 @@ define("app/models/RoleModel",
       				//if the responsibiity doesn't exist
       				if (!hasResp){
       					//add a new responsibility to the role (username, task, status)
-      					//console.debug("adding a new responsibility to role " + r._id);
+      					console.debug("adding a new responsibility to role " + r._id);
       					if (!r.responsibilities){
       					  r.responsibilities = [];
       					}
@@ -105,18 +104,20 @@ define("app/models/RoleModel",
       					});		
       				}
 
-      				if (isNew){
+      				if (r.isNew){
+      				  console.log("Adding role", r);
       				  self.add(r);
       				} else {
+      				  console.log("Updating role", r);
       				  self.update(r);
       				}
 			        
 			      });
-			    } catch (err){
+			    //} catch (err){
 			      //didn't find the role, so this is new
-			      console.debug("ERROR getting role in RoleModel", err);
-			    }
-			  });
+			   //   console.debug("ERROR getting role in RoleModel", err);
+			   // }
+			 });
       },
       
       displayName: function(){

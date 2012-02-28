@@ -1,5 +1,18 @@
 <div id="rightHeader" style="padding:8px">
-		<span id="showNotifications" dojoAttachPoint="showNotifications" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconNotify"  class="c-float-l" title="${coordel.stream.showNotifications}" label="0" showLabel="false"></span>
+		<span id="showNotifications" dojoAttachPoint="showNotifications" dojoType="dijit.form.DropDownButton" iconClass="coordelHeaderIcon coordelHeaderIconNotify"  class="coordelHeaderDropDown c-float-l" title="${coordel.stream.showNotifications}" dropDownPosition="below" label="0" showLabel="false">
+			<div dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog popout" style="visibility:hidden">
+				<div class="task-form-outline" style="padding:0">
+					<div class="task-form-header ui-corner-top">
+						<div dojoAttachPoint="alertsCancel" dojoType="dijit.form.Button" style="float: left">${coordel.cancel}</div>
+					  <h2>${coordel.alerts}</h2>
+	
+					</div>
+					<div class="alerts" dojoAttachPoint="alertsContainer" style="overflow-y: auto; max-height: 400px"></div>
+					<div dojoAttachPoint="alertsFooter" class="task-form-footer footer-button  ui-corner-bottom c-text-center">${coordel.stream.clearAlerts}</div>
+				</div>
+			</div>
+		</span>	
+			
 	<div dojoAttachPoint="coordelUserPreferences" dojoType="dijit.form.DropDownButton" title="User Preferences" class="c-float-r" label="${userFullName}" iconClass="coordelHeaderIcon coordelHeaderIconBlank" showLabel="true" style="margin-left: 6px">
 	   <div id="coordelUserPreferencesMenu" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden">
 			<h3 class="menu-header">${coordel.options}</h3>

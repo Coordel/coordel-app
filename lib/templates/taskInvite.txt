@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 		<link rel="shortcut icon" href="http://dev.coordel.com:8080/images/favicon.gif">
-		<style>
-			body {
+		<style type="text/css">
+	body {
 				background-color: #eaeaea;
 				font-size: 14px;
 				font-family: "Lucida Grande", Helvetica;
@@ -37,7 +37,7 @@
 			
 			h1.bullet {
 				font-size: 14px;
-				background: url(http://{{url}}/images/emails/bullet-checkbox.gif) no-repeat center left;
+				background: url(http://{{url}}/images/emails/bulletCheckbox.gif) no-repeat center left;
 				padding-left: 28px;
 			}
 			
@@ -46,69 +46,71 @@
 				text-decoration: none;
 				text-shadow: #fff 1px 1px;
 			}
-a:visited {color: #000000;}
-a:hover {text-decoration: underline;}
-a:active {}
+		a:visited {color: #000000;}
+		a:hover {text-decoration: underline;}
+		a:active {}
 
 		</style>
+		<title></title>
 	</head>
 	<body>
 		<div id="body-container">
 			<div id="container">
-				
 				<div id="content" class="entry-content">
 					<div class="ui-corner-all large-shadow content-panel">
 						<div>
 							<h3 style="font-size:18px;-webkit-font-smoothing:antialiased">
-							<strong style="font-weight:bold;white-space:nowrap">{{fromFirstName}} {{fromLastName}}</strong> 
-							<span style="white-space:nowrap">  assigned you a task using <a href="http://www.coordel.com/">Coordel</a>&hellip;</span>
+								<strong style="font-weight:bold;white-space:nowrap">{{fromFirstName}} {{fromLastName}}</strong> <span style="white-space:nowrap">assigned you a task using <a href="http://www.coordel.com/">Coordel</a>…</span>
 							</h3>
-							
 							<div class="task-header">
-				    			<table width="100%" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc; padding: 12px 0px">
-				    			<tbody>
-				    				<tr>
+								<table width="100%" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc; padding: 12px 0px">
+				
+									<tr>
 										<td valign="top" width="24px">
-				                    	<img src="https://{{url}}/images/emails/checkbox.png" border="0" style="border:0; outline:none; display:block;width:24px;height:24px;" />
-				                		</td>
-				                		<td valign="middle" style="font-size:16px;-webkit-font-smoothing:antialiased;padding-left:4px;color:#00629B;padding-top:4px;line-height:1.35em">
-				                		{{name}}
-				                		</td>
-				    				</tr>
-				    			</tbody>
-				    			</table>
-				    			<table width="100%" style="margin-top: 8px">
-				    			<tbody>
-				    				{{#purpose}}
-				    				<tr>
-				    					<td width="24px" style="color: #5c5c5c" align="right" valign="middle">Purpose:</td>
-				    					<td style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
-				    					{{purpose}}
-				    					</td>
-				    				</tr>
-				    				{{/purpose}}
-										{{#starts}}
-				    				<tr>
-				    					<td width="24px" style="color: #5c5c5c" align="right" valign="middle">Starts:</td>
-				    					<td colspan="2" style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
-				    				 	{{starts}}
-				    					</td>
-				    				</tr>
-				    				{{/starts}}
-										{{#deadline}}
-				    				<tr>
-				    					<td width="24px" style="color: #5c5c5c" align="right" valign="middle">Deadline:</td>
-				    					<td style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
-				    					{{deadline}}
-				    					</td>
-				    				</tr>
-				    				{{/deadline}}
-										
-				    			</tbody>
-				    			</table>
-				    		</div><!-- .task-header -->
-							
-							<div style="padding-top: 18px"><a href="http://{{url}}/invite/{{inviteId}}"><img title="Activate Your Free Account" href="http://{{url}}/images/emails/activate-button.png"></a></div>
+											<img src="http://{{url}}/images/emails/checkbox.png" border="0" style="border:0; outline:none; display:block;width:24px;height:24px;">
+										</td>
+										<td valign="middle" style="font-size:16px;-webkit-font-smoothing:antialiased;padding-left:4px;color:#00629B;padding-top:4px;line-height:1.35em">
+											{{name}}
+										</td>
+									</tr>
+
+								</table>
+								<table width="100%" style="margin-top: 8px">
+									{{#purpose}} 
+									<tr>
+										<td width="24px" style="color: #5c5c5c" align="right" valign="middle">
+											Purpose:
+										</td>
+										<td style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
+											{{purpose}}
+										</td>
+									</tr>
+									{{/purpose}} 
+									{{#start}} 
+									<tr>
+										<td width="24px" style="color: #5c5c5c" align="right" valign="middle">
+											Starts:
+										</td>
+										<td colspan="2" style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
+											{{start}}
+										</td>
+									</tr>
+									{{/start}} 
+									{{#deadline}} 
+									<tr>
+										<td width="24px" style="color: #5c5c5c" align="right" valign="middle">
+											Deadline:
+										</td>
+										<td style="font-size:14px;-webkit-font-smoothing:antialiased;padding-left:4px;padding-top:4px;line-height:1.35em">
+											{{deadline}}
+										</td>
+									</tr>
+									{{/deadline}}
+								</table>
+							</div><!-- .task-header -->
+							<div style="padding-top: 18px">
+								<a href="http://{{url}}/invite/{{inviteId}}"><img height="34" width="207" alt="Activate Your Free Account" src="http://{{url}}/images/emails/activateButton.png"></a>
+							</div>
 						</div>
 					</div>
 					<div class="sub-content">
@@ -122,7 +124,7 @@ a:active {}
 								Get Your Party Started
 							</h1>
 							<div class="bullet-content">
-								Not quite sure how to tackle an assignment?  Or do you know the beginning and the end but you are not quite sure what's in the middle? All you need is a talented team. Coordel allows you to plan and manage efforts that have not been predefined (yet). How’s that for getting things done? 
+								Not quite sure how to tackle an assignment? Or do you know the beginning and the end but you are not quite sure what's in the middle? All you need is a talented team. Coordel allows you to plan and manage efforts that have not been predefined (yet). How’s that for getting things done?
 							</div>
 						</div>
 						<div class="">
@@ -130,7 +132,7 @@ a:active {}
 								Add Coordination to your Collaboration
 							</h1>
 							<div class="bullet-content">
-								How much effort does it take to coordinate all your e-mails, calendars, to do lists, phone calls,…? Coordel is your go-to place to manage all the work you could and should be doing, for yourself and as part of a team. It’s all your professional commitments in just one window. How’s that for efficiency?  
+								How much effort does it take to coordinate all your e-mails, calendars, to do lists, phone calls,…? Coordel is your go-to place to manage all the work you could and should be doing, for yourself and as part of a team. It’s all your professional commitments in just one window. How’s that for efficiency?
 							</div>
 						</div>
 						<div class="">
@@ -138,7 +140,7 @@ a:active {}
 								Increase Return on Teamwork Investment
 							</h1>
 							<div class="bullet-content">
-								Working with others too often involves miscommunications, misunderstandings, and lacking or wrong information. Coordel includes and coordinates all the information and communication you and your team need to do deliver high quality results. How’s that for teamwork? 							
+								Working with others too often involves miscommunications, misunderstandings, and lacking or wrong information. Coordel includes and coordinates all the information and communication you and your team need to do deliver high quality results. How’s that for teamwork?
 							</div>
 						</div>
 						<div class="">
@@ -151,7 +153,7 @@ a:active {}
 						</div>
 					</div>
 				</div><!-- .entry-conten
-				</div><!-- .content .hfeed -->
+				</div><!== .content .hfeed -->
 			</div><!-- #container -->
 		</div><!-- #body-container -->
 	</body>

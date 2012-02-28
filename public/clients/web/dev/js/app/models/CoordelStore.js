@@ -57,69 +57,64 @@ define(["dojo",
             contact: function(username, noYou){
               var def = new dojo.Deferred(),
                   self = this;
+                  
+              //console.debug("getting contact from contactStore", username);
               if (username !== "UNASSIGNED"){
-                console.debug("getting contact from contactStore", username);
+                
                 c = self.contactStore.store.get(username);
               } else {
                 c = {id: "UNASSIGNED", email: ""};
               }
-              dojo.when(c, function(con){
-                console.debug("when function", con);
-                con = self._setFullName(con, noYou);
-                def.callback(con);
-              });
-              return def;
+              c = self._setFullName(c, noYou);
+    
+              return c;
             },
             
             _setFullName: function(contact, noYou){
               //unless noYou is true, if I'm this user i get "You" back
               //for the contact fullName.
               
-              console.log("setting full name for ", contact);
+              //console.log("setting full name for ", contact);
               
               if (noYou === undefined) {
                 noYou = false;
               }
               
-              //console.debug("_setFullName contact, noYou", contact._id, noYou, this.user._id);
-              
               contact.fullName = coordel.you;
+              
+              //console.debug("_setFullName noYou: " + noYou, "contact: " + contact.id);
               
               if (contact.id === "UNASSIGNED"){
                 contact.fullName = coordel.unassigned;
+              } else if (contact.firsName === "None" && contact.lastName === "Given") {
+                contact.fullName = contact.email;
               } else {
-                //console.debug("wasn't unassigned", noYou, contact._id, this.user._id);
+                //console.debug("wasn't unassigned", noYou, contact.id, this.user.id);
                 
-                if (contact.id !== this.user._id || noYou){
+                if (contact.id !== this.user.id || noYou){
                   //console.debug("shouldn't be you");
                   contact.fullName = contact.firstName + " " + contact.lastName; 
                 }
               }
-              
+              //console.log("sending back contact with fullname", contact, contact.fullName );
               return contact;
             },
             
             contactFullName: function(username, noYou){
-              var def = new dojo.Deferred(),
-                  self = this;
+              var self = this;
               
-              console.debug("testing contactFullName", username, noYou);
+              //console.debug("testing contactFullName", username, noYou);
               
               if (username !== "UNASSIGNED"){
-                c = self.contact(username, noYou);
-                
-                dojo.when(c, function(con){
-                  console.debug("contact", con);
-                  con = self._setFullName(con, noYou);
-                  def.callback(con.fullName);
-                });
-                
+                c = self.contactStore.store.get(username); 
                 
               } else {
                 c = {_id: "UNASSIGNED", email: ""};
               }
+              
+              c = self._setFullName(c, noYou);
             
-              return def;
+              return c.fullName;
             },
             
             
@@ -210,6 +205,25 @@ define(["dojo",
               return uuidCache.shift();
             },
             
+            getAlerts: function(){
+              
+              return dojo.xhrGet({
+                url: "/alerts/",
+                handleAs: "json",
+                content: {username: this.username()},
+                headers: this.headers
+              });
+            },
+            
+            clearAlerts: function(){
+              return dojo.xhrDelete({
+                url: "/alerts/",
+                handleAs: "json",
+                content: {username: this.username()},
+                headers: this.headers
+              });
+            },
+            
             getUser: function(email){
               var store = new couch({
                 target: this.db, 
@@ -227,7 +241,7 @@ define(["dojo",
             	var query = store.query(queryArgs);
             	
             	query.then(function(res){
-            	  console.log("response", res);
+            	  //console.log("response", res);
             	  if (res.length > 0){
             	    def.callback(res[0]);
             	  } else {
@@ -266,7 +280,9 @@ define(["dojo",
                 invite.data.calendar.start = dtFormat.prettyISODate(invite.data.calendar.start);
               }
               
+              var def = new dojo.Deferred();
               
+            
               return dojo.xhrPost({
                 url: "/invite",
                 handleAs: "json",

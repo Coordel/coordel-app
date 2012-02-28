@@ -72,7 +72,7 @@ function _save(app, fn){
       var peopleKey = key + ':people';
       
       data.people.forEach(function(p){
-        console.log("ADD PERSON, KEY ", peopleKey, p);
+        //console.log("ADD PERSON, KEY ", peopleKey, p);
         multi.sadd(peopleKey, p);
       });
     }
@@ -124,7 +124,7 @@ exports.get = function(id, fn){
           //console.log("couldn't load existing invite from store",err);
           fn(err, false);
         } else {
-          console.log("found the app", app);
+          //console.log("found the app", app);
           var tLoaded = app.defaultTemplatesLoaded;
           //redis convers boolean values to strings, so need to convert them to bool on return
           //this might be a problem!
@@ -203,6 +203,8 @@ exports.addAppObjects = function(userData, fn){
       }];
       privProj.created = timestamp;
       privProj.creator = userData.appId.toString();
+      privProj.updated = timestamp;
+      privProj.updater = userData.appId.toString();
       
       objs.push(privProj);
       
@@ -210,6 +212,11 @@ exports.addAppObjects = function(userData, fn){
       toReturn.privateRole = uuids[1];
       privRole.project = uuids[0];
       privRole.username = userData.appId.toString();
+      privRole.isNew = false;
+      privRole.created = timestamp;
+      privRole.creator = userData.appId.toString();
+      privRole.updated = timestamp;
+      privRole.updater = userData.appId.toString();
       
       objs.push(privRole);
       
@@ -224,6 +231,8 @@ exports.addAppObjects = function(userData, fn){
       }];
       delegate.created = timestamp;
       delegate.creator = userData.appId.toString();
+      delegate.updated = timestamp;
+      delegate.updater = userData.appId.toString();
       
       objs.push(delegate);
       
@@ -237,6 +246,8 @@ exports.addAppObjects = function(userData, fn){
       user.isTemplate = false; 
       user.created = timestamp;
       user.creator = userData.appId.toString();
+      user.updated = timestamp;
+      user.updater = userData.appId.toString();
       
       objs.push(user);
       //console.log("appObjects", objs);
@@ -268,9 +279,9 @@ exports.getPeople = function(appId, fn){
 };
 
 function getPeople(key, fn){
-  console.log("GET PEOPLE", key);
+  //console.log("GET PEOPLE", key);
   var arr = redis.smembers(key, function(err, keyArr){
-    console.log("after getKeyArray", err, keyArr);
+    //console.log("after getKeyArray", err, keyArr);
     if (err) return fn(err, false);
     return fn(null, keyArr);
   });
@@ -285,7 +296,7 @@ function getUserApps(appId, field, fn){
 
     appIds.forEach(function(id){
       var akey = 'coordelapp:' + id;
-      console.log("GET USER APP FOR KEY", akey);
+      //console.log("GET USER APP FOR KEY", akey);
       multi.hgetall(akey);
     });
 

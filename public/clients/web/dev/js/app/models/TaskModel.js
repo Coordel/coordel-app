@@ -746,7 +746,6 @@ define("app/models/TaskModel",
     			icon: t.icon.post
     		}, task);
         
-        
   	    //default status and substatus
   	    //CURRENT means that it can show in the Current list if not deferred or blocked
   	    task.status = "CURRENT"; 
@@ -811,11 +810,17 @@ define("app/models/TaskModel",
         task.docType = "task";
         task.isTemplate = false;
         
+        //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
+        task.isMyDelegated = false;
+        if (task.project === app.myDelegatedProject){
+          task.isMyDelegated = true;
+        }
+        
         var def = p.updateAssignments(task);
         
         //need to make sure the update to the project happens before the task is added
         def.then(function(taskResp){
-          console.debug("adding task with status", taskResp.status);
+          console.debug("adding task with status", taskResp, taskResp.status);
           db.taskStore.store.add(taskResp, {username: username});
           dojo.publish("coordel/updatePrimaryBoxCount");
         });

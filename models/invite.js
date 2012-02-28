@@ -16,6 +16,7 @@ var Invite = exports = module.exports = function Invite(args){
 Invite.prototype.add = function(fn){
   //console.log("INVITE ADD" , this);
   if (this.id && this.to && this.from){
+
     //console.log('adding invite to redis store', this);
     var multi = redis.multi(),
         key = 'invite:' + this.id;

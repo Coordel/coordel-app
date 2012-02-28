@@ -57,7 +57,7 @@ define(
       
       showNoneFoundHandler: null,
       
-      pendingEmail: null,
+      pendingContact: null,
       
       postMixInProperties : function() {
         if (!this.isNew){
@@ -489,16 +489,16 @@ define(
         });
         
         //contacts
-        dojo.connect(this.taskFormDelegate, "onAddOption", this, function(email){
+        dojo.connect(this.taskFormDelegate, "onAddOption", this, function(contact){
           //a user adds an email when the user isn't already in their contact list. it might
           //be that the user is already a coordel member, so need to check that first. then
           //if they aren't found as a user, need to put a temporary placeholder in the pill
           
           //when the task is saved, an email invite will be sent to the saved user
           
-          console.debug("adding contact", email);
+          console.debug("adding contact", contact);
           
-          var query = db.getUser(email);
+          var query = db.getUser(contact.email);
           
           dojo.when(query, function(user){
             console.log("queried coordel user", user);
@@ -511,13 +511,12 @@ define(
                 self._setPills("delegate");
               });
             } else {
-              console.log("non-member, will do invite on save", email);
-              self.pendingEmail = email;
+              console.log("non-member, will do invite on save", contact);
+              self.pendingContact = contact;
               self.task.username = "pending";
               self.taskFormDelegate.reset();
               self._setPills("delegate");
             }
-            
           });
         });
        
@@ -684,7 +683,7 @@ define(
             } else {
               this.taskFormDelegateValue.set("imageClass", false);
             }
-            this.taskFormDelegateValue.showPill(this.task.username, self.pendingEmail);
+            this.taskFormDelegateValue.showPill(this.task.username, self.pendingContact);
           }
           break;
           case "deliverables":
@@ -916,9 +915,11 @@ define(
           this.task.docType = "task";
           
           var invite = db.inviteUser({
-            email: this.pendingEmail,
+            email: this.pendingContact.email,
+            firstName: this.pendingContact.firstName,
+            lastName: this.pendingContact.lastName,
             subject: this.task.name,
-            data: this.task});
+            data: dojo.clone(this.task)});
        
           dojo.when(invite, function(resUser){
               console.log("invited user", resUser);

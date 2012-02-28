@@ -25,6 +25,7 @@ module.exports = {
   },
   privateRole : {
     characteristics: [],
+    isNew: false,
     docType: "role",
     history: [],
     isTemplate: false,

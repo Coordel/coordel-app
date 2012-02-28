@@ -203,14 +203,13 @@ var validate = function(req, res, next){
 
 // Routes
 require('./routes/users')(app, validate); //login, registration, invites
-require('./routes/userApp')(app, validate); //app settings, people, vips
+require('./routes/userApps')(app, validate); //app settings, people, vips
 require('./routes/clients')(app, validate); //web NOTE provide acces to others (i.e. mobile)
 require('./routes/coordeldb')(app, validate); //all couch access
 require('./routes/admin')(app, validate);//admin features
-require('./routes/blueprint')(app, validate);//blueprint and share objects
+require('./routes/blueprints')(app, validate);//blueprint and share objects
 require('./routes/icons')(app, validate);//listing of all app icons
-
-
+require('./routes/alerts')(app, validate);//alert management
 
 //root 
 app.get('/', function(req, res){
@@ -242,10 +241,12 @@ var changesIO = io.sockets.on('connection', function (client) {
   
 });
 
+
+
 //Get the the update sequence of the dbase and start following changes
 couch.info(function(err, info){
   if (err){
-    console.log("ERROR getting update sequence", err);
+    console.log("ERROR getting update sequence when starting to monitor couch changes", err);
   } else {
     var since = info.update_seq;
     //start the changes stream using the latest sequence
@@ -254,10 +255,28 @@ couch.info(function(err, info){
     follow({db:dbUrl, since: since, include_docs:true}, function(error, change) {
       if(!error) {
         var map = Alert.getChangeAlertMap(change.doc);
-        //console.log("ALERT MAP", map);
+        console.log("ALERT MAP", map);
         for (var key in map){
-          //console.log("ALERT TO", key);
+          console.log("CHANGE", key, change.doc.updater);
           changesIO.emit('changes:' + key, change.doc);
+          
+          //if this user didn't do the update, then alert when history exists
+          if (change.doc.updater !== key && change.doc.history){
+            console.log("ALERT", key);
+            var alert = change.doc.history.shift();
+            changesIO.emit('alerts:' + key, alert);
+            var a = new Alert({
+              username: key,
+              alert: alert
+            });
+            
+            a.add(function(err, res){
+              if (err) console.log("ERROR adding alert", err);
+            });
+         
+            
+            
+          }
         }
       } 
     });

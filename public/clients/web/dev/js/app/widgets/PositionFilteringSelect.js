@@ -124,10 +124,15 @@ dojo.declare(
     
     _addContact: function(){
       
+      var contact = {},
+          name = this.altDropDown.contactName.get("value").split(" ");
       
-      var email = this.altDropDown.contactEmail.get("value");
-         
-      this.onAddOption(email);
+      contact.email = this.altDropDown.contactEmail.get("value");
+
+      contact.firstName = name[0];
+      contact.lastName = name[1];
+      
+      this.onAddOption(contact);
       
     },
     

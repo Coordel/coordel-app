@@ -158,6 +158,7 @@ define("app/models/ProjectModel",
       },
     	
     	invite: function(username, project){
+
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
     	  }
@@ -289,10 +290,11 @@ define("app/models/ProjectModel",
     	},
     	
     	update: function(project){
+    	  console.log("updating project", project);
     	  var db = this.db,
     	      username = db.username();
     	  project.isNew = false;
-    	  db.projectStore.store.put(project, {username: username});
+    	  return db.projectStore.store.put(project, {username: username});
     	},
     	
     	updateAssignments: function(task){
@@ -306,11 +308,13 @@ define("app/models/ProjectModel",
   	        hasAssign = false,
   	        doUpdate = false,
   	        roleid = db.uuid(),
-  	        def = new dojo.Deferred();
+  	        def = new dojo.Deferred(),
+            status = "INVITE",
+  	        hasUser = false;
   	        
-  	    //console.debug("updating project assignments", p, task.username);
+  	    console.debug("updating project assignments", p, task.username);
   	    //make sure this task's user is part of the project
-  	    var hasUser = false;
+      
   	    dojo.forEach(p.users, function(user){
   	      if (task.username === user){
   	        hasUser = true;
@@ -318,9 +322,16 @@ define("app/models/ProjectModel",
   	    });
   	    
   	    if (!hasUser){
-  	      //console.debug("inviting user to project", task.username);
-  	      p = self.invite(task.username, p);
-  	      //p.users.push(task.username);
+  	      //if this is my delegated project, the project invitation process is skipped and the
+          //tasks are accepted on a task by task basis
+  	      if (!p.isMyDelegated){
+  	        console.debug("inviting user to project", task.username);
+    	      p = self.invite(task.username, p);
+  	      } else {
+  	        p.users.push(task.username);
+  	        status = "ACCEPTED";
+  	      }
+  	      doUpdate = true;
   	    }
   	       
   	    if (!p.assignments){
@@ -335,6 +346,7 @@ define("app/models/ProjectModel",
     			if (assign.username === task.username){
     			  if (assign.role === "FOLLOWER"){
     			    assign.role = roleid;
+    			    assign.status = status;
     			    hasAssign = true;
     			    doUpdate = true;
     			  } else if (assign.role === "RESPONSIBLE"){
@@ -344,19 +356,20 @@ define("app/models/ProjectModel",
     			  } else {
     			    hasAssign = true;
       				roleid = assign.role;
-    			  }
-    				
+    			  }		
     			}
     		});
     		
     		//if there wasn't an assignment, then create a new one for this user using the 
     		//uuid assigned to the role on call of the function
     		if (!hasAssign) {
+    		  
   	      p.assignments.push({
     				username: task.username,
     				role: roleid,
-    				status: "INVITE"
+    				status: status
     			});
+    			
     			doUpdate = true;
   	    }
   	    
@@ -368,9 +381,13 @@ define("app/models/ProjectModel",
   	  
       	//save project if an assignment was added or updated for a follower or responsible
       	if (doUpdate){
-      	  //console.debug("saving project, assignment was added or updated", task.username);
-      	  dojo.when(this.update(p), function(){
+      	  console.debug("saving project, assignment was added or updated", p, task.username);
+      	  dojo.when(self.update(p), function(){
+      	    
       	    def.callback(task);
+      	  }, 
+      	  function(err){
+      	    console.log("failed to update project", err);
       	  });
         } else {
       	  def.callback(task);

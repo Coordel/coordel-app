@@ -1,59 +1,73 @@
-var settings    = require('./../settings');
+/**
+ * Alerts enable users to know that someone else did something that affects them. The
+ * couchdb changes feed is the primary source of alerts
+ 
+ * Alerts are saved in the redis store but are very volitile. In other words, they only last long
+ * enough for the user to see what the alert was. As soon as they are viewed, they are cleared
+ * since the Stream holds alert data structured into the correct object. There will not ever be
+ * more than 99 alerts because they will also be trimmed
+ 
+ * this way, alerts are a bit stickier than a growl, but don't create something like an inbox
+ */
+ var settings    = require('./../settings'),
+     redisOpts   = settings.config.redisOptions,
+     redis       = require('redis').createClient(redisOpts.port, redisOpts.host),
+     emailer     = require('./../lib/emailer');
+
+//authenticate the redis client
+redis.auth(redisOpts.auth);
 
 var Alert = exports = module.exports = function Alert(args){
-  //an invite has a to and from and date
-  this.id = args.id;
-  this.to = args.to;
-  this.from = args.from;
-  this.created = (new Date()).toISOString();
+  this.username = args.username;
+  this.alert = args.alert;
 };
 
 Alert.prototype.add = function(fn){
-  //console.log("INVITE ADD" , this);
-  if (this.id && this.to && this.from){
-    //console.log('adding invite to redis store', this);
-    var multi = redis.multi(),
-        key = 'invite:' + this.id;
-        
-    multi.hset(key, 'id', this.id);
-    multi.hset(key, 'to', this.to);
-    multi.hset(key, 'from', this.from);
-    multi.hset(key, 'created', this.created);
+  var key = 'coordel-alerts:'+ this.username,
+      multi = redis.multi();
+      
+  multi.lpush(key, JSON.stringify(this.alert));
+  multi.ltrim(key, 0, 99);
+  multi.exec(function(err, res){
+    if (err){
+      console.log("ERROR adding alert", err);
+      fn(err, null);
+    } else {
+      console.log("saved alert", res);
+      fn(false, res);
+    }
+  });
   
-    multi.sadd('coordel-invites', key);
-    multi.exec(function(err, replies){
-      if (err) fn(err, false);
-      fn(null, true);
-    });
-  } else {
-    fn('Invite is not valid. id, to and from are all required', false);
-  }
 };
 
-exports.get = function(id, fn){
-  //id will be the email of the person invited
-  redis.sismember(['coordel-invites', 'invite:' + id], function(err, reply) {
-    //console.log("after testing  sismember", err, reply);
+exports.getUserAlerts = function(username, fn){
+  var key = 'coordel-alerts:' + username;
+  redis.lrange(key,0,-1, function(err, res){
     if (err){
-      //problem with getting invite 
-      //console.log("error getting invite from store", err);
-      fn(err, false);
-    } else if (!reply){
-      //console.log("invite didn't exist");
-      fn("Invite not found", false);
-    } else if (reply) {
-      //console.log("invite existed, loading");
-      var key = 'invite:' + id;
-      //console.log("key for get", key);
-      redis.hgetall(key, function(err, invite){
-        if (err){
-          //console.log("couldn't load existing invite from store",err);
-          fn(err, false);
-        } else {
-          //console.log("found the invite", invite);
-          fn(false, invite);
-        }
-      }); 
+      console.log("ERROR getting alerts", err);
+      fn(err, null);
+    } else {
+      var alerts = [];
+      console.log("Got alerts", res);
+      res.forEach(function(alert){
+        alerts.push(JSON.parse(alert));
+      });
+      fn(false, alerts);
+    }
+  });
+};
+
+exports.deleteUserAlerts = function(username, fn){
+  
+  var key = 'coordel-alerts:' + username;
+  console.log('deleting Alerts', key);
+  redis.ltrim(key, 2, 1, function(err, res){
+    if (err){
+      console.log("ERROR deleting alerts", err);
+      fn(err, null);
+    } else {
+      console.log("ltrim results", res);
+      fn(false, true);
     }
   });
 };
@@ -88,6 +102,11 @@ exports.getChangeAlertMap = function(change){
 	if(doc.docType == "task") {
 	   if (!map[doc.username]) map[doc.username] = true;
 	} 
+	
+	//responsible gets notified of the tasks assigned to isMyDelegated
+	if(doc.docType == "task") {
+	   if (!map[doc.responsible]) map[doc.responsible] = true;
+	}
 
 	//only the responsible gets notified of pending tasks
 	if (doc.docType === "task" && doc.status === "PENDING"){

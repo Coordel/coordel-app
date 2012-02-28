@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.5",
+  version: "0.1.6",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -824,6 +824,14 @@ module.exports = {
       		if (doc.delegator){
       		  emit(
         			[doc.delegator, doc.status, doc._id, 0, toDateArray(new Date(doc.updated))],
+        			{"_id": doc._id}
+        		);
+      		}
+      		
+      		//if the task is flagged isMyDelegated then the responsible need to see the task as well
+      		if (doc.isMyDelegated){
+      		  emit(
+        			[doc.responsible, doc.status, doc._id, 0, toDateArray(new Date(doc.updated))],
         			{"_id": doc._id}
         		);
       		}

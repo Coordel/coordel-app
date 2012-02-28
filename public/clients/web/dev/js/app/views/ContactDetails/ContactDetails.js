@@ -33,12 +33,12 @@ define(
         
         var c = this.contact;
         
-        //console.debug("contact", this.contact);
+        console.debug("contact", this.contact);
         
         //now set default to "" where the user hasn't provided the details value
         
         if (!c.fullName){
-          c.fullName = db.contactFullName(c._id);
+          c.fullName = db.contactFullName(c.id);
         }
         
         if (!c.email){

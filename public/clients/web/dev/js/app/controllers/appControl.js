@@ -40,6 +40,8 @@ define(['dojo',
 	  
 	  doneSound: null,
 	  
+	  currentAlerts: [],
+	  
 	  init: function() {
 	    var app = this,
 	        def = db.init();
@@ -48,6 +50,12 @@ define(['dojo',
 	      console.log("DATABASE LOADED: ", res);
 	      app.username = db.appStore.username;
 	      app.showApp();
+	      var alerts = db.getAlerts(app.username);
+	      dojo.when(alerts, function(res){
+	        app.currentAlerts = res;
+	        //update the notification count
+          dojo.publish("coordel/updateNotificationCount", [{currentAlerts: app.currentAlerts}]);
+	      });
 	    });
 	  },
 	  
@@ -80,11 +88,18 @@ define(['dojo',
 	    var ac = this;
 	    
 	    var socket = io.connect(window.location.host);
+	    
+	    console.log("showing app", this.username);
 		  
-			//load
-			socket.on('changes:' + this.username, function (change) {
-		    console.log('SOCKET CHANGE', change);
+			//register for socketio events
+			socket.on("changes:" + this.username.toString(), function (change) {
+		    console.log("SOCKET CHANGE", change);
 		    app.handleChange(change);
+		  });
+		  
+		  socket.on("alerts:" + this.username.toString(), function(alert){
+		    console.log("SOCKET ALERT", alert);
+		    app.handleAlert(alert);
 		  });
 	    
 	    this.initSounds();
@@ -106,6 +121,9 @@ define(['dojo',
 	  	
 	  	//listen for sound requiest
 	  	this.addObjectHandler = dojo.subscribe("coordel/playSound", this, "playSound");
+	  	
+	  	//listen for alerts clear
+	  	this.clearAlertsHandler = dojo.subscribe("coordel/clearAlerts", this, "handleClearAlerts");
 	  	
   		dojo.removeClass(document.body, "loading login");
 		  //console.debug("database has loaded, in the deferred function",resp);
@@ -331,6 +349,24 @@ define(['dojo',
 	    d.show();
 	  },
 	  
+	  handleAlert: function(alert){
+	    this.currentAlerts.unshift(alert);
+	    
+	    //update the notification count
+      dojo.publish("coordel/updateNotificationCount", [{currentAlerts: this.currentAlerts}]);
+      
+      //play the sound
+      dojo.publish("coordel/playSound", ["ding"]);
+	  },
+	  
+	  handleClearAlerts: function(){
+	    console.log("clearing alerts");
+	    this.currentAlerts = [];
+	    db.clearAlerts();  
+	    //update the notification count
+      dojo.publish("coordel/updateNotificationCount", [{currentAlerts: this.currentAlerts}]);
+	  },
+	  
 	  handleChange: function(resp){
 	    
 	    console.log("appControl handleChanges called", resp);
@@ -425,7 +461,7 @@ define(['dojo',
   				case "role":
   				  if (chg.isNew && chg.creator !== app.username && chg.updater !== app.username  && chg.status !== "TRASH" && chg.status !== "ARCHIVE" && !chg._deleted){
   				    //this is a new role that I didn't create
-  				    console.debug("Notify Role ADD", app);
+  				    console.debug("Notify Role ADD", chg);
   				    db.roleStore.store.notify(chg);
   				  } else if (chg.status === "ARCHIVE" || chg.status === "TRASH" || chg._deleted) {
   				    //role was deleted
@@ -523,6 +559,7 @@ define(['dojo',
   					break;
   			};
   	    
+  	    /*
   	    //check if I made this change and capture the notifications
 	      if (chg.updater !== app.username){
 	        
@@ -533,12 +570,13 @@ define(['dojo',
   	        //get the most recent history entry and use it for the notification
 	          notifications.push(chg.history.shift());
 	        }
-	        /*
+	        
 	        //publish the change so views can react
-	        dojo.publish("coordel/changeNotification", [chg]);
-	        console.debug("published a change");
-	        */
+	        //dojo.publish("coordel/changeNotification", [chg]);
+	        //console.debug("published a change");
+	        
 	      } 
+	      */
 	      
 	      //update the counts in case
 	      dojo.publish("coordel/setPrimaryBoxCounts");
@@ -546,6 +584,12 @@ define(['dojo',
   		//console.log("notifications length, array", notifications.length, notifications);
   		//if there are notifications, publish them
       if (notifications.length > 0){
+        
+        //post the new notification and set the currentAlerts = to the returned list
+        
+        
+        
+        
         /*
         var a = db.appStore.app();
         if (!a.notifications){
@@ -561,10 +605,10 @@ define(['dojo',
         //db.appStore.store.put(a, {id: a._id, username: app.username});
         //update the notification count
         
-        dojo.publish("coordel/updateNotificationCount", [{count: 5}]);
+        //dojo.publish("coordel/updateNotificationCount", [{count: this.currentAlerts.length}]);
         
         //play the sound
-        dojo.publish("coordel/playSound", ["ding"]);
+        //dojo.publish("coordel/playSound", ["ding"]);
       }
   	}
 	  

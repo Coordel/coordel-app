@@ -32,6 +32,7 @@ define(["dojo",
               });
             	return def;
             },
+          
             
             getUserAssignments: function(project, username){
               var store = new couch({

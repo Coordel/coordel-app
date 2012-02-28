@@ -27,7 +27,7 @@ define(
       
       postMixInProperties : function() {
         this.inherited(arguments);
-        //console.log("Contact",this.contact);
+        console.log("Contact",this.contact);
         var email = dojo.trim(this.contact.email.toLowerCase());
         
         if (this.contact.email !== ""){
@@ -47,7 +47,7 @@ define(
         dojo.connect(con.contactContainer, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);
           if (this.doNavigation){
-             dojo.publish("coordel/primaryNavSelect", [ {name: "contact", id: this.contact._id}]);
+             dojo.publish("coordel/primaryNavSelect", [ {name: "contact", id: this.contact.id}]);
           }
   	      //dojo.addClass(con.contactContainer, "active selected");
   	      this.onClick();
@@ -82,7 +82,7 @@ define(
       },
       
       setSelection: function(args){
-        if (args.id === this.contact._id){
+        if (args.id === this.contact.id){
           if (this.domNode){
             dojo.addClass(this.domNode, "active selected");
           }

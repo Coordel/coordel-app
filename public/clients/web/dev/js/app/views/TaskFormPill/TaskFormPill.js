@@ -43,9 +43,10 @@ define(
         dojo.removeClass(this.mainNode, "selected");
       },
       
-      showPill: function(value, email){
+      showPill: function(value, contact){
         //the value will be the id used to create the actual display value of the pill based on
         //the taskFormField this is for except for deliverable which will be the deliverable itself
+        //when adding a contact, value will be pending, and a pending contact will be sent in as well
         
         //console.debug("showing the pill", value);
         
@@ -68,18 +69,11 @@ define(
           case "delegate":
           //console.debug("showing a delegate pill", value, email);
           if (value === "pending"){
-            this.source = email;
+            this.source = contact.firstName + " " + contact.lastName;
             this.displayValue.innerHTML = this.source;
           } else {
-            //this.source = db.contactFullName(value);
-            //this.displayValue.innerHTML = this.source;
-            
-            var q = db.contactFullName(value);
-            q.then(function(fullName){
-              self.source = fullName ;
-              self.displayValue.innerHTML = self.source;
-            });
-          
+            self.source = db.contactFullName(value);
+            self.displayValue.innerHTML = self.source;
           }
           break;
           case "deliverables":

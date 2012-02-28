@@ -13,7 +13,7 @@ var data = {
 data.name = name;
 data.purpose = "test purpose";
 data.deadline = "Feb 29";
-data.starts = "Feb 15";
+data.start = "Feb 15";
 
 
 //send the user an email with the link
@@ -23,7 +23,7 @@ emailer.send({
   to: "dev@coordel.com",
   from: "jeff.gorder@coordel.com",
   subject: name,
-  template: './lib/templates/invite.txt',
+  template: './lib/templates/taskInvite.txt',
   data: data
   }, function(err, res){
     

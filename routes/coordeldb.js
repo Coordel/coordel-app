@@ -28,10 +28,11 @@ module.exports = function(app, validate){
    * @api validated
    */
   app.put('/coordel/:id', validate, function(req, res){
-    console.log("PUT coordel/:id", req.body);
+    console.log("PUT coordel/:id");
     couch.save(req.body, function(err, putRes){
-      console.log("PUT RESPONSE", putRes, err);
+      //console.log("PUT RESPONSE", putRes, err);
       if (err){
+        console.log("ERROR PUTTING TO COUCH", err);
         res.json({error: err + ' '+req.body.id+ ' '+req.docType});
       } else {
         res.json(putRes);
@@ -66,10 +67,10 @@ module.exports = function(app, validate){
         
     couch.saveAttachment(id, rev, name, type, req, function(err, attachRes){
       if (err) {
-        console.log("ERROR", err);
+        console.log("ERROR saving file", err);
         res.json({error: err});
       } else {
-        console.log("RESPONSE", attachRes);
+        //console.log("RESPONSE", attachRes);
         res.json(attachRes);
       }
     });
@@ -80,14 +81,14 @@ module.exports = function(app, validate){
         name = req.params.name,
         rev = req.query.rev;
         
-    console.log("delete called", id, name, rev);
+    //console.log("delete called", id, name, rev);
     
     var url = '/' + id + '/'+name;
     url = url + '?rev=' + rev;
     
     nanoCouch.attachment.destroy(id, name, rev, function(e,b,h){
       if (e){
-        console.log("ERROR", e);
+        console.log("ERROR deleting file", e);
       } else {
         console.log("RESPONSE", b);
         res.json(b);

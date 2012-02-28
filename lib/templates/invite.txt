@@ -36,7 +36,7 @@
 			
 			h1.bullet {
 				font-size: 14px;
-				background: url(http://{{url}}/images/emails/bullet-checkbox.gif) no-repeat center left;
+				background: url(http://{{url}}/images/emails/bulletCheckbox.gif) no-repeat center left;
 				padding-left: 28px;
 			}
 			
@@ -61,7 +61,7 @@
 							<div style="font-size: 18px;padding-bottom: 12px;"><span style="font-weight: bold;">{{fromFirstName}} {{fromLastName}}</span> invited you to <a href="http://www.coordel.com">Coordel</a></div>
 							<div style="padding-bottom: 12px;">Coordel is the online partner that helps you redefine the way you innovate, execute and reuse your work and how you interact with others.</div>
 							
-							<div><a href="http://{{url}}/invite/{{inviteId}}"><img title="Activate Your Free Account" href="http://{{url}}/images/emails/activate-button.png"></a></div>
+							<div><a href="http://{{url}}/invite/{{inviteId}}"><img height="34" width="207" alt="Activate Your Free Account" src="http://{{url}}/images/emails/activateButton.png"></a></div>
 						</div>
 					</div>
 					<div class="sub-content">

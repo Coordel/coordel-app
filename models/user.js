@@ -157,6 +157,19 @@ exports.invite = function(inviteData, fn){
                   if (err){
                     fn(err, false);
                   } else {
+                    //console.log("registered user", registeredUser.appId, inviteData.from.appId);
+                    //don't send back the password
+                    delete registeredUser.password;
+                    
+                    //add each person to the other's people list
+                    var multi = redis.multi(),
+                        uKey = 'coordelapp:' + inviteData.from.appId + ':people',
+                        pKey = 'coordelapp:' + registeredUser.appId + ':people';
+
+                    multi.sadd(uKey, registeredUser.appId);
+                    multi.sadd(pKey, inviteData.from.appId);
+                    multi.exec();
+                    
                     fn(null, registeredUser);
                     var template =  './lib/templates/invite.txt';
                     if (inviteData.data.docType === 'task'){
@@ -167,7 +180,8 @@ exports.invite = function(inviteData, fn){
                       firstName: inviteData.to.firstName,
                       fromFirstName: inviteData.from.firstName,
                       fromLastName: inviteData.from.lastName,
-                      inviteId: inviteid
+                      inviteId: inviteid,
+                      name: inviteData.data.name
                     };
                     
                     if (inviteData.data.purpose){
@@ -193,7 +207,7 @@ exports.invite = function(inviteData, fn){
                       template: template,
                       data: data
                       }, function(err, res){
-                        
+                        console.log("ERROR SENDING EMAIL", err);
                     });
                   }
                 });
@@ -232,7 +246,7 @@ exports.get = function(id, fn){
 
 function _save(user, fn){
   if (user.id && user.appId && user.email && user.password){
-    console.log('adding user to redis store in _save', user);
+    //console.log('adding user to redis store in _save', user);
     var multi = redis.multi(),
         key = 'user:' + user.email;
         
@@ -268,9 +282,9 @@ function _getUser(args, fn){
     } else if (reply) {
       //console.log("user existed, loading");
       var key = 'user:' + args.id;
-      console.log("USER GET KEY", key);
+      //console.log("USER GET KEY", key);
       redis.hgetall(key, function(err, user){
-        console.log("USER", user);
+        //console.log("USER", user);
         if (err){
           //console.log("couldn't load existing user from store",err);
           fn(err, false);

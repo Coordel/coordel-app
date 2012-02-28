@@ -4,7 +4,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
     var now = new Date();
     return {
       prettyISODate: function(date){
-        //console.debug("date sent to prettyISODate", date);
+        console.debug("date sent to prettyISODate", date);
         //take care that empty strings or null just get returned
         try {
           if (date === "" || date === null){

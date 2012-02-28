@@ -54,6 +54,8 @@ function(dojo, JsonRest, stamp) {
   				  }
     			  //return object;
     			  return object;
+    			}, function(err){
+    			  //console.log("error received in CouchDBStore put", err);
     			});
     			
       	},

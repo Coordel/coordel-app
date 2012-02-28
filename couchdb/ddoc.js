@@ -28,11 +28,28 @@ function cradle_error(err, res) {
 
 
 
+
+
 function update_views(db, docpath, code) {
-	function save_doc() {
+	function save_doc(fn) {
 		db.save(docpath, code, cradle_error);
 		return true;
 	}
+	
+	function add_doc(fn) {
+		db.save(docpath, code, handle_templates);
+		return true;
+	}
+	
+	function handle_templates(err, res){
+    if (err) console.log('Failed to add DDOC', err);
+    var templates = require('./defaultTemplates');
+    db.save(templates, function(err, reply){
+      if (err) console.log('Failed to add Default Templates', err); 
+      if (!err) console.log('default templates uploaded');
+    });
+  }
+  
 	// compare function definitions in document and in code
 	function compare_def(docdef, codedef) {
 		var i = 0;
@@ -68,7 +85,7 @@ function update_views(db, docpath, code) {
 		}
 		if (!doc) {
 			console.log('no design doc found updating "' + docpath + '"');
-			return save_doc();
+			return add_doc();
 		}
 		if (compare_def(doc.updates, code.updates) || compare_def(doc.views, code.views)) {
 			return save_doc();

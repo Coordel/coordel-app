@@ -9,8 +9,7 @@
 
 /* use quick entry style when a user can click in a textbox, type something, and press enter to add
 to a list (i.e. private tasks, checklist, choices, etc)*/
-.c-quick-entry{
-  width: 100%; 
+.c-quick-entry{ 
   color: #66727F;
   
   border-bottom: 1px solid #a3aab1;

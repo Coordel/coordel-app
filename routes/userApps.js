@@ -12,8 +12,6 @@ module.exports = function(app, validate){
   
   app.get('/app', validate, function(req, res){
     
-    
-    
     //loads the current user's app
     App.get(req.session.auth.appId, function(err, app){
       if (err) {
@@ -26,14 +24,14 @@ module.exports = function(app, validate){
   
   app.post('/app/person', validate, function(req, res){
   
-    console.log('ADDING PERSON userAppId', req.body.userAppId, 'personAppId', req.body.personAppId);
+    //console.log('ADDING PERSON userAppId', req.body.userAppId, 'personAppId', req.body.personAppId);
     App.addPerson({
       userAppId: req.body.userAppId,
       personAppId: req.body.personAppId
     }, function(err, reply){
       if (err){
         console.log('ERROR adding person', err);
-        res.json({error: 'Error adding person'});
+        res.json({error: 'Error adding person: ' + err});
       } else {
         res.json({success: 'ok'});
       }
@@ -41,14 +39,14 @@ module.exports = function(app, validate){
   });
   
   app.del('/app/person', validate, function(req, res){
-    console.log('REMOVING PERSON userAppId', req.body.userAppId, 'personAppId', req.body.personAppId);
+    //console.log('REMOVING PERSON userAppId', req.body.userAppId, 'personAppId', req.body.personAppId);
     App.remPerson({
       userAppId: req.body.userAppId,
       personAppId: req.body.personAppId
     }, function(err, reply){
       if (err){
         console.log('ERROR removing person', err);
-        res.json({error: 'Error removing person'});
+        res.json({error: 'Error removing person: '+ err});
       } else {
         res.json({success: 'ok'});
       }

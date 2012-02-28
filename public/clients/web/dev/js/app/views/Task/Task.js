@@ -257,6 +257,8 @@ define(
         if (t.isDelegated() && this.focus !== "contact"){
           //console.debug("it's delegated");
           var con = db.contactFullName(t.username);
+          
+          //if this is my task, then I need to see who it's from
 
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(con  + " : ");
         }

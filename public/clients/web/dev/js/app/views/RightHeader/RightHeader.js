@@ -13,9 +13,10 @@ define(
     "dojo/date/stamp",
     "app/util/dateFormat",
     'app/views/AddTaskButton/AddTaskButton',
-    "app/views/DNDDialog/DNDDialog"
+    "app/views/DNDDialog/DNDDialog",
+    "app/views/Stream/Stream"
     ], 
-  function(dojo, coordel, w, t, html, stamp, dt, add, dialog) {
+  function(dojo, coordel, w, t, html, stamp, dt, add, dialog, Stream) {
   
   dojo.declare(
     "app.widgets.RightHeader", 
@@ -27,6 +28,8 @@ define(
       id: null,
       
       coordel: coordel,
+      
+      currentAlerts: [],
       
       userFullName: null,
       
@@ -58,6 +61,25 @@ define(
           dojo.publish("coordel/logout");
         });
         
+        dojo.connect(this.alertsFooter, "onclick", this, function(){
+          dojo.publish("coordel/clearAlerts");
+          this.showNotifications.closeDropDown();
+        });
+        
+        dojo.connect(this.showNotifications, "onClick", this, function(){
+          dojo.forEach(dijit.findWidgets(this.alertsContainer), function(child){
+            child.destroyRecursive();
+          });
+          var alerts = new Stream({
+            stream: this.currentAlerts,
+            showProject: true
+          }).placeAt(this.alertsContainer);
+        });
+        
+        dojo.connect(this.alertsCancel, "onClick", this, function(){
+          this.showNotifications.closeDropDown();
+        });
+        
         //hide the do not disturb button 
         dojo.addClass(this.doNotDisturb, "hidden");
         
@@ -84,8 +106,9 @@ define(
       },
       
       updateNotificationCount: function(args){
-        console.debug("updateNotificationCount called");
-        var count = args.count;
+        console.debug("updateNotificationCount called", args);
+        this.currentAlerts = args.currentAlerts;
+        var count = this.currentAlerts.length;
         var node = dijit.byId(this.showNotifications);
         if (count !== 0){
           node.set("iconClass", "coordelHeaderIcon coordelHeaderIconNotifyActive");

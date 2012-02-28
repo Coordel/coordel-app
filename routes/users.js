@@ -38,7 +38,7 @@ module.exports = function(app, validate){
 
   app.get('/invite/:id', function(req, res){
     //this is the link that is sent in the invitation email
-    console.log("CLAIM INVITE", req.params.id);
+    //console.log("CLAIM INVITE", req.params.id);
 
     Invite.get(req.params.id, function(err, invite){
       if(err) {
@@ -58,7 +58,7 @@ module.exports = function(app, validate){
   });
   
   app.post('/invite', function(req, res){
-     console.log("INVITE POSTED");
+     //console.log("INVITE POSTED");
      var inv = {to:{}, from:{}};
      inv.to.firstName = req.body.firstName;
      inv.to.lastName = req.body.lastName;
@@ -71,11 +71,11 @@ module.exports = function(app, validate){
      inv.subject = req.body.subject;
 
      //this is where the invite is added
-     console.log("SEND INVITE", inv);
+     //console.log("SEND INVITE", inv);
      
      User.invite(inv, function(err, reply){
        if (err){
-         console.log("ERROR", err);
+         console.log("ERROR Inviting user", err);
          res.json({error: err});
        } else {
          //res.render('users/confirmInvite', {firstName: inv.firstName, layout: 'users/layout'});
@@ -102,7 +102,7 @@ module.exports = function(app, validate){
             var u = new User(user);
             u.update(function(err, reply){
               if (err){
-                console.log("ERROR: ", err);
+                console.log("ERROR updating password: ", err);
               } else {
                 delete req.invite;
                 res.redirect('/logout');

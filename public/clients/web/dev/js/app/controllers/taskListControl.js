@@ -60,15 +60,16 @@ define(["dojo",
       tlc.focus = focus;
       
       
+      
 	    //console.debug("focus tasks", focus, tasks);
       tlc._showHeader(focus, isTurbo);
   
       //show the task list
 	    tlc.showTaskList(focus);
 	    
-	    //show the quick entry
+	    
+      //show the quick entry
       this._showQuickEntry();
-      
 	    
 	    //set the title
       document.title = "Coordel > " + txt[focus];
@@ -538,6 +539,8 @@ define(["dojo",
           
         }
       }
+    
+      dijit.byId("taskListLayout").resize();
     },
     
     _showQuickEntry: function(){
@@ -554,7 +557,10 @@ define(["dojo",
             qe.showEdit();
           }
         }).placeAt(dojo.byId("taskListQuickEntry"));
+        
       }
+      
+      dijit.byId("mainCenterContainer").resize();
     },
         
     _createInviteTask: function(proj, status){

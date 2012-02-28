@@ -46,7 +46,8 @@ define(
       
       addChild: function(child){
         //add this function to add activities and messages to the stream entry
-        this.children.addChild(child);
+        child.placeAt(this.children);
+        //this.children.addChild(child);
       },
       
       _showProject: function(isShowing){
