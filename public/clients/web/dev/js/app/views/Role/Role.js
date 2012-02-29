@@ -35,26 +35,34 @@ define(
       
       setResps: function(){
         this._clear(this.roleResps);
-        var resps = this.role.responsibilities;
+        
+        //it doesn't make sense to show a cancelled or deleted task as 
+        //a responsibility
+        var resps = dojo.filter(this.role.responsibilities, function(r){
+          return r.substatus !== "CANCELLED" && r.substatus !== "TRASH";
+        });
+        
         //console.debug("responsibilities", resps);
         
         if (resps && resps.length > 0){
-       
           dojo.forEach(resps, function(r){
 
-            //it doesn't make sense to show a cancelled or deleted task as 
-            //a responsibility
-            if (r.status !== "CANCELLED" && r.status !== "TRASH" ){
-              var t = db.projectStore.taskStore.get(r.task);
+            var t = db.projectStore.taskStore.get(r.task);
 
-              var resp = new R({
-                task: t
-              }).placeAt(this.roleResps);
-            }
-            
-            
+            var resp = new R({
+              task: t
+            }).placeAt(this.roleResps);
+     
           }, this);
+        } else {
+          
+          this.onEmpty();
+          
         }
+        
+      },
+      
+      onEmpty: function(){
         
       },
       

@@ -98,8 +98,8 @@ exports.getChangeAlertMap = function(change){
 		});
 	}
 
-	//users get the tasks when they own them
-	if(doc.docType == "task") {
+	//users get the tasks when they own them and they aren't pending
+	if(doc.docType == "task" && doc.status !== "PENDING" && doc.substatus !== "DECLINED") {
 	   if (!map[doc.username]) map[doc.username] = true;
 	} 
 	
@@ -137,17 +137,6 @@ exports.getChangeAlertMap = function(change){
 	//the responsible needs change to get the done notification
 	if(doc.docType == "task" && doc.substatus == "APPROVED") {
 		if (!map[doc.responsible]) map[doc.responsible] = true;
-	}
-
-	//make sure the user doesn't get pending tasks notifications
-	if (doc.docType === "task" && doc.status === "PENDING"){
-	  if (!map[doc.username]) map[doc.username] = true;
-	}
-
-	//make sure the user doesn't get declined task notifications
-	//make sure the user doesn't get pending tasks notifications
-	if (doc.docType === "task" && doc.substatus === "DECLINED"){
-	  if (!map[doc.username]) map[doc.username] = true;
 	}
 	
 	if (doc.docType == "message"){

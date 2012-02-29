@@ -105,8 +105,6 @@ define(
         
         this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
         
-        //this.setSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "setSelection");
-        
         this.showInvited();
         
         //show the project
@@ -162,17 +160,18 @@ define(
       },
       
       clearSelection: function(args){
-        //console.debug("in clear selection", this.domNode);
+        //console.debug("in clear selection", this.project._id);
         if (this.domNode){
           dojo.removeClass(this.domNode, "active selected");
           this.setSelection(args);
         }
-        
       },
       
       setSelection: function(args){
+        //console.log("setting project selection", this.project._id);
         if (args.id === this.project._id){
           if (this.domNode){
+            //console.log("project should be active", this.project._id);
             dojo.addClass(this.domNode, "active selected");
           }
         }

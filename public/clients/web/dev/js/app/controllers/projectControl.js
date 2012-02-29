@@ -38,7 +38,7 @@ define([
         layout.showLayout(project);
        
         //load the project data
-        if (db.projectStore.currentProject !== project._id){
+       // if (db.projectStore.currentProject !== project._id){
           //this project isn't in the cache, so load it and then show it
           //console.debug("project not in cache, loading...");
           dojo.when(db.projectStore.loadProject(project._id), function(){
@@ -47,6 +47,7 @@ define([
             self.showStream();
             //self.showRoles();
           });
+          /*
         } else {
           //console.debug("project in cache");
           //this project is currently in cache, so show it
@@ -55,6 +56,7 @@ define([
           self.showStream();
           //self.showRoles();
         }
+        */
         
         this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "setRightColumn");
         
@@ -296,7 +298,7 @@ define([
         
         //need to watch and see if there is a change to this list
         var handler = group.tasks.observe(function(task, removedFrom, insertedInto){
-          //console.debug("tasks observed", task, removedFrom, insertedInto, group.focus);
+          console.debug("tasks observed", task, removedFrom, insertedInto, group.focus);
           
           //was this a delete
           if (removedFrom > -1){

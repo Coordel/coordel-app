@@ -129,9 +129,8 @@ define("app/models/ProjectModel",
     	},
     	
     	isUserOwner: function(){
-    	  
-    	  if(this.responsible === this.db.username()){
-    	    //console.log("isUserOwner called", this.responsible, this.db.user._id, this.name);
+    	  //console.log("isUserOwner called", this.project.responsible, this.db.username());
+    	  if(this.project.responsible === this.db.username()){
     	    return true;
     	  }
     	  return false;
@@ -607,11 +606,11 @@ define("app/models/ProjectModel",
     	sendPendingTasks: function(username, project){
     	  var db = this.db;
     	  
-    	  db.projectStore.loadProject(project._id).then(function(resp){
+    	  db.projectStore.loadProject(project._id).then(function(store){
     	    //console.debug("project db", resp);
-    	    var tasks = resp.taskMemory.query({db:db});
-    	    dojo.when(tasks, function(resp){
-    	      dojo.forEach(resp, function(task){
+    	    var query = store.taskMemory.query({db:db});
+    	    dojo.when(query, function(tasks){
+    	      dojo.forEach(tasks, function(task){
     	        if (task.status === "PENDING" && task.username === username){
     	          task.status = "CURRENT";
     	          var t = db.getTaskModel(task, true);
@@ -631,7 +630,7 @@ define("app/models/ProjectModel",
     	    project = this.db.projectStore.store.get(this._id);
     	  }
     	  
-    	  //console.debug("participate", username, project);
+    	  console.debug("participate", username, project);
     	  
     	  dojo.forEach(project.assignments, function(assign){
     	    if (assign.username === username){
@@ -646,6 +645,12 @@ define("app/models/ProjectModel",
     	  
     	  p.update(project);
     	  p.sendPendingTasks(username, project);
+    	},
+    	
+    	leave: function(username, project, message){
+    	  console.log("leaving project", username, project, message);
+    	  
+    	  
     	},
     	
     	reuse: function(project){

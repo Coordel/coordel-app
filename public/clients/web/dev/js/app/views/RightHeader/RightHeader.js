@@ -64,6 +64,9 @@ define(
         dojo.connect(this.alertsFooter, "onclick", this, function(){
           dojo.publish("coordel/clearAlerts");
           this.showNotifications.closeDropDown();
+          dojo.forEach(dijit.findWidgets(this.alertsContainer), function(child){
+            child.destroyRecursive();
+          });
         });
         
         dojo.connect(this.showNotifications, "onClick", this, function(){

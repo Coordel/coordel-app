@@ -112,6 +112,12 @@ define([
         dojo.publish("coordel/projectAction", [{action: "decline", project: this.project, validate: true, cssClass: "warning-button"}]);
       });
       
+      //wire up the proposeChange menu option
+      dojo.connect(this.proposeChange, "onclick", this, function(){
+        //console.log("cancel clicked");
+        dojo.publish("coordel/projectAction", [{action: "proposeChange", project: this.project, validate: true}]);
+      });
+      
       //wire up the reuse menu option
       dojo.connect(this.reuse, "onclick", this, function(){
         //console.log("reuse clicked");
@@ -159,6 +165,8 @@ define([
         //I can't see edit if I'm not the responsible
         //dojo.addClass(this.edit, "hidden");
       }
+      
+      console.log("projStat", projStat);
              
       switch(projStat){	
   		  case "ACTIVE":
@@ -175,6 +183,7 @@ define([
   				  
   				} else {
   				  if (myAssign){
+  				    console.log("assignment", myAssign);
   				    if (myAssign.role === "FOLLOWER"){
     				    if (myAssign.status === "INVITE"){
     				      //not owner - follow decline
@@ -187,10 +196,9 @@ define([
     				    }
     				  } else {
     				    //console.debug("not owner");
-    				    if (myAssign.status === "DELEGATED"){
+    				    if (myAssign.status === "INVITE"){
     				      //not owner - participate follow decline
-    				      dojo.removeClass(this.participate, "hidden");
-    				      dojo.removeClass(this.decline, "hidden");
+    				      dojo.removeClass(this.proposeChange, "hidden");
     				    } else if (myAssign.status === "ACCEPTED"){
     				      //not owner - leave
     				      dojo.removeClass(this.leave, "hidden");

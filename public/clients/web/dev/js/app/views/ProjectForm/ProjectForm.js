@@ -551,9 +551,6 @@ define(
     
         dojo.when(def, function(res){
           self.onSave(res);
-          if (self.isNew){
-            dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: self.project._id}]);
-          }
         });
   
       },

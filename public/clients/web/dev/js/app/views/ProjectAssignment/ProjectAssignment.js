@@ -83,6 +83,7 @@ define(
       
       setRole: function(roleid){
         this._clear(this.roleContainer);
+        var self = this;
         
         var r = db.projectStore.roleStore.get(roleid);
         
@@ -90,7 +91,10 @@ define(
         //if the role has responsibilities, show them
         if (r.responsibilities && r.responsibilities.length > 0){
           var view = new Role({
-            role: r
+            role: r,
+            onEmpty: function(){
+              dojo.addClass(self.roleContainer, "hidden");
+            }
           }).placeAt(this.roleContainer);
         } else {
           dojo.addClass(this.roleContainer, "hidden");

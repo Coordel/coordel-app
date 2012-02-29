@@ -244,7 +244,7 @@ define(
         //if this is deferred, set defered date as task metainfo
         if (t.isDeferred()){
           //console.debug("it's deferred");
-          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent( dt.deferred(t.calendar.start) + " : ");
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.starts + " " + dt.deferred(t.calendar.start) + " : ");
           
           //if it's deferred and we're the focus is deferred, show the remove defer button
           if (this.focus === "deferred"){
@@ -421,7 +421,7 @@ define(
           });
           
           this.actionsDialog.set("content", menu);
-
+          this.chooseAction.openDropDown();
         });
         
         
@@ -446,8 +446,8 @@ define(
           //console.debug("accept Project", t);
           var proj = db.getProjectModel(t.project);
           
-          dojo.when(proj, function(project){
-            proj.participate(db.username(), project);
+          dojo.when(proj, function(p){
+            proj.participate(db.username(), p.project);
           });
         });
 

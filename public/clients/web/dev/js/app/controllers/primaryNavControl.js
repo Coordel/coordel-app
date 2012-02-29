@@ -398,12 +398,15 @@ define(['dojo',
           group.addChild(new p({
             project: proj
           }), insertedInto);
+          
+          dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: proj._id}]);
       
         }
         
       
         if (group.projects.length === 0){
           group.hide();
+          dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
         }
       
       }, true);

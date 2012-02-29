@@ -656,9 +656,7 @@ define(["dojo",
 
         //was this a delete
         if (removedFrom > -1){
-          console.debug("NOT REMOVING FROM GROUP BUT SUPPOSED TO remov from group " + focus, removedFrom, task);
-          
-          
+          console.debug("NOT REMOVING FROM GROUP BUT SUPPOSED TO remov" + focus, removedFrom, task);
         }
 
         if (insertedInto > -1){

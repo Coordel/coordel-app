@@ -95,6 +95,13 @@ define([
         dojo.publish("coordel/taskAction", [{action: "reuse", task: this.task}]);
       });
       
+      //PROJECT 
+      //wire up the proposeProjChange menu option
+      dojo.connect(this.proposeProjChange, "onclick", this, function(){
+        //console.log("proposeChange clicked");
+        dojo.publish("coordel/projectAction", [{action: "proposeChange", validate: true, project: this.task}]);
+      });
+      
       
     },
     

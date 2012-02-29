@@ -121,14 +121,14 @@ app.store.util.TaskQueryEngine = function(query, options){
   		case "blocked":
       query = function(task){
         var t = db.getTaskModel(task, true);
-  			return t.isBlocked() && applyFilter(task);
+  			return t.isBlocked() && !t.isProjectInvite() && applyFilter(task);
   		};
   		break;
   		case "deferred": 
   		query = function(task){
   			var t = db.getTaskModel(task, true);
   			task.contextStarts = t.getStarts();
-  			return t.isDeferred() && applyFilter(task);
+  			return t.isDeferred() && !t.isProjectInvite() && applyFilter(task);
   		};
   		break;
   		case "delegated":

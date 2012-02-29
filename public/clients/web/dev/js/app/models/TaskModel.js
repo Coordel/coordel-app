@@ -271,7 +271,7 @@ define("app/models/TaskModel",
 
     		//submitted actions are only current for the responsible
     		if (t.isSubmitted()) {
-          //console.log("this is a submitted task", t.name, t.status, t.substatus, p.name, p.isUserOwner());
+          console.log("this is a submitted task", t.name, t.status, t.substatus, p.name, p.isUserOwner());
     			if (!p.isUserOwner()){
     				//console.debug(t.name + " was CURRENT-DONE and I'm not the project responsible, it's not current");
     				isCurrent = false;
@@ -883,14 +883,41 @@ define("app/models/TaskModel",
       },
       update: function(task){
         
-        //console.debug("update task", task);
+        
         
         var db = this.db,
             username = this.db.username(),
-            p = this.p;
+            p = this.p,
+            t = this;
+            
+        console.debug("update task", task, db.focus);
+            
         task.isNew = false;
+        
+        /*
+        //make the UPDATE activity for the task update
+        task = t.addActivity({
+    			verb: "UPDATE",
+    			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
+    			icon: t.icon.update
+    		}, task);
+    		
+    		*/
         p.updateAssignments(task);
-        db.taskStore.store.put(task, {username: username});
+        
+        //use the appropriate store based on the focus of the db
+        switch(db.focus){
+          case "project":
+          db.projectStore.taskStore.put(task, {username: username});
+          break;
+          case "task":
+          db.taskStore.store.put(task, {username: username});
+          break;
+          case "contact":
+          db.contactStore.taskStore.put(task, {username: username});
+          break;
+        }
+        
         dojo.publish("coordel/setPrimaryBoxCounts");
       },
   

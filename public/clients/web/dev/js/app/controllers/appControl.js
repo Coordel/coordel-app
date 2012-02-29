@@ -160,7 +160,7 @@ define(['dojo',
 	    //console.debug("appControl should do task action", args);
 	    
 	    var d = new cDialog({
-	      id: "taskActionDialog",
+
 	      confirmText: coordel.taskActions.confirmText[args.action],
 	      executeCss: css,
 	      executeText: coordel.taskActions[args.action],
@@ -521,15 +521,15 @@ define(['dojo',
   				  //projectStore - if the currentProject is is the project of this task
   				  //update taskStore with the incoming task
   				  if (chg.project === db.projectStore.currentProject){
-  				    console.debug("Current Project Task", chg);
-  				    if (chg.isNew && chg.creator !== app.username && !chg.status === "TRASH" && !chg._deleted){
+  				    console.debug("Current Project Task", chg, app.username);
+  				    if (chg.isNew && chg.creator !== app.username && chg.status !== "TRASH" && !chg._deleted){
   				      console.debug("Notify Project Task ADD", chg);
   				      //this is a new task and I didn't create it so add 
-  				      db.projectStore.taskMemory.notify(chg);
+  				      db.projectStore.taskStore.notify(chg);
   				      
   				    } else if (chg.status === "TRASH" || chg._deleted){
   				      console.debug("Notify Project Task DELETE", chg);
-  				      db.projectStore.taskMemory.notify(null, chg._id);
+  				      db.projectStore.taskStore.notify(null, chg._id);
   				      
   				    } else {
   				      //this is an update

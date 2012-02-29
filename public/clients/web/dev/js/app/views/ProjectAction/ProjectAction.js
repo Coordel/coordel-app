@@ -42,6 +42,10 @@ define([
     postCreate: function(){
       this.inherited(arguments);
       
+      if (this.project.status === "PROJECT"){
+        this.project = db.projectStore.store.get(this.project.project);
+      }
+      
       //make sure there is a message entered before enabling the save button
       dojo.connect(this.actionText, "onKeyUp", this, function(){
         this.validate();
@@ -61,10 +65,11 @@ define([
     },
     
     save: function(){
-      console.debug("save called in ProjectAction", this.action, this.project);
+      console.debug("save called in ProjectAction", this.action, this.project, this.actionText.get("value"));
       var p = db.getProjectModel(this.project, true),
-          message = "",
-          project = this.project;
+          message =  this.actionText.get("value"),
+          project = this.project,
+          username = db.username();
       
       switch(this.action){
         case "participate":
@@ -74,7 +79,7 @@ define([
           p.delegate(project, message);
           break;
         case "leave": 
-          p.leave(project, message);
+          p.leave(username, project, message);
           break;
         case "follow": 
           p.follow(project, message);

@@ -57,10 +57,12 @@ define(["dojo",
               
               var def = new dojo.Deferred(),
                   self = this;
-                  
+                
+              /*  
               if (project === this.currentProject){
                 def.callback(self);
               } else {
+              */
                 //current project is the project that is currently cached. that way
                 //the app can inspect it and if a different project is needed, it can be loaded
                 load = new dojo.DeferredList([
@@ -74,7 +76,7 @@ define(["dojo",
                   self.currentProject = project;
                   def.callback(self);
                 });
-              }
+             // }
               return def;
               
             },
