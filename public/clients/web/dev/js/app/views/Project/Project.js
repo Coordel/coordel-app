@@ -47,6 +47,14 @@ define(
           }
         });
         
+        if (self.project.substatus && self.project.substatus === "DONE"){
+          self.icon = "icon-project-done";
+        }
+        
+        if (self.project.substatus && self.project.substatus === "CANCELLED"){
+          self.icon = "icon-project-cancelled";
+        }
+        
         
       },
       
@@ -63,28 +71,29 @@ define(
         if (dojo.hasClass(self.projectIcon, "invite-error")){
           dojo.removeClass(self.projectIcon, "invite-error");
         }
-           
-        dojo.forEach(self.project.assignments, function(assign){
+        
+        if (self.project.substatus !== "DONE" && self.project.substatus !== "CANCELLED"){
+          dojo.forEach(self.project.assignments, function(assign){
 
-          
-          if (self.project.responsible === username && 
-              assign.status === "PROPOSED" || 
-              assign.status === "INVITE" && assign.role !== "FOLLOWER" ||
-              assign.status === "AMENDED"){
-            //the project shows the invite icon while the project has roles that aren't accepted or in error
-            //this helps the responsible keep track of what invitations they have sent in which projects
-            //show the invite icon
-            //console.debug("show invite", self.project.name);
-            dojo.addClass(self.projectIcon, "invite");
-          }
-          
-          if (self.project.responsible === username && assign.role !== "FOLLOWER" && assign.status === "DECLINED" || assign.status === "LEFT"){
-            //the project shows a warning if the invited user declines or leaves the project
-            //show the invite error icon
-            //console.debug("show invite-error", self.project.name);
-            dojo.addClass(self.projectIcon, "invite-error");
-          }
-        });
+            if (self.project.responsible === username && 
+                assign.status === "PROPOSED" || 
+                assign.status === "INVITE" && assign.role !== "FOLLOWER" ||
+                assign.status === "AMENDED"){
+              //the project shows the invite icon while the project has roles that aren't accepted or in error
+              //this helps the responsible keep track of what invitations they have sent in which projects
+              //show the invite icon
+              //console.debug("show invite", self.project.name);
+              dojo.addClass(self.projectIcon, "invite");
+            }
+
+            if (self.project.responsible === username && assign.role !== "FOLLOWER" && assign.status === "DECLINED" || assign.status === "LEFT"){
+              //the project shows a warning if the invited user declines or leaves the project
+              //show the invite error icon
+              //console.debug("show invite-error", self.project.name);
+              dojo.addClass(self.projectIcon, "invite-error");
+            }
+          });
+        }
       },
       
       postCreate: function(){

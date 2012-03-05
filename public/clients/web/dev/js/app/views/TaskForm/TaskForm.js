@@ -28,9 +28,10 @@ define(
     "app/views/TaskFormAdd/TaskFormAdd",
     "app/views/TaskFormPill/TaskFormPill",
     "app/views/DeliverableSettings/DeliverableSettings",
-    "app/views/TaskFormAttachments/TaskFormAttachments"
+    "app/views/TaskFormAttachments/TaskFormAttachments",
+    "app/util/dateFormat"
     ], 
-  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments) {
+  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format) {
   
   dojo.declare(
     "app.views.TaskForm", 
@@ -203,6 +204,16 @@ define(
           //will be adding a new project
           this._setPills("project");
           this.taskFormProject._status = "select";
+        });
+        
+        //deadline
+        dojo.connect(this.taskFormDeadline, "onChange", this, function(args){
+          this._setPills("deadline");
+        });
+        
+        //defer
+        dojo.connect(this.taskFormDefer, "onChange", this, function(args){
+          this._setPills("defer");
         });
         
         //delegate
@@ -413,6 +424,32 @@ define(
           //make sure we don't react to onChange and set the pill again when we reset to nothing
           this.taskFormProject.reset();
           this.taskFormProject.focus();
+          //now make sure we can reset the pill when selected
+        });
+        
+        //deadline
+        dojo.connect(this.taskFormDeadlineValue.removeValue, "onclick", this, function(){
+          this.taskFormDeadline.reset();
+          delete this.task.deadline;
+          //hide the pill
+          dojo.addClass(this.taskFormDeadlineValue.domNode, "hidden");
+          dojo.removeClass(this.taskFormDeadline.domNode, "hidden");
+          //make sure we don't react to onChange and set the pill again when we reset to nothing
+         
+          this.taskFormDeadline.focus();
+          //now make sure we can reset the pill when selected
+        });
+        
+        //defer
+        dojo.connect(this.taskFormDeferValue.removeValue, "onclick", this, function(){
+          this.taskFormDefer.reset();
+          delete this.task.calendar;
+          //hide the pill
+          dojo.addClass(this.taskFormDeferValue.domNode, "hidden");
+          dojo.removeClass(this.taskFormDefer.domNode, "hidden");
+          //make sure we don't react to onChange and set the pill again when we reset to nothing
+         
+          this.taskFormDefer.focus();
           //now make sure we can reset the pill when selected
         });
         
@@ -671,6 +708,20 @@ define(
             dojo.addClass(this.taskFormProject.domNode, "hidden");
             dojo.removeClass(this.taskFormProjectValue.domNode, "hidden");
             this.taskFormProjectValue.showPill(this.task.project);
+          }
+          break;
+          case "deadline":
+          if (this.task.deadline){
+            dojo.addClass(this.taskFormDeadline.domNode, "hidden");
+            dojo.removeClass(this.taskFormDeadlineValue.domNode, "hidden");
+            this.taskFormDeadlineValue.showPill(format.prettyISODate(this.task.deadline));
+          }
+          break;
+          case "defer":
+          if (this.task.calendar && this.task.calendar.start){
+            dojo.addClass(this.taskFormDefer.domNode, "hidden");
+            dojo.removeClass(this.taskFormDeferValue.domNode, "hidden");
+            this.taskFormDeferValue.showPill(format.prettyISODate(this.task.calendar.start));
           }
           break;
           case "delegate":

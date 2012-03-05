@@ -15,7 +15,7 @@ module.exports = function(app, validate){
     
     var username = req.query.username;
     
-    console.log("getting alerts for", username);
+    //console.log("getting alerts for", username);
     
     Alert.getUserAlerts(username, function(err, alerts){
       if (err){

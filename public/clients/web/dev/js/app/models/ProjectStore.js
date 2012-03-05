@@ -53,7 +53,7 @@ define(["dojo",
             
             loadProject: function(project){
               
-              //console.debug("loadProject called", project);
+              console.debug("loadProject called", project);
               
               var def = new dojo.Deferred(),
                   self = this;
@@ -65,7 +65,7 @@ define(["dojo",
               */
                 //current project is the project that is currently cached. that way
                 //the app can inspect it and if a different project is needed, it can be loaded
-                load = new dojo.DeferredList([
+              var load = new dojo.DeferredList([
                   self._loadRoles(project),
                   self._loadTasks(project),
                   self._loadBlockers(project)

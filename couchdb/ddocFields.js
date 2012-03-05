@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.6",
+  version: "0.1.8",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -444,6 +444,85 @@ module.exports = {
       }
     },
     
+    
+    /******************************* TASKS *****************************************************/
+    taskStream: {
+      map: function (doc){
+      	function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+
+      	function toISODateArray (date){
+      	  var dtString = date.split("T")[0];
+      	  dtString = dtString.split("-");
+      	  var tmString = date.split("T")[1];
+      	  tmString = tmString.split(".");
+      	  tmString = tmString[0].split(":");
+      	  return [
+      	    parseInt(dtString[0],10), 
+      	    parseInt(dtString[1],10), 
+      	    parseInt(dtString[2],10), 
+      	    parseInt(tmString[0],10), 
+      	    parseInt(tmString[1],10), 
+      	    parseInt(tmString[2],10)];
+      	}
+
+      	if (doc.docType === "message"){
+      	  if (doc.task){
+      	    emit(
+        			[doc.task, toISODateArray(doc.created), "message"],
+        			doc
+        		);
+      	  }
+      	}
+
+
+      	if (doc.docType === "task" && doc.status != "IN-ITEM" && doc.status !== "TRASH" && doc.status !== "SOMEDAY" && doc.status !== "ARCHIVE"){
+      		doc.history.forEach(function(item){
+      			emit(
+      				[doc._id, toDateArray(new Date(item.time)), "task"],
+      				item
+      			);	
+      		});
+      	}
+      }
+    },
+    
+    taskBlocking: {
+      map: function (doc){
+        //this returns any tasks this taskid is blocking
+
+        if (doc.docType === "task"
+            && doc.status !== "IN-ITEM"
+      			&& doc.status !== "TRASH"
+      			&& doc.status !== "ARCHIVE"
+      			&& doc.status !== "SOMEDAY"
+      			&& doc.substatus !== "TRASH"
+      			&& doc.substatus !== "ARCHIVE"){
+
+      		if (doc.coordinates){
+      		  doc.coordinates.forEach(function(coord){
+              emit(
+          			[coord],
+          			{"_id": doc._id}
+          		);
+            });
+      		}
+
+        }
+      }
+    },
+    
     /******************************* FIELDS *****************************************************/
     
     fieldFiles: {
@@ -778,7 +857,7 @@ module.exports = {
       			&& doc.substatus !== "APPROVED"
       			&& doc.substatus !== "CANCELLED"){
       		var user = doc.username;
-      		if (doc.status == "CURRENT" && (doc.substatus == "DONE" || doc.substatus == "ISSUE" || doc.substatus == "DECLINED")){
+      		if (doc.status == "CURRENT" && (doc.substatus == "DONE" || doc.substatus == "ISSUE" || doc.substatus == "DECLINED" || doc.substatus === "UNASSIGNED")){
       			//the user has indicated they are done with the task, have flagged an issue, or declined a task
       			//so if there is a delegator they get it back otherwise, the responsible now needs to take action
       			user = doc.responsible;

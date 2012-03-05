@@ -62,6 +62,14 @@ define(
           this.source = db.contactFullName(value);
           this.displayValue.innerHTML = this.source;
           break;
+          case "deadline":
+          this.source = value;
+          this.displayValue.innerHTML = this.source;
+          break;
+          case "defer":
+          this.source = value;
+          this.displayValue.innerHTML = this.source;
+          break;
           case "people":
           this.source = db.contactFullName(value);
           this.displayValue.innerHTML = this.source;

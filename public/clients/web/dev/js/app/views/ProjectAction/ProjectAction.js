@@ -74,6 +74,10 @@ define([
       switch(this.action){
         case "participate":
           p.participate(username, project, message);
+          //if we're participating the currently focused project, default back to current
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
           break;
         case "delegate":
           p.delegate(project, message);
@@ -89,9 +93,13 @@ define([
           break;
         case "send":
           p.send(project, message);
+          //if we're activating the currently focused project, default back to current
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
           break;
         case "decline":
-          p.decline(project, message);
+          p.decline(username, project, message);
           break;
         case "pause":
           p.pause(project, message);
@@ -104,9 +112,16 @@ define([
           break;
         case "deleteProject":
           p.remove(project);
+          //if we're deleting the currently focused project, default back to current
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
           break;
         case "reuse":
           p.reuse(project);
+          break;
+        case "markDone":
+          p.markDone(project, message);
           break;
       }
     },

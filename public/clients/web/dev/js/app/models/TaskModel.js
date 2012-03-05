@@ -163,6 +163,11 @@ define("app/models/TaskModel",
         }
       },
       
+      isUnassigned: function(){
+        var t = this;
+        return (t.username === "UNASSIGNED" || t.substatus === "UNASSIGNED") && !t.isCancelled() && !t.isDone();
+      },
+      
       isCurrent: function(){
     		
      		var isCurrent = true,
@@ -170,13 +175,45 @@ define("app/models/TaskModel",
     			  p = this.p,
     			  db = this.db,
     			  username = this.db.username(),
-    			  reason = "Task was current";
+    			  reason = "Task was current",
+    			  test = false;
     			  
-    		//console.debug("isCurrent project", p);
-    		
-    		//if it's deleted, it's not current
+       	//if it's deleted, it's not current
     		if (t.isDeleted()){
     		  return false;
+    		}
+    		
+    		if (t.isBlocked()){
+    		  console.debug(t.name + " was BLOCKED, it's not current");
+    		  return false;
+    		}
+    	 
+    	  //if it's unassigned, it's current if I'm delegator or responsible
+    		if (t.isUnassigned()){
+    		  if (t.delegator && t.delegator === username){
+    		    return true;
+    		  } else if (t.projResponsible() === username){
+    		    return true;
+    		  } else {
+    		    return false;
+    		  }
+    		}
+    		
+    		//if it's declined and I'm not the delegator or responsible it's not current
+    		//it's not current when viewing a project list
+    		if (t.isDeclined()){
+    		  test = false;
+    		  //console.debug("task is declined", t);
+    		  if (t.delegator && t.delegator === username && db.focus !== "project"){
+    		    //if I'm the delegator, then a declined task is CURRENT up for me
+    		    test = true;
+    		  } else if (t.projResponsible() === username && db.focus !== "project"){
+    		    //if I'm the responsible, then a declined task is CURRENT for me
+            test = true;
+            //console.debug("this task is DECLINED and I'm responsible", test);
+    		  }
+    		  
+    		  return test;
     		}
     		
     		if (t.isProjectInvite()){
@@ -191,22 +228,6 @@ define("app/models/TaskModel",
     			return false;
     		}
     		
-    		//if it's declined and I'm not the delegator or responsible it's not current
-    		if (t.isDeclined()){
-    		  var test = false;
-    		  //console.debug("task is declined", t);
-    		  if (t.delegator && t.delegator === username){
-    		    //if I'm the delegator, then a declined task is CURRENT up for me
-    		    test = true;
-    		  } else if (t.projResponsible() === username){
-    		    //if I'm the responsible, then a declined task is CURRENT for me
-            test = true;
-            //console.debug("this task is DECLINED and I'm responsible", test);
-    		  }
-    		  
-    		  return test;
-    		}
- 
         //console.debug("in isCurrent before calling isDone", t.name, t.isDone());
     		//if it's done or trash, it's not current :)
     		if (t.isDone()){
@@ -218,13 +239,25 @@ define("app/models/TaskModel",
     		//console.debug("coordinates length", task.coordinates.length);
     		//if it's delegated (in my delegated project) it's not current
     		if (t.isDelegated()){
+    		  test = false;
+    		  //if the task is delegated and it submitted for approval, then it's current
+    		  //for the responsible
+    		  if (t.isSubmitted() && t.projResponsible() === username){
+    		    test = true;
+    		  }
+    		  
+    		  //if the task is delegated and it's is an issue, then it's current for the 
+    		  //responsible
+    		  if (t.isIssue() && t.projResponsible() === username){
+    		    test = true;
+    		  }
+    		  
     		  //console.debug(t.name + " was delegated, it's not current");
-    		  return false;
+    		  return test;
     		}
     		
-        
     		//if it's cancelled, it's not current :)
-    		if (t.substatus === "CANCELLED"){
+    		if (t.isCancelled()){
     		  //console.debug(t.name + " was " + t.substatus + ", it's not current");
     			return false;
     		}
@@ -277,11 +310,6 @@ define("app/models/TaskModel",
     				isCurrent = false;
     			};	
     		}
-
-    		if (t.isBlocked()){
-    		  //console.debug(t.name + " was BLOCKED, it's not current");
-    		  isCurrent = false;
-    		}
     	
     		return isCurrent;
     	},
@@ -299,10 +327,15 @@ define("app/models/TaskModel",
   		    return false;
   		  }
   		  
+  		  //if the task is unassigned, it will only show in the project list, so shouldn't be blocked
+  		  if (t.isUnassigned() && db.focus === "project"){
+  		    return false;
+  		  }
  		    //if this task is paused, it's blocked by the project responsible pausing the task
   		  //because the user is still responsible, but can't do work on it at this time
   		  //this makes it easier for project responsibles to manage what is current for users
-  		  if (t.isPaused()){
+  		  //when the project list is show, though, don't block because of pausing
+  		  if (t.isPaused() && db.focus !== "project"){
   		    return true;
   		  }
   		  
@@ -340,8 +373,12 @@ define("app/models/TaskModel",
         var t = this,
             p = this.p,
             test = false;
-        
-        
+            
+        //if the task is unassigned, it should only show as unassigned
+  		  if (t.isUnassigned()){
+  		    return false;
+  		  }
+         
         dojo.forEach(p.project.assignments, function(assign){
           //console.debug(t.name, assign.status);
           if (assign.username === t.username && assign.role === t.role &&
@@ -368,7 +405,12 @@ define("app/models/TaskModel",
     		    isInvite = false,
     		    p = this.p,
     		    username = this.db.username();
-        
+    		    
+        //if the task is unassigned, it should only show as unassigned
+  		  if (t.isUnassigned()){
+  		    return false;
+  		  }
+    
     		//if it's a project invite, it's not going to be task invite because the user
     		//needs to agree to join the project before then can consider accepting the tasks
     		//it's an invite if DELEGATED
@@ -420,6 +462,10 @@ define("app/models/TaskModel",
     		    isCurrent = false,
     		    username = this.db.username();
     		
+   	    //if the task is unassigned, it should only show as unassigned
+  		  if (t.isUnassigned()){
+  		    return false;
+  		  }
     		
     		//this is a task invitation for the user that isn't proposed, isn't agreed, and isn't declined
     		if (t.isInvite() && !t.isProposed() && !t.isAgreed() && !t.isDeclined() && t.username === username){
@@ -503,7 +549,7 @@ define("app/models/TaskModel",
     	
     	isCancelled: function(){
     	  var t = this;
-    	  return (t.status === "DONE" && t.substatus === "CANCELLED");
+    	  return (t.status === "DONE" && t.substatus === "CANCELLED") || pStatus.isCancelled(t.p.project);
     	},
     	
     	isPrivate: function(){
@@ -526,8 +572,22 @@ define("app/models/TaskModel",
     		var t = this,
     			  isDeferred = false;
     			  
+        //if the task is unassigned, it should only show as unassigned
+  		  if (t.isUnassigned()){
+  		    return false;
+  		  }	
+  		  
+  		  //the assumption is that once a task gets going, it's not deferred any more
     		if (t.hasDeferDate()
+    		  && !t.isSubmitted()
+    		  && !t.isBlocked()
+    		  && !t.isPaused()
+    		  && !t.isIssue()
+    		  && !t.isCleared()
+    		  && !t.isReturned()
     			&& !t.isDone()
+    			&& !t.isCancelled()
+    			&& !t.isInvite()
     			&& stamp.toISOString(new Date()) < t.calendar.start){
     				isDeferred = true;
     				//console.log(t.task.name + " is DEFERRED");
@@ -659,7 +719,7 @@ define("app/models/TaskModel",
     	},
     	isPaused: function(){
     	  var t = this;
-    	  return (t.status === "CURRENT" && t.substatus === "PAUSED");
+    	  return (t.status === "CURRENT" && t.substatus === "PAUSED") || pStatus.isPaused(t.p.project);
     	},
     	isCleared: function(){
     	  var t = this;
@@ -725,7 +785,11 @@ define("app/models/TaskModel",
     	  task = this._validateTask(task);
     	  
     	  var t = this,
-    	      p = this.p;
+    	      p = this.p,
+    	      isDelegated = false,
+    	      //track project name because it can change to private or delegated if no project given
+    	      projId = p.project._id,
+    	      projName = p.project.name;
     	  
     	  //console.debug("add task", task, task.username, p.project.substatus);
         
@@ -739,25 +803,13 @@ define("app/models/TaskModel",
           task._id = id;
         }
         
-        //make the POST activity for the task creation
-        task = t.addActivity({
-    			verb: "POST",
-    			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
-    			icon: t.icon.post
-    		}, task);
-        
   	    //default status and substatus
   	    //CURRENT means that it can show in the Current list if not deferred or blocked
   	    task.status = "CURRENT"; 
   	    //if I created this task, then I've already accepted by default
   	    task.substatus = "ACCEPTED"; 
   	    
-  	    //if the substatus of the project is PENDING then the task status should be pending
-  	    //if this user isn't the responsible
-  	    if (p.project.substatus === "PENDING" && task.responsible !== username){
-  	      task.status = "PENDING";
-  	      console.debug("project substatus is PENDING, updated task status to PENDING");
-  	    }
+  	    
   	    
   	    //default to the current user if username not set yet
   	    if (!task.username){
@@ -774,13 +826,7 @@ define("app/models/TaskModel",
   	    //if i'm not the task user, then this is delegated
   	    if (task.username !== username){
   	      task.substatus = "DELEGATED";
-  	      
-  	      //console.debug("adding DELEGATE activity");
-  	      task = t.addActivity({
-      			verb: "DELEGATE",
-      			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
-      			icon: t.icon.delegateItem
-      		}, task);
+  	      isDelegated = true;
   	    }
   	    
   	    //if a project was set, set the responsible and, if applicable, the delegator
@@ -799,11 +845,23 @@ define("app/models/TaskModel",
   	      //i'm the responsible when it's a private or delegated task
   	      task.responsible = username;
   	      task.project = app.myPrivateProject;
+  	      projId = app.myPrivateProject;
+  	      projName = "Private";
   	      //it's a delegated project if the username isn't me
   	      if (task.username !== username){
   	        //assign it to my delegated project
   	        task.project = app.myDelegatedProject;
+  	        projId = app.myDelegatedProject;
+    	      projName = "Delegated";
   	      }
+  	    }
+  	    
+  	    //if the substatus of the project is PENDING then the task status should be pending
+  	    //if this user isn't the responsible
+  	    console.log("testing pending", p.project.substatus, task.responsible, task.username);
+  	    if (p.project.substatus === "PENDING" && task.responsible !== task.username){
+  	      task.status = "PENDING";
+  	      console.debug("project substatus is PENDING, updated task status to PENDING");
   	    }
     		
         //set the type and template info
@@ -816,6 +874,24 @@ define("app/models/TaskModel",
           task.isMyDelegated = true;
         }
         
+        //handle the activity stream
+        //make the POST activity for the task creation
+        task = t.addActivity({
+    			verb: "POST",
+    			target: {id:projId, name: projName, type: "PROJECT"},
+    			icon: t.icon.post
+    		}, task);
+        
+        //make the DELEGATE entry if delegated
+        if (isDelegated){
+          console.debug("adding DELEGATE activity");
+  	      task = t.addActivity({
+      			verb: "DELEGATE",
+      			target: {id:projId, name: projName, type: "PROJECT"},
+      			icon: t.icon.delegateItem
+      		}, task);
+        }
+  
         var def = p.updateAssignments(task);
         
         //need to make sure the update to the project happens before the task is added
@@ -882,9 +958,7 @@ define("app/models/TaskModel",
         });
       },
       update: function(task){
-        
-        
-        
+
         var db = this.db,
             username = this.db.username(),
             p = this.p,
@@ -1067,7 +1141,7 @@ define("app/models/TaskModel",
     		task.substatus = "DONE";
     		task = t.addActivity({
     			verb: "SUBMIT",
-    			target: {id:p.project.responsible, name: db.contactFullName(p.project.responsible, true), type: "PERSON"},
+    			target: {id:p.project._id, name: db.contactFullName(p.project.name, true), type: "PROJECT"},
     			icon: t.icon.submitItem,
     			body: message
     		}, task);
@@ -1347,6 +1421,32 @@ define("app/models/TaskModel",
           t.submitToApprove(task);
         }
 
+    	},
+    	leave: function(task){
+    	  	var t = this,
+      			db = this.db,
+            p = this.p;
+
+      		task.username = "UNASSIGNED";
+      		task = t.addActivity({
+      			verb: "LEAVE",
+      			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
+      			icon: t.icon.leave
+      		}, task);
+          t.update(task);
+    	},
+    	reassign: function(task, username){
+    	  	var t = this,
+      			db = this.db,
+            p = this.p;
+
+      		task.username = username;
+      		task = t.addActivity({
+      			verb: "REASSIGN",
+      			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
+      			icon: t.icon.reassign
+      		}, task);
+          t.update(task);
     	},
     	addActivity: function(opts, task){
     	  var db = this.db,

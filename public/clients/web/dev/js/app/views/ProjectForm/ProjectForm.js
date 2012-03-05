@@ -10,11 +10,12 @@ define(
   "dijit/Tooltip",
   "dojo/data/ItemFileWriteStore",
   "app/views/ProjectFormPill/ProjectFormPill",
+  "app/util/dateFormat",
   "dijit/layout/ContentPane",
   "app/views/ProjectFormRoles/ProjectFormRoles",
   "app/views/ProjectFormAttachments/ProjectFormAttachments",
   "app/widgets/ContainerPane"], 
-  function(dojo,coordel, html, htmlTip, w, t, db, stamp, Tooltip, ws, Pill) {
+  function(dojo,coordel, html, htmlTip, w, t, db, stamp, Tooltip, ws, Pill, format) {
   
   dojo.declare(
     "app.views.ProjectForm", 
@@ -183,7 +184,7 @@ define(
         
         //people
         this.projectFormPeople.watch("value", function(prop, oldVal, newVal){
-          /*
+          
           console.debug("project people changed", prop, oldVal, newVal, self.project.users);
           //self.set("project", newVal);
           var has = false;
@@ -200,7 +201,7 @@ define(
             self.project.users.push(newVal);
           }
           console.debug("people after change", self.project.users);
-          */
+          
         });
         
         
@@ -225,6 +226,17 @@ define(
           this._setPills("responsible");
           this.projectFormResponsible._status = "select";
         });
+        
+        //deadline
+        dojo.connect(this.projectFormDeadline, "onChange", this, function(args){
+          this._setPills("deadline");
+        });
+
+        //defer
+        dojo.connect(this.projectFormDefer, "onChange", this, function(args){
+          this._setPills("defer");
+        });
+        
         
         dojo.connect(this.projectFormPeople, "onChange", this, function(args){
           //console.debug("projectFormPeople onChange");
@@ -259,6 +271,31 @@ define(
         
         //watch for clicking of remove on the pill (responsible and people only). blockers and deliverables
         //have to be handled as pills are added so removal is handled in _setPills
+        
+        //deadline
+        dojo.connect(this.projectFormDeadlineValue.removeValue, "onclick", this, function(){
+          this.projectFormDeadline.reset();
+          delete this.project.deadline;
+          //hide the pill
+          dojo.addClass(this.projectFormDeadlineValue.domNode, "hidden");
+          dojo.removeClass(this.projectFormDeadline.domNode, "hidden");
+          //make sure we don't react to onChange and set the pill again when we reset to nothing
+          this.projectFormDeadline.focus();
+          //now make sure we can reset the pill when selected
+        });
+        
+        //defer
+        dojo.connect(this.projectFormDeferValue.removeValue, "onclick", this, function(){
+          this.projectFormDefer.reset();
+          delete this.project.calendar;
+          //hide the pill
+          dojo.addClass(this.projectFormDeferValue.domNode, "hidden");
+          dojo.removeClass(this.projectFormDefer.domNode, "hidden");
+          //make sure we don't react to onChange and set the pill again when we reset to nothing
+         
+          this.projectFormDefer.focus();
+          //now make sure we can reset the pill when selected
+        });
         
         //responsible
         dojo.connect(this.projectFormResponsibleValue.removeValue, "onclick", this, function(){
@@ -369,6 +406,20 @@ define(
             dojo.addClass(this.projectFormResponsible.domNode, "hidden");
             dojo.removeClass(this.projectFormResponsibleValue.domNode, "hidden");
             this.projectFormResponsibleValue.showPill(this.project.responsible);
+          }
+          break;
+          case "deadline":
+          if (this.project.deadline){
+            dojo.addClass(this.projectFormDeadline.domNode, "hidden");
+            dojo.removeClass(this.projectFormDeadlineValue.domNode, "hidden");
+            this.projectFormDeadlineValue.showPill(format.prettyISODate(this.project.deadline));
+          }
+          break;
+          case "defer":
+          if (this.project.calendar && this.project.calendar.start){
+            dojo.addClass(this.projectFormDefer.domNode, "hidden");
+            dojo.removeClass(this.projectFormDeferValue.domNode, "hidden");
+            this.projectFormDeferValue.showPill(format.prettyISODate(this.project.calendar.start));
           }
           break;
           case "roles": 
@@ -552,11 +603,11 @@ define(
         dojo.when(def, function(res){
           self.onSave(res);
         });
-  
+        
       },
       
       onSave: function(project){
-        
+
       },
       
       baseClass: "project-form"

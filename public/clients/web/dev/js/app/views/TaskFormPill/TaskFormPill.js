@@ -66,6 +66,14 @@ define(
           this.source = db.projectStore.store.get(value);
           this.displayValue.innerHTML = this.source.name;
           break;
+          case "deadline":
+          this.source = value;
+          this.displayValue.innerHTML = this.source;
+          break;
+          case "defer":
+          this.source = value;
+          this.displayValue.innerHTML = this.source;
+          break;
           case "delegate":
           //console.debug("showing a delegate pill", value, email);
           if (value === "pending"){

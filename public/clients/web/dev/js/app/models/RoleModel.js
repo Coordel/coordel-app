@@ -37,22 +37,25 @@ define("app/models/RoleModel",
     	      self = this;
     	      
   		  var def = db.projectStore.loadProject(task.project);
-			  def.then(function(store){
+			  dojo.when(def, function(store){
 			    //try {
 			      
-			      //console.debug("loaded project, store", store);
+			      console.debug("loaded project, store", store);
 			      
 			      var hasRole = false;
 			      
-			      var updateRole = db.projectStore.roleStore.get(roleid);
+			      var resRole = db.projectStore.roleMemory.get(roleid);
 			      
-			      dojo.when(updateRole, function(resRole){
+			      //dojo.when(updateRole, function(resRole){
 			        console.log("update role", resRole);
 			        if (resRole){
-			          console.log("hasRole set to true");
+			          //console.log("hasRole set to true");
 			          hasRole = true;
 			          r = resRole;
 			          r.isNew = false;
+			          //set the username of the role to the task because it might be that this 
+			          //role has been assigned to a new user
+			          r.username = task.username;
 			        }
 			        
 			        //console.debug("hasRole in updateResponsibilities", hasRole);
@@ -68,7 +71,7 @@ define("app/models/RoleModel",
   			      }
 
        				//need to check if the responsibility exists in the role
-      				//and if it does, update it with the task's new status/substatus
+      				//and if it does, update it with the task's new status/substatus/username
       				var hasResp = false,
       				    deleteKey = false;
       				dojo.forEach(r.responsibilities, function(resp, key) {
@@ -82,6 +85,7 @@ define("app/models/RoleModel",
       					    //update the status
       					    resp.status = task.status;
         						resp.substatus = task.substatus;
+        						resp.username = task.username;
       					  }
       					}
       				});
@@ -112,7 +116,7 @@ define("app/models/RoleModel",
       				  self.update(r);
       				}
 			        
-			      });
+			      //});
 			    //} catch (err){
 			      //didn't find the role, so this is new
 			   //   console.debug("ERROR getting role in RoleModel", err);

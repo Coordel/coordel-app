@@ -33,7 +33,7 @@ module.exports = function(app, validate){
       //console.log("PUT RESPONSE", putRes, err);
       if (err){
         console.log("ERROR PUTTING TO COUCH", err);
-        res.json({error: err + ' '+req.body.id+ ' '+req.docType});
+        res.json({error: err});
       } else {
         res.json(putRes);
       }
@@ -51,7 +51,7 @@ module.exports = function(app, validate){
     
     couch.get(req.params.id, function(err, doc){
       if (err){
-        
+        res.json({error: "ERROR getting files: " + err});
       } else {
         res.json(doc);
       }
@@ -120,8 +120,12 @@ module.exports = function(app, validate){
   app.get('/coordel/:id', validate, function(req, res){
     //console.log('GET ID', req.params.id);
     couch.get(req.params.id, function(err, obj){
-      if (err) console.log("ERROR getting " + req.params.id);
-      res.json(obj);
+      if (err){
+        console.log("ERROR getting " + req.params.id + ": " + err.error);
+      } else {
+        res.json(obj);
+      }
+      
     });
   });
 

@@ -182,11 +182,14 @@ define("app/models/ProjectStatus",
         //if it's ACTIVE PAUSED and i have an assignment in the project, it's paused
         var isPaused = false;
         if (project.status === "ACTIVE" && project.substatus === "PAUSED"){
+          isPaused = true;
+          /*
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username){
               isPaused = true;
             }
           });
+          */
         }
         return isPaused;
       },
@@ -210,11 +213,11 @@ define("app/models/ProjectStatus",
         //console.debug("cancelled projects requested");
         var isCancelled = false;
         if (project.status === "ACTIVE" && project.substatus === "CANCELLED"){
+          isCancelled = true;
           var days = this.getDaysPassed(project, project.substatus);
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username && days < 14){
               //console.debug("isCancelled = true", username, days);
-              isCancelled = true;
               if (assign.status === "ACK"){
                 //console.debug("assign.status was ACK", username, days);
                 isCancelled = false;
@@ -313,9 +316,9 @@ define("app/models/ProjectStatus",
         
         if (project.status === "ARCHIVE" && project.substatus === "DONE"){
           var days = this.getDaysPassed(project);
+          isDone = true;
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username && days < 14){
-              isDone = true;
               if (assign.status === "ACK"){
                 isDone = false;
               }

@@ -414,22 +414,22 @@ define(["dojo",
         //need to check for each of the types of possible project-invite and create groups for them
         //new
         var inv = db.projectStore.memory.query("invitedNew", {sort:[{attribute: "created", descending: false}]});
-        this._addGroup("New", inv, focus, "INVITE");
+        this._addGroup(txt.projectInvited, inv, focus, "INVITE");
         //declined
         var dec = db.projectStore.memory.query("invitedDeclined", {sort:[{attribute: "created", descending: false}]});
-        this._addGroup("Declined", dec, focus, "DECLINED");
+        this._addGroup(txt.declinedProject, dec, focus, "DECLINED");
         //left
         var left = db.projectStore.memory.query("invitedLeft", {sort:[{attribute: "created", descending: false}]});
-        this._addGroup("Left", left, focus, "LEFT");
+        this._addGroup(txt.leftProject, left, focus, "LEFT");
         //proposed-changes
         var prop = db.projectStore.memory.query("invitedProposed", {sort:[{attribute: "created", descending: false}]});
-        this._addGroup("Proposed Change", prop, focus, "PROPOSED");
+        this._addGroup(txt.proposedChange, prop, focus, "PROPOSED");
         //agreed-changes
         var ag = db.projectStore.memory.query("invitedAgreed", {sort:[{attribute: "created", descending: false}]});
-        this._addGroup("Agreed Change", ag, focus, "AGREED");
+        this._addGroup(txt.agreedChange, ag, focus, "AGREED");
         //ammend-proposed-changes
         var amm = db.projectStore.memory.query("invitedAmended", {sort:[{attribute: "created", descending: false}]});
-        this._addGroup("Amended Change", amm, focus, "AMENDED");
+        this._addGroup(txt.amendedChange, amm, focus, "AMENDED");
         
         //console.debug("invites taskListControl", inv.length , dec.length , left.length , prop.length , ag.length , amm.length);
         //show invited projects

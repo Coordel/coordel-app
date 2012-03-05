@@ -54,6 +54,10 @@ define([
           dojo.removeClass(this.send.domNode, "hidden");
         }
         
+        if (pStatus.isDone(this.project)){
+          this.markDone.set("disabled", true);
+        }
+        
         //if i'm not the project responsible, hide both send and done buttons 
         if (username !== this.project.responsible){
           dojo.addClass(this.markDone.domNode, "hidden");
@@ -103,7 +107,7 @@ define([
         //decline
         dojo.connect(this.decline, "onClick", this, function(){
           //console.log("cancel clicked");
-          dojo.publish("coordel/projectAction", [{action: "decline", project: this.project, cssClass: "warning-button"}]);
+          dojo.publish("coordel/projectAction", [{action: "decline", project: this.project, validate: true,  cssClass: "warning-button"}]);
         });
         
         //participate

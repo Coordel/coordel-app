@@ -105,11 +105,10 @@ define(["dojo",
               
               //console.debug("testing contactFullName", username, noYou);
               
-              if (username !== "UNASSIGNED"){
-                c = self.contactStore.store.get(username); 
-                
+              if (username === "UNASSIGNED"){
+                 return coordel.unassigned; 
               } else {
-                c = {_id: "UNASSIGNED", email: ""};
+                c = self.contactStore.store.get(username); 
               }
               
               c = self._setFullName(c, noYou);
@@ -399,10 +398,11 @@ define(["dojo",
               } else {
                 obj = this.projectStore.store.get(project);
               }
-              //console.debug("called getProjectModel", id);
-              return new pModel({project: obj, db: db});
-            
               
+              
+              var p = new pModel({project:obj});
+              p.init(db);
+              return p; 
             },
             
             projects: function(showMine){

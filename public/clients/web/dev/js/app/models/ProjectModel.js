@@ -286,6 +286,9 @@ define("app/models/ProjectModel",
   	    
         //save the project
         var res = db.projectStore.store.add(project, {username: username});
+        dojo.when(res, function(proj){
+          //console.log("done adding", proj);
+        });
     	},
     	
     	update: function(project){
@@ -434,37 +437,18 @@ define("app/models/ProjectModel",
           db.projectStore.store.put(project,{username: db.username()});
     	},
     	
-    	send: function(project){
+    	send: function(project, message){
     	  
     	  var p = this,
     	      db = this.db;
     	      
-    	      console.debug("project", project);
+    	  console.debug("sending project", project);
     	  
-    	  /*  
-    	  db.projectStore.loadProject(project._id).then(function(resp){
-    	    console.debug("project db", resp);
-    	    var tasks = resp.taskMemory.query({db:db});
-    	    dojo.when(tasks, function(resp){
-    	      
-    	 
-    	      dojo.forEach(resp, function(task){
-    	        if (task.status === "PENDING"){
-    	          task.status = "CURRENT";
-    	          var t = db.getTaskModel(task, true);
-    	          t.update(task, {username:db.username()});
-    	        }
-    	      });
-    	      console.debug("tasks", resp);
-    	 
-    	    });
-    	    
-    	  });
-    	  */
     	  //add the create entry into the history
   	  	project = p.addActivity({
     			verb: "POST",
-    			icon: p.icon.post
+    			icon: p.icon.post,
+    			body: message
     		}, project);
     		
     		project.substatus = "SENT";
@@ -472,7 +456,7 @@ define("app/models/ProjectModel",
     		//deal with any non-follower roles
     		
     		db.projectStore.store.put(project, {username: db.username()});
-    		dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: project._id}]);
+    		//dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: project._id}]);
     	},
     	
     	follow: function(username, project){
@@ -531,23 +515,21 @@ define("app/models/ProjectModel",
     	  p.update(project);
     	},
     	
-    	decline: function(username, project){
+    	decline: function(username, project, message){
   
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
     	    console.debug("didn't have project, loading");
     	  }
     	  
-    	  console.debug("declining project", project, username);
+    	  console.debug("declining project", project, username, message);
     	  
     	  var curAssign = {},
-    	      idx = dojo.indexOf(project.users, username),
     	      p = this,
-    	      store = this.db.projectStore.loadProject(project._id),
-    	      db = this.db;
+    	      query = this.db.projectStore.loadProject(project._id),
+    	      db = this.db,
+    	      docs = [];
     	  
-    	  
-    	  console.debug("after variables");
     	  //set the assignment to decline
     	  dojo.forEach(project.assignments, function(assign){
     	    if (assign.username === username){
@@ -556,75 +538,228 @@ define("app/models/ProjectModel",
     	    }
     	  });
     	  
-    	  console.debug("after finding the project assignment", curAssign, "index", idx, "store", store);
+    	  //make the activity stream mode
+    	  p.addActivity({
+    			verb: "DECLINE",
+    			icon: p.icon.decline,
+    			body: message
+    		}, project);
+    		
+    		//take the user out of the project
+    		var newUsers = dojo.filter(project.users, function(u){
+    		  return u !== username;
+    		});
+   	    project.users = newUsers;
+    	  
+    	  docs.push(project);
     	  
     	  //need to deal with any tasks that were assigned to this user
     	  
-    	  store.then(function(res){
-    	    console.debug("got the project store", res);
+    	  query.then(function(store){
+    	    console.debug("got the project store", store);
     	    
-    	    var tasks = res.taskMemory.query({db:db});
+    	    var tasks = store.taskMemory.query({db:db, filters: {username: username}}),
+    	        roles = store.roleMemory.query({username:username});
+    	        
+    	    console.log("decline tasks and roles", tasks, roles);
+    	    
     	    tasks.forEach(function(task){
-    	      console.debug("looping over tasks, current task to decline", task, db.getTaskModel(task, true));
-    	      if (task.username === username) {
-    	        var t = db.getTaskModel(task, true);
-    	        //console.debug("task to decline", task);
-      	      t.decline(task);
-    	      }
+    	      //console.debug("looping over tasks, current task to decline", task, db.getTaskModel(task, true));
+    	      
+    	      var t = db.getTaskModel(task, true);
+  	        //console.debug("task to decline", task);
+    	      if (!message){
+          	  message = "";
+          	}
+
+          	//if the user declines this task, it needs to go back to the person who delegated it
+          	//or to the project responsible if there isn't a delegator
+
+        		task.status = "DELEGATED";
+        		task.substatus = "DECLINED";
+        		task.isNew = false;
+        		task = t.addActivity({
+        			verb: "DECLINE",
+        			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+        			icon: t.icon.decline
+        		}, task);
+    	      docs.push(task);
     	    });
     	    
-    	    //make the activity stream mode
-      	  p.addActivity({
-      			verb: "DECLINE",
-      			icon: p.icon.decline
-      		}, project);
-
-      	  //remove this user from the users list to remove their access to the project
-      	  project.users.splice(idx, 1);
-          //console.debug("project to decline", project);
-      	  p.update(project);
-      	
+    	    
+      	  dojo.forEach(roles, function(role){
+      	    var isUpdate = false;
+      	    dojo.forEach(role.responsibilities, function(r){
+      	      if (r.status !== "DONE" && r.status !== "ARCHIVE"){
+      	        r.status = "DELEGATED";
+      	        r.substatus = "DECLINED";
+      	        isUpdate = true;
+      	      }
+      	    });
+      	    if (isUpdate){
+      	      role.isNew = false;
+      	      docs.push(role);
+      	    }
+      	  });
+    
+      	  console.log("DOCS for DECLINE", docs);
+      	  var u = db.username();
+          dojo.forEach(docs, function(doc){
+            switch(doc.docType){
+              case "project":
+              store.store.put(doc, {username: u });
+              break;
+              case "role":
+              store.roleStore.put(doc, {username: u});
+              break;
+              case "task":
+              store.taskStore.put(doc, {username:u});
+              break;
+            }
+          });
     	  });
     	  
     	},
     	
-    	join: function(username, project){
-    	  if (!project){
-    	    project = this.db.projectStore.store.get(this._id);
-    	  }
-    	  
-    	  //console.debug("join", username, project);
-    	  
-    		this.addActivity({
-    			verb: "JOIN",
-    			icon: this.icon.join
+    	pause: function(project, message){
+    	  var p = this,
+    	      db = this.db;
+
+    	  console.debug("pausing project", project);
+   
+      	project = p.addActivity({
+    			verb: "PAUSE",
+    			icon: p.icon.pause,
+    			body: message
     		}, project);
-    	  
-    	  return project;
+
+    		project.substatus = "PAUSED";
+
+    		p.update(project);
     	},
     	
-    	sendPendingTasks: function(username, project){
+    	resume: function(project, message){
+    	  var p = this,
+    	      db = this.db;
+
+    	  console.debug("resuming project", project);
+   
+      	project = p.addActivity({
+    			verb: "RESUME",
+    			icon: p.icon.resume,
+    			body: message
+    		}, project);
+
+    		project.substatus = "SENT";
+    		p.update(project);
+    	},
+    	 
+    	cancel: function(project, message){
+    	  var p = this,
+    	      db = this.db,
+    	      query = this.db.projectStore.loadProject(project._id),
+    	      docs = [];
+
+    	  console.debug("cancelling project", project);
+   
+      	project = p.addActivity({
+    			verb: "CANCEL",
+    			icon: p.icon.resume,
+    			body: message
+    		}, project);
+
+    		project.substatus = "CANCELLED";
+    		//p.update(project);
+    		docs.push(project);
+    		query.then(function(store){
+    	    
+    	    var tasks = store.taskMemory.query({db:db}),
+    	        roles = store.roleMemory.query();
+    	        
+    	    console.log("cancel tasks and roles", tasks, roles);
+    	    
+    	    tasks.forEach(function(task){
+    	      //console.debug("looping over tasks, current task to decline", task, db.getTaskModel(task, true));
+    	      
+    	      var t = db.getTaskModel(task, true);
+  	        //console.debug("task to decline", task);
+  	        if (!t.isDone()){
+  	          task.status = "DONE";
+          		task.substatus = "CANCELLED";
+          		task.isNew = false;
+          		task = t.addActivity({
+          			verb: "CANCEL",
+          			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+          			icon: t.icon.cancel
+          		}, task);
+      	      docs.push(task);
+  	        }
+    	    });
+    	    
+    	    
+      	  dojo.forEach(roles, function(role){
+      	    var isUpdate = false;
+      	    dojo.forEach(role.responsibilities, function(r){
+      	      if (r.status !== "DONE" && r.status !== "ARCHIVE"){
+      	        r.status = "DONE";
+      	        r.substatus = "CANCELLED";
+      	        isUpdate = true;
+      	      }
+      	    });
+      	    if (isUpdate){
+      	      role.isNew = false;
+      	      docs.push(role);
+      	    }
+      	  });
+    
+      	  console.log("DOCS for CANCEL", docs);
+      	  var u = db.username();
+          dojo.forEach(docs, function(doc){
+            switch(doc.docType){
+              case "project":
+              store.store.put(doc, {username: u });
+              break;
+              case "role":
+              store.roleStore.put(doc, {username: u});
+              break;
+              case "task":
+              store.taskStore.put(doc, {username:u});
+              break;
+            }
+          });
+    	  });
+    	},
+    	
+      sendPendingTasks: function(username, project){
     	  var db = this.db;
     	  
-    	  db.projectStore.loadProject(project._id).then(function(store){
-    	    //console.debug("project db", resp);
-    	    var query = store.taskMemory.query({db:db});
-    	    dojo.when(query, function(tasks){
-    	      dojo.forEach(tasks, function(task){
-    	        if (task.status === "PENDING" && task.username === username){
-    	          task.status = "CURRENT";
-    	          var t = db.getTaskModel(task, true);
-    	          t.update(task, {username:db.username()});
-    	          console.debug("task updated from PENDING to CURRENT", task);
+    	  console.log("sendPendingTasks called", username, project);
+    	  
+    	  var q = db.projectStore.loadProject(project);
+    	  
+    	  q.then(function(store){
+    	    console.debug("sendPendingTasks project db", store);
+    	    var qt = store.taskMemory.query({db:db});
+    	    
+    	    console.log("queried qt", qt);
+   
+      	  dojo.when(qt, function(tasks){
+      	    console.log("got tasks", tasks);
+      	    dojo.forEach(tasks, function(task){
+      	      var t = db.getTaskModel(task, true);
+      	      if (task.status === "PENDING" && task.username === username){
+    	          t.accept(task);
     	        }
-    	      });
-    	    });
+      	    });
+      	  });
     	  });
     	},
     	
     	participate: function(username, project, message){
     	  
-    	  var p = this;
+    	  var p = this,
+    	      db = this.db,
+    	      docs = [];
 
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
@@ -640,17 +775,273 @@ define("app/models/ProjectModel",
     	  
     		project = this.addActivity({
     			verb: "JOIN",
-    			icon: this.icon.join
+    			icon: this.icon.join,
+    			body: message
     		}, project);
+    		
+    		docs.push(project);
     	  
-    	  p.update(project);
-    	  p.sendPendingTasks(username, project);
+    	  var q = db.projectStore.loadProject(project._id);
+    	  
+    	  q.then(function(store){
+    	    console.debug("sendPendingTasks project db", store);
+    	    tasks = store.taskMemory.query({db:db, filters: {username: username}});
+    	    roles = store.roleMemory.query({username: username});
+    	    
+    	    console.log("tasks and roles", tasks, roles);
+    	    
+    	    dojo.forEach(tasks, function(task){
+    	      var t = db.getTaskModel(task, true);
+    	      if (task.status === "PENDING"){
+    	        
+  	          if (!message){
+            	  message = "";
+            	}
+
+          		task.status = "CURRENT";
+          		task.substatus = "ACCEPTED";
+          		task.isNew = false;
+          		task = t.addActivity({
+          			verb: "ACCEPT",
+          			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+          			icon: t.icon.accept,
+          			body: message
+          		}, task);
+          		docs.push(task);
+  	        }
+    	    });
+    	    
+    	    dojo.forEach(roles, function(role){
+    	      var isUpdate = false;
+    	      dojo.forEach(role.responsibilities, function(r){
+    	        if(r.status === "PENDING"){
+    	          r.status = "CURRENT";
+    	          r.substatus = "ACCEPTED";
+    	          r.isNew = false;
+    	          isUpdate = true;
+    	        }
+    	      });
+    	      if (isUpdate){
+    	        docs.push(role);
+    	      }
+    	    });
+    	    
+    	    console.log("PARTICIPATE DOCS", docs);
+          var u = db.username();
+          dojo.forEach(docs, function(doc){
+            switch(doc.docType){
+              case "project":
+              store.store.put(doc, {username: u});
+              break;
+              case "role":
+              store.roleStore.put(doc, {username: u});
+              break;
+              case "task":
+              store.taskStore.put(doc, {username:u});
+              break;
+            }
+          }); 
+        
+    	  });
+    	  
+    	},
+    	
+    	markDone: function(project, message){
+    	  
+    	  var p = this,
+    	      db = this.db;
+
+    	  if (!project){
+    	    project = this.db.projectStore.store.get(this._id);
+    	  }
+    	  
+    	  console.debug("mark Done", project);
+    	  
+    		project = this.addActivity({
+    			verb: "COMPLETE",
+    			icon: this.icon.done,
+    			body: message
+    		}, project);
+    		
+    		
+    	  
+    	  var q = db.projectStore.loadProject(project._id);
+    	  
+    	  q.then(function(store){
+    	    console.log("store", store);
+    	    var docs = [];
+    	    //first update the project
+    	    project.status = "ARCHIVE";
+      		project.substatus = "DONE";
+      		docs.push(project);
+      		
+    	    //now deal with the tasks
+    	    var tasks = store.taskMemory.query({db:db});
+    	    dojo.forEach(tasks, function(task){
+    	      var t = db.getTaskModel(task, true);
+    	      if (!t.isDone()){
+    	        console.log("cancelling task", task.name);
+  	          task.status = "DONE";
+          		task.substatus = "CANCELLED";
+          		task.isNew = false;
+          		task = t.addActivity({
+          			verb: "CANCEL",
+          			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
+          			icon: t.icon.cancel
+          		}, task);
+          		docs.push(task);
+  	        }
+    	    });
+    	    
+    	    //finally deal with the found roles
+    	    var roles = store.roleMemory.query();
+    	    console.log("roles", roles);
+    	    dojo.forEach(roles, function(role){
+    	      var isUpdated = false;
+    	      console.log("testing role", role);
+    	      dojo.forEach(role.responsibilities, function(r){
+    	        if (r.status !== "DONE" && r.status !== "ARCHIVE"){
+      	        console.log("mark done responsibility", role, r);
+      	        r.status = "DONE";
+      	        r.substatus = "CANCELLED";
+      	        isUpdated = true;
+      	      }
+    	      }); 
+    	      if (isUpdated){
+    	        role.isNew = false;
+    	        docs.push(role);
+    	      }
+    	    });
+    	  
+    	    //we have to deal with all the docs before doing the updates 
+    	    //because changes will alter the stores and revs otherwise
+          console.log("DOCS TO UPDATE", docs);
+          var username = db.username();
+          dojo.forEach(docs, function(doc){
+            switch(doc.docType){
+              case "project":
+              store.store.put(doc, {username: username });
+              break;
+              case "role":
+              store.roleStore.put(doc, {username: username});
+              break;
+              case "task":
+              store.taskStore.put(doc, {username:username});
+              break;
+            }
+          });
+      	  
+    	  });
+    	  
     	},
     	
     	leave: function(username, project, message){
-    	  console.log("leaving project", username, project, message);
+    	  //when a user leaves a project, they are removed from the users list, and all 
+    	  //tasks that aren't done or cancelled are made unassigned
     	  
+    	  //roles are actually moved between assignments. so, one user may have a reference in their
+    	  //left assignment to a role that has tasks they completed and another may have a reference
+    	  //to the same role that has tasks they also completed. This keeps the role as the constant
+    	  //but also allows for users to keep track of what they did. for the user who left the project
+    	  //their history will show they left but will show what they did before leaving. for the other
+    	  //user, if they are still current when the project is completed, they will have that shown
     	  
+    	  var p = this,
+    	      db = this.db,
+    	      docs = [];
+    	  
+    	  var q = db.projectStore.loadProject(project._id);
+    	  q.then(function(store){
+    	    console.log("leaving project", username, project, message, store);
+          
+          //find the assignment for this user and mark it left
+      	  dojo.forEach(project.assignments, function(assign){
+      	    if (assign.username === username){
+      	      assign.status = "LEFT";
+      	    }
+      	  });
+
+          //make the activity entry for leaving the project
+      		project = p.addActivity({
+      			verb: "LEAVE",
+      			icon: p.icon.leave,
+      			body: message
+      		}, project);
+      			
+          //remove the user from the project
+          var newUsers = dojo.filter(project.users, function(u){
+      		  return u !== username;
+      		});
+     	    project.users = newUsers;
+          
+          docs.push(project);
+      	  
+      	  //get the tasks for this user and role
+      	  var tasks = store.taskMemory.query({db:db, filters: {username: username}});
+      	  var roles = store.roleMemory.query({username: username});
+      	  
+      	  console.log("leaving tasks and roles", tasks, roles);
+      	  
+      	  dojo.forEach(tasks, function(task){
+    	      var t = db.getTaskModel(task, true);
+  
+    	      //leave or reassign the task if it isn't done or cancelled
+    	      if (!t.isCancelled() && !t.isDone()){
+    	        //if the task is submitted for approval, reassign to the responsible
+    	        if (t.isSubmitted()){
+    	          task.username = task.responsible;
+            		task = t.addActivity({
+            			verb: "REASSIGN",
+            			target: {id:project._id, name: project.name, type: "PROJECT"},
+            			icon: t.icon.reassign,
+            			body: coordel.projectAction.reassignLeft
+            		}, task);
+    	        } 
+    	        //make the status of the task left
+    	        task.status = "CURRENT";
+    	        task.substatus = "UNASSIGNED";
+          		task = t.addActivity({
+          			verb: "LEAVE",
+          			target: {id:project._id, name: project.name, type: "PROJECT"},
+          			icon: t.icon.leave
+          		}, task);
+    	        
+    	        docs.push(task); 
+    	      }
+    	    });
+    	    
+    	    dojo.forEach(roles, function(role){
+    	      dojo.forEach(role.responsibilities, function(r){
+    	        if (r.username === username){
+    	          if (r.status !== "DONE" && r.status !== "ARCHIVE"){
+    	            r.status = "CURRENT";
+    	            r.substatus = "UNASSIGNED";
+    	          }
+    	        }
+    	      });
+    	      docs.push(role);
+    	    });
+    	    
+    	    //we have to deal with all the docs before doing the updates 
+    	    //because changes will alter the stores and revs otherwise
+          console.log("DOCS TO LEAVE", docs);
+          
+          var u = db.username();
+          dojo.forEach(docs, function(doc){
+            switch(doc.docType){
+              case "project":
+              store.store.put(doc, {username: u });
+              break;
+              case "role":
+              store.roleStore.put(doc, {username: u});
+              break;
+              case "task":
+              store.taskStore.put(doc, {username:u});
+              break;
+            }
+          }); 
+          
+    	  });
     	},
     	
     	reuse: function(project){

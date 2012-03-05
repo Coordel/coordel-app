@@ -104,6 +104,15 @@ define(
           d.show();
         });
         
+        dojo.connect(this.refresh, "onclick", this, function(){
+          //do not disturb is off, click this to activate
+          this.coordelUserPreferences.closeDropDown();
+          	dojo.addClass(document.body, "loading login");
+          dijit.byId("outerLayout").destroyRecursive();
+          //setTimeout(1000, dojo.publish("coordel/refresh"));
+          dojo.publish("coordel/refresh");
+        });
+        
         //subscribe to notifications updates
         this.updateNotificationCountHandler = dojo.subscribe("coordel/updateNotificationCount", this, "updateNotificationCount");
       },
@@ -113,14 +122,16 @@ define(
         this.currentAlerts = args.currentAlerts;
         var count = this.currentAlerts.length;
         var node = dijit.byId(this.showNotifications);
-        if (count !== 0){
-          node.set("iconClass", "coordelHeaderIcon coordelHeaderIconNotifyActive");
-          node.set("label", count);
-          node.set("showLabel", true);
-        } else {
-          node.set("iconClass", "coordelHeaderIcon coordelHeaderIconNotify");
-          node.set("showLabel", false);
-        } 
+        if (node){
+          if (count !== 0){
+            node.set("iconClass", "coordelHeaderIcon coordelHeaderIconNotifyActive");
+            node.set("label", count);
+            node.set("showLabel", true);
+          } else {
+            node.set("iconClass", "coordelHeaderIcon coordelHeaderIconNotify");
+            node.set("showLabel", false);
+          }
+        }
       },
       
       confirm: function(){
@@ -133,7 +144,7 @@ define(
       
       destroy: function(){
         this.inherited(arguments);
-        dojo.unsubscribe(this.updateNotificationsHandler);
+        dojo.unsubscribe(this.updateNotificationCountHandler);
       },
       
       baseClass: "primary-header"

@@ -22,6 +22,8 @@ define(['dojo',
 	var app = {
 	  username: null,//should be null and set when user logs in
 	  
+	  handlers: [],
+	  
 	  navController: null,
 	  
 	  streamController: null,
@@ -89,7 +91,7 @@ define(['dojo',
 	    
 	    var socket = io.connect(window.location.host);
 	    
-	    console.log("showing app", this.username);
+	    //console.log("showing app", this.username);
 		  
 			//register for socketio events
 			socket.on("changes:" + this.username.toString(), function (change) {
@@ -104,26 +106,28 @@ define(['dojo',
 	    
 	    this.initSounds();
 	    
+	    this.resetHandlers();
+	    
 	  	//listen for logout
-	  	this.doLogoutHandler = dojo.subscribe("coordel/logout", this, "doLogout");
+	  	this.handlers.push(dojo.subscribe("coordel/logout", this, "doLogout"));
 	  	
 	  	//listen for task actions
-	  	this.taskActionHandler = dojo.subscribe("coordel/taskAction", this, "doTaskAction");
+	  	this.handlers.push(dojo.subscribe("coordel/taskAction", this, "doTaskAction"));
 	  	
 	  	//listen for project actions
-	  	this.projectActionHandler = dojo.subscribe("coordel/projectAction", this, "doProjectAction");
+	  	this.handlers.push(dojo.subscribe("coordel/projectAction", this, "doProjectAction"));
 	  	
 	  	//listen for project edit
-	  	this.editProjectHandler = dojo.subscribe("coordel/editProject", this, "handleEditProject");
+	  	this.handlers.push(dojo.subscribe("coordel/editProject", this, "handleEditProject"));
 	  	
 	  	//listen for addObject actions
-	  	this.addObjectHandler = dojo.subscribe("coordel/addObject", this, "addObjectAction");
+	  	this.handlers.push(dojo.subscribe("coordel/addObject", this, "addObjectAction"));
 	  	
 	  	//listen for sound requiest
-	  	this.addObjectHandler = dojo.subscribe("coordel/playSound", this, "playSound");
+	  	this.handlers.push(dojo.subscribe("coordel/playSound", this, "playSound"));
 	  	
 	  	//listen for alerts clear
-	  	this.clearAlertsHandler = dojo.subscribe("coordel/clearAlerts", this, "handleClearAlerts");
+	  	this.handlers.push(dojo.subscribe("coordel/clearAlerts", this, "handleClearAlerts"));
 	  	
   		dojo.removeClass(document.body, "loading login");
 		  //console.debug("database has loaded, in the deferred function",resp);
@@ -140,6 +144,17 @@ define(['dojo',
       //init the primary nav controller 
       app.navController = pNavControl.init(ac.username);	
 	  },
+	  
+	  resetHandlers: function(){
+	    if (this.handlers.length > 0){
+	      dojo.forEach(this.handlers, function(h){
+	        dojo.unsubscribe(h);
+	      });
+	      
+	      this.handlers = [];
+	    }
+	  },
+	  
 
 	  doTaskAction: function(args){
 	    //the TaskActionMenu sends the action to do and the task this function 
@@ -221,7 +236,7 @@ define(['dojo',
     },
 	  
 	  doProjectAction: function(args){
-	    console.debug("appControl should do project action", args);
+	    //console.debug("appControl should do project action", args);
 	    var css = "highlight-button",
 	        d,
 	        proj;
@@ -299,7 +314,7 @@ define(['dojo',
 	  _showProjectForm: function(){
 	    //console.debug("create a project");
 	    var id = db.uuid();
-	    console.debug("create a project with this _id", id, "username", db.username());
+	    //console.debug("create a project with this _id", id, "username", db.username());
 	    //when we create a new project, by default, the current user is
 	    //set as the responsible and a responsible role is created for them
 	    var proj = new ProjectForm({
@@ -360,7 +375,7 @@ define(['dojo',
 	  },
 	  
 	  handleClearAlerts: function(){
-	    console.log("clearing alerts");
+	    //console.log("clearing alerts");
 	    this.currentAlerts = [];
 	    db.clearAlerts();  
 	    //update the notification count
@@ -369,7 +384,7 @@ define(['dojo',
 	  
 	  handleChange: function(resp){
 	    
-	    console.log("appControl handleChanges called", resp);
+	    //console.log("appControl handleChanges called", resp);
 	  
   	  var notifications = [];
   		//resp.results.map(function(r){
@@ -419,7 +434,7 @@ define(['dojo',
   				      projects = db.projects(false),
   				      assignStatus = "";
   				      
-  				  console.debug("projects in change test", projects);
+  				  //console.debug("projects in change test", projects);
   				  
   				  //need to check if this is new because it may have been saved several times before it 
   				  //got to this user so its isNew property might be false
@@ -433,15 +448,15 @@ define(['dojo',
   				  
   				  dojo.forEach(chg.assignments, function(assign){
   				    if (assign.username === app.username){
-  				      console.debug("project status = ", assign.status);
+  				      //console.debug("project status = ", assign.status);
   				      assignStatus = assign.status;
   				    }
   				  });
   				  
   				  
   				  
-  					console.debug("project change received", chg, app.username, p);
-  					console.debug("STATUS:", chg.status, chg.substatus);
+  					//console.debug("project change received", chg, app.username, p);
+  					//console.debug("STATUS:", chg.status, chg.substatus);
   					if (isNew && chg.creator !== app.username && chg.updater !== app.username && chg.status !== "ARCHIVE" && chg.status !== "TRASH" && !chg._deleted){
   					  //this is a new project that I didn't create so add
   					  console.debug("Notify Project ADD", chg._id, chg._rev);

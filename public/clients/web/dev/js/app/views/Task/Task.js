@@ -18,8 +18,10 @@ define(
   "app/views/ConfirmDialog/ConfirmDialog",
   "app/views/TaskInfoDialog/TaskInfoDialog",
   "app/views/ProjectInfo/ProjectInfo",
-  "app/models/ProjectStatus"], 
-  function(dojo, dt, chk, coordel, html, w, t, stamp, ti, dialog, toolDialog, tp, cp, ActionsMenu, db, TaskForm, Confirm, TaskInfoDialog, ProjectInfo, pStatus) {
+  "app/models/ProjectStatus",
+  "app/views/Stream/Stream",
+  "app/views/Dialog/Dialog"], 
+  function(dojo, dt, chk, coordel, html, w, t, stamp, ti, dialog, toolDialog, tp, cp, ActionsMenu, db, TaskForm, Confirm, TaskInfoDialog, ProjectInfo, pStatus, Stream, cDialog) {
   
   dojo.declare(
     "app.views.Task", 
@@ -79,7 +81,7 @@ define(
           //if the status matches the incoming status, push the user and then need
           //to check if this is just a follower role so we know what buttons to show. if it's project,
           //it means that they need to participate. if it's follower, then they need to follow the project
-          console.debug("testing assignments in taskInvite", proj.name, assign.status, status);
+          //console.debug("testing assignments in taskInvite", proj.name, assign.status, status);
           if (assign.status === status){
             if (proj.responsible === db.username()){
               //if i'm the project responsible, then i need to see everyone that might have generated
@@ -211,8 +213,8 @@ define(
           this.taskCheckbox.set("disabled", true);
         }
         
-        //if this is current or invite, the user needs to see metainfo added to the task (Issue, Cleared, etc)
-        if (this.focus === "current" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
+        //if this is current, delegated or invite, the user needs to see metainfo added to the task (Issue, Cleared, etc)
+        if (this.focus === "current" || this.focus==="delegated" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
           this._setMetaInfo();
         }
         
@@ -253,15 +255,17 @@ define(
         
         }
         
+        /*commented out because the task user is added in _setMetaInfo
         //if this is delegated, who was delegated the task as metainfo
         if (t.isDelegated() && this.focus !== "contact"){
           //console.debug("it's delegated");
           var con = db.contactFullName(t.username);
           
           //if this is my task, then I need to see who it's from
-
+          
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(con  + " : ");
         }
+        */
         
         //hide the delete button. it only shows on delegated and private tasks
         dojo.query(".delete", this.domNode).addClass("hidden");
@@ -385,14 +389,44 @@ define(
           } else {
             dojo.publish("coordel/primaryNavSelect", [ {name: "task", focus: this.focus, id: this.task._id, task: this.task}]);
           }
-          
-          
           //this.destroy();
         });
         
-        
+        //wire up the showStream button so it shows the task stream
+        dojo.connect(this.showStream, "onclick", this, function(){
+          
+          var query,
+              title =  coordel.stream.taskStream;
+          
+          if (this.isProjectInvite){
+            query = db.streamStore.loadProjectStream(this.project._id);
+            title = coordel.stream.projectStream;
+          } else {
+            query = db.streamStore.loadTaskStream(this.task._id);
+          } 
+
+          dojo.when(query, function(resp){
+            console.debug("stream in taskDetailsControl", resp);
+            var stream = new Stream({
+              stream: resp,
+              style: "max-height: 400px; overflow-y: auto;"
+            });
+            
+            var d = new cDialog({
+              style: "width: 320px; overflow-x:hidden",
+              "class": "tasklist-titlepane alerts",
+              title: title,
+              content: stream,
+              onCancel: function(){
+                d.destroy();
+              }
+            });
+            
+            d.show();
+          });
+        });
+
         //wire up the edit button
-        
         dojo.connect(this.editTask, "onclick", this, function(){
           var form = new TaskForm({isNew: false, task: this.task});
           var cont = this.taskFormContainer;
@@ -444,17 +478,18 @@ define(
         //wire up the acceptProject button
         dojo.connect(this.acceptProject, "onclick", this, function(){
           //console.debug("accept Project", t);
-          var proj = db.getProjectModel(t.project);
+          var proj = db.projectStore.store.get(t.project);
           
-          dojo.when(proj, function(p){
-            proj.participate(db.username(), p.project);
-          });
+          dojo.publish("coordel/projectAction", [{action: "participate", project: proj, validate: false}]);
+          
+          //proj.participate(db.username(), proj.project);
+     
         });
 
        //wire up the declineProject button
        dojo.connect(this.declineProject, "onclick", this, function(){
-         console.debug("decline Project", t);
-         t.p.decline(db.username(), t.p.project);
+         //console.debug("decline Project", t);
+         dojo.publish("coordel/projectAction", [{action: "decline", project: this.project, validate: true,  cssClass: "warning-button"}]);
          //var proj = db.getProjectModel(t.project);
          //dojo.when(proj, function(model){
            //proj.decline(db.username(), model.project);
@@ -490,11 +525,13 @@ define(
        });
         
         //wire up the stream button
+        /*
         dojo.connect(this.showStream, "onclick", this, function(){
           //console.debug("removing task", this.task);
           dojo.publish("coordel/showTaskStream", [{name:"task", id: this.task._id}]);
           
         });
+        */
         
         //wire up the info button
         
@@ -537,6 +574,8 @@ define(
         
         var username = t.username;
         
+        
+        
         if(t.isIssue()){
           username = resp;
         }
@@ -549,19 +588,29 @@ define(
         //contact view when all the tasks belong to the contact selected
         if (u !== username && this.focus !== "contact"){
           
+          
           //need to test for states, sometimes need to show the project responsible owning the task
           //if the status is issue, need to show responsible, not user
           
-          if (username === "UNASSIGNED" && !t.isCancelled()){
+          if (username === "UNASSIGNED" || this.task.substatus === "UNASSIGNED" && !t.isCancelled()){
             dojo.query(".meta-info", this.domNode).addClass("c-color-error");
           } 
           
-          //if a task is declined, the name will be placed by the decline metadata so don't show it here
           //if it's proposed or agreed, that metadata will have the right name, so don't put it here
-          if (!t.isDeclined() && !t.isProposed() && !t.isAgreed()){
-             dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(db.contactFullName(username) + " : ");
+          if (!t.isProposed() && !t.isAgreed() && t.status !== "PROJECT"){
+            var name = db.contactFullName(username);
+            if (this.task.substatus === "UNASSIGNED"){
+              name = coordel.unassigned;
+            }
+            dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(name + " : ");
           }
-          
+           
+        }
+        
+        //if it's project Left put who left
+        if (t.status === "PROJECT" && t.substatus === "LEFT"){
+          var left = db.contactFullName(this.task.username);
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(left + " : ");
         }
         
         //private
@@ -693,8 +742,8 @@ define(
         
         //submitted for approval
         if (t.isSubmitted()){
-          //console.debug("it's submitted");
-          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.submitted + " : ");
+          console.debug("it's submitted");
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-active").addContent(coordel.metainfo.submitted + " : ");
         }
         
         //returned
@@ -717,14 +766,14 @@ define(
                 multi.push(db.contactFullName(username));
               });
               
-              dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(multi.join(", ") + " : ");
+              dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(multi.join(", ") + " : ");
             } else {
               //console.debug("it wasn't hasMulti, user was: ", user);
-              dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(user + " : ");
+              dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(user + " : ");
             }
             
           } else {
-            dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(user + " " + coordel.metainfo.declined + " : ");
+            dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent( coordel.metainfo.declined + " : ");
           }
         }  
       },

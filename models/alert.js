@@ -26,6 +26,8 @@ Alert.prototype.add = function(fn){
   var key = 'coordel-alerts:'+ this.username,
       multi = redis.multi();
       
+  //console.log("ADD ALERT", this.username, this.alert);
+      
   multi.lpush(key, JSON.stringify(this.alert));
   multi.ltrim(key, 0, 99);
   multi.exec(function(err, res){
@@ -48,7 +50,7 @@ exports.getUserAlerts = function(username, fn){
       fn(err, null);
     } else {
       var alerts = [];
-      console.log("Got alerts", res);
+      //console.log("Got alerts", res);
       res.forEach(function(alert){
         alerts.push(JSON.parse(alert));
       });
@@ -81,7 +83,11 @@ exports.getChangeAlertMap = function(change){
 	  if (!doc.substatus || doc.substatus !== "PENDING"){
 	    //this isn't pending so notify everyone with an assignment
 	    doc.assignments.forEach(function(assign){
-	      if (!map[assign.username]) map[assign.username] = true;
+	      
+	      //notify everyone who didn't decline or leave the project
+	      if (assign.status !== "LEFT" && assign.status !== "LEFT-ACK" && assign.status !== "DECLINED"){
+	        if (!map[assign.username]) map[assign.username] = true;
+	      }
   		});
 	  }
 
@@ -98,8 +104,8 @@ exports.getChangeAlertMap = function(change){
 		});
 	}
 
-	//users get the tasks when they own them and they aren't pending
-	if(doc.docType == "task" && doc.status !== "PENDING" && doc.substatus !== "DECLINED") {
+	//users get the tasks when they own them and they aren't pending, declined, or left (set to unassigned)
+	if(doc.docType == "task" && doc.status !== "PENDING" && doc.substatus !== "DECLINED" && doc.substatus !=="UNASSIGNED") {
 	   if (!map[doc.username]) map[doc.username] = true;
 	} 
 	
@@ -147,7 +153,7 @@ exports.getChangeAlertMap = function(change){
 	}
 	
 	//notify about new templates
-	if (doc.docType == "template"){
+	if (doc.docType == "template" && doc.username){
 	  //notify the user that a template is available
 		if (!map[doc.username]) map[doc.username] = true;
 		

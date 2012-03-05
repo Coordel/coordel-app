@@ -372,11 +372,15 @@ define(['dojo',
            
           });
           
+          
+          
           if (toRemove !== -1){
             var child = group.getChildren()[toRemove];
             //console.debug("child", child, toRemove);
             child.destroyRecursive();
           }
+          
+          //console.log("GROUP PROJECTS LENGTH", group.projects.length);
 
         }
 
@@ -398,15 +402,12 @@ define(['dojo',
           group.addChild(new p({
             project: proj
           }), insertedInto);
-          
-          dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: proj._id}]);
-      
         }
         
       
         if (group.projects.length === 0){
           group.hide();
-          dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          //dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
         }
       
       }, true);

@@ -187,6 +187,9 @@ define([
         var cur = store.taskMemory.query({db: db, focus: "projectCurrent"}, {sort: sort});
         var def = store.taskMemory.query({db: db, focus: "deferred"}, {sort: sort});
         var bl = store.taskMemory.query({db: db, focus: "blocked"}, {sort: sort});
+        var un = store.taskMemory.query({db:db, focus: "unassigned"}, {sort: sort});
+        
+        console.log("current tasks", cur);
         
         //get the invited tasks
         //TASK invited (for users who have accepted the project)
@@ -218,18 +221,21 @@ define([
         self._addGroup(coordel.deferred, def);
         //blocked
         self._addGroup(coordel.blocked, bl);
+        //unassigned
+        self._addGroup(coordel.unassigned, un);
+        
         
         //here are the invitations
         //task invite
-        self._addGroup("Task Invited", inv);
+        self._addGroup(coordel.taskInvited, inv);
         
         //project invite
-        self._addGroup("Project Invited", pNew);
-        self._addGroup("Declined Role", pDec);
-        self._addGroup("Proposed Role Changes", pProp);
-        self._addGroup("Amended Proposed Role Changes", pAmend);
-        self._addGroup("Agreed Role Changes", pAgree);
-        self._addGroup("Left Project", pLeft);
+        self._addGroup(coordel.projectInvited, pNew);
+        self._addGroup(coordel.declinedProject, pDec);
+        self._addGroup(coordel.proposedChange, pProp);
+        self._addGroup(coordel.amendedChange, pAmend);
+        self._addGroup(coordel.agreedChange, pAgree);
+        //self._addGroup(coordel.leftProject, pLeft);
         
         
         //done, paused, and cancelled

@@ -255,13 +255,13 @@ couch.info(function(err, info){
     follow({db:dbUrl, since: since, include_docs:true}, function(error, change) {
       if(!error) {
         var map = Alert.getChangeAlertMap(change.doc);
-        console.log("ALERT MAP", map);
+        //console.log("ALERT MAP", map);
         for (var key in map){
           console.log("CHANGE", key, change.doc.updater);
           changesIO.emit('changes:' + key, change.doc);
           
           //if this user didn't do the update, then alert when history exists
-          if (change.doc.updater !== key && change.doc.history){
+          if (change.doc.username !== "UNASSIGNED" && change.doc.updater !== key && change.doc.history && change.doc.history.length > 0){
             console.log("ALERT", key);
             var alert = change.doc.history.shift();
             changesIO.emit('alerts:' + key, alert);
@@ -272,10 +272,7 @@ couch.info(function(err, info){
             
             a.add(function(err, res){
               if (err) console.log("ERROR adding alert", err);
-            });
-         
-            
-            
+            });       
           }
         }
       } 

@@ -7,6 +7,7 @@ define({
 	  alerts: "Alerts",
 	  noDeadline: "No Deadline",
 	  quickAddTask: "Quick Add Task",
+	  refresh: "Refresh",
 	  "noName": "No Name",
 		"focus": "Tasks",
 		"invitations": "Invitations",
@@ -45,6 +46,13 @@ define({
 		"active": "Active",
 		"pending": "Pending",
 		pendingParticipation: "Pending Participation",
+		taskInvited: "Task Invited",
+		projectInvited: "Coord Invited",
+		declinedProject: "Declined Coord Role",
+		leftProject: "Left Coord Role",
+		proposedChange: "Proposed Role Change",
+		agreedChange: "Agreed Role Change",
+		amendedChange: "Amended Role Change",
 		"done": "Done",
 		"you": "You",
 		"unassigned": "Unassigned",
@@ -55,7 +63,7 @@ define({
 		"showRightColumn": "Show Right Column",
 		"hideRightColumn": "Hide Right Column",
 		"reply": "Reply",
-		"send": "Send",
+		"send": "Activate",
 		"save": "Save",
 		"ok": "Ok",
 		"cancel": "Cancel",
@@ -158,11 +166,12 @@ define({
 		  follow: "Follow",
 		  unfollow: "Unfollow",
 		  cancel: "Cancel",
+		  ackCancel: "Acknowledge Cancel",
 		  pause: "Pause",
 		  resume: "Resume",
 		  defer: "Defer",
 		  deleteProject: "Delete",
-		  send: "Send",
+		  send: "Activate",
 		  decline: "Decline",
 		  clear: "Clear",
 		  reuse: "Blueprint",
@@ -172,12 +181,17 @@ define({
 		  promote: "Promote",
 		  reassign: "Reassign",
 		  markDone: "Mark Done",
+		  ackDone: "Feedback",
+		  reassignLeft: "Task reassigned to Responsible because Person left Coord",
+		  cancelProject: "Responsible cancelled Coord",
+		  markDoneProject: "Responsible marked Coord done",
 		  confirmText: {
 		    participate: "Click Participate to agree to do Tasks in this Coord",
 		    leave: "This will permanently remove your access to this Coord and set all of your Current Tasks in the Coord Unassigned",
 		    follow: "Click Follow to gain access to this Coord",
 		    unfollow: "Click Unfollow to remove your access to this Coord",
 		    cancel: "This will permanently Cancel the Coord. All Tasks and Roles in the Coord will also be Cancelled",
+		    ackCancel: "This informs the other People that you know the Coord is cancelled and removes it from the list",
 		    pause: "This will pause all Tasks in the Coord",
 		    resume: "This will resume all Paused Tasks in the Coord",
 		    send: "This will activate the Coord and send Pending Tasks to the assigned People",
@@ -187,7 +201,8 @@ define({
 	      clear: "Clear from list",
 	      proposeChange: "This will alert the Coord Responsible that you have made changes to the Role",
 	      agreeChange: "",
-	      markDone: "This will mark the Coord Done. It will cancel any undone Tasks"
+	      markDone: "This will mark the Coord Done. It will cancel any undone Tasks",
+	      ackDone: "This will collect your feedback for the other People in this Coord"
 		  },
 		  instructions: {
 		    leave: "Enter why you are leaving the Coord",
@@ -582,7 +597,7 @@ define({
   		    "preposition": "in"
   		  },
   		  "unassign": {
-  		    "verb": "dismissed",
+  		    "verb": "unassigned",
   		    "preposition": "in"
   		  },
   		  "assign": {
@@ -624,6 +639,10 @@ define({
   			"agree-change": {
   			  "verb": "agreed the change",
   			  "preposition": "to"
+  			},
+  			"leave": {
+  			  "verb": "left",
+  			  "preposition": ""
   			}
   		}
 		},

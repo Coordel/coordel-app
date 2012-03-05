@@ -28,17 +28,24 @@ app.store.util.TaskQueryEngine = function(query, options){
 	if (query.db){
 	  db = query.db;
 	}
-	if (query.focus){
+
 	  //if a query is provided, it will be for one of the main task focus groups
 	  var queryObject = query;
+	  
+	  //console.log("queryObject", queryObject);
 
   	//if there are additional attributes to deal with in the query, they will be here
   	//examples include, get current tasks for a particular project, an attribute 
   	//would be project: id (the project identifier)
   	var filters = queryObject.filters;
   	
+ 	if (query.focus){ 	
   	// create our matching query function based on the incoming focus
   	switch(queryObject.focus){
+  	  case "all":
+  	  query = function(task){
+  	    return true;
+  	  };
   	  case "calendar":
   	  query = function(task){
   	    var t = db.getTaskModel(task, true);
@@ -99,7 +106,14 @@ app.store.util.TaskQueryEngine = function(query, options){
   		query = function(task){
   		  var t = db.getTaskModel(task, true);
   			//if the assignment status for the task username is LEFT
-  			return (pStatus.assignStatus(t.p.project, t.username) === "LEFT" && applyFilter(task));
+  			return (pStatus.assignStatus(t.p.project, t.username) === "LEFT" && !t.isDone() && !t.isCancelled() && applyFilter(task));
+  		};
+  		break;
+  		
+  		case "unassigned":
+  		query = function(task){
+  		  var t = db.getTaskModel(task, true);
+  			return t.isUnassigned() && applyFilter(task);
   		};
   		break;
   		
@@ -114,8 +128,10 @@ app.store.util.TaskQueryEngine = function(query, options){
   		//cleared tasks won't be current for the responsible, issues wouldn't be cleared for the user, etc
   		case "projectCurrent":
   		query = function(task){
+  		  
   			var t = db.getTaskModel(task, true);
-  			return t.isCurrent() || t.isCleared() || t.isIssue() || t.isSubmitted() || t.isReturned() && applyFilter(task);
+  			console.log("testing projectCurrent", t.isCurrent(), t.isCleared(), t.isIssue(), t.isSubmitted(), t.isReturned(), t.isUnassigned());
+  			return (t.isCurrent() || t.isCleared() || t.isIssue() || t.isSubmitted() || t.isReturned()) && !t.isUnassigned() && applyFilter(task);
   		};
   		break;
   		case "blocked":
@@ -164,12 +180,13 @@ app.store.util.TaskQueryEngine = function(query, options){
   	}
 	} else {
 	  
-	  //console.debug("no focus in tqe");
+	  //console.debug("no focus in tqe", filters);
 	  
 	  //just return everything, or apply filters to everything if no focus
 		query = function(task){
+		  //console.log("query task", task, filters);
 	    if (filters){
-	      return applyFilters(task);
+	      return applyFilter(task);
 	    }
 		  return true;
 		};
@@ -190,7 +207,7 @@ app.store.util.TaskQueryEngine = function(query, options){
 	    
   	  for(var key in filters){
   			var required = filters[key];
-  			//console.debug("required", required, required.test);
+  			//console.debug("required", required, required.test, task[key]);
   			if(required && required.test){
   				if(!required.test(task[key])){
   					return false;

@@ -214,6 +214,8 @@
 .icon-project-actions {background-position:-220px;}
 
 .icon-project-following {background-position: -360px;}
+.icon-project-cancelled {background-position: -480px;}
+.icon-project-done {background-position: -520px;}
 
 .active .icon-project {background-position:-120px;}
 .active .icon-owner-project {background-position:-180px;}
@@ -222,6 +224,9 @@
 .active .icon-project-following {background-position: -380px;}
 .active .icon-owner-project.invite {background-position: -420px;}
 .active .icon-owner-project.invite-error {background-position: -460px;}
+.active .icon-project-cancelled {background-position: -500px;}
+.active .icon-project-done {background-position: -540px;}
+
 
 .highlight .icon-project, .active.highlight .icon-project {background-position:-140px;}
 .highlight .icon-owner-project, .active.highlight .icon-owner-project {background-position:-200px;}

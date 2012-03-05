@@ -21,6 +21,7 @@
 				<li dojoAttachPoint="deadlineAround" class="field task-deadline">
 					<div class="field-inner">
 						<div dojoAttachPoint="taskFormDeadline" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" constraints="{formatLength:'medium'}" placeHolder="${coordel.taskForm.phDeadline}" layoutAlign="bottom" taskFormField="deadline" openOnClick="true"></div>
+						<div dojoAttachPoint="taskFormDeadlineValue" dojoType="app.views.TaskFormPill" taskFormField="deadline" class="hidden"></div>
 					</div>
 					<div dojoAttachPoint="deadlineTip" class="hidden"></div>
 				</li>
@@ -44,6 +45,7 @@
 				<li dojoAttachPoint="deferAround" class="field task-defer">
 					<div class="field-inner">
 						<div dojoAttachPoint="taskFormDefer" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" placeHolder="${coordel.taskForm.phDefer}" constraints="{formatLength:'medium'}"  layoutAlign="bottom" taskFormField="defer"></div>
+						<div dojoAttachPoint="taskFormDeferValue" dojoType="app.views.TaskFormPill" taskFormField="defer" class="hidden"></div>
 					</div>
 					<div dojoAttachPoint="deferTip" class="hidden"></div>
 				</li>

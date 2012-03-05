@@ -45,7 +45,7 @@ define([
       //otherwise, there is the option to follow
       dojo.connect(this.participate, "onclick", this, function(){
         //console.log("return clicked");
-        dojo.publish("coordel/projectAction", [{action: "participate", project: this.project, validate: false}]);
+        dojo.publish("coordel/projectAction", [{action: "participate", project: this.project, validate: true}]);
       });
       
       //wire up the leave menu option
@@ -56,14 +56,18 @@ define([
         dojo.publish("coordel/projectAction", [{action: "leave", project: this.project, validate: true, cssClass: "warning-button"}]);
       });
       
-      //wire up the edit menu option
-      /*
-      dojo.connect(this.edit, "onclick", this, function(){
-        console.log("edit clicked");
-        dojo.publish("coordel/editProject", [{project: this.project}]);
+      //wire up the mark done menu option
+      dojo.connect(this.markDone, "onclick", this, function(){
+        console.log("mark done clicked");
+        dojo.publish("coordel/projectAction", [{action: "markDone", project: this.project, validate: true}]);
       });
-      */
       
+      //wire up the mark done menu option
+      dojo.connect(this.ackDone, "onclick", this, function(){
+        console.log("ack done clicked");
+        dojo.publish("coordel/projectAction", [{action: "ackDone", project: this.project}]);
+      });
+  
       //wire up the follow menu option
       dojo.connect(this.follow, "onclick", this, function(){
         //console.log("follow clicked");
@@ -94,6 +98,12 @@ define([
         dojo.publish("coordel/projectAction", [{action: "cancel", project: this.project, validate: true, cssClass: "warning-button"}]);
       });
       
+      //wire up the cancel menu option
+      dojo.connect(this.ackCancel, "onclick", this, function(){
+        //console.log("cancel clicked");
+        dojo.publish("coordel/projectAction", [{action: "ackCancel", project: this.project, validate: false}]);
+      });
+      
       //wire up the delete menu option
       dojo.connect(this.deleteProject, "onclick", this, function(){
         //console.log("cancel clicked");
@@ -103,7 +113,7 @@ define([
       //wire up the send menu option
       dojo.connect(this.send, "onclick", this, function(){
         //console.log("cancel clicked");
-        dojo.publish("coordel/projectAction", [{action: "send", project: this.project}]);
+        dojo.publish("coordel/projectAction", [{action: "send", project: this.project, validate: true}]);
       });
       
       //wire up the decline menu option
@@ -170,20 +180,28 @@ define([
              
       switch(projStat){	
   		  case "ACTIVE":
-  			  //owner - leave pause cancel reuse
+  			  //owner - pause cancel reuse (the owner can't leave)
   				if (own){
+  				
   				  if (projSub && projSub === "PENDING"){
   				    dojo.removeClass(this.send, "hidden");
     				  dojo.removeClass(this.deleteProject, "hidden");
     					dojo.addClass(this.cancel, "hidden");
     					dojo.addClass(this.pause, "hidden");
-  				  } else {
-  				    dojo.removeClass(this.leave, "hidden");
-  				  }
+  				  } else if (projSub && projSub === "PAUSED") {
+  				    dojo.addClass(this.pause, "hidden");
+              dojo.removeClass(this.resume, "hidden");
+  				  } else if (projSub && projSub === "CANCELLED") {
+    				  dojo.addClass(this.pause, "hidden");
+              dojo.addClass(this.cancel, "hidden");
+    					dojo.addClass(this.resume, "hidden");
+    				} else {
+    				  dojo.removeClass(this.markDone, "hidden");
+    				}
   				  
   				} else {
   				  if (myAssign){
-  				    console.log("assignment", myAssign);
+  				    //console.log("assignment", myAssign);
   				    if (myAssign.role === "FOLLOWER"){
     				    if (myAssign.status === "INVITE"){
     				      //not owner - follow decline
@@ -202,36 +220,32 @@ define([
     				    } else if (myAssign.status === "ACCEPTED"){
     				      //not owner - leave
     				      dojo.removeClass(this.leave, "hidden");
+    				    } 
+    				    
+    				    if (projSub && projSub === "CANCELLED"){
+    				      dojo.addClass(this.leave, "hidden");
+    				      dojo.removeClass(this.ackCancel, "hidden");
     				    }
+    				    
     				  }
   				  } else {
   				    //console.debug("should show no options");
   				    this.hasOptions = false;
   				  }
   				  
+  				  
   				}
   				break;
-  	    case "PAUSED":
-  			//owner - resume cancel reuse
-  				if (own){
-            dojo.addClass(this.pause, "hidden");
-            dojo.removeClass(this.resume, "hidden");
-  				} else {
-  				  //not owner - no options message
-  				  this.hasOptions = false;
-  				}
-  				break;
-  	    case "CANCELLED":
-  			//owner - reuse
-  		
-  			  if (!own){
-  					dojo.addClass(this.cancel, "hidden");
-  					dojo.addClass(this.pause, "hidden");
-  				} else {
-  				  //not owner - no options message
-  				  this.hasOptions = false;
-  				}
-  				break;
+  			  case "ARCHIVE":
+  			    if (own){
+      				dojo.addClass(this.pause, "hidden");
+              dojo.addClass(this.cancel, "hidden");
+      				dojo.addClass(this.resume, "hidden");
+            } 
+          
+				    dojo.removeClass(this.ackDone, "hidden");
+	
+  			  break;
   		}
     }
        
