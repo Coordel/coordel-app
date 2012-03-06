@@ -27,7 +27,7 @@ define(
       
       footer: null,
       
-      prettyObjectName: coordel.project,
+      prettyObjectName: "",//coordel.project,
       
       postMixInProperties: function(){
         this.inherited(arguments);
@@ -37,7 +37,7 @@ define(
         try {
           this.prettyVerb = coordel.stream.verbs[verb].verb;
         } catch (err) {
-          console.debug("ERROR getting the verb, so used the raw value", verb);
+          console.debug("ERROR getting the verb, so used the raw value", verb, err);
           this.prettyVerb = verb;
         }
         

@@ -1,0 +1,36 @@
+<div>
+	<div dojoAttachPoint="score" style="white-space: nowrap">
+		
+		<div class="ratings c-float-r">
+			<div class="radio-score">
+				<input dojoAttachPoint="low1" type="radio" name="entry-${to}" dojoType="dijit.form.RadioButton" value="1"/>
+				<label>1</label>
+			</div>
+			<div class="radio-score">
+				<input dojoAttachPoint="low2" type="radio" name="entry-${to}" dojoType="dijit.form.RadioButton" value="2"/>
+				<label>2</label>
+			</div>
+			<div class="radio-score">
+				<input dojoAttachPoint="medium3" type="radio" name="entry-${to}" dojoType="dijit.form.RadioButton" value="3"/>
+				<label>3</label>
+			</div>
+			<div class="radio-score">
+				<input dojoAttachPoint="high4" type="radio" name="entry-${to}" dojoType="dijit.form.RadioButton" value="4"/>
+				<label>4</label>
+			</div>
+			<div class="radio-score">
+				<input dojoAttachPoint="high5" type="radio" name="entry-${to}" dojoType="dijit.form.RadioButton" value="5"/>
+				<label>5</label>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="username">${toFullName}</div>
+		<div class="clear"></div>
+	</div>
+	<div dojoAttachPoint="commentContainer" class="comment hidden" style="margin-left: 100px;padding: 0 8px">
+		<div style="font-size: 10px" class="c-color-active">Heap on the complements!</div>
+		<div class="textarea-holder  c-margin-b">
+			<div type="text" dojoAttachPoint="comment" dojoType="dijit.form.Textarea"></div>
+		</div>
+	</div>
+</div>

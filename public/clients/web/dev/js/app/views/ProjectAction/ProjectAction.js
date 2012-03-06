@@ -3,14 +3,18 @@ define([
   "i18n!app/nls/coordel",
   "text!app/views/ProjectAction/templates/ProjectAction.html",
   "text!app/views/ProjectAction/templates/Blueprint.html",
+  "text!app/views/ProjectAction/templates/Feedback.html",
   "dijit/_Widget", 
   "dijit/_Templated",
   "app/views/ConfirmDialog/ConfirmDialog",
   'app/widgets/ContainerPane',
   'app/models/CoordelStore',
-  'app/views/ProjectForm/ProjectForm'], function(dojo, coordel, template, blueprint, w, t, Dialog, ContainerPane, db, Form) {
+  'app/views/ProjectForm/ProjectForm',
+  "app/views/feedback/RatingForm/RatingForm"], function(dojo, coordel, template, blueprint, feedback, w, t, Dialog, ContainerPane, db, Form, Rating) {
   //return an object to define the "./newmodule" module.
   dojo.declare("app.views.ProjectAction", [w,t], {
+    
+    rating: null,
     
     project: null, 
     
@@ -37,10 +41,16 @@ define([
         this.templateString = blueprint;
       }
       
+      if (this.action === "ackDone"){
+        this.templateString = feedback;
+      }
+      
     },
     
     postCreate: function(){
       this.inherited(arguments);
+      
+      console.log("project action", this.action);
       
       if (this.project.status === "PROJECT"){
         this.project = db.projectStore.store.get(this.project.project);
@@ -62,14 +72,28 @@ define([
         }).placeAt(this.containerNode);
       }
       
+      //if we're giving feedback, then we need to show a feedback form
+      if (this.action === "ackDone"){
+        
+        this.rating = new Rating({
+          project: this.project
+        }).placeAt(this.containerNode);
+        console.log("it was ackDone", this.rating);
+      }
+      
     },
     
     save: function(){
-      console.debug("save called in ProjectAction", this.action, this.project, this.actionText.get("value"));
+    
+      console.debug("save called in ProjectAction", this.action, this.project);
       var p = db.getProjectModel(this.project, true),
-          message =  this.actionText.get("value"),
+          message = "",
           project = this.project,
           username = db.username();
+      
+      if (this.actionText){
+         message = this.actionText.get("value");
+      }
       
       switch(this.action){
         case "participate":
@@ -110,6 +134,9 @@ define([
         case "cancel":
           p.cancel(project, message);
           break;
+        case "ackCancel":
+          p.ackCancel(username, project);
+          break;
         case "deleteProject":
           p.remove(project);
           //if we're deleting the currently focused project, default back to current
@@ -122,6 +149,10 @@ define([
           break;
         case "markDone":
           p.markDone(project, message);
+          break;
+        case "ackDone":
+          this.rating.save();
+          p.feedback(username, project);
           break;
       }
     },

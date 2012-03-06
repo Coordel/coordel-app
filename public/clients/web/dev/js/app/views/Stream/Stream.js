@@ -30,6 +30,8 @@ define(
       
       showProject: false,
       
+      isAlerts: false,
+      
       stream: [],
     
       postCreate: function(){
@@ -53,6 +55,10 @@ define(
         //console.debug("showStream stream.length:",  stream.length);
               
         self.showProject = (db.streamStore.currentContext === "userStream" || db.streamStore.currentContext === "userMessages");
+        
+        if (self.isAlerts){
+          self.showProject = true;
+        }
   
         stream.forEach(function(item, key){
           //console.debug("iterating stream", item, key);

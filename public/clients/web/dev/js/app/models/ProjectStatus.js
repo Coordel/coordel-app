@@ -218,7 +218,7 @@ define("app/models/ProjectStatus",
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username && days < 14){
               //console.debug("isCancelled = true", username, days);
-              if (assign.status === "ACK"){
+              if (assign.status === "LEFT-ACK" || assign.ack){
                 //console.debug("assign.status was ACK", username, days);
                 isCancelled = false;
               }
@@ -319,7 +319,7 @@ define("app/models/ProjectStatus",
           isDone = true;
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username && days < 14){
-              if (assign.status === "ACK"){
+              if (assign.ack){
                 isDone = false;
               }
             }

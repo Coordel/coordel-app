@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.8",
+  version: "0.1.13",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -548,6 +548,88 @@ module.exports = {
       }
     },
     
+    /******************************* REPORTS ********************************************************/
+    
+    userFeedback: {
+      map: function(doc){
+        
+        function toISODateArray (date){
+      	  var dtString = date.split("T")[0];
+      	  dtString = dtString.split("-");
+      	  var tmString = date.split("T")[1];
+      	  tmString = tmString.split(".");
+      	  tmString = tmString[0].split(":");
+      	  return [
+      	    parseInt(dtString[0],10), 
+      	    parseInt(dtString[1],10), 
+      	    parseInt(dtString[2],10), 
+      	    parseInt(tmString[0],10), 
+      	    parseInt(tmString[1],10), 
+      	    parseInt(tmString[2],10)];
+      	}
+        
+        if (doc.docType === "project"){
+          doc.assignments.forEach(function(assign){
+            if (assign.feedback && assign.feedback.length > 0){
+              emit([assign.username, toISODateArray(doc.updated)], {name: doc.name, feedback: assign.feedback});
+          	}
+          });
+        }
+      }
+    },
+    
+    userFeedbackAvg: {
+      map: function(doc) {
+
+      	if (doc.docType === "project"){
+
+        	doc.assignments.forEach(function(assign){
+
+          	if (assign.feedback && assign.feedback.length > 0){
+      				assign.feedback.forEach(function(f){
+      	 	 			emit(assign.username, parseInt(f.score, 10));
+              });
+          	}
+          });
+      	}
+      },
+      reduce: function(keys, values, rereduce){
+        
+        var result;
+
+        if( rereduce ) {
+          result = {
+            sum: values[0].sum
+            ,count: values[0].count
+          };
+
+          for(var j=1,e=values.length; j<e; ++j) {
+            result.sum = result.sum + values[j].sum;
+            result.count = result.count + values[j].count;
+          };
+
+          result.avg = (result.sum / result.count);
+
+          return result;
+        };
+
+        // Non-rereduce case
+        result = {
+          sum: values[0]
+          ,count: 1
+        };
+
+        for(var i=1,f=keys.length; i<f; ++i) {
+          result.sum = result.sum + values[i];
+          result.count = result.count + 1;
+        };
+
+        result.avg = (result.sum / result.count);
+
+        return result;
+      }
+    },
+    
     /******************************* USERS ********************************************************/
     
     userBlockers: {
@@ -564,8 +646,7 @@ module.exports = {
         				  task: doc._id,
         				  docType: "prequisite",
         				  username: doc.username
-        				}
-        			);
+        			});
         		});
       	  }
       	}
@@ -706,7 +787,7 @@ module.exports = {
               var show = false;
       	      if (days_passed < 14){
       	        show = true;
-      	        if (assign.status === "ACK"){
+      	        if (assign.ack){
       	          show = false;
       	        }
       	        if (show){

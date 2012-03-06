@@ -1058,6 +1058,46 @@ define("app/models/ProjectModel",
         });
     	},
     	
+    	feedback: function(username, project){
+        var p = this;
+    	  console.log("feedback called", username, project);
+    	  
+    	  dojo.forEach(project.assignments, function(assign){
+    	    if (assign.username === username){
+    	      assign.ack = true;
+    	    }
+    	  });
+    	  
+    	  project = this.addActivity({
+    			verb: "FEEDBACK",
+    			icon: this.icon.feedback
+    		}, project);
+    		
+    		p.update(project);
+    	},
+    	
+    	ackCancel: function(username, project){
+        var p = this;
+    	  console.log("ackCancel called", username, project);
+    	  
+    	  dojo.forEach(project.assignments, function(assign){
+    	    if (assign.username === username){
+    	      if (assign.status === "LEFT"){
+    	        assign.status = "LEFT-ACK";
+    	      } else {
+    	        assign.ack = true;
+    	      }
+    	    }
+    	  });
+    	  
+    	  project = this.addActivity({
+    			verb: "ACK",
+    			icon: this.icon.cancel
+    		}, project);
+    		
+    		p.update(project);
+    	},
+    	
     	addActivity: function(opts, project){
     	  var db = this.db,
           username = db.username();

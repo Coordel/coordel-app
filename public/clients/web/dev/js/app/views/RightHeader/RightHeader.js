@@ -75,7 +75,10 @@ define(
           });
           var alerts = new Stream({
             stream: this.currentAlerts,
-            showProject: true
+            isAlerts: true,
+            onCancel: function(){
+              alerts.destroy();
+            }
           }).placeAt(this.alertsContainer);
         });
         

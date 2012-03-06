@@ -68,7 +68,8 @@ define("app/models/CoordelBase",["dojo", "dojo/Stateful", "dojo/date/stamp"], fu
       	edit: "ui-icon-pencil",
       	todo: "c-icon c-icon-task",
       	preferences: "ui-icon-gear",
-      	connection: "ui-icon-extlink"
+      	connection: "ui-icon-extlink",
+      	feedback: "ui-icon-heart"
       }
   });
   return app.models.CoordelBase;    

@@ -288,7 +288,7 @@ define(['dojo',
   	    dojo.addClass(d.confirmTextContainer, "action-form-header");
   	    d.validate();
 	    } else {
-	      if (args.action === "reuse"){
+	      if (args.action === "reuse" || args.action === "ackDone"){
 	        dojo.addClass(d.confirmTextContainer, "action-form-header");
 	      } else {
 	        //not validating, and not a resue so hide the projectaction

@@ -199,10 +199,10 @@ define({
 	      decline: "This will remove access from the Coord",
 	      reuse: "Click to save this Coord as a Blueprint Coord for reuse in the future",
 	      clear: "Clear from list",
-	      proposeChange: "This will alert the Coord Responsible that you have made changes to the Role",
+	      proposeChange: "Click to alert the Coord Responsible that you have made changes to the Role",
 	      agreeChange: "",
 	      markDone: "This will mark the Coord Done. It will cancel any undone Tasks",
-	      ackDone: "This will collect your feedback for the other People in this Coord"
+	      ackDone: "This will give feedback to the other People in this Coord. Indicate how much you would like to work with each Person again."
 		  },
 		  instructions: {
 		    leave: "Enter why you are leaving the Coord",
@@ -541,7 +541,7 @@ define({
   		    "preposition": "in"
   		  },
   		  "complete": {
-  		    "verb": "concluded",
+  		    "verb": "concluded coord",
   		    "preposition": "in"
   		  },
   		  "pause": {
@@ -643,6 +643,14 @@ define({
   			"leave": {
   			  "verb": "left",
   			  "preposition": ""
+  			},
+  			"feedback": {
+  			  "verb": "gave feedback",
+  			  "preposition": "in"
+  			},
+  			"ack": {
+  			  "verb": "acknowledged cancel",
+  			  "preposition": "in"
   			}
   		}
 		},
