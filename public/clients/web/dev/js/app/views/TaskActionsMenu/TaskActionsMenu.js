@@ -92,9 +92,16 @@ define([
       //wire up the reuse menu option
       dojo.connect(this.reuseTask, "onclick", this, function(){
         //console.log("reuse clicked");
-        dojo.publish("coordel/taskAction", [{action: "reuse", task: this.task}]);
+        dojo.publish("coordel/taskAction", [{action: "reuse", task: dojo.clone(this.task)}]);
       });
       
+      /*
+      //wire up the reuse menu option
+      dojo.connect(this.reuseDeliverables, "onclick", this, function(){
+        //console.log("reuse clicked");
+        dojo.publish("coordel/taskAction", [{action: "reuseDeliverables", task: this.task}]);
+      });
+      */
       //PROJECT 
       //wire up the proposeProjChange menu option
       dojo.connect(this.proposeProjChange, "onclick", this, function(){
@@ -116,6 +123,7 @@ define([
       //reuse shows by default but hide it if this is a PROJECT invite
       if (this.task.status === "PROJECT"){
         dojo.addClass(this.reuseTask, "hidden");
+        dojo.addClass(this.reuseDeliverables, "hidden");
       }
           
       //if I'm the owner, I can usually see cancel pause unless this

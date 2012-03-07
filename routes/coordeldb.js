@@ -65,15 +65,24 @@ module.exports = function(app, validate){
         rev = req.query.rev,
         type = req.headers['content-type'];
         
-    couch.saveAttachment(id, rev, name, type, req, function(err, attachRes){
-      if (err) {
-        console.log("ERROR saving file", err);
-        res.json({error: err});
-      } else {
-        //console.log("RESPONSE", attachRes);
-        res.json(attachRes);
-      }
-    });
+    
+        var stream = couch.saveAttachment({
+            id: id, 
+            rev: rev
+        }, {
+            name: name, 
+            contentType: type
+        }, function(err, attachRes){
+          if (err) {
+            console.log("ERROR saving file", err);
+            res.json({error: err});
+          } else {
+            //console.log("RESPONSE", attachRes);
+            res.json(attachRes);
+          }
+        });
+            
+        req.pipe(stream);
   });
   
   app.del('/coordel/files/:id/:name', validate, function(req, res){
@@ -129,16 +138,22 @@ module.exports = function(app, validate){
     });
   });
 
-  app.get('/coordel/view/:id', validate, function(req, res){
-    var view = req.params.id;
+  app.get('/coordel/view/:name', validate, function(req, res){
+    var view = req.params.name;
     view = 'coordel/' + view;
-    //console.log('GET VIEW', view);
+    console.log('GET VIEW', view);
     var opts = {};
-    //console.log('queryString params', req.query);
+    
     for (var key in req.query){
-      opts[key] = req.query[key];
+      if (key === "key" || key === "startkey" || key === "endkey"){
+        opts[key] = JSON.parse(req.query[key]);
+      } else {
+        opts[key] = req.query[key];
+      }
     }
-    couch.view(view, req.query, function(err, resView){
+    
+    //console.log('queryString params', req.query, opts);
+    couch.view(view, opts, function(err, resView){
       var ret = [],
           toReturn;
    

@@ -29,7 +29,8 @@ define(
     "app/views/TaskFormPill/TaskFormPill",
     "app/views/DeliverableSettings/DeliverableSettings",
     "app/views/TaskFormAttachments/TaskFormAttachments",
-    "app/util/dateFormat"
+    "app/util/dateFormat",
+    "app/widgets/ContainerPane"
     ], 
   function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format) {
   

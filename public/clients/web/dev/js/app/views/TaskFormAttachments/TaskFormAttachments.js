@@ -6,7 +6,8 @@ define(
     "dijit/_HasDropDown",
     "app/form/Uploader",
     "app/form/UploaderFile",
-    "app/models/FileModel"
+    "app/models/FileModel",
+    "app/widgets/ContainerPane"
     ], 
   function(dojo,coordel, w, t, html, h, Uploader, UploaderFile, FileModel) {
   

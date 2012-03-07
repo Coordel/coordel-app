@@ -3,10 +3,6 @@
  * 
  * Redis generates user.id and appId at userKeys and appKeys
  *
- * CRADLE WARNING: in cradle/lib/cradle.js, the key, startkey, and endkey options were JSON.stringified
- * which caused those parameters not to work. Had to comment out line 510 to stop that. make sure that if 
- * cradle is updated that that is either changed in the cradle code or that it is recommented or figure
- * out why I was so stupid
  */
 
 var express     = require('express'),

@@ -15,6 +15,8 @@ define("app/models/TaskModel",
     {
       db: null,
       
+      headers: {Accept: "application/json", "Content-Type": "application/json"},
+      
       p: null,
       
       init: function(db){
@@ -1447,6 +1449,29 @@ define("app/models/TaskModel",
       			icon: t.icon.reassign
       		}, task);
           t.update(task);
+    	},
+    	reuse: function(task, isDeliverables){
+    	  /*
+    	  var bp = task;
+    	  if (isDeliverables){
+    	    var dbp = {};
+    	    dpb.docType = "deliverable";
+    	    dbp.deliverables = task.workspace;
+    	    bp = dbp;
+    	    console.log("reuse deliverable", bp);
+    	  } else {
+    	    console.log("reuse task", bp);
+    	  }
+    	  */
+    	  return  dojo.xhrPost({
+          url: "/blueprint",
+          handleAs: "json",
+          putData: dojo.toJson(task),
+          headers: this.headers,
+          load: function(res){
+            console.log("blueprint", res);
+          }
+        });
     	},
     	addActivity: function(opts, task){
     	  var db = this.db,

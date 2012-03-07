@@ -11,7 +11,8 @@ var settings    = require('./../settings'),
     couchOpts   = settings.config.couchOptions,
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),
-    db          = cn.database(settings.config.couchName);
+    db          = cn.database(settings.config.couchName),
+    async       = require('async');
     
 
 var Blueprint = exports = module.exports = function Blueprint(args){
@@ -22,8 +23,8 @@ function getProject(args, fn){
   console.log("GETTING PROJECT", args._id);
   var bp = args,
       viewArgs = {
-        startkey: JSON.stringify([args._id]), 
-        endkey:JSON.stringify([args._id, {}]), 
+        startkey: [args._id], 
+        endkey:[args._id, {}], 
         include_docs: true};
   
   db.view('coordel/projects', viewArgs, function(err, docs){
@@ -105,6 +106,119 @@ function getProject(args, fn){
       fn(null, bp);
     }
   });
+}
+
+function getTask(args, fn){
+  console.log("GETTING TASK", args._id, args);
+  var bp,
+      id = args._id,
+      rev = args._rev,
+      responsible = args.responsible,
+      username = args.username,
+      delegator = null,
+      attachments = null;
+      
+  if (args._attachments){
+    attachments = args._attachments;
+  }
+  
+  args.id = id;
+      
+  //clear out the specific info from the task
+  delete args._id;
+  delete args._rev;
+  delete args._attachments;
+  delete args.username;
+  delete args.responsible;
+  
+  //clear any blockers because we don't save them
+  args.coordinates = [];
+
+  if (args.delegator){
+    delegator = args.delegator;
+    delete args.delegator;
+  }
+  
+  bp = args;    
+  bp.templateType = 'task';
+
+  console.log('Creating blueprint: ' , bp);
+  
+  //db.view('coordel/tasks', viewArgs, function(err, docs){
+  db.save(bp, function(err, result){
+    if (err){
+      fn(err, false);
+    } else {
+      
+      bp._id = result.id;
+      bp._rev = result.rev;
+      
+      console.log('new blueprint', bp);
+      
+      if (attachments){
+        var atts = [];
+        for (var key in attachments){
+          atts.push(key);
+        }
+        
+        async.forEachSeries(atts, function(name, callback){
+          
+          var fileStream = db.getAttachment(id, name);
+          
+          var stream = db.saveAttachment({
+              id: bp._id, 
+              rev: bp._rev
+          }, {
+              name: name, 
+              contentType: attachments[key].content_type
+          }, function(err, attachRes){
+            if (err) {
+              console.log("ERROR saving file", err);
+              //res.json({error: err});
+            } else {
+              console.log("SAVED FILE", attachRes);
+              bp._rev = attachRes.rev;
+              callback();
+            }
+          });
+
+          fileStream.pipe(stream);
+         
+          }, function(err){
+            
+            db.get(bp._id, function(err, fbp){
+              if (err){
+                console.log("ERROR getting final blueprint", err);
+              } else {
+                saveBlueprint(fbp);
+              }
+            });
+            
+                   
+        });
+      } else {
+        saveBlueprint(bp);
+      }
+
+      function saveBlueprint(pending){
+        pending.username = username;
+        pending.responsible = responsible;
+        if (delegator){
+          pending.delegator = delegator;
+        }
+        console.log("saveBlueprint", pending);
+        db.save(pending, function(err, finalResp){
+          if (err){
+            console.log("ERROR saving final blueprint", err);
+          } else {
+            console.log("FINAL BLUEPRINT", finalResp);
+            pending._rev = finalResp.rev;
+            fn(null, pending); 
+          }
+        });
+      }
+    }
+  });
 };
 
 Blueprint.prototype.add = function(args, fn){
@@ -115,8 +229,10 @@ Blueprint.prototype.add = function(args, fn){
     * @return {blueprint} will be a the full json of the requested object
     * 
     */
-    
+  
   var type = args.docType;
+  
+  console.log("BLUEPRINT-ADD", type);
     
   args.isTemplate = true;
   args.docType = 'template';
@@ -143,8 +259,39 @@ Blueprint.prototype.add = function(args, fn){
     case 'role':
     break;
     case 'task':
+      console.log("blueprinting task");
+      getTask(args, function(err, bp){
+        if (err){
+          console.log("ERROR", err);
+          fn(err, false);
+        } else {
+          console.log("got task to blueprint", bp);
+          
+          db.save(bp, function(err, bpResp){
+            if (err){
+              console.log("ERROR blueprinting", err);
+              fn(err, false);
+            } else {
+              console.log("saved template", bpResp);
+              bp._id = bpResp.id;
+              bp._rev = bpResp.rev;
+              fn(null, bp);
+            }
+          });
+          
+        }
+      });
     break;
     case 'deliverable':
+    /*
+      console.log("got deliverable to blueprint", bp);
+      bp.templateType = 'deliverable';
+      bp.id = bp._id; //save the id for use instantiating the blueprint
+      delete bp._id;
+      delete bp._rev;
+      bp.blockers = [];//blockers will contain any of the tasks that block this task
+      console.log('Creating blueprint: ' , r.doc.name);
+      */
     break;
   }
   

@@ -131,7 +131,7 @@ define([
       //wire up the reuse menu option
       dojo.connect(this.reuse, "onclick", this, function(){
         //console.log("reuse clicked");
-        dojo.publish("coordel/projectAction", [{action: "reuse", project: this.project}]);
+        dojo.publish("coordel/projectAction", [{action: "reuse", project: dojo.clone(this.project)}]);
       }); 
       
     },

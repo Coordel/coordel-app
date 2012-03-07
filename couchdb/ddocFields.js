@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.13",
+  version: "0.1.25",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -207,26 +207,31 @@ module.exports = {
       			[doc.project, 1],
       			{"_id": doc._id, "name": doc.name}
       		);
-
-      		doc.responsibilities.forEach(function(resp){
-      		  //emit the tasks
-      			emit(
-      				[doc.project, 3, resp.task, 0],
-      				{"_id": resp.task}
-      			);
-      		});
+          
+          if (doc.responsibilities){
+           	doc.responsibilities.forEach(function(resp){
+        		  //emit the tasks
+        			emit(
+        				[doc.project, 3, resp.task, 0],
+        				{"_id": resp.task}
+        			);
+        		});
+          }
+      	
       	}
 
       	if (doc.docType === "task"){
-      		doc.coordinates.forEach(function(coord){
-      		  //emit the blockers. blockers have a lower number than tasks because when reused
-      		  //they need to be added before tasks without blockers. otherwise, the ui won't 
-      		  //find the blocker with the task is added.
-      			emit(
-      				[doc.project, 2, doc._id, 1],
-      				{"_id": coord}
-      			);
-      		});
+      	  if (doc.coordinates){
+      	    doc.coordinates.forEach(function(coord){
+        		  //emit the blockers. blockers have a lower number than tasks because when reused
+        		  //they need to be added before tasks without blockers. otherwise, the ui won't 
+        		  //find the blocker with the task is added.
+        			emit(
+        				[doc.project, 2, doc._id, 1],
+        				{"_id": coord}
+        			);
+        		});
+      	  }
       	}
       }
     },
@@ -446,6 +451,33 @@ module.exports = {
     
     
     /******************************* TASKS *****************************************************/
+    
+    tasks: {
+      map: function(doc){
+        //this gets tasks and any blockers
+        
+        if (doc.docType === "task"){
+          if (doc.coordinates){
+            doc.coordinates.forEach(function(coord){
+        		  //emit the blockers. blockers have a lower number than tasks because when reused
+        		  //they need to be added before tasks without blockers. otherwise, the ui won't 
+        		  //find the blocker with the task is added.
+        			emit(
+        				[doc._id, 2],
+        				{"_id": coord}
+        			);
+        		});
+          }
+      		
+      		//emit the tak
+          emit(
+            [doc._id, 3], 	
+            {"_id": doc._id}
+          );
+      	}
+      }
+    },
+    
     taskStream: {
       map: function (doc){
       	function toDateArray (date){

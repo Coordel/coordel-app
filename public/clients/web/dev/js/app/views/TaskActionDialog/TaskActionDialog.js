@@ -3,11 +3,13 @@ define([
   "i18n!app/nls/coordel",
   "text!app/views/TaskActionDialog/templates/taskActionDialog.html",
   "text!app/views/TaskActionDialog/templates/raiseIssueDialog.html",
+  "text!app/views/TaskActionDialog/templates/reuse.html",
   "dijit/_Widget", 
   "dijit/_Templated",
   'dijit/Dialog',
   'app/widgets/ContainerPane',
-  'app/models/CoordelStore'], function(dojo, coordel, template, issueTemplate, w, t, Dialog, ContainerPane, db) {
+  'app/models/CoordelStore',
+  "app/views/TaskForm/TaskForm"], function(dojo, coordel, template, issueTemplate, reuseTemplate, w, t, Dialog, ContainerPane, db, Form) {
   //return an object to define the "./newmodule" module.
   dojo.declare("app.views.TaskActionDialog", [w,t], {
     
@@ -36,6 +38,10 @@ define([
         this.issueInstructions = coordel.taskActions.instructions.raiseIssue;
         this.solutionInstructions = coordel.taskActions.instructions.proposedSolution;
       }
+      
+      if (this.action === "reuse" || this.action === "reuseDeliverables"){
+        this.templateString = reuseTemplate;
+      }
     },
     
     postCreate: function(){
@@ -62,6 +68,14 @@ define([
         });
       }
       
+      //if we're reusing, then we need to show a task form
+      if (this.action === "reuse" || this.action === "reuseDeliverables"){
+        var f = new Form({
+          task: this.task,
+          isNew: false
+        }).placeAt(this.containerNode);
+      }
+      
     },
     
     save: function(){
@@ -70,7 +84,7 @@ define([
           task = this.task,
           message = "";
       
-      if (this.action !== "raiseIssue"){
+      if (this.action !== "raiseIssue" && this.action !== "reuse" && this.action !== "reuseDeliverables"){
         message = dijit.byId(this.actionText).get("value");
       }
       
@@ -109,6 +123,13 @@ define([
           break;
         case "delete":
           t.remove(task);
+          break;
+        case "reuse":
+          t.reuse(task);
+          break;
+        case "reuseDeliverables":
+          t.reuse(task, true);
+          break;
       }
     },
     

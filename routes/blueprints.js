@@ -10,16 +10,20 @@ module.exports = function(app, validate){
     //ADD Blueprint - this will be an object type doc that comes in
     //when an object (project, task, role, deliverable) is blueprinted, a copy is made and saved as a
     //template for the user who made the blueprint
+   
     var b = new Blueprint(),
         args = req.body;
+        
+    console.log("BLUEPRINT", args);
     
     args.isPublic = false;
     
-    console.log("ASSIGNMENTS", args.assignments.length);
+    //console.log("ASSIGNMENTS", args.assignments.length);
       
         
     b.add(args, function(err, bp){
       if (err) {
+        console.log("ERROR blueprinting", err);
         //res.json({error: err});
       } else {
         res.json(bp);

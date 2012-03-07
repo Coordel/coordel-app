@@ -219,6 +219,7 @@ define({
 		  "return": "Return",
 		  "approve": "Approve",
 		  "reuse": "Blueprint",
+		  reuseDeliverables: "Blueprint Deliverables",
 		  "raiseIssue": "Raise Issue",
 		  "clearIssue": "Clear Issue",
 		  "cancel": "Cancel",
@@ -249,7 +250,8 @@ define({
 		    "decline": "This will send the Task back to the Person who Delegated the Task to you",
 		    "proposeChange": "This will return the Task the person who Delegated it to you to Agree, Modify or Decline your changes.",
 		    "agreeChange": "This will notify the person who proposed the change or changes to the Task that you agree to the changes.",
-		    reuse: "Click to configure this Task as a template to Blueprint..."
+		    reuse: "Click to Blueprint this Task",
+		    reuseDeliverables: "Click to Blueprint this Task's Deliverables"
 		    
 		  },
 		  "instructions": {
@@ -267,7 +269,8 @@ define({
 		    "proposeChange": "Describe the change or changes you made to the Task. If you haven't made changes, Cancel and make the changes first.",
 		    "agreeChange": "Enter comments you have about the changes or details any additional changes you have made",
 		    "quickEnterPrivate": "Click to quick-enter Private Tasks...",
-		    reuse: ""
+		    reuse: "",
+		    reuseDeliverables: ""
 		    
 		  }
 		},
@@ -689,6 +692,10 @@ define({
 		  instructions: {
 		    quickEnterTask: "Click to quick-enter Coord Tasks..."
 		  }
+		},
+		feedback: {
+		  low: "Not at all",
+		  high: "Very much"
 		},
 		"deliverable": {
 		  "emptyTitle": "No Deliverables",

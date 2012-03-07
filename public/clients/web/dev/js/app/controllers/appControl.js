@@ -159,7 +159,15 @@ define(['dojo',
 	  doTaskAction: function(args){
 	    //the TaskActionMenu sends the action to do and the task this function 
 	    //shows the correct dialog to capture the user's message and save the state change
-      var css = "highlight-button";
+      var css = "highlight-button",
+          title = coordel.taskActions[args.action],
+          executeText = coordel.taskActions[args.action];
+      
+      //trim reuse deliverables title and button
+      if (args.action === "reuseDeliverables"){
+        title = coordel.taskActions["reuse"];
+        executeText = coordel.taskActions["reuse"];
+      }
       
       if (args.cssClass){
         css = args.cssClass;
@@ -178,9 +186,9 @@ define(['dojo',
 
 	      confirmText: coordel.taskActions.confirmText[args.action],
 	      executeCss: css,
-	      executeText: coordel.taskActions[args.action],
+	      executeText: executeText,
         "class": "tasklist-titlepane",
-        title:  coordel.taskActions[args.action],
+        title:  title,
         content: act,
         onCancel: function(){
           d.destroy();
@@ -200,7 +208,14 @@ define(['dojo',
   	    
 	    } else {
 	      //not validating, so hide the projectaction
-	      dojo.addClass(act.domNode, "hidden");
+	    
+	      if (args.action === "reuse" || args.action === "reuseDeliverables"){
+	        dojo.addClass(d.confirmTextContainer, "action-form-header");
+	      } else {
+	        //not validating, and not a resue so hide the task action
+    	    dojo.addClass(act.domNode, "hidden");
+	      }
+
 	    }
 
       d.show();
@@ -245,20 +260,6 @@ define(['dojo',
 	      css = args.cssClass;
 	    }
 	    
-	    //create the action for this project
-	    /*
-	    if (args.action === "reuse"){
-	      proj = new ProjectForm({
-  	      project: args.project,
-  	      isNew: false
-  	    });
-	    } else {
-	      proj = new ProjectAction({
-  	      project: args.project,
-  	      action: args.action
-  	    });
-	    }
-	    */
 	     proj = new ProjectAction({
   	      project: args.project,
   	      action: args.action
@@ -452,9 +453,7 @@ define(['dojo',
   				      assignStatus = assign.status;
   				    }
   				  });
-  				  
-  				  
-  				  
+
   					//console.debug("project change received", chg, app.username, p);
   					//console.debug("STATUS:", chg.status, chg.substatus);
   					if (isNew && chg.creator !== app.username && chg.updater !== app.username && chg.status !== "ARCHIVE" && chg.status !== "TRASH" && !chg._deleted){
