@@ -304,7 +304,7 @@ define([
         
         //need to watch and see if there is a change to this list
         var handler = group.tasks.observe(function(task, removedFrom, insertedInto){
-          console.debug("tasks observed", task, removedFrom, insertedInto, group.focus);
+          //console.debug("tasks observed", task, removedFrom, insertedInto, group.focus);
           
           //was this a delete
           if (removedFrom > -1){

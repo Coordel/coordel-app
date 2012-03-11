@@ -58,13 +58,13 @@ define([
       
       //wire up the mark done menu option
       dojo.connect(this.markDone, "onclick", this, function(){
-        console.log("mark done clicked");
+        //console.log("mark done clicked");
         dojo.publish("coordel/projectAction", [{action: "markDone", project: this.project, validate: true}]);
       });
       
       //wire up the mark done menu option
       dojo.connect(this.ackDone, "onclick", this, function(){
-        console.log("ack done clicked");
+        //console.log("ack done clicked");
         dojo.publish("coordel/projectAction", [{action: "ackDone", project: this.project}]);
       });
   
@@ -176,7 +176,7 @@ define([
         //dojo.addClass(this.edit, "hidden");
       }
       
-      console.log("projStat", projStat);
+      //console.log("projStat", projStat);
              
       switch(projStat){	
   		  case "ACTIVE":

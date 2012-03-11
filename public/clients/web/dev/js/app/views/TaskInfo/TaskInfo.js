@@ -134,7 +134,14 @@ define(
             //this was a private project so set it to none
             dojo.addClass(self.infoDeadline, "hidden");
           } else {
-            self.deadline.set("value" , dt.deadline(dead));
+            console.log("there was a deadline", dead);
+            var showTime = false,
+                test = dead.split("T");
+            if(test.length > 1){
+              showTime = true;
+              console.log("showTime is true");
+            }
+            self.deadline.set("value" , dt.deadline(dead, showTime));
           }
 
           if (t.isOverdue()){
@@ -171,9 +178,9 @@ define(
         
         //set the status and dates
         self.status.set("value", t.getStatus());
-        self.updated.set("value", dt.prettyISODate(task.updated));
+        self.updated.set("value", dt.prettyISODate(task.updated, true));
         self.updater.set("value", db.contactFullName(task.updater));
-        self.created.set("value", dt.prettyISODate(task.created));
+        self.created.set("value", dt.prettyISODate(task.created, true));
         self.creator.set("value", db.contactFullName(task.creator));
         
         

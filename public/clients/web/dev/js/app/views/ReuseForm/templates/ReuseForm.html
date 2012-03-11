@@ -1,0 +1,16 @@
+<div class="task-form-dropdown ui-corner-bottom dijitMenu">
+	<div class="select-field">
+		<div class="desc">
+			<span class="name">${coordel.blueprint}</span>
+		</div>
+		<div>
+			<input templateFilter="tasks" dojoType="dijit.form.FilteringSelect" dojoAttachPoint="blueprint" class="text" tabindex="1"/>
+		</div>
+		<div>
+			<div class="instructions c-padding" tabindex="2">
+				${coordel.blueprintInstructions}
+			</div>
+		</div>
+	</div>
+	<div dojoAttachPoint="save" class="footer-button c-text-center ui-corner-bottom task-form-button c-margin-large-t">${submitLabel}</div>   
+</div>

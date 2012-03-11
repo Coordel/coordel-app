@@ -27,7 +27,7 @@ define(
       
       postMixInProperties : function() {
         this.inherited(arguments);
-        console.log("Contact",this.contact);
+        //console.log("Contact",this.contact);
         var email = dojo.trim(this.contact.email.toLowerCase());
         
         if (this.contact.email !== ""){

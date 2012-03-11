@@ -91,7 +91,7 @@ define(
         
         dojo.connect(this.doNotDisturb, "onclick", this, function(){
           //do not disturb is on, click this to turn it off
-          console.debug("onExecute fired in primary header");
+          //console.debug("onExecute fired in primary header");
           //clicking do not disturb off shows the stream and restarts alerts
           dojo.addClass(this.doNotDisturb, "hidden");
           dojo.removeClass(this.doNotDisturbOff, "hidden");
@@ -101,7 +101,7 @@ define(
         
         dojo.connect(this.doNotDisturbOff, "onclick", this, function(){
           //do not disturb is off, click this to activate
-          console.debug("onClick fired in primary header. showing dialog");
+          //console.debug("onClick fired in primary header. showing dialog");
           var d = new dialog();
           dojo.connect(d, "onConfirm", this, "confirm");
           d.show();
@@ -121,7 +121,7 @@ define(
       },
       
       updateNotificationCount: function(args){
-        console.debug("updateNotificationCount called", args);
+        //console.debug("updateNotificationCount called", args);
         this.currentAlerts = args.currentAlerts;
         var count = this.currentAlerts.length;
         var node = dijit.byId(this.showNotifications);

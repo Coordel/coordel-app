@@ -102,10 +102,10 @@ define("app/models/TaskModel",
         if (!name){
           name = coordel.sortHeader.noProject;
           if (p.isMyPrivate){
-            console.debug ("it's my private project");
+            //console.debug ("it's my private project");
             name = coordel.myPrivate;
           } else if (p.isMyDelegated){
-            console.debug ("it's my delegated project");
+            //console.debug ("it's my delegated project");
             name = coordel.delegated;
           }
         }
@@ -186,7 +186,7 @@ define("app/models/TaskModel",
     		}
     		
     		if (t.isBlocked()){
-    		  console.debug(t.name + " was BLOCKED, it's not current");
+    		  //console.debug(t.name + " was BLOCKED, it's not current");
     		  return false;
     		}
     	 
@@ -306,7 +306,7 @@ define("app/models/TaskModel",
 
     		//submitted actions are only current for the responsible
     		if (t.isSubmitted()) {
-          console.log("this is a submitted task", t.name, t.status, t.substatus, p.name, p.isUserOwner());
+          //console.log("this is a submitted task", t.name, t.status, t.substatus, p.name, p.isUserOwner());
     			if (!p.isUserOwner()){
     				//console.debug(t.name + " was CURRENT-DONE and I'm not the project responsible, it's not current");
     				isCurrent = false;
@@ -769,14 +769,14 @@ define("app/models/TaskModel",
         if (task.project && task.project !== "" && !uuidPat.test(task.project)){
           //task.project was provided and wasn't blank and didn't match the uuid format
           //delete what was sent and it will default accordingly
-          console.debug("task.project was provided, but wasn't in uuid format", task.project);
+          //console.debug("task.project was provided, but wasn't in uuid format", task.project);
           delete (task.project);
         }
         
         if (task.role && task.role !== "" && !uuidPat.test(task.role)){
           //task.role was provided and wasn't blank and didn't match the uuid format
           //delete what was sent and it will default accordingly
-          console.debug("task.role was provided, but wasn't in uuid format", task.role);
+          //console.debug("task.role was provided, but wasn't in uuid format", task.role);
           delete (task.role);
         }
         
@@ -860,10 +860,10 @@ define("app/models/TaskModel",
   	    
   	    //if the substatus of the project is PENDING then the task status should be pending
   	    //if this user isn't the responsible
-  	    console.log("testing pending", p.project.substatus, task.responsible, task.username);
+  	    //console.log("testing pending", p.project.substatus, task.responsible, task.username);
   	    if (p.project.substatus === "PENDING" && task.responsible !== task.username){
   	      task.status = "PENDING";
-  	      console.debug("project substatus is PENDING, updated task status to PENDING");
+  	      //console.debug("project substatus is PENDING, updated task status to PENDING");
   	    }
     		
         //set the type and template info
@@ -886,7 +886,7 @@ define("app/models/TaskModel",
         
         //make the DELEGATE entry if delegated
         if (isDelegated){
-          console.debug("adding DELEGATE activity");
+          //console.debug("adding DELEGATE activity");
   	      task = t.addActivity({
       			verb: "DELEGATE",
       			target: {id:projId, name: projName, type: "PROJECT"},
@@ -898,7 +898,7 @@ define("app/models/TaskModel",
         
         //need to make sure the update to the project happens before the task is added
         def.then(function(taskResp){
-          console.debug("adding task with status", taskResp, taskResp.status);
+          //console.debug("adding task with status", taskResp, taskResp.status);
           db.taskStore.store.add(taskResp, {username: username});
           dojo.publish("coordel/updatePrimaryBoxCount");
         });
@@ -966,7 +966,7 @@ define("app/models/TaskModel",
             p = this.p,
             t = this;
             
-        console.debug("update task", task, db.focus);
+        //console.debug("update task", task, db.focus);
             
         task.isNew = false;
         
@@ -1338,7 +1338,7 @@ define("app/models/TaskModel",
     			icon: t.icon.decline,
     			body: message
     		}, task);
-    		console.debug("task to decline", task);
+    		//console.debug("task to decline", task);
     		t.update(task);
     	},
     	proposeChange: function(task, message){
@@ -1406,6 +1406,8 @@ define("app/models/TaskModel",
       	dojo.publish("coordel/playSound", ["done"]);
           
         //console.debug("user, responsible", this.username, t.projResponsible());
+        
+        task.completed = (new Date()).toISOString();
 
         if (username === t.projResponsible()){
           if (t.username === username){
@@ -1451,6 +1453,11 @@ define("app/models/TaskModel",
           t.update(task);
     	},
     	reuse: function(task, isDeliverables){
+    	  var bp = {
+    	    username: this.db.username(),
+    	    templateType: "task",
+    	    task: task
+    	  };
     	  /*
     	  var bp = task;
     	  if (isDeliverables){
@@ -1466,13 +1473,14 @@ define("app/models/TaskModel",
     	  return  dojo.xhrPost({
           url: "/blueprint",
           handleAs: "json",
-          putData: dojo.toJson(task),
+          postData: dojo.toJson(bp),
           headers: this.headers,
           load: function(res){
-            console.log("blueprint", res);
+            //console.log("blueprint", res);
           }
         });
     	},
+    	
     	addActivity: function(opts, task){
     	  var db = this.db,
           p = this.p,

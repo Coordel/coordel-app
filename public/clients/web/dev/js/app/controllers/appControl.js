@@ -108,6 +108,8 @@ define(['dojo',
 	    
 	    this.resetHandlers();
 	    
+	    this.interval = setInterval(dojo.hitch(this, this._timeUpdate), 60000);
+	    
 	  	//listen for logout
 	  	this.handlers.push(dojo.subscribe("coordel/logout", this, "doLogout"));
 	  	
@@ -142,7 +144,13 @@ define(['dojo',
       }));
 		      
       //init the primary nav controller 
-      app.navController = pNavControl.init(ac.username);	
+      app.navController = pNavControl.init(ac.username);
+      
+      
+	  },
+	  
+	  _timeUpdate: function(){
+	    dojo.publish("coordel/timeUpdate");
 	  },
 	  
 	  resetHandlers: function(){
@@ -157,6 +165,10 @@ define(['dojo',
 	  
 
 	  doTaskAction: function(args){
+	    
+	    if (args.action === "reuse") {
+	      return;
+	    }
 	    //the TaskActionMenu sends the action to do and the task this function 
 	    //shows the correct dialog to capture the user's message and save the state change
       var css = "highlight-button",
@@ -164,10 +176,12 @@ define(['dojo',
           executeText = coordel.taskActions[args.action];
       
       //trim reuse deliverables title and button
+      /*
       if (args.action === "reuseDeliverables"){
         title = coordel.taskActions["reuse"];
         executeText = coordel.taskActions["reuse"];
       }
+      */
       
       if (args.cssClass){
         css = args.cssClass;
@@ -208,13 +222,13 @@ define(['dojo',
   	    
 	    } else {
 	      //not validating, so hide the projectaction
-	    
-	      if (args.action === "reuse" || args.action === "reuseDeliverables"){
-	        dojo.addClass(d.confirmTextContainer, "action-form-header");
-	      } else {
+	      
+	      //if (args.action === "reuse" || args.action === "reuseDeliverables"){
+	        //dojo.addClass(d.confirmTextContainer, "action-form-header");
+	      //} else {
 	        //not validating, and not a resue so hide the task action
     	    dojo.addClass(act.domNode, "hidden");
-	      }
+	      //}
 
 	    }
 

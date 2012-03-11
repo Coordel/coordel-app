@@ -2,7 +2,7 @@
 			<ul class="task-form">
 				
 				<li dojoAttachPoint="nameAround" class="field task-name">
-					<div dojoAttachPoint="showReuseTemplates" class="reuse c-float-r" title="${coordel.reuse}"></div>
+					<div dojoAttachPoint="showReuseTemplates" dojoType="app.views.ReuseDropDown"></div>
 					<div dojoAttachPoint="taskNameInnerNode" style="display: inline-block; width:90%" class="c-margin-t">
 						
 						<div dojoAttachPoint="taskFormName" placeHolder="${coordel.taskForm.phName}"  dojoType="dijit.form.Textarea" class="taskFormName"></div>
@@ -20,7 +20,7 @@
 				
 				<li dojoAttachPoint="deadlineAround" class="field task-deadline">
 					<div class="field-inner">
-						<div dojoAttachPoint="taskFormDeadline" dojoType="app.widgets.PositionDateTextBox" hasDownArrow="false" constraints="{formatLength:'medium'}" placeHolder="${coordel.taskForm.phDeadline}" layoutAlign="bottom" taskFormField="deadline" openOnClick="true"></div>
+						<div dojoAttachPoint="taskFormDeadline" dojoType="app.views.DeadlineDropDown" placeHolder="${coordel.taskForm.phDeadline}" taskformField="deadline"></div>
 						<div dojoAttachPoint="taskFormDeadlineValue" dojoType="app.views.TaskFormPill" taskFormField="deadline" class="hidden"></div>
 					</div>
 					<div dojoAttachPoint="deadlineTip" class="hidden"></div>

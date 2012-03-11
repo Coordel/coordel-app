@@ -50,18 +50,18 @@ define(
         this.attachLabel.innerHTML = this.placeHolder;
         
         dojo.connect(this.uploader, "onChange", this, function(fileList){
-          console.debug("got files to upload", fileList);
+          //console.debug("got files to upload", fileList);
         });
         
         dojo.connect(this.uploader, "onBeginFile", this, function(file){
-          console.debug("file upload started", file);
+          //console.debug("file upload started", file);
           this.showLoading();
           
           this.loadingFiles.addChild(new UploaderFile({file:file}));
         });
         
         dojo.connect(this.uploader, "onComplete", this, function(){
-          console.debug("all files uploaded");
+          //console.debug("all files uploaded");
           var self = this;
           //clear the loading files (if there are any)
           if (this.loadingFiles.hasChildren()){
@@ -71,7 +71,7 @@ define(
           var getTask = this._getTask();
 
           getTask.then(function(resp){
-            console.debug("in the _getTask deferred", resp, self.task);
+            //console.debug("in the _getTask deferred", resp, self.task);
             
             self.task._attachments = resp._attachments;
             self.task._rev = resp._rev;
@@ -129,12 +129,12 @@ define(
         var self = this;
         
         if (this.rev){
-          console.debug("rev set", this.rev);
+          //console.debug("rev set", this.rev);
           this.uploader.rev = this.rev;
         }
         
         if (self.task._attachments && this._attachmentsCount() > 0){
-          console.debug("there are attachments");
+          //console.debug("there are attachments");
           self.showData();
           if (self.attachedFiles.hasChildren()){
             self.attachedFiles.destroyDescendants();
@@ -204,11 +204,11 @@ define(
           var uf = new UploaderFile({file:file});
           uf.showComplete();
           dojo.connect(uf.deleteFile, "onclick", this, function(){
-            console.log("clicked");
+            //console.log("clicked");
           
             var def = self.db.removeFile(self.task, uf.file.info.name);
             def.then(function(task){
-              console.debug("setFiles", task);
+              //console.debug("setFiles", task);
               self.task = task;
               var rev = task._rev;
               self.rev = rev ;
@@ -226,12 +226,17 @@ define(
       
       _getPositionStyle: function(parent){
 
-  		  var query = ".task-attachments";
+  		  //var query = ".task-attachments";
 
   		  //get the position of the li containing this control
-  		  var nodePos = dojo.position(dojo.query(query)[0]);
+  		  //var nodePos = dojo.position(dojo.query(query)[0]);
 
-  		  var aroundNode = parent._aroundNode || parent.domNode;
+  		  //var aroundNode = parent._aroundNode || parent.domNode;
+  		  
+  		  var nodePos = dojo.position(this._aroundNode);
+  		  
+  		  var aroundNode = this._aroundNode;
+        
 
   	    //get this parent's position
   	    var parentPos = dojo.position(aroundNode.parentNode);
@@ -245,7 +250,7 @@ define(
 
   		  var style = {
   	      position: "absolute",
-          left: (nodePos.x - parentPos.x + 2) + "px", // need to move left (negative number) and will result in getting 5, +3 gets it to 8px from the edge of the dropdown
+          left: (nodePos.x - parentPos.x + 7) + "px", // need to move left (negative number) and will result in getting 5, +3 gets it to 8px from the edge of the dropdown
           top: ((nodePos.y + nodePos.h) - (thisPos.y + thisPos.h) + 1) + "px",
           width: (nodePos.w - 16) + "px" //leaves 8px on each side
   	    };

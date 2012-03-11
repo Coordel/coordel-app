@@ -1,0 +1,19 @@
+<div class="task-form-dropdown ui-corner-bottom dijitMenu">
+	<div class="select-field">
+		<div class="desc">
+			<span class="name">${coordel.date}</span>
+		</div>
+		<div>
+			<input dojoType="dijit.form.DateTextBox" dojoAttachPoint="date" class="text" tabindex="1"/>
+		</div>
+	</div>
+	<div class="select-field c-padding-large-b">
+		<div class="desc">
+			<span class="name">${coordel.time}</span>
+		</div>
+		<div>
+			<input dojoAttachPoint="time" disabled="disabled" dojoType="dijit.form.TimeTextBox" class="text" tabindex="2"/>
+		</div>
+	</div>
+	<div dojoAttachPoint="save" class="footer-button c-text-center ui-corner-bottom task-form-button c-margin-large-t">${submitLabel}</div>   
+</div>

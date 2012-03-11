@@ -19,6 +19,63 @@ var Blueprint = exports = module.exports = function Blueprint(args){
  
 };
 
+function loadAttachments(args, fn){
+  /**
+   * This function duplicates the attachments of the into a doc and returns it as 
+   * the foundation of the blueprint.
+   *
+   * @param {array} args.attachments - the list of attachments to load
+   * @param {uuid} args.id - id of the template that has the existing attachments
+   * @return {Type}
+   * @api public
+   */
+  var atts = [],
+      doc = {};
+  for (var key in args.attachments){
+    atts.push(key);
+  }
+  
+  db.save(doc, function(err, res){
+    if (err){
+      console.log("ERROR saving initial blueprint doc", err);
+    } else {
+      doc._id = res.id;
+      doc._rev = res.rev;
+      
+      async.forEachSeries(atts, function(name, callback){
+
+        var fileStream = db.getAttachment(args.id, name);
+
+        var stream = db.saveAttachment(doc, {
+            name: name, 
+            contentType: args.attachments[key].content_type
+        }, function(err, attachRes){
+          if (err) {
+            console.log("ERROR adding attachment to blueprinted object", err);
+            //res.json({error: err});
+          } else {
+            doc._rev = attachRes.rev;
+            callback();
+          }
+        });
+
+        fileStream.pipe(stream);
+
+        }, function(err){
+
+          db.get(doc._id, function(err, result){
+            if (err){
+              console.log("ERROR getting blueprinted attachments", err);
+              fn(err, null);
+            } else {
+              fn(false, result);
+            }
+          });
+      });
+    }
+  });
+}
+
 function getProject(args, fn){
   console.log("GETTING PROJECT", args._id);
   var bp = args,
@@ -109,40 +166,26 @@ function getProject(args, fn){
 }
 
 function getTask(args, fn){
-  console.log("GETTING TASK", args._id, args);
+  
+  console.log("Getting Task: '" + args.task.name + "'" );
+
   var bp,
-      id = args._id,
-      rev = args._rev,
-      responsible = args.responsible,
+      id = args.task._id,
+      //rev = args._rev,
+      //responsible = args.responsible,
       username = args.username,
-      delegator = null,
       attachments = null;
-      
-  if (args._attachments){
-    attachments = args._attachments;
+  
+     
+  if (args.task._attachments){
+    attachments = args.task._attachments;
   }
   
-  args.id = id;
-      
-  //clear out the specific info from the task
-  delete args._id;
-  delete args._rev;
-  delete args._attachments;
-  delete args.username;
-  delete args.responsible;
+  args.sourceId = id;
+  args.name = args.task.name;
+  args.username = ""; //need to clear out the username so we can attach without notifying the user
   
-  //clear any blockers because we don't save them
-  args.coordinates = [];
-
-  if (args.delegator){
-    delegator = args.delegator;
-    delete args.delegator;
-  }
-  
-  bp = args;    
-  bp.templateType = 'task';
-
-  console.log('Creating blueprint: ' , bp);
+  bp = args;
   
   //db.view('coordel/tasks', viewArgs, function(err, docs){
   db.save(bp, function(err, result){
@@ -153,7 +196,7 @@ function getTask(args, fn){
       bp._id = result.id;
       bp._rev = result.rev;
       
-      console.log('new blueprint', bp);
+      //console.log('new blueprint created...');
       
       if (attachments){
         var atts = [];
@@ -176,7 +219,7 @@ function getTask(args, fn){
               console.log("ERROR saving file", err);
               //res.json({error: err});
             } else {
-              console.log("SAVED FILE", attachRes);
+              //console.log("attached file to blueprint...");
               bp._rev = attachRes.rev;
               callback();
             }
@@ -201,24 +244,24 @@ function getTask(args, fn){
       }
 
       function saveBlueprint(pending){
+       
         pending.username = username;
-        pending.responsible = responsible;
-        if (delegator){
-          pending.delegator = delegator;
-        }
-        console.log("saveBlueprint", pending);
+        
+        //console.log("saving blueprint...");
+        
         db.save(pending, function(err, finalResp){
           if (err){
             console.log("ERROR saving final blueprint", err);
           } else {
-            console.log("FINAL BLUEPRINT", finalResp);
             pending._rev = finalResp.rev;
+            //console.log("Final Blueprint: '" + pending + "'");
             fn(null, pending); 
           }
         });
       }
     }
   });
+
 };
 
 Blueprint.prototype.add = function(args, fn){
@@ -230,9 +273,9 @@ Blueprint.prototype.add = function(args, fn){
     * 
     */
   
-  var type = args.docType;
+  var type = args.templateType;
   
-  console.log("BLUEPRINT-ADD", type);
+  //console.log("Add Blueprint type: '" + type + "'");
     
   args.isTemplate = true;
   args.docType = 'template';
@@ -259,26 +302,14 @@ Blueprint.prototype.add = function(args, fn){
     case 'role':
     break;
     case 'task':
-      console.log("blueprinting task");
+      //console.log("blueprinting task");
       getTask(args, function(err, bp){
         if (err){
-          console.log("ERROR", err);
+          console.log("ERROR blueprinting task + '" + err + "'");
           fn(err, false);
         } else {
-          console.log("got task to blueprint", bp);
-          
-          db.save(bp, function(err, bpResp){
-            if (err){
-              console.log("ERROR blueprinting", err);
-              fn(err, false);
-            } else {
-              console.log("saved template", bpResp);
-              bp._id = bpResp.id;
-              bp._rev = bpResp.rev;
-              fn(null, bp);
-            }
-          });
-          
+          //console.log("got task to blueprint", bp.name);
+          fn(null, bp);
         }
       });
     break;
@@ -305,6 +336,50 @@ Blueprint.prototype.share = function(args, fn){
   
 };
 
-exports.get = function(args, fn){
+exports.getAttachments = function(templateid, fn){
+
+  /**
+   * This function takes the _id of a template, loads it, and then creates starter docs
+   * with attachments created to be used by taskforms and project forms
+   *
+   * @param {Type} name
+   * @return {Type}
+   * @api public
+   */
+  //get the template based on the id in the args
+  console.log("getAttachments", templateid);
+  db.get(templateid, function(err, bp){
+    if (err){
+      console.log("ERR creating template attachments", err);
+      fn(err, null);
+    } else {
+      //create a doc the the attachments and return it
+      //console.log("BLUEPRINT ATTACHMENTS", bp);
+      if (!bp._attachments){
+        fn(false, {});
+      } else {
+        switch (bp.templateType){
+          case "project":
+          break;
+          case "task":
+            loadAttachments({id:bp._id, attachments: bp._attachments}, function(err, atts){
+              if (err){
+                console.log("ERROR loading attachements for template", err);
+                fn(err, null);
+              } else {
+                //console.log("Loaded attachments", atts);
+                fn(false, atts);
+              }
+            });
+          break;
+          case "deliverable":
+          break;
+        }
+      }
+    }
+  });
+  
+  
+  
   
 };

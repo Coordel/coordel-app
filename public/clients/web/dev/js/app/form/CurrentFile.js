@@ -27,6 +27,7 @@ define(["dojo",
     postCreate: function(){
       this.inherited(arguments);
       
+      
       this.interval = setInterval(dojo.hitch(this, this._refresh), 60000);
     },
     

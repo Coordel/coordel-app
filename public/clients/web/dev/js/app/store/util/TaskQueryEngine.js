@@ -130,7 +130,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   		query = function(task){
   		  
   			var t = db.getTaskModel(task, true);
-  			console.log("testing projectCurrent", t.isCurrent(), t.isCleared(), t.isIssue(), t.isSubmitted(), t.isReturned(), t.isUnassigned());
+  			//console.log("testing projectCurrent", t.isCurrent(), t.isCleared(), t.isIssue(), t.isSubmitted(), t.isReturned(), t.isUnassigned());
   			return (t.isCurrent() || t.isCleared() || t.isIssue() || t.isSubmitted() || t.isReturned()) && !t.isUnassigned() && applyFilter(task);
   		};
   		break;

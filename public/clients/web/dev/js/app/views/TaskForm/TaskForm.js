@@ -30,9 +30,12 @@ define(
     "app/views/DeliverableSettings/DeliverableSettings",
     "app/views/TaskFormAttachments/TaskFormAttachments",
     "app/util/dateFormat",
-    "app/widgets/ContainerPane"
+    "dijit/Menu",
+    "app/widgets/ContainerPane",
+    "app/views/DeadlineDropDown/DeadlineDropDown",
+    "app/views/ReuseDropDown/ReuseDropDown"
     ], 
-  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format) {
+  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format, Menu) {
   
   dojo.declare(
     "app.views.TaskForm", 
@@ -48,6 +51,8 @@ define(
       task: {},
       
       templateString: html,
+      
+      templates: null,
       
       widgetsInTemplate: true,
       
@@ -75,6 +80,8 @@ define(
         
         //console.debug("task in TaskForm", self.task);
         
+        this.templates = db.templates("tasks");
+        
         if (!self.task._id){
           var id = db.uuid();
           //console.debug("created new uuid for TaskForm",id);
@@ -86,36 +93,55 @@ define(
         //if it's set later than the project deadline
         var min = stamp.toISOString(new Date(), {selector: "date"});
         if (self.isNew){
-          self.taskFormDeadline.set("constraints",{min: min});
+          self.taskFormDeadline.set("minMax",{min: min});
           self.taskFormDefer.set("constraints",{min: min});
         } else {
           var tmod = db.getTaskModel(self.task, true);
           if (tmod.p.isMyPrivate() || tmod.p.isMyDelegated()){
-            self.taskFormDeadline.set("constraints",{min: min});
+            self.taskFormDeadline.set("minMax",{min: min});
             self.taskFormDefer.set("constraints",{min: min});
           } else {
             var max = tmod.projDeadline();
-            self.taskFormDeadline.set("constraints",{min: min, max:max});
+            self.taskFormDeadline.set("minMax",{min: min, max:max});
             self.taskFormDefer.set("constraints",{min: min, max: max});
           }
         }
-          
+        
         //set the url for attachments
         self.taskFormAttachments.setUrl(db.db + "files/" + escape(self.task._id));
         self.taskFormAttachments.set("task", self.task);
         self.taskFormAttachments.set("username",db.username());
+        self.taskFormAttachments._aroundNode = self.attachmentsAround;
         
+        self.taskFormDeadline.setDropDown(self.task);
+        self.taskFormDeadline._aroundNode = self.deadlineAround;
+        
+        self.showReuseTemplates.setDropDown(self.task);
+        self.showReuseTemplates._aroundNode = self.nameAround;
+    
         //console.debug("postCreate in TaskForm", this.task);
         if (!self.isNew){
+        
+          //hide templates button
+          dojo.addClass(this.showReuseTemplates.domNode,"hidden");
+          dojo.removeAttr(this.taskNameInnerNode, "style");
+          
           self._setPills("project");
           self._setPills("delegate");
           self._setPills("blockers");
           self._setPills("deliverables");
           self.taskFormName.set("value", self.task.name);
           self.taskFormPurpose.set("value", self.task.purpose);
+          
+          if (self.task.purpose && self.task.purpose !== "" && self.task.purpose !== coordel.taskForm.phPurpose){
+            dojo.removeClass(self.taskFormPurpose.domNode, "c-placeholder");
+          }
+        
           if (self.task.deadline){
             self.taskFormDeadline.set("value", stamp.fromISOString(self.task.deadline));
+            self._setPills("deadline");
           }
+          
           if (self.task.calendar && self.task.calendar.start){
             self.taskFormDefer.set("value", stamp.fromISOString(self.task.calendar.start));
           }
@@ -127,12 +153,6 @@ define(
         self._setFilteringSelect(self.taskFormDelegate, db.contacts(), true);
         self._setFilteringSelect(self.taskFormBlockers, db.projects());
         self._setFilteringSelect(self.taskFormDeliverables, db.templates("deliverable"));
-        
-        //if this isn't a new task, then hide the templates button. 
-        if (!this.isNew){
-          dojo.addClass(this.showReuseTemplates,"hidden");
-          dojo.removeAttr(this.taskNameInnerNode, "style");
-        }
         
         //make the datetextbox dropdown on focus rather than waiting to a click
         //dojo.connect(this.taskFormDeadline, "onFocus", this.taskFormDeadline, "openDropDown");
@@ -161,6 +181,14 @@ define(
             dojo.addClass(this.domNode, "c-placeholder");
           }
         });
+        
+        dojo.connect(this.showReuseTemplates, "onChange", this, function(template){
+          
+          //console.log ("got template in task form", template);
+          this._setTemplate(template);
+  
+        });
+        
         dojo.connect(this.taskFormPurpose, "onFocus", this.taskFormPurpose, function(){
           //console.debug ("onFocus taskFormPurpose", this);
           if(this.value === coordel.taskForm.phPurpose){
@@ -534,14 +562,14 @@ define(
           
           //when the task is saved, an email invite will be sent to the saved user
           
-          console.debug("adding contact", contact);
+          //console.debug("adding contact", contact);
           
           var query = db.getUser(contact.email);
           
           dojo.when(query, function(user){
-            console.log("queried coordel user", user);
+            //console.log("queried coordel user", user);
             if (user){
-              console.log("coordel member, add to this user's app", user);
+              //console.log("coordel member, add to this user's app", user);
               var add = db.contactStore.addContact(user.app);
               dojo.when(add, function(){
                 self.task.username = user.app;
@@ -549,7 +577,7 @@ define(
                 self._setPills("delegate");
               });
             } else {
-              console.log("non-member, will do invite on save", contact);
+              //console.log("non-member, will do invite on save", contact);
               self.pendingContact = contact;
               self.task.username = "pending";
               self.taskFormDelegate.reset();
@@ -578,13 +606,13 @@ define(
     /*----------------------------------------------------------------------------------------*/
         dojo.connect(this.taskFormProject, "onAdd", this, function(field){
           //when a project is added, this event will fire, so show the instructions for the project
-          console.debug("project change so show instructions", field);
+          //console.debug("project change so show instructions", field);
           this._showInstructions(field);
         });
         
         dojo.connect(this.taskFormDelegate, "onAdd", this, function(field){
           //when a project is added, this event will fire, so show the instructions for the project
-          console.debug("delegate change so show instructions", field);
+          //console.debug("delegate change so show instructions", field);
           this._showInstructions(field);
         });
         
@@ -612,17 +640,23 @@ define(
          
         });
         //deadline
+        
         this.taskFormDeadline.watch("value", function(prop, oldVal, newVal){
           //console.debug("task deadline changed", prop, oldVal, newVal);
           //self.set("deadline", newVal);
           if (newVal){
-            self.task.deadline = stamp.toISOString(new Date(newVal), {selector: "date"});
+            var selector = "date";
+            //console.log("new deadline value", newVal);
+            if (self.taskFormDeadline.hasTime){
+              selector = "datetime";
+            }
+            self.task.deadline = stamp.toISOString(new Date(newVal), {selector: selector});
           } else {
             self.task.deadline = "";
           }
           
         });
-        
+      
         //project
         this.taskFormProject.watch("value", function(prop, oldVal, newVal){
           //console.debug("task project changed", prop, oldVal, newVal);
@@ -645,8 +679,6 @@ define(
             self.task.calendar = {};
           }
           self.task.calendar.start = stamp.toISOString(new Date(newVal));
-          //self.set("deadline", newVal);
-          //self.task.deadline = stamp.toISOString(new Date(newVal), {selector: "date"});
         });
         
         //deliverables
@@ -691,6 +723,60 @@ define(
         this.onReady();
       },
       
+      _setTemplate: function(id){
+        var def = db.getTaskFromBlueprint(id), 
+            self = this;
+            
+        dojo.when(def, function(task){
+        
+          //console.log("got blueprint", task, def);
+          
+          self.task = task;
+         
+          if (self.task.name && self.task.name.length > 0){
+            self.taskFormName.set("value", self.task.name);
+            dojo.removeClass(self.taskFormName.domNode, "c-placeholder");
+          }
+
+          if (self.task.purpose && self.task.purpose.length > 0){
+            self.taskFormPurpose.set("value", self.task.purpose);
+            dojo.removeClass(self.taskFormPurpose.domNode, "c-placeholder");
+          }
+
+          if (self.task.deadline){
+            self._setPills("deadline");
+          }
+
+          /* NOT SETTING PROJECT because its probably the not the same project and if the user
+              wants to add it to a project, they can select the project and it will be set
+          */
+
+          if (self.task.username){
+            self._setPills("delegate");
+          }
+
+          if (self.task.calendar && self.task.calendar.start){
+            self._setPills("defer");
+          }
+
+          if (self.task.workspace){
+            self._setPills("deliverables");
+          }
+
+          if (self.task.coordinates){
+            self._setPills("blockers");
+          }
+
+          if (self.task._attachments){
+            self.taskFormAttachments.set("task", self.task);
+            self.taskFormAttachments.set("rev", self.task._rev);
+            self.taskFormAttachments.setData();
+          }
+          
+          dojo.addClass(self.showReuseTemplates.domNode, "hidden");
+       });
+      },
+      
       onReady: function(){
          
         //this is here to enable the focus to be set on the task name on load
@@ -711,13 +797,20 @@ define(
             this.taskFormProjectValue.showPill(this.task.project);
           }
           break;
+          
           case "deadline":
           if (this.task.deadline){
+            var hasTime = false,
+                test = this.task.deadline.split("T");
+            if(test.length > 1){
+              hasTime = true;
+            }
             dojo.addClass(this.taskFormDeadline.domNode, "hidden");
             dojo.removeClass(this.taskFormDeadlineValue.domNode, "hidden");
-            this.taskFormDeadlineValue.showPill(format.prettyISODate(this.task.deadline));
+            this.taskFormDeadlineValue.showPill(format.prettyISODate(this.task.deadline, hasTime));
           }
           break;
+        
           case "defer":
           if (this.task.calendar && this.task.calendar.start){
             dojo.addClass(this.taskFormDefer.domNode, "hidden");
@@ -974,7 +1067,7 @@ define(
             data: dojo.clone(this.task)});
        
           dojo.when(invite, function(resUser){
-              console.log("invited user", resUser);
+              //console.log("invited user", resUser);
               self.task.username = resUser.appId;
               t = db.getTaskModel(self.task, true);
               if (self.isNew){

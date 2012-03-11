@@ -109,6 +109,11 @@ define(['dojo',
       if (!this.setTurboHandler){
         this.setTurboHandler = dojo.subscribe("coordel/setTurbo", this, "handleSetTurbo");
       }
+      
+      //publish a refresh signal every 60 seconds for objects that need to update like
+	    //tasks that might be deferred when loaded, but aren't more, or if time is showing
+	    //alter the time remaining or ago
+	
     },
   
     handleSetTurbo: function(args){

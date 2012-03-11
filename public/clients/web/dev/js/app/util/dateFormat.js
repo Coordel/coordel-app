@@ -3,8 +3,10 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
     //date is the string that is stored in couch
     var now = new Date();
     return {
-      prettyISODate: function(date){
-        console.debug("date sent to prettyISODate", date);
+      prettyISODate: function(date, showTime){
+        now = new Date();
+        //console.debug("date sent to prettyISODate", date);
+        
         //take care that empty strings or null just get returned
         try {
           if (date === "" || date === null){
@@ -24,6 +26,9 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
           if (thisYr === dtYr){
             //if the date is this year, return MMM dd
             format = {datePattern: "MMM d", selector: "date"};
+            if (showTime){
+              format = {datePattern: "MMM d, hh:mm", selector: "date"};
+            }
           } else {
             //if the date is not this year, return MMM dd, yyyy
             format = {formatLength: "medium", selector: "date"};
@@ -117,6 +122,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
       },
       
       deferred: function(date){
+        now = new Date();
         //take care that empty strings or null just get returned
         if (date === "" || date === null){
           return "";
@@ -145,7 +151,8 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
         return dt.format(stamp.fromISOString(date),format);
       },
       
-      deadline: function(date){
+      deadline: function(date, showTime){
+        now = new Date();
         //take care that empty strings or null just get returned
         if (date === "" || date === null){
           return "";
@@ -173,10 +180,23 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
           
           diff = dojo.date.difference(now,d,"day");
           
-          //console.debug("the deadline is to come",now, d, diff);
+          //console.debug("the deadline is to come",now, d, diff, showTime);
           toReturn = diff.toString() + " " + coordel.metainfo.daysLeft;
           if (diff === 0){
-            toReturn = coordel.metainfo.today;
+            if (showTime){
+              
+              hrs = dojo.date.difference(now,d,"hour");
+              mins = dojo.date.difference(now,d,"minute");
+              
+              
+            
+              mins = mins % 60;
+              
+              //console.log("mins", mins);
+              toReturn = hrs.toString() + ":" + dojo.string.pad(mins.toString(), 2, "0") + " " + coordel.metainfo.left;
+            } else {
+              toReturn = coordel.metainfo.today;
+            }
           }
           if (diff === 1){
             toReturn = diff.toString() + " " + coordel.metainfo.dayLeft;
@@ -186,6 +206,9 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
             if (thisYr === dtYr){
               //if the date is this year, return MMM dd
               format = {datePattern: "MMM d", selector: "date"};
+              if (showTime){
+                format = {datePattern: "MMM d, hh:mm", selector: "date"};
+              }
             } else {
               //if the date is not this year, return MMM dd, yyyy
               format = {formatLength: "medium", selector: "date"};
@@ -198,7 +221,39 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
         } else if (compare === 0){
           //deadline is today
           //console.debug("the deadline is today");
-          toReturn = coordel.metainfo.today;
+          if (showTime){
+            hrs = dojo.date.difference(now,d,"hour");
+            mins = dojo.date.difference(now,d,"minute");
+            
+            var hString = "",
+                mString = "";
+            
+            mins = mins % 60;
+            
+            if (hrs > 1){
+              hString = hrs.toString() + " " + coordel.metainfo.hrs;
+              
+            } else if (hrs === 1){
+              
+              hString = hrs.toString() + " " + coordel.metainfo.hr;
+              
+            }
+            
+            if (mins > 9){
+              mString =  dojo.string.pad(mins.toString(), 2, "0") + " " + coordel.metainfo.mins;
+            } else if (mins > 0 && mins <= 9){
+              mString =  mins.toString() + " " + coordel.metainfo.mins;
+            } else if (mins === 0){
+              mString =  mins.toString() + " " + coordel.metainfo.min;
+            }
+            //console.log("mins",now, d, mins);
+            
+            
+            
+            toReturn = hString + " " + mString + " " + coordel.metainfo.left;
+          } else {
+            toReturn = coordel.metainfo.today;
+          }
         
         } else if (compare < 0){
           //console.debug("the deadline is past");
@@ -217,6 +272,9 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
             if (thisYr === dtYr){
               //if the date is this year, return MMM dd
               format = {datePattern: "MMM d", selector: "date"};
+              if (showTime){
+                format = {datePattern: "MMM d, hh:mm", selector: "date"};
+              }
             } else {
               //if the date is not this year, return MMM dd, yyyy
               format = {formatLength: "medium", selector: "date"};

@@ -198,6 +198,8 @@ define(
         //set the dropdown for the choose action tooltipdialog
         this.chooseAction.dropDown = this.actionsDialog;
         
+        this.subHandlers.push(dojo.subscribe("coordel/timeUpdate", this, "_setDeadline"));
+        
         //handle when the actionsMenu is clicked
         this.subHandlers.push(dojo.subscribe("coordel/taskAction", this, "doTaskAction"));
         
@@ -406,7 +408,7 @@ define(
           } 
 
           dojo.when(query, function(resp){
-            console.debug("stream in taskDetailsControl", resp);
+            //console.debug("stream in taskDetailsControl", resp);
             var stream = new Stream({
               stream: resp,
               style: "max-height: 400px; overflow-y: auto;"
@@ -456,6 +458,7 @@ define(
           
           this.actionsDialog.set("content", menu);
           this.chooseAction.openDropDown();
+        
         });
         
         
@@ -552,9 +555,32 @@ define(
           cont.addChild(i);
           this.infoDialog.show();
         });
+        
+        
       },
       
       doTaskAction: function(args){
+        if (args.action === "reuse" && args.task._id === this.task._id){
+          console.log("show the form");
+          var form = new TaskForm({isNew: false, task: args.task});
+          var cont = this.blueprintFormContainer;
+          if (cont.hasChildren()){
+            cont.destroyDescendants();
+          }
+          cont.addChild(form);
+          this.blueprintDialog.show();
+          
+          var confirm = dojo.connect(this.blueprintDialog, "onConfirm", this, function(){
+            console.debug("should blueprint the task");
+            var t = db.getTaskModel(args.task, true);
+            t.reuse(args.task);
+            dojo.disconnect(confirm);
+          });
+        }
+        
+        //if the args action is reuse, then we need to pop up a task form
+        
+        
         //just close the task action dropdown
         if (this.chooseAction){
           this.chooseAction.closeDropDown();
@@ -742,7 +768,7 @@ define(
         
         //submitted for approval
         if (t.isSubmitted()){
-          console.debug("it's submitted");
+          //console.debug("it's submitted");
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-active").addContent(coordel.metainfo.submitted + " : ");
         }
         
@@ -804,18 +830,25 @@ define(
             today = true;
           }
           
-          deadline = dt.deadline(t.deadline);
+          var test = t.deadline.split("T"),
+              showTime = false;
+          if (test.length>1){
+            showTime = true;
+          }
+          
+          
+          deadline = dt.deadline(t.deadline, showTime);
           
           //has deadline
           if (past) {
             // deadline past so add error color
-            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(deadline);
+            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-error").empty().addContent(deadline);
           } else if(today) {
             //deadline today and set explicitly so set color normal
-            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addContent(deadline);
+            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").empty().addContent(deadline);
           } else {
             //deadline not past but deadline set explicitly so set color active
-            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addContent(deadline);
+            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").empty().addContent(deadline);
           }
           return;
           
@@ -836,14 +869,14 @@ define(
             if (deadline.length > 0){
               if (past) {
                 //project deadline is past, so set error color
-                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(deadline);
+                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-error").empty().addContent(deadline);
               } else if (today){
                 //project deadline today, but not explicit deadline so set label color
-                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addContent(deadline);
+                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").empty().addContent(deadline);
               }
               else {
                 //project deadline not past, but not explicit deadline so don't set active color
-                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-disabled").addContent(deadline);
+                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-disabled").empty().addContent(deadline);
               }
             }
           }

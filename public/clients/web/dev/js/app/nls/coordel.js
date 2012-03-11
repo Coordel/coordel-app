@@ -8,6 +8,11 @@ define({
 	  noDeadline: "No Deadline",
 	  quickAddTask: "Quick Add Task",
 	  refresh: "Refresh",
+	  date: "Date",
+	  time: "Time",
+	  blueprint: "Blueprint",
+	  blueprintInstructions: "Choose a Blueprint and then click Apply Blueprint",
+	  applyBlueprint: "Apply Blueprint",
 	  "noName": "No Name",
 		"focus": "Tasks",
 		"invitations": "Invitations",
@@ -328,7 +333,13 @@ define({
 		  "daysLeft": "days left",
 		  "daysLate": "days late",
 		  "dayLeft": "day left",
-		  "dayLate": "day late"
+		  "dayLate": "day late",
+		  "left": "left",
+		  "hr": "hr",
+		  "hrs": "hrs",
+		  "min": "min",
+		  "mins": "mins"
+		  
 		},
 		"sort": {
 		  "sortBy": "Sort By",
@@ -659,6 +670,7 @@ define({
 		},
 		"taskDetails": {
 		  "editTask": "Edit Task",
+		  "blueprintTask": "Blueprint Task",
 		  "declineTask": "Decline Task",
 		  "acceptTask": "Accept Task",
 		  "chooseAction": "Choose Task Action",
