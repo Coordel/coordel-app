@@ -1055,10 +1055,16 @@ define("app/models/ProjectModel",
     	reuse: function(project){
     	  console.log("reuse project", project);
     	  
+    	  var bp = {
+    	    username: this.db.username(),
+    	    templateType: "project",
+    	    project: project
+    	  };
+    	  
     	  return  dojo.xhrPost({
           url: "/blueprint",
           handleAs: "json",
-          putData: dojo.toJson(project),
+          putData: dojo.toJson(bp),
           headers: this.headers,
           load: function(res){
             console.log("blueprint", res);

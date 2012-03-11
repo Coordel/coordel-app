@@ -16,8 +16,9 @@ define(['dojo',
         "i18n!app/nls/coordel",
         "app/views/ConfirmDialog/ConfirmDialog",
         "app/views/ProjectForm/ProjectForm",
-        "app/views/ProjectAction/ProjectAction"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction) {
+        "app/views/ProjectAction/ProjectAction",
+        "app/views/PersonForm/PersonForm"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -399,10 +400,19 @@ define(['dojo',
 	  _showContactForm: function(){
 	    //console.debug("create a contact");
 	    
+	    var pers = new PersonForm();
+	    
 	    var d = new cDialog({
 	      title: coordel.newContact,
 	      baseClass: "contact-form",
-	      executeText: coordel.save
+	      executeText: coordel.save,
+	      content: pers
+	    });
+	    
+	    var save = dojo.connect(d, "onConfirm", pers, function(){
+	      pers.save();
+	      dojo.disconnect(save);
+	      d.destroy();
 	    });
 	    
 	    d.show();

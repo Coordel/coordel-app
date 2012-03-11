@@ -1,5 +1,6 @@
 define({
 	"root": {
+	  invitationSubject: "Get More Done with me at Coordel",
 	  username: "Username",
 	  password: "Password",
 	  rememberMe: "Remember Me",
@@ -10,6 +11,7 @@ define({
 	  refresh: "Refresh",
 	  date: "Date",
 	  time: "Time",
+	  add: "Add",
 	  blueprint: "Blueprint",
 	  blueprintInstructions: "Choose a Blueprint and then click Apply Blueprint",
 	  applyBlueprint: "Apply Blueprint",
