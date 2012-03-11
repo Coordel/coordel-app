@@ -270,48 +270,76 @@ define(['dojo',
 	        d,
 	        proj;
 	        
-	    if (args.cssClass){
-	      css = args.cssClass;
-	    }
+	    console.log("project action args", args);
 	    
-	     proj = new ProjectAction({
+	    if (args.action === "reuse"){
+	      //need to show the project form with blueprint titles
+	      proj = new ProjectForm({
+
   	      project: args.project,
-  	      action: args.action
+  	      isNew: false
   	    });
-	    
-      
-	    d = new cDialog({
-	      title: "",
-	      confirmText: coordel.projectActions.confirmText[args.action],
-	      executeCss: css,
-	      executeText: coordel.projectActions[args.action],
-	      title:  coordel.projectActions[args.action],
-	      content: proj,
-	      onCancel: function(){
-	        d.destroy();
-	      }
-	    });
-    
-      dojo.connect(proj, "onValidate", function(isValid){
-	      //console.debug("app control got onValidate", isValid);
-	      d.validate(isValid);
-	    });
-	    
-	    dojo.connect(d, "onConfirm", proj, "save");
-	    
-	    if (args.validate){
-  	    dojo.addClass(d.confirmTextContainer, "action-form-header");
-  	    d.validate();
+
+  	    d = new cDialog({
+  	      title: coordel.projDetails.reuseProject,
+  	      baseClass: "project-form",
+  	      executeText: coordel.save,
+  	      content: proj,
+  	      onCancel: function(){
+  	        d.destroy();
+  	      }
+  	    });
+
+  	    //console.debug("cDialog", d);
+
+  	    var save = dojo.connect(d, "onConfirm", proj, function(){
+  	      proj.save();
+  	      dojo.disconnect(save);
+  	      d.destroy();
+  	    }); 
+
+  	    d.show();
+	      
 	    } else {
-	      if (args.action === "reuse" || args.action === "ackDone"){
-	        dojo.addClass(d.confirmTextContainer, "action-form-header");
-	      } else {
-	        //not validating, and not a resue so hide the projectaction
-    	    dojo.addClass(proj.domNode, "hidden");
-	      }
+	      //show a project action
+	      if (args.cssClass){
+  	      css = args.cssClass;
+  	    }
+
+  	    proj = new ProjectAction({
+    	    project: args.project,
+    	    action: args.action
+    	  });
+
+  	    d = new cDialog({
+  	      title: "",
+  	      confirmText: coordel.projectActions.confirmText[args.action],
+  	      executeCss: css,
+  	      executeText: coordel.projectActions[args.action],
+  	      title:  coordel.projectActions[args.action],
+  	      content: proj,
+  	      onCancel: function(){
+  	        d.destroy();
+  	      }
+  	    });
+
+        dojo.connect(proj, "onValidate", function(isValid){
+  	      //console.debug("app control got onValidate", isValid);
+  	      d.validate(isValid);
+  	    });
+
+  	    dojo.connect(d, "onConfirm", proj, "save");
+
+  	    if (args.validate){
+    	    dojo.addClass(d.confirmTextContainer, "action-form-header");
+    	    d.validate();
+  	    } else {
+  	      //not validating so hide the projectaction
+  	      dojo.addClass(proj.domNode, "hidden");
+  	    }
+
+  	    d.show();
 	    }
-	    
-	    d.show();
 	  },
 	  
 	  addObjectAction: function(args){
@@ -336,6 +364,7 @@ define(['dojo',
 	      
 	      project: {
 	        _id: id,
+	        docType: "project",
 	        responsible: db.username(),
 	        users: [db.username()],
 	        assignments: [{

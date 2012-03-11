@@ -8,9 +8,9 @@
 <div style='background:#e5e5e5;border-bottom: 1px solid #a3aab1' class="coordel-toolbar">
 	<div>
 		
-		<div id="taskListDetailsSearch" class="c-padding hidden" dojoType="app.views.QuickSearch"></div>
+		<div id="taskListDetailsSearch" style="visibility: hidden" class="c-padding hidden" dojoType="app.views.QuickSearch"></div>
 		<div id="taskListDetailsTurbo" dojoAttachPoint="goTurbo" title="${goTurbo}" dojoType="dijit.form.Button" iconClass="small-task-icon icon-turbo" showLabel="false"></div>
-		<div id="taskListDetailsFilter" dojoAttachPoint="filter" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" showLabel="false"></div>
+		<div id="taskListDetailsFilter" style="visibility:hidden" dojoAttachPoint="filter" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" showLabel="false"></div>
 		<div id="taskListDetailsSort" dojoAttachPoint="sort" dojoType="dijit.form.DropDownButton" iconClass="small-task-icon icon-sort" showLabel="false">
 			<div id="taskListDetailsSortMenu" dojoAttachPoint="sortDialog" class="menu" layoutAlign="top" dojoType="dijit.TooltipDialog">
 				

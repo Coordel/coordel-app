@@ -37,10 +37,6 @@ define([
         this.instructions = i;
       }
       
-      if (this.action === "reuse"){
-        this.templateString = blueprint;
-      }
-      
       if (this.action === "ackDone"){
         this.templateString = feedback;
       }
@@ -63,14 +59,6 @@ define([
       
       //the message, issue and proposed solution need to be entered before this can be saved
       this.onValidate(false);
-      
-      //if we're reusing, then we need to show a project form
-      if (this.action === "reuse"){
-        var f = new Form({
-          project: this.project,
-          isNew: false
-        }).placeAt(this.containerNode);
-      }
       
       //if we're giving feedback, then we need to show a feedback form
       if (this.action === "ackDone"){
@@ -145,7 +133,7 @@ define([
           }
           break;
         case "reuse":
-          p.reuse(project);
+          //p.reuse(project);
           break;
         case "markDone":
           p.markDone(project, message);

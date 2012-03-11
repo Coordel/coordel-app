@@ -53,8 +53,8 @@ define(
         }).placeAt(this.roleDropDown);
         
         dojo.connect(this.dropDown.save, "onclick", this, function(){
-         var role = this.role;
-         //console.debug("save clicked in role form", project, role);
+         var role = this.dropDown.role;
+         console.debug("save clicked in role form", project, role);
           
           var roleName = this.dropDown.focusPoint.get("value"),
               username = this.dropDown.people.get("value"),
@@ -62,6 +62,8 @@ define(
           
           if (this.isNew){
             project = p.addAssignment(roleName, username, project);
+            console.log("added assignment", roleName, username, project);
+            this.onChange();
           } else {
             dojo.forEach(project.assignments, function(assign){
               if (assign.role === role.role){

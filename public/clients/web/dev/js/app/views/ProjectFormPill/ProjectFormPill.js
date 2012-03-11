@@ -43,12 +43,12 @@ define(
         dojo.removeClass(this.mainNode, "selected");
       },
       
-      showPill: function(value){
+      showPill: function(value, contact){
         //the value will be the id used to create the actual display value of the pill based on
         //the taskFormField this is for except for deliverable which will be the deliverable itself
         
         //console.debug("showing the pill", value);
-        
+        dojo.addClass(this.image, "hidden");
         if (this.imageClass){
           dojo.removeClass(this.image, "hidden");
           dojo.addClass(this.image, this.imageClass);
@@ -71,8 +71,17 @@ define(
           this.displayValue.innerHTML = this.source;
           break;
           case "people":
-          this.source = db.contactFullName(value);
-          this.displayValue.innerHTML = this.source;
+          console.log("setting pill for people", value);
+          if (value === "pending"){
+            this.value = contact.email;
+            this.source = contact.firstName + " " + contact.lastName;
+            this.displayValue.innerHTML = this.source;
+          } else {
+            console.log("db", db);
+            this.source = db.contactFullName(value);
+            console.log("self source", this.source, this.displayValue.innerHTML);
+            this.displayValue.innerHTML = this.source;
+          }
           break;
           case "assignment":
           //the default value of name is Role if there isn't a name provide

@@ -33,6 +33,12 @@ define(
         
         this._setFilteringSelect(db.templates(this.templateFilter));
         
+        dojo.connect(this.domNode, "onkeypress", this, function(evt){
+          //console.debug("key", evt.which);
+          evt.stopPropagation();
+          //the parent popup will close this if you press TAB stop it from propagating
+        });
+        
         /*
         this.blueprint.watch("value", function(prop, oldVal, newVal){
           //console.debug("task deadline changed", prop, oldVal, newVal);

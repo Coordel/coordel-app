@@ -261,6 +261,7 @@ define(["dojo",
 	    
 	    var a = dojo.connect(this.header.goTurbo, "onClick", this, function(){
 	      dojo.publish("coordel/setTurbo", [{isTurbo: true}]);
+	      dojo.publish("coordel/showRightColumn", [true]);
 	      //this.showTurbo();
 	      dojo.disconnect(a);
 	    });

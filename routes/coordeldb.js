@@ -17,7 +17,7 @@ var settings    = require('./../settings'),
 module.exports = function(app, validate){
   
   app.post('/coordel', validate, function(req, res){
-    console.log("POST", req.body);
+    //console.log("POST", req.body);
   });
   
   /**
@@ -28,7 +28,7 @@ module.exports = function(app, validate){
    * @api validated
    */
   app.put('/coordel/:id', validate, function(req, res){
-    console.log("PUT coordel/:id");
+    //console.log("PUT coordel/:id");
     couch.save(req.body, function(err, putRes){
       //console.log("PUT RESPONSE", putRes, err);
       if (err){
@@ -99,7 +99,7 @@ module.exports = function(app, validate){
       if (e){
         console.log("ERROR deleting file", e);
       } else {
-        console.log("RESPONSE", b);
+        //console.log("RESPONSE", b);
         res.json(b);
       }
     });
@@ -141,7 +141,7 @@ module.exports = function(app, validate){
   app.get('/coordel/view/:name', validate, function(req, res){
     var view = req.params.name;
     view = 'coordel/' + view;
-    console.log('GET VIEW', view);
+    //console.log('GET VIEW', view);
     var opts = {};
     
     for (var key in req.query){

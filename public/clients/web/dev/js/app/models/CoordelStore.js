@@ -237,7 +237,7 @@ define(["dojo",
                 //load the attachments
                 var q = this.getBlueprintAttachments(templateid);
                 q.then(function(doc){
-                  console.log("loaded blueprint attachments", doc);
+                  //console.log("loaded blueprint attachments", doc);
                   def.callback(get(bp.task, doc));
                 });
               } else {
@@ -260,7 +260,7 @@ define(["dojo",
                   //the deadline was. For example, if the task was created on the 9th and deadline was
                   //the 19th, then we add 10 days to today for the deadline;
                   //if the deadline hasn't past, then figure out how many days left
-                  console.log("getting deadline", template.deadline, template.created);
+                  //console.log("getting deadline", template.deadline, template.created);
                   var now = new Date(),
                       start = stamp.fromISOString(template.created),
                       end = stamp.fromISOString(template.deadline),
@@ -612,7 +612,7 @@ define(["dojo",
               if (!filter){
                 filter = "all";
               }
-              
+              //console.log("templates filter", filter);
               var templates = this.appStore.memTemplates.query(filter);
               
               return templates;

@@ -99,9 +99,11 @@ exports.getChangeAlertMap = function(change){
 
 	if (doc.docType === "role"){
 	  //everyone with a responsbility in this role gets notified
-		doc.responsibilities.forEach(function(resp){
-		  if (!map[resp.username]) map[resp.username] = true;
-		});
+	  if (doc.responsibilities){
+	    doc.responsibilities.forEach(function(resp){
+  		  if (!map[resp.username]) map[resp.username] = true;
+  		});
+	  }
 	}
 
 	//users get the tasks when they own them and they aren't pending, declined, or left (set to unassigned)

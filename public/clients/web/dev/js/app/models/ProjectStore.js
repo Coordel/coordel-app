@@ -53,7 +53,7 @@ define(["dojo",
             
             loadProject: function(project){
               
-              console.debug("loadProject called", project);
+              //console.debug("loadProject called", project);
               
               var def = new dojo.Deferred(),
                   self = this;
@@ -72,7 +72,7 @@ define(["dojo",
                 ]);
 
                 load.then(function(resp){
-                  //console.debug("loaded project", project);
+                  console.debug("loaded project", resp);
                   self.currentProject = project;
                   def.callback(self);
                 });

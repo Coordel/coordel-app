@@ -26,6 +26,12 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         
+        dojo.connect(this.domNode, "onkeypress", this, function(evt){
+          //console.debug("key", evt.which);
+          evt.stopPropagation();
+          //the parent popup will close this if you press TAB stop it from propagating
+        });
+        
         this._setPeople();
        
       },

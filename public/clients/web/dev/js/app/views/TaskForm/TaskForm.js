@@ -115,7 +115,7 @@ define(
         
         self.taskFormDeadline.setDropDown(self.task);
         self.taskFormDeadline._aroundNode = self.deadlineAround;
-        
+      
         self.showReuseTemplates.setDropDown(self.task);
         self.showReuseTemplates._aroundNode = self.nameAround;
     
@@ -558,7 +558,7 @@ define(
         dojo.connect(this.taskFormDelegate, "onAddOption", this, function(contact){
           //a user adds an email when the user isn't already in their contact list. it might
           //be that the user is already a coordel member, so need to check that first. then
-          //if they aren't found as a user, need to put a temporary placeholder in the pill
+          //if they aren't found as a user, need to put a temporarytaskF placeholder in the pill
           
           //when the task is saved, an email invite will be sent to the saved user
           
@@ -611,7 +611,7 @@ define(
         });
         
         dojo.connect(this.taskFormDelegate, "onAdd", this, function(field){
-          //when a project is added, this event will fire, so show the instructions for the project
+          //when a contact is added, this event will fire, so show the instructions for the contact
           //console.debug("delegate change so show instructions", field);
           this._showInstructions(field);
         });

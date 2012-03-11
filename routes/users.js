@@ -26,9 +26,15 @@ module.exports = function(app, validate){
     var defaultUrl = escape('http://' + settings.url + '/images/default_contact.png'),
         url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
         
-    var img = request(url);
-    req.pipe(img);
-    img.pipe(res);
+    if (req.query.email === "jeff.gorder@coordel.com"){
+       var img = request(url);
+        req.pipe(img);
+        img.pipe(res);
+    } else {
+      res.end();
+    }
+        
+   
     
   });
 

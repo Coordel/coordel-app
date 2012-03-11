@@ -169,7 +169,7 @@ dojo.declare(
 	      });
 	      
 	      dojo.connect(this.altDropDown.saveFieldValue, "onclick", this, function(){
-	        //console.debug("save clicked in openAltDropDown");
+	        //console.debug("save clicked in openAltDropDown", this);
 	        //save according to the taskFormField
 	        this._status = "saved";
 	        switch(this.taskFormField){

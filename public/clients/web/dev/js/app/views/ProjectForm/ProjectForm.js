@@ -12,6 +12,7 @@ define(
   "app/views/ProjectFormPill/ProjectFormPill",
   "app/util/dateFormat",
   "dijit/layout/ContentPane",
+  "app/views/ReuseDropDown/ReuseDropDown",
   "app/views/ProjectFormRoles/ProjectFormRoles",
   "app/views/ProjectFormAttachments/ProjectFormAttachments",
   "app/widgets/ContainerPane"], 
@@ -61,7 +62,11 @@ define(
         self.projectFormRoles.setDropDown(self.project);
         self.projectFormAttachments.setDropDown(self.project);
         
-        
+        //set the templates if this is new
+        if (self.isNew){
+          self.reuseTemplates.setDropDown(self.project);
+          self.reuseTemplates._aroundNode = self.nameAround;
+        }
         
         if (!self.isNew){
           var purpose = self.project.purpose;
@@ -69,11 +74,15 @@ define(
             purpose = coordel.projectForm.phPurpose;
           }
           //hide the reuse button
-          dojo.addClass(self.showReuseTemplates, "hidden");
+          dojo.addClass(this.reuseTemplates.domNode,"hidden");
+          dojo.removeAttr(this.projectNameInnerNode, "style");
           
           //set the values
           self.projectFormName.set("value", self.project.name);
           self.projectFormPurpose.set("value", purpose);
+          if (self.project.purpose && self.project.purpose !== "" && self.project.purpose !== coordel.projectForm.phPurpose){
+            dojo.removeClass(self.projectFormPurpose.domNode, "c-placeholder");
+          }
           if (self.project.deadline){
             self.projectFormDeadline.set("value", stamp.fromISOString(self.project.deadline));
           }
@@ -185,7 +194,9 @@ define(
         //people
         this.projectFormPeople.watch("value", function(prop, oldVal, newVal){
           
-          console.debug("project people changed", prop, oldVal, newVal, self.project.users);
+        
+          self.pendingUser = newVal;
+          /*
           //self.set("project", newVal);
           var has = false;
           dojo.forEach(self.project.users, function(user){
@@ -201,7 +212,7 @@ define(
             self.project.users.push(newVal);
           }
           console.debug("people after change", self.project.users);
-          
+          */
         });
         
         
@@ -239,23 +250,22 @@ define(
         
         
         dojo.connect(this.projectFormPeople, "onChange", this, function(args){
-          //console.debug("projectFormPeople onChange");
+          
+          this._setPills("people");
+          this.projectFormPeople._status = "select";
+          
+          
+          
+          console.debug("projectFormPeople onChange, pending user is", this.pendingUser);
+        
           var u = self.projectFormPeople.get("value");
-          var has = false;
-          dojo.forEach(self.project.users, function(user){
-            if (user === u || u === ""){
-              has = true;
-            }
-          });
+          
+          var has = ((dojo.indexOf(self.project.users, u) > -1) || u === "");
           
           if (!has){
             var p = db.getProjectModel(this.project, true);
-            if (!self.project.users){
-              self.project.users = [];
-            }
             
             self.project = p.invite(u, self.project);
-            //self.project.users.push(u);
             self.projectFormRoles.setDropDown(self.project);
           }
           //console.debug("people after change", self.project.users);
@@ -264,6 +274,70 @@ define(
           this.projectFormPeople.reset();
           this.projectFormPeople.focus();
           this._setPills("people");
+        });
+        
+        dojo.connect(this.projectFormRoles, "onChange", this, function(args){
+          this._setPills("roles");
+        });
+        
+        /* ADDS _____________________________________________________________________*/
+        
+        dojo.connect(this.projectFormPeople, "onAddOption", this, function(contact){
+          //a user adds an email when the user isn't already in their contact list. it might
+          //be that the user is already a coordel member, so need to check that first. then
+          //if they aren't found as a user, need to put a temporarytaskF placeholder in the pill
+          
+          //when the project is saved, an email invite will be sent to the saved user
+          
+          console.debug("adding contact", contact);
+          
+          var query = db.getUser(contact.email);
+          
+          dojo.when(query, function(user){
+            //console.log("queried coordel user", user);
+            if (user){
+              console.log("coordel member, add to this user's app", user);
+              
+              var add = db.contactStore.addContact(user.app);
+              dojo.when(add, function(){
+                setUser(user.app);
+                self.projectFormPeople.reset();
+                self._setPills("people");
+              });
+            
+            } else {
+              console.log("non-member, will do invite on save", contact);
+            
+              self.pendingContact = contact;
+              setUser(contact, true);
+              self.projectFormPeople.reset();
+              self._setPills("people");
+            }
+            
+            function setUser(user, isPending){
+              if (isPending){
+                //keep a list of pending users to invite when the project is saved
+                if (!self.pendingUsers){
+                  self.pendingUsers = [];
+                }
+                
+                self.pendingUsers.push(user);
+                
+              } else {
+                //add this user
+                var has = (dojo.indexOf(self.project.users, user) > -1);
+                if (!has){
+                  var p = db.getProjectModel(self.project, true);
+                  if (!self.project.users){
+                    self.project.users = [];
+                  }
+
+                  self.project = p.invite(user, self.project);
+                  self.projectFormRoles.setDropDown(self.project);
+                }
+              }
+            }
+          });
         });
         
         
@@ -444,10 +518,10 @@ define(
                 //console.debug("pill clicked");
                 var form = self.projectFormRoles;
                 form.isNew = false;
-                form.role = assign;
                 if (assign.name){
                   form.dropDown.focusPoint.set("value", assign.name);
                 }
+                form.dropDown.role = assign;
                 form.dropDown.people.set("value", assign.username);
                 form.openDropDown();
                 p.select();
@@ -455,10 +529,12 @@ define(
                   self._setPills("roles");
                   p.reset();
                 });
+                
               });
 
               dojo.connect(p.removeValue, "onclick", this, function(evt){
-                evt.preventDefault();
+                evt.stopPropagation();
+                console.log("remove");
                 var dKey = -1;
                 dojo.forEach(self.project.assignments, function(assign, key){
                   if(assign.role === p.value.role){
@@ -471,16 +547,20 @@ define(
                 }
 
                 self._setPills("roles");
-
-                //console.debug("remove this assignment", p.value);
               });
             }
           });
           break;
           case "people":
           dojo.empty(self.projectFormPeopleValue);
-          var people = self.project.users;
+          var people = self.project.users,
+              pending = self.pendingUsers;
+              
+          
+          
+                 
           dojo.forEach(people, function(user){
+
             //need to create a new pill for each user
             var pill = new Pill({
               formField: "people"
@@ -495,32 +575,50 @@ define(
             //wire up the removal of the pill
             dojo.connect(pill.removeValue, "onclick", function(){
               var removeId = pill.value;
-
-              //first delete the correct pill and remove the deliverable
-              var dKey;
-              dojo.forEach(people, function(d, key){
-                //console.debug("user in remove pill", d);
-                if (removeId === d){
-                  //console.debug("removing pill", d);
-                  //capture which deliverable to remove because deleting it here 
-                  //caused an error
-                  dKey = key;
-                }
+              
+              console.log("removeId");
+              
+              self.project.users = dojo.filter(people, function(d){
+                return d !== removeId;
               });
 
-              //now delete the deliverable
-              people.splice(dKey,1);
-
               //close in case we were editing
-              self.forceClose(true);
-              self.focus();
+              self.projectFormPeople.forceClose(true);
+              self.projectFormPeople.focus();
 
               //now reset the pills with the updated data
               self._setPills("people");
             });
-            
-            pill.showPill(user, db);
+          
+            pill.showPill(user);
           });
+        
+          if (pending && pending.length > 0){
+            dojo.forEach(pending, function(user){
+              var pill = new Pill({
+                imageClass: "pill-invite",
+                formField: "people"
+              }).placeAt(self.projectFormPeopleValue);
+              
+              dojo.connect(pill.removeValue, "onclick", function(){
+                var removeId = pill.value;
+
+                self.pendingUsers = dojo.filter(pending, function(pend){
+                  return pend.email !== removeId;
+                });
+
+                //close in case we were editing
+                self.projectFormPeople.forceClose(true);
+                self.projectFormPeople.focus();
+
+                //now reset the pills with the updated data
+                self._setPills("people");
+              });
+
+              pill.showPill("pending", user);
+    
+            });
+          }
         }
       },
     
@@ -592,18 +690,59 @@ define(
       save: function(){
         //console.debug("save project");
         var self = this;
-        var p = db.getProjectModel(this.project, true);
-        var def;
-        if (this.isNew){
-          def = p.add(this.project);
-        } else {
-          def = p.update(this.project);
-        }
-    
-        dojo.when(def, function(res){
-          self.onSave(res);
-        });
+        var p = db.getProjectModel(self.project, true);
         
+        if (self.pendingUsers && self.pendingUsers.length > 0){
+          
+          var invites = [];
+          
+          dojo.forEach(self.pendingUsers, function(u){
+            invites.push(db.inviteUser({
+              email: u.email,
+              firstName: u.firstName,
+              lastName: u.lastName,
+              subject: self.project.name,
+              data: dojo.clone(self.project)})
+            );
+          });
+          
+          var defList = new dojo.DeferredList(invites);
+          
+          defList.then(function(userList){
+            //get all the usernames and update the project with them
+             //console.log("invited users", userList);
+             dojo.forEach(userList, function(user){
+               if (user[0]){
+                 console.log("invited user", user[1]);
+                 p.project = p.invite(user[1].appId, p.project);
+                 
+               } else {
+                 console.log("ERROR Sending Invite to user");
+               }
+             });
+             
+             console.log("project after invites", p.project);
+             save(p);
+          });
+          
+        } else {
+          save(p);
+        }
+        
+        function save(p){
+          console.log("saving coord", p, self.isNew);
+          var def = new dojo.Deferred();
+          
+          if (self.isNew){
+            def = p.add(self.project);
+          } else {
+            def = p.update(self.project);
+          }
+
+          dojo.when(def, function(res){
+            self.onSave(res);
+          });
+        }
       },
       
       onSave: function(project){

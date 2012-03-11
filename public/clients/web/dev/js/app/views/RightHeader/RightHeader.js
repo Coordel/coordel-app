@@ -39,21 +39,19 @@ define(
       
       updateNotificationCountHandler: null,
       
+      showRightColumnHandler: null,
+      
       postCreate: function(){
         this.inherited(arguments);
         
         dojo.connect(this.showRight, "onClick", this, function(){
           //console.debug("showRight clicked");
           dojo.publish("coordel/showRightColumn", [true]);
-          dojo.removeClass(dijit.byId("hideRightColumn").domNode, "hidden");
-          dojo.addClass(dijit.byId("showRightColumn").domNode, "hidden");
         });
         
         dojo.connect(this.hideRight, "onClick", this, function(){
           //console.debug("hideRight clicked");
           dojo.publish("coordel/showRightColumn", [false]);
-          dojo.addClass(dijit.byId("hideRightColumn").domNode, "hidden");
-          dojo.removeClass(dijit.byId("showRightColumn").domNode, "hidden");
         });
         
         dojo.connect(this.optLogout, "onclick", this, function(){
@@ -118,6 +116,17 @@ define(
         
         //subscribe to notifications updates
         this.updateNotificationCountHandler = dojo.subscribe("coordel/updateNotificationCount", this, "updateNotificationCount");
+        this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "handleShowRightColumn");
+      },
+      
+      handleShowRightColumn: function(args){
+        if (args){
+          dojo.removeClass(dijit.byId("hideRightColumn").domNode, "hidden");
+          dojo.addClass(dijit.byId("showRightColumn").domNode, "hidden");
+        } else {
+          dojo.addClass(dijit.byId("hideRightColumn").domNode, "hidden");
+          dojo.removeClass(dijit.byId("showRightColumn").domNode, "hidden");
+        }
       },
       
       updateNotificationCount: function(args){

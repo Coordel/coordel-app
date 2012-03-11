@@ -164,25 +164,34 @@ define("app/models/ProjectModel",
     	  
     		var p = this;
     		
-    		project.users.push(username);
+    		if (!project.users){
+          project.users = [];
+        }
     		
-    		if (!project.assignments){
-    		  project.assignments = [];
-    		}
-    		
-    		project.assignments.push({
-    		  username: username,
-    		  role: "FOLLOWER",
-    		  status: "INVITE"
-    		});
-    		
-    		p.addActivity({
-    			object: {id: username, name: p.db.contactFullName(username), type: "PERSON"},
-    			target: {id: project._id, name: project.name, type: "PROJECT"},
-    			verb: "INVITE",
-    			icon: p.icon.invite
-    		}, project);
-    		
+    		var has = (dojo.indexOf(project.users, username) > -1);
+        
+        if (!has){
+          project.users.push(username);
+
+      		if (!project.assignments){
+      		  project.assignments = [];
+      		}
+
+      		project.assignments.push({
+      		  username: username,
+      		  role: "FOLLOWER",
+      		  status: "INVITE"
+      		});
+
+      		p.addActivity({
+      			object: {id: username, name: p.db.contactFullName(username), type: "PERSON"},
+      			target: {id: project._id, name: project.name, type: "PROJECT"},
+      			verb: "INVITE",
+      			icon: p.icon.invite
+      		}, project);
+         
+        }
+         		
     		return project;
     	},
     	
@@ -219,6 +228,8 @@ define("app/models/ProjectModel",
     	},
     	
     	add: function(project){
+    	  
+    	  console.log("adding project", project);
     	  
     	  var db = this.db,
   	        app = db.appStore.app(),
@@ -285,10 +296,7 @@ define("app/models/ProjectModel",
         });
   	    
         //save the project
-        var res = db.projectStore.store.add(project, {username: username});
-        dojo.when(res, function(proj){
-          //console.log("done adding", proj);
-        });
+        return db.projectStore.store.add(project, {username: username});
     	},
     	
     	update: function(project){
