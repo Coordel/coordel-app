@@ -32,3 +32,35 @@
 .task-info span {
   line-height: 12px;
 }
+
+.countdown {
+  padding-top: 8px;
+}
+
+.countdown.expired .countdown-box{
+  background-color: #DA291C;
+}
+
+.countdown span{
+	height: 35px;
+	width: 22px;
+	margin-right: 1px;
+	margin-left: 1px;
+	font-size: 18px;
+	padding:1px;
+	-moz-border-radius:2px;
+	border-radius: 2px;
+}
+.countdown-box{
+  background-image: url("images/button_background.png");
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #00629B;
+  color: #ffffff;
+
+ 	-moz-box-shadow: 1px 1px 3px #5c5c5c;
+	-webkit-box-shadow: 1px 1px 3px #5c5c5c;
+	box-shadow: 1px 1px 3px #5c5c5c;
+
+}
+

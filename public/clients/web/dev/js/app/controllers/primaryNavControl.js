@@ -192,7 +192,7 @@ define(['dojo',
         }
         //this.primaryController = null;
         dojo.when(t, function(resp){
-          c.init(focus, resp);
+          c.init(focus, resp, args.isTurbo);
         });
         //this.primaryController = tdControl;
       }  else {

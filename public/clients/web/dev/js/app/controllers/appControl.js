@@ -43,6 +43,8 @@ define(['dojo',
 	  
 	  doneSound: null,
 	  
+	  expireSound: null, 
+	  
 	  currentAlerts: [],
 	  
 	  init: function() {
@@ -68,6 +70,9 @@ define(['dojo',
 	    
 	    this.dingSound = new Audio("/sounds/ding.mp3");
 	    this.dingSound.load();
+	    
+	    this.expireSound = new Audio("/sounds/timer_expire.wav");
+	    this.expireSound.load();
 	  },
 	  
 	  playSound: function(sound){
@@ -79,6 +84,8 @@ define(['dojo',
 	      case "done":
 	      this.doneSound.play();
 	      break;
+	      case "expired":
+	      this.expireSound.play();
 	    }
 	  },
 	

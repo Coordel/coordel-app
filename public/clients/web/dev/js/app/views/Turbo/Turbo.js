@@ -293,12 +293,15 @@ define([
       },
       
       doTask: function(){
-        dojo.publish("coordel/primaryNavSelect", [ {name: "task", focus: this.focus, id: this.currentTask._id, task: this.currentTask}]);
+        dojo.publish("coordel/primaryNavSelect", [ {name: "task", isTurbo: true, focus: this.focus, id: this.currentTask._id, task: this.currentTask}]);
       },
       
       destroy: function(){
         this.inherited(arguments);
-        this.wizard.destroy();
+        if (this.wizard){
+          this.wizard.destroy();
+        }
+        
       },
       
       baseClass: "turbo"

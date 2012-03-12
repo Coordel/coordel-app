@@ -51,7 +51,8 @@ define([
 		
 		rightFocus: "todo", //can be note or stream as well
 		
-		init: function(focus, task) {
+		init: function(focus, task, isTurbo) {
+		  console.log("init isTurbo", isTurbo);
 		  
 		  if (!task.todos){
 		    task.todos = [];
@@ -65,6 +66,7 @@ define([
 		  //this.task = task;
 		  this.task = task;
 		  this.focus = focus;
+		  this.isTurbo = isTurbo;
 		  var tdc = this;
 
 		  document.title = document.title + " > " + task.name;
@@ -81,8 +83,6 @@ define([
 	    if (cont.hasChildren()){
 	      cont.destroyDescendants();
 	    }
-	    
-	    
 	    
       this.showHeader();
 		  
@@ -304,7 +304,7 @@ define([
 		    cont.destroyDescendants();
 		  }
 		  
-		  this.taskInfo = new ti({task:this.task, showName: false});
+		  this.taskInfo = new ti({task:this.task, showName: false, isTurbo: this.isTurbo});
 		      
 		  var pane = new tp({
 		    title: this.task.name,
@@ -571,9 +571,6 @@ define([
           stream: resp
         }));
       });
-      
-     
 		}
-	
 	};
 });

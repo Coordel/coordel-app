@@ -24,6 +24,8 @@ define(
       
       task: null,
       
+      isTurbo: false,
+      
       model: null,
       
       showName: true,
@@ -43,12 +45,54 @@ define(
     
       postCreate: function(){
         this.inherited(arguments);
+        var self = this;
+        console.log("TaskInfo isTurbo", this.isTurbo);
+        if (this.isTurbo){
+          dojo.removeClass(this.turboTimer, "hidden");
+          self.interval = setInterval(dojo.hitch(self, self.doCountdown), 1000);
+        }
             
         this.setTask(this.task);
         
         //handle task notifications
     		this.notifyHandler = dojo.subscribe("coordel/taskNotify", this, "handleTaskNotify");
         
+      },
+      
+      doCountdown: function(){
+        // parseInt() doesn't work here...
+    		var m = this.min.innerHTML,
+    			s0 = this.sec0.innerHTML,
+    			s1 = this.sec1.innerHTML,
+    			minute = parseInt(m, 10),
+    			second = parseInt(s0+s1, 10);
+
+    		second = second-1;
+
+    		if(second < 0) {
+    			second = 59;
+    			minute = minute - 1;
+    		}
+
+    		if (second < 10){
+    			this.sec0.innerHTML = "0";
+    		} else {
+    			this.sec0.innerHTML = second.toString()[0];
+    		}
+
+    		if (second < 10){
+    			this.sec1.innerHTML = second.toString()[0];
+    		} else {
+    			this.sec1.innerHTML = second.toString()[1];
+    		}
+
+    		this.min.innerHTML = minute.toString();
+
+    		if (minute <= 0 && second <= 0){
+    			clearInterval(this.interval);
+    			dojo.publish("coordel/playSound", ["expired"]);
+    			dojo.addClass(this.turboTimer, "expired");
+    		}
       },
       
       handleTaskNotify: function(args){
@@ -208,6 +252,9 @@ define(
       
       destroy: function(){
         this.inherited(arguments);
+        if (this.interval){
+          clearInterval(this.interval);
+        }
         if (this.notifyHandler){
           dojo.unsubscribe(this.notifyHandler);
         }
