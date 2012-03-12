@@ -121,6 +121,13 @@ define(
           }
         });
         
+        dojo.connect(this.reuseTemplates, "onChange", this, function(template){
+          
+          //console.log ("got template in task form", template);
+          this._setTemplate(template);
+  
+        });
+        
         dojo.connect(this.projectFormName, "onBlur", this.projectFormName, function() {
           console.debug ("onblur projectFormName", this.value);
         
@@ -456,6 +463,48 @@ define(
         
       },
       
+      _setTemplate: function(templateid){
+        this.isBlueprint = true;
+        console.log("set template", templateid);
+        var def = db.getProjectFromBlueprint(templateid), 
+            self = this;
+            
+        dojo.when(def, function(bp){
+          console.log("finished getting docs", bp);
+          
+          self.blueprint = bp;
+          
+          self.project = bp.project;
+          
+          self.projectFormResponsible.set("value", self.project.responsible);
+          
+          self._setPills("people");
+          
+          if (self.project.name && self.project.name.length > 0){
+            self.projectFormName.set("value", self.project.name);
+            dojo.removeClass(self.projectFormName.domNode, "c-placeholder");
+          }
+
+          if (self.project.purpose && self.project.purpose.length > 0){
+            self.projectFormPurpose.set("value", self.project.purpose);
+            dojo.removeClass(self.projectFormPurpose.domNode, "c-placeholder");
+          }
+
+          if (self.project.deadline){
+            self._setPills("deadline");
+          }
+          
+          if (self.project.assignments){
+            self._setPills("roles");
+          }
+          
+          if (self.project._attachments){
+            self.projectFormAttachments.setDropDown(self.project);
+            self.projectFormAttachments.dropDown.setData();
+          }
+        });
+      },
+      
       _getTipTemplate: function(field){
 
           var map = {
@@ -687,6 +736,12 @@ define(
          control.set("store" , store);
       },
       
+      reuse: function(){
+        var self = this;
+        var p = db.getProjectModel(self.project, true);
+        p.reuse(self.project);
+      },
+      
       save: function(){
         //console.debug("save project");
         var self = this;
@@ -730,18 +785,63 @@ define(
         }
         
         function save(p){
-          console.log("saving coord", p, self.isNew);
+          console.log("saving coord", p, self.isNew, self.isBlueprint);
           var def = new dojo.Deferred();
           
-          if (self.isNew){
-            def = p.add(self.project);
+          if (self.isBlueprint){
+            var list = [];
+            
+            //save the documents in the correct order starting with project
+            if (self.project.isNew){
+              list.push(p.add(self.project));
+            } else {
+              list.push(p.update(self.project));
+            }
+            
+            if (self.blueprint.roles && self.blueprint.roles.length > 0){
+              console.log("add roles", self.blueprint.roles);
+              dojo.forEach(self.blueprint.roles, function(role){
+                var r = db.getRoleModel(role, true);
+                r.add(role);
+              });
+            }
+            /*
+            if (self.blueprint.blockers && self.blueprint.blockers.length > 0){
+              console.log("add blockers", self.blueprint.blockers);
+              dojo.forEach(self.blueprint.blockers, function(block){
+                var b = db.getBlockerModel(block, true);
+                
+                b.blueprint(block);
+              });
+            }
+            
+            if (self.blueprint.tasks && self.blueprint.tasks.length > 0){
+              console.log("add tasks", self.blueprint.tasks);
+              dojo.forEach(self.blueprint.tasks, function(task){
+                var t = db.getTaskModel(task, true);
+                
+                t.blueprint(task);
+              });
+            }
+            
+            */
+            
+            dojo.when(def, function(res){
+              self.onSave(res);
+            });
+            
           } else {
-            def = p.update(self.project);
-          }
+            
+            if (self.isNew){
+              def = p.add(self.project);
+            } else {
+              def = p.update(self.project);
+            }
 
-          dojo.when(def, function(res){
-            self.onSave(res);
-          });
+            dojo.when(def, function(res){
+              self.onSave(res);
+            });
+          }
         }
       },
       

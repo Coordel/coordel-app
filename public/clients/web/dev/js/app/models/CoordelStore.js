@@ -7,6 +7,7 @@ define(["dojo",
         "app/models/TaskStore",
         "app/models/ProjectStore",
         'app/models/ProjectModel',
+        'app/models/RoleModel',
         "app/models/TaskModel",
         "app/models/DeliverableModel",
         "app/models/ContactStore",
@@ -15,7 +16,7 @@ define(["dojo",
         "i18n!app/nls/coordel",
         "app/util/dateFormat",
         "dojo/date/stamp"
-        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, tModel, dm, cStore, sStore,rStore, coordel, dtFormat, stamp) {
+        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, rModel, tModel, dm, cStore, sStore,rStore, coordel, dtFormat, stamp) {
       
         var uuidCache = [];
         var CoordelStore = {
@@ -225,11 +226,222 @@ define(["dojo",
               });
             },
             
+            getProjectFromBlueprint: function(templateid){
+              var bp = this.appStore.memTemplates.get(templateid),
+                  def = new dojo.Deferred(),
+                  docs = {},
+                  self = this;
+              
+              if (bp.blueprintAttachments){
+                //since there were attachments, get the starter docs for them
+                var q = self.getBlueprintAttachments(templateid);
+                q.then(function(docs){
+                  console.log("got starter project docs", docs);
+                  def.callback(self._getProjectFromBlueprint(bp, docs));
+                });
+              } else {
+                def.callback(self._getProjectFromBlueprint(bp, docs));
+              }
+              return def;
+            },
+            
+            _getProjectFromBlueprint: function(template, docs){
+              var bp = {},
+                  username = this.username(),
+                  self = this;
+              //this function merges the template and the starter docs
+              //need to track the old id's and the new mapping
+              bp.idMap = {};
+              
+              //first the project
+              bp.project = {};
+              bp.project.isNew = true;
+              bp.project._id = self.uuid();
+              if (docs[template.project._id]){
+                bp.project = docs[template.project._id];
+                bp.project.isNew = false;
+              }
+              bp.project.docType = "project";
+              bp.project.responsible = template.project.responsible;
+              bp.project.users = template.project.users;
+              bp.project.status = "ACTIVE";
+              bp.project.substatus = "PENDING";
+              bp.project.isMyDelegated = template.project.isMyDelegated;
+              bp.project.isMyPrivate = template.project.isMyPrivate;
+              bp.project.isTemplate = template.project.isTemplate;
+              
+              
+              
+              if (template.project.assignments){
+                bp.project.assignments = template.project.assignments;
+                dojo.forEach(bp.project.assignments, function(assign){
+                  if (assign.role !== "RESPONSIBLE" && assign.role !== "FOLLOWER"){
+                    var id = self.uuid();
+                    bp.idMap[assign.role]= id;
+                    assign.role = id;
+                  }
+                  if (assign.username === bp.project.responsible){
+                    assign.status = "ACCEPTED";
+                  } else {
+                    assign.status = "INVITE";
+                  }
+                });
+              }
+              
+              if (template.project.name){
+                bp.project.name = template.project.name;
+              }
+              
+              if (template.project.purpose){
+                bp.project.purpose = template.project.purpose;
+              }
+              
+              if (template.project.deadline){
+                //we need to calculate the new deadline based on when the project started and when
+                //the deadline was. For example, if the project was created on the 9th and deadline was
+                //the 19th, then we add 10 days to today for the deadline;
+                //if the deadline hasn't past, then figure out how many days left
+                //console.log("getting deadline", template.deadline, template.created);
+                var now = new Date(),
+                    start = stamp.fromISOString(template.project.created),
+                    end = stamp.fromISOString(template.project.deadline),
+                    diff = 0,
+                    compare = 0,
+                    deadline,
+                    hasTime = false,
+                    test = template.project.deadline.split("T");
+                
+                if (test.length > 1){
+                  hasTime = true;
+                }
+                               
+                //if there is a completed entry, use it because it gives a better indication
+                //of how long the task took
+                if (template.project.completed){
+                  end = stamp.fromISOString(template.project.completed);
+                }
+                
+                compare = dojo.date.difference(start, end, "day");
+                
+                //the start and end are the same day
+               if (compare === 0){
+                  //if the deadline had a time entry then test if diff in minutes
+                  if (hasTime){
+                    diff = dojo.date.difference(start, end, "minute");
+                    //make sure the start happened before the end
+                    if (diff > 0){
+                      //set the new deadline based on the diff in minutes
+                      bp.project.deadline = stamp.toISOString(dojo.date.add(now, "minute", diff));
+                    } else {
+                      //console.log("today, has time, diff < 0");
+                      //if wasn't positive, then just set the deadline to today
+                      bp.project.deadline = stamp.toISOString(now, {selector:"date"});
+                    }
+                  } else {
+                    //console.log("today, noTime, diff < 0");
+                    bp.project.deadline = stamp.toISOString(now, {selector: "date"});
+                  }
+                } else {
+                  //get the difference in minutes between the start and end of the task
+                  diff = dojo.date.difference(start, end, "minute");
+
+                  //console.log("diff", diff);
+                  
+                  bp.project.deadline = stamp.toISOString(dojo.date.add(now,"minute", diff));
+                } 
+                
+              }
+              
+              //blockers have to be the first tasks so they don't hang up
+              if (template.blockers && template.blockers.length > 0){
+                var blockers = [];
+                //check if it was a doc with attachments
+                dojo.forEach(template.blockers, function(t){
+                  
+                  var doc = {},
+                      id = self.uuid();
+                  bp.idMap[t._id]= id;
+                  doc._id = id;
+                  doc.isNew = true;
+                  if (template.blueprintAttachments[t._id]){
+                    doc = template.blueprintAttachments[t._id];
+                    bp.idMap[t._id]= template.blueprintAttachments[t._id]._id;
+                    doc.isNew = false;
+                  }
+                  doc.role = bp.idMap[t.role];
+                  doc.project = bp.project._id;
+                  blockers.push(self._getTaskFromBlueprint(t, doc, template._id));
+                });
+                
+                bp.blockers = blockers;
+          
+              }
+              
+              //tasks
+              if (template.tasks && template.tasks.length > 0){
+                var tasks = [];
+                //check if it was a doc with attachments
+                dojo.forEach(template.tasks, function(t){
+                  
+                  var doc = {},
+                      id = self.uuid();
+                  bp.idMap[t._id]= id;
+                  doc._id = id;
+                  doc.isNew = true;
+                  if (template.blueprintAttachments[t._id]){
+                    doc = template.blueprintAttachments[t._id];
+                    bp.idMap[t._id]= template.blueprintAttachments[t._id]._id;
+                    doc.isNew = false;
+                  }
+                  doc.role = bp.idMap[t.role];
+                  doc.project = bp.project._id;
+                  tasks.push(self._getTaskFromBlueprint(t, doc, template._id));
+                });
+                
+                bp.tasks = tasks;
+          
+              }
+              
+              //roles
+              if (template.roles && template.roles.length > 0){
+                var roles = [];
+                dojo.forEach(template.roles, function(r){
+                  var role = {};
+                  role.isNew = true;
+                  console.log("testing responsiblities", r);
+                  role._id = bp.idMap[r._id];
+                  role.name = "";
+                  if (r.name) role.name = r.name;
+                  role.username = r.username;
+                  role.project = bp.project._id;
+                  role.docType = "role";
+                  if (r.responsibilities && r.responsibilities.length > 0){
+                    dojo.forEach(r.responsibilities, function(resp){
+                      if (resp.username === bp.project.responsible){
+                        resp.status = "CURRENT";
+                        resp.substatus = "ACCEPTED";
+                      } else {
+                        resp.status = "PENDING";
+                        resp.substatus = "DELEGATED";
+                      }
+                      resp.task = bp.idMap[resp.task];
+                    });
+                    role.responsibilities = r.responsibilities;
+                  }
+                  roles.push(role);
+                });
+                bp.roles = roles;
+              }
+            
+              return bp;
+            },
+            
             getTaskFromBlueprint: function(templateid){
           	  //id is the templateid
           	  var bp = this.appStore.memTemplates.get(templateid),
           	      def = new dojo.Deferred(),
-          	      doc = {};
+          	      doc = {},
+          	      self = this;
               
               //console.log("getFromBlueprint", bp);
 
@@ -238,114 +450,127 @@ define(["dojo",
                 var q = this.getBlueprintAttachments(templateid);
                 q.then(function(doc){
                   //console.log("loaded blueprint attachments", doc);
-                  def.callback(get(bp.task, doc));
+                  def.callback(self._getTaskFromBlueprint(bp.task, doc, templateid));
                 });
               } else {
-                def.callback(get(bp.task, doc));
+                def.callback(self._getTaskFromBlueprint(bp.task, doc, templateid));
               }
-
-              function get(template, doc){
-                
-                
-                if (template.name && template.name.length > 0){
-                  doc.name = template.name;
-                }
-
-                if (template.purpose && template.purpose.length > 0){
-                  doc.purpose = template.purpose;
-                }
-
-                if (template.deadline){
-                  //we need to calculate the new deadline based on when the task started and when
-                  //the deadline was. For example, if the task was created on the 9th and deadline was
-                  //the 19th, then we add 10 days to today for the deadline;
-                  //if the deadline hasn't past, then figure out how many days left
-                  //console.log("getting deadline", template.deadline, template.created);
-                  var now = new Date(),
-                      start = stamp.fromISOString(template.created),
-                      end = stamp.fromISOString(template.deadline),
-                      diff = 0,
-                      compare = 0,
-                      deadline,
-                      hasTime = false,
-                      test = template.deadline.split("T");
-                  
-                  if (test.length > 1){
-                    hasTime = true;
-                  }
-                                 
-                  //if there is a completed entry, use it because it gives a better indication
-                  //of how long the task took
-                  if (template.completed){
-                    end = stamp.fromISOString(template.completed);
-                  }
-                  
-                  compare = dojo.date.difference(start, end, "day");
-                  
-                  //the start and end are the same day
-                 if (compare === 0){
-                    //if the deadline had a time entry then test if diff in minutes
-                    if (hasTime){
-                      diff = dojo.date.difference(start, end, "minute");
-                      //make sure the start happened before the end
-                      if (diff > 0){
-                        //set the new deadline based on the diff in minutes
-                        doc.deadline = stamp.toISOString(dojo.date.add(now, "minute", diff));
-                      } else {
-                        //console.log("today, has time, diff < 0");
-                        //if wasn't positive, then just set the deadline to today
-                        doc.deadline = stamp.toISOString(now, {selector:"date"});
-                      }
-                    } else {
-                      //console.log("today, noTime, diff < 0");
-                      doc.deadline = stamp.toISOString(now, {selector: "date"});
-                    }
-                  } else {
-                    //get the difference in minutes between the start and end of the task
-                    diff = dojo.date.difference(start, end, "minute");
-
-                    //console.log("diff", diff);
-                    
-                    doc.deadline = stamp.toISOString(dojo.date.add(now,"minute", diff));
-                  } 
-                  
-                }
-
-                 /* NOT SETTING PROJECT because its probably the not the same project and if the user
-                     wants to add it to a project, they can select the project and it will be set
-                */
-
-                if (template.username){
-                  doc.username = template.username;
-                }
-
-                if (template.calendar && template.calendar.start){
-                  doc.calendar = template.calendar;
-                }
-
-                if (template.workspace){
-                  doc.workspace = template.workspace;
-                }
-                
-                /* NOT SETTING BLOCKERS because the user should use project templates to 
-                   get multiple tasks
-                */
-
-                //if there was a template id, then the template was created from a template
-                //track the template history to see the evolution
-                if (template.templateId){
-                  if (!doc.templateHistory){
-                    doc.templateHistory = [];
-                  }
-                  doc.templateHistory.push(template.templateId);
-                }
-
-                doc.templateId = templateid;
-
-                return doc;
-              }
+              
               return def;
           	},
+          	
+          	_getTaskFromBlueprint: function(template, doc, templateid){
+              
+              doc.docType = "task";
+              
+              if (template.name && template.name.length > 0){
+                doc.name = template.name;
+              }
+
+              if (template.purpose && template.purpose.length > 0){
+                doc.purpose = template.purpose;
+              }
+
+              if (template.deadline){
+                //we need to calculate the new deadline based on when the task started and when
+                //the deadline was. For example, if the task was created on the 9th and deadline was
+                //the 19th, then we add 10 days to today for the deadline;
+                //if the deadline hasn't past, then figure out how many days left
+                //console.log("getting deadline", template.deadline, template.created);
+                var now = new Date(),
+                    start = stamp.fromISOString(template.created),
+                    end = stamp.fromISOString(template.deadline),
+                    diff = 0,
+                    compare = 0,
+                    deadline,
+                    hasTime = false,
+                    test = template.deadline.split("T");
+                
+                if (test.length > 1){
+                  hasTime = true;
+                }
+                               
+                //if there is a completed entry, use it because it gives a better indication
+                //of how long the task took
+                if (template.completed){
+                  end = stamp.fromISOString(template.completed);
+                }
+                
+                compare = dojo.date.difference(start, end, "day");
+                
+                //the start and end are the same day
+               if (compare === 0){
+                  //if the deadline had a time entry then test if diff in minutes
+                  if (hasTime){
+                    diff = dojo.date.difference(start, end, "minute");
+                    //make sure the start happened before the end
+                    if (diff > 0){
+                      //set the new deadline based on the diff in minutes
+                      doc.deadline = stamp.toISOString(dojo.date.add(now, "minute", diff));
+                    } else {
+                      //console.log("today, has time, diff < 0");
+                      //if wasn't positive, then just set the deadline to today
+                      doc.deadline = stamp.toISOString(now, {selector:"date"});
+                    }
+                  } else {
+                    //console.log("today, noTime, diff < 0");
+                    doc.deadline = stamp.toISOString(now, {selector: "date"});
+                  }
+                } else {
+                  //get the difference in minutes between the start and end of the task
+                  diff = dojo.date.difference(start, end, "minute");
+
+                  //console.log("diff", diff);
+                  
+                  doc.deadline = stamp.toISOString(dojo.date.add(now,"minute", diff));
+                } 
+                
+              }
+
+               /* NOT SETTING PROJECT because its probably the not the same project and if the user
+                   wants to add it to a project, they can select the project and it will be set
+              */
+
+              if (template.username){
+                doc.username = template.username;
+              }
+
+              if (template.calendar && template.calendar.start){
+                doc.calendar = template.calendar;
+              }
+
+              if (template.workspace){
+                doc.workspace = template.workspace;
+              }
+              
+              /* NOT SETTING BLOCKERS because the user should use project templates to 
+                 get multiple tasks
+              */
+              
+              if (template.todos){
+                dojo.forEach(template.todos, function(todo){
+                  todo.done = false;
+                });
+                doc.todos = template.todos;
+              }
+              
+              if (template.notes){
+                doc.notes = template.notes;
+              }
+
+              //if there was a template id, then the template was created from a template
+              //track the template history to see the evolution
+              if (template.templateId){
+                if (!doc.templateHistory){
+                  doc.templateHistory = [];
+                }
+                doc.templateHistory.push(template.templateId);
+              }
+
+              doc.templateId = templateid;
+
+              return doc;
+            },
             
             clearAlerts: function(){
               return dojo.xhrDelete({
@@ -468,6 +693,30 @@ define(["dojo",
               var t = new tModel(obj);
               t.task = obj;
               return t.init(db);
+        
+            },
+            
+            getRoleModel: function(role, isObject){
+              if (!isObject){
+                isObject = false;
+              }
+              
+         
+              var focus = this.focus,
+                  db = this,
+                  obj; 
+                  
+              if (isObject){
+                obj = role;
+              } else {
+                //console.debug("getTaskModel is loading the task");
+              
+                  obj = db.roleStore.store.get(role);
+             
+              }
+              var r = new rModel({db:db});
+              r.role = obj;
+              return r;
         
             },
             

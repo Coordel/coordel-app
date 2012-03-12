@@ -71,15 +71,15 @@ define(
           this.displayValue.innerHTML = this.source;
           break;
           case "people":
-          console.log("setting pill for people", value);
+          //console.log("setting pill for people", value);
           if (value === "pending"){
             this.value = contact.email;
             this.source = contact.firstName + " " + contact.lastName;
             this.displayValue.innerHTML = this.source;
           } else {
-            console.log("db", db);
+            //console.log("db", db);
             this.source = db.contactFullName(value);
-            console.log("self source", this.source, this.displayValue.innerHTML);
+            //console.log("self source", this.source, this.displayValue.innerHTML);
             this.displayValue.innerHTML = this.source;
           }
           break;

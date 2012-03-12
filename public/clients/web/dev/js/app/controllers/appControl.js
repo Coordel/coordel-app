@@ -301,7 +301,7 @@ define(['dojo',
   	    //console.debug("cDialog", d);
 
   	    var save = dojo.connect(d, "onConfirm", proj, function(){
-  	      proj.save();
+  	      proj.reuse();
   	      dojo.disconnect(save);
   	      d.destroy();
   	    }); 

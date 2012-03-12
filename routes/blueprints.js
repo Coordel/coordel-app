@@ -31,7 +31,7 @@ module.exports = function(app, validate){
         args = req.body,
         stamp = (new Date()).toISOString();
         
-    //console.log("BLUEPRINT", args );
+    console.log("BLUEPRINT", args );
     if (!args.created){
       args.created = stamp;
       args.creator = args.username;

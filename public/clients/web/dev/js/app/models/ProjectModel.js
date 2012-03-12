@@ -229,7 +229,7 @@ define("app/models/ProjectModel",
     	
     	add: function(project){
     	  
-    	  console.log("adding project", project);
+    	  //console.log("adding project", project);
     	  
     	  var db = this.db,
   	        app = db.appStore.app(),
@@ -300,7 +300,7 @@ define("app/models/ProjectModel",
     	},
     	
     	update: function(project){
-    	  console.log("updating project", project);
+    	  //console.log("updating project", project);
     	  var db = this.db,
     	      username = db.username();
     	  project.isNew = false;
@@ -322,7 +322,7 @@ define("app/models/ProjectModel",
             status = "INVITE",
   	        hasUser = false;
   	        
-  	    console.debug("updating project assignments", p, task.username);
+  	    //console.debug("updating project assignments", p, task.username);
   	    //make sure this task's user is part of the project
       
   	    dojo.forEach(p.users, function(user){
@@ -335,7 +335,7 @@ define("app/models/ProjectModel",
   	      //if this is my delegated project, the project invitation process is skipped and the
           //tasks are accepted on a task by task basis
   	      if (!p.isMyDelegated){
-  	        console.debug("inviting user to project", task.username);
+  	        //console.debug("inviting user to project", task.username);
     	      p = self.invite(task.username, p);
   	      } else {
   	        p.users.push(task.username);
@@ -391,13 +391,13 @@ define("app/models/ProjectModel",
   	  
       	//save project if an assignment was added or updated for a follower or responsible
       	if (doUpdate){
-      	  console.debug("saving project, assignment was added or updated", p, task.username);
+      	  //console.debug("saving project, assignment was added or updated", p, task.username);
       	  dojo.when(self.update(p), function(){
       	    
       	    def.callback(task);
       	  }, 
       	  function(err){
-      	    console.log("failed to update project", err);
+      	    console.log("ERROR failed to update project", err);
       	  });
         } else {
       	  def.callback(task);
@@ -450,7 +450,7 @@ define("app/models/ProjectModel",
     	  var p = this,
     	      db = this.db;
     	      
-    	  console.debug("sending project", project);
+    	  //console.debug("sending project", project);
     	  
     	  //add the create entry into the history
   	  	project = p.addActivity({
@@ -527,10 +527,10 @@ define("app/models/ProjectModel",
   
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
-    	    console.debug("didn't have project, loading");
+    	    //console.debug("didn't have project, loading");
     	  }
     	  
-    	  console.debug("declining project", project, username, message);
+    	  //console.debug("declining project", project, username, message);
     	  
     	  var curAssign = {},
     	      p = this,
@@ -564,12 +564,12 @@ define("app/models/ProjectModel",
     	  //need to deal with any tasks that were assigned to this user
     	  
     	  query.then(function(store){
-    	    console.debug("got the project store", store);
+    	    //console.debug("got the project store", store);
     	    
     	    var tasks = store.taskMemory.query({db:db, filters: {username: username}}),
     	        roles = store.roleMemory.query({username:username});
     	        
-    	    console.log("decline tasks and roles", tasks, roles);
+    	    //console.log("decline tasks and roles", tasks, roles);
     	    
     	    tasks.forEach(function(task){
     	      //console.debug("looping over tasks, current task to decline", task, db.getTaskModel(task, true));
@@ -610,7 +610,7 @@ define("app/models/ProjectModel",
       	    }
       	  });
     
-      	  console.log("DOCS for DECLINE", docs);
+      	  //console.log("DOCS for DECLINE", docs);
       	  var u = db.username();
           dojo.forEach(docs, function(doc){
             switch(doc.docType){
@@ -633,7 +633,7 @@ define("app/models/ProjectModel",
     	  var p = this,
     	      db = this.db;
 
-    	  console.debug("pausing project", project);
+    	  //console.debug("pausing project", project);
    
       	project = p.addActivity({
     			verb: "PAUSE",
@@ -650,7 +650,7 @@ define("app/models/ProjectModel",
     	  var p = this,
     	      db = this.db;
 
-    	  console.debug("resuming project", project);
+    	  //console.debug("resuming project", project);
    
       	project = p.addActivity({
     			verb: "RESUME",
@@ -668,7 +668,7 @@ define("app/models/ProjectModel",
     	      query = this.db.projectStore.loadProject(project._id),
     	      docs = [];
 
-    	  console.debug("cancelling project", project);
+    	  //console.debug("cancelling project", project);
    
       	project = p.addActivity({
     			verb: "CANCEL",
@@ -684,7 +684,7 @@ define("app/models/ProjectModel",
     	    var tasks = store.taskMemory.query({db:db}),
     	        roles = store.roleMemory.query();
     	        
-    	    console.log("cancel tasks and roles", tasks, roles);
+    	    //console.log("cancel tasks and roles", tasks, roles);
     	    
     	    tasks.forEach(function(task){
     	      //console.debug("looping over tasks, current task to decline", task, db.getTaskModel(task, true));
@@ -720,7 +720,7 @@ define("app/models/ProjectModel",
       	    }
       	  });
     
-      	  console.log("DOCS for CANCEL", docs);
+      	  //console.log("DOCS for CANCEL", docs);
       	  var u = db.username();
           dojo.forEach(docs, function(doc){
             switch(doc.docType){
@@ -741,18 +741,18 @@ define("app/models/ProjectModel",
       sendPendingTasks: function(username, project){
     	  var db = this.db;
     	  
-    	  console.log("sendPendingTasks called", username, project);
+    	  //console.log("sendPendingTasks called", username, project);
     	  
     	  var q = db.projectStore.loadProject(project);
     	  
     	  q.then(function(store){
-    	    console.debug("sendPendingTasks project db", store);
+    	    //console.debug("sendPendingTasks project db", store);
     	    var qt = store.taskMemory.query({db:db});
     	    
-    	    console.log("queried qt", qt);
+    	    //console.log("queried qt", qt);
    
       	  dojo.when(qt, function(tasks){
-      	    console.log("got tasks", tasks);
+      	    //console.log("got tasks", tasks);
       	    dojo.forEach(tasks, function(task){
       	      var t = db.getTaskModel(task, true);
       	      if (task.status === "PENDING" && task.username === username){
@@ -773,7 +773,7 @@ define("app/models/ProjectModel",
     	    project = this.db.projectStore.store.get(this._id);
     	  }
     	  
-    	  console.debug("participate", username, project);
+    	  //console.debug("participate", username, project);
     	  
     	  dojo.forEach(project.assignments, function(assign){
     	    if (assign.username === username){
@@ -792,11 +792,11 @@ define("app/models/ProjectModel",
     	  var q = db.projectStore.loadProject(project._id);
     	  
     	  q.then(function(store){
-    	    console.debug("sendPendingTasks project db", store);
+    	    //console.debug("sendPendingTasks project db", store);
     	    tasks = store.taskMemory.query({db:db, filters: {username: username}});
     	    roles = store.roleMemory.query({username: username});
     	    
-    	    console.log("tasks and roles", tasks, roles);
+    	    //console.log("tasks and roles", tasks, roles);
     	    
     	    dojo.forEach(tasks, function(task){
     	      var t = db.getTaskModel(task, true);
@@ -834,7 +834,7 @@ define("app/models/ProjectModel",
     	      }
     	    });
     	    
-    	    console.log("PARTICIPATE DOCS", docs);
+    	    //console.log("PARTICIPATE DOCS", docs);
           var u = db.username();
           dojo.forEach(docs, function(doc){
             switch(doc.docType){
@@ -863,7 +863,7 @@ define("app/models/ProjectModel",
     	    project = this.db.projectStore.store.get(this._id);
     	  }
     	  
-    	  console.debug("mark Done", project);
+    	  //console.debug("mark Done", project);
     	  
     		project = this.addActivity({
     			verb: "COMPLETE",
@@ -876,7 +876,7 @@ define("app/models/ProjectModel",
     	  var q = db.projectStore.loadProject(project._id);
     	  
     	  q.then(function(store){
-    	    console.log("store", store);
+    	    //console.log("store", store);
     	    var docs = [];
     	    //first update the project
     	    project.status = "ARCHIVE";
@@ -888,7 +888,7 @@ define("app/models/ProjectModel",
     	    dojo.forEach(tasks, function(task){
     	      var t = db.getTaskModel(task, true);
     	      if (!t.isDone()){
-    	        console.log("cancelling task", task.name);
+    	        //console.log("cancelling task", task.name);
   	          task.status = "DONE";
           		task.substatus = "CANCELLED";
           		task.isNew = false;
@@ -903,13 +903,13 @@ define("app/models/ProjectModel",
     	    
     	    //finally deal with the found roles
     	    var roles = store.roleMemory.query();
-    	    console.log("roles", roles);
+    	    //console.log("roles", roles);
     	    dojo.forEach(roles, function(role){
     	      var isUpdated = false;
-    	      console.log("testing role", role);
+    	      //console.log("testing role", role);
     	      dojo.forEach(role.responsibilities, function(r){
     	        if (r.status !== "DONE" && r.status !== "ARCHIVE"){
-      	        console.log("mark done responsibility", role, r);
+      	        //console.log("mark done responsibility", role, r);
       	        r.status = "DONE";
       	        r.substatus = "CANCELLED";
       	        isUpdated = true;
@@ -923,7 +923,7 @@ define("app/models/ProjectModel",
     	  
     	    //we have to deal with all the docs before doing the updates 
     	    //because changes will alter the stores and revs otherwise
-          console.log("DOCS TO UPDATE", docs);
+          //console.log("DOCS TO UPDATE", docs);
           var username = db.username();
           dojo.forEach(docs, function(doc){
             switch(doc.docType){
@@ -960,7 +960,7 @@ define("app/models/ProjectModel",
     	  
     	  var q = db.projectStore.loadProject(project._id);
     	  q.then(function(store){
-    	    console.log("leaving project", username, project, message, store);
+    	    //console.log("leaving project", username, project, message, store);
           
           //find the assignment for this user and mark it left
       	  dojo.forEach(project.assignments, function(assign){
@@ -988,7 +988,7 @@ define("app/models/ProjectModel",
       	  var tasks = store.taskMemory.query({db:db, filters: {username: username}});
       	  var roles = store.roleMemory.query({username: username});
       	  
-      	  console.log("leaving tasks and roles", tasks, roles);
+      	  //console.log("leaving tasks and roles", tasks, roles);
       	  
       	  dojo.forEach(tasks, function(task){
     	      var t = db.getTaskModel(task, true);
@@ -1032,7 +1032,7 @@ define("app/models/ProjectModel",
     	    
     	    //we have to deal with all the docs before doing the updates 
     	    //because changes will alter the stores and revs otherwise
-          console.log("DOCS TO LEAVE", docs);
+          //console.log("DOCS TO LEAVE", docs);
           
           var u = db.username();
           dojo.forEach(docs, function(doc){
@@ -1053,7 +1053,7 @@ define("app/models/ProjectModel",
     	},
     	
     	reuse: function(project){
-    	  console.log("reuse project", project);
+    	  //console.log("reuse project", project);
     	  
     	  var bp = {
     	    username: this.db.username(),
@@ -1067,14 +1067,14 @@ define("app/models/ProjectModel",
           putData: dojo.toJson(bp),
           headers: this.headers,
           load: function(res){
-            console.log("blueprint", res);
+            //console.log("blueprint", res);
           }
         });
     	},
     	
     	feedback: function(username, project){
         var p = this;
-    	  console.log("feedback called", username, project);
+    	  //console.log("feedback called", username, project);
     	  
     	  dojo.forEach(project.assignments, function(assign){
     	    if (assign.username === username){
@@ -1092,7 +1092,7 @@ define("app/models/ProjectModel",
     	
     	ackCancel: function(username, project){
         var p = this;
-    	  console.log("ackCancel called", username, project);
+    	  //console.log("ackCancel called", username, project);
     	  
     	  dojo.forEach(project.assignments, function(assign){
     	    if (assign.username === username){

@@ -959,6 +959,20 @@ define("app/models/TaskModel",
           });
         });
       },
+      
+      blueprint: function(task){
+        var db = this.db,
+            username = this.db.username(),
+            p = this.p,
+            t = this;
+            
+        if (t.isNew){
+          db.taskStore.store.add(task, {username: username});
+        } else {
+          db.taskStore.store.put(task, {username: username});
+        }
+      },
+      
       update: function(task){
 
         var db = this.db,

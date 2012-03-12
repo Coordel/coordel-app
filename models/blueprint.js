@@ -19,18 +19,69 @@ var Blueprint = exports = module.exports = function Blueprint(args){
  
 };
 
+function loadBlueprintAttachments(bpAtts, fn){
+  //this loads the starter docs for a project that was blueprinted
+  //they are in an object that has the original doc is with the atts to use
+
+  var docs = [];
+  //get all the docs that have the attachments to get
+  for (var key in bpAtts){
+
+    docs.push(bpAtts[key]);
+  }
+  loadProjectAttachments(docs, function(err, list){
+    //the return will have the new list with the original id 
+    //need to reassemble with doc back together with the original doc id
+    for (var key in bpAtts){
+
+      bpAtts[key]=list[bpAtts[key]._id];
+    }
+    //return the docs
+    fn(false, bpAtts);
+  });
+}
+
+function loadProjectAttachments(docs, fn){
+  //this creates attachment holders for any docs in the project that have attachments
+  console.log("loading project attachments...", docs.length);
+  var attached = {};
+  
+  async.forEach(docs, 
+    
+    function(doc, callback){
+      //load the attachments for this doc
+      var load = {};
+      load.id = doc._id;
+      load.attachments = doc._attachments;
+      loadAttachments(load, function(err, result){
+        attached[load.id]=result;
+        callback();
+      });
+    }, 
+
+    function(err){
+      if (err){
+        console.log("ERROR loading project attachments", err);
+        fn(err, null);
+      } else {
+        fn(false, attached);
+      }
+  });
+}
+
 function loadAttachments(args, fn){
   /**
-   * This function duplicates the attachments of the into a doc and returns it as 
-   * the foundation of the blueprint.
+   * This function duplicates the attachments of the into a doc and returns it 
+   * 
    *
    * @param {array} args.attachments - the list of attachments to load
-   * @param {uuid} args.id - id of the template that has the existing attachments
+   * @param {uuid} args.id - id of the doc that has the existing attachments
    * @return {Type}
    * @api public
    */
   var atts = [],
       doc = {};
+  
   for (var key in args.attachments){
     atts.push(key);
   }
@@ -77,12 +128,20 @@ function loadAttachments(args, fn){
 }
 
 function getProject(args, fn){
-  console.log("GETTING PROJECT", args._id);
+  console.log("GETTING PROJECT", args.project._id);
+  
+  
+  
+  
   var bp = args,
+      attached = {},
       viewArgs = {
-        startkey: [args._id], 
-        endkey:[args._id, {}], 
+        startkey: [args.project._id], 
+        endkey:[args.project._id, {}], 
         include_docs: true};
+        
+  args.sourceId = args.project._id;
+  args.name = args.project.name;
   
   db.view('coordel/projects', viewArgs, function(err, docs){
     if (err){
@@ -100,67 +159,63 @@ function getProject(args, fn){
       
       
       console.log("DOCS", docs.length);
-      docs.rows.map(function(r){
-        
-        switch (r.key[1]){
-          case PROJ:
-            //indicate that this is a template
-            bp.templateType = 'project';
-            bp.username = bp.responsible;
-            bp.id = bp._id; //save the id for use instantiating the blueprint
-            delete bp._id;
-            delete bp._rev;
-            bp.roles = [];
-            bp.tasks = [];//tasks will be any tasks that dont block
-            bp.blockers = [];//blockers will contain any of the tasks that block others in the project
-            console.log('Creating blueprint: ' , r.doc.name);
-          break;
-          case ROLE:
-            //roles will arrive next, expand the bp assignment role with the role doc
-            bp.roles.push(r.doc);
-            /*
-            bp.assignments.forEach(function(assign){
-              if (assign.role === r.doc._id){
-                console.log('Expanding role: ', r.doc._id);
-                assign.role = r.doc;
-              }
-            });
-            */
-          break;
-          case BLOCK:
-            if (r.doc.project !== bp.id){
-              console.log("Blocker from another Coord, discarding...", r.doc.name);
-            } else {
-              console.log("Attach blocker to Coord: ", r.doc.name);
-              bp.blockers.push(r.doc);
-              taskMap[r.doc._id] = true;
-            }
-          break;
-          case TASK: 
-            //last will be the tasks. iterate the assigments for role.responsibilities and expand
-            if (!taskMap[r.doc._id]){
-              console.log("Attach task to Coord: ", r.doc.name);
-              bp.tasks.push(r.doc);
-            } else {
-              console.log("Task already in taskMap, discarding...", r.doc.name);
-            }
-            /*
-            bp.assignments.forEach(function(assign){
-              assign.role.responsibilities.forEach(function(resp){
-                if (resp.task === r.doc._id){
-                  console.log('Expanding task: ', r.doc.name);
-                  resp.task = r.doc;
-                  //track the task to make sure we don't add it twice 
-                  taskMap[r.doc._id] = true;
-                }
-              });
-            });
-            */
-          break;
+      
+      var toAttach = [];
+      docs.forEach(function(doc){
+        if (doc._attachments){
+          toAttach.push(doc);
         }
       });
+      
+      if (toAttach.length > 0){
+        loadProjectAttachments(toAttach, function(err, result){
+          console.log("project docs with attachments", result);
+          bp.blueprintAttachments = result;
+          doBlueprint();
+        });
+      } else {
+        doBlueprint();
+      }
+      
+      function doBlueprint(){
+        
+        console.log("doBlueprint", docs);
+        
+        docs.rows.map(function(r){
+          switch (r.key[1]){
+            case PROJ:
+              bp.roles = [];
+              bp.tasks = [];//tasks will be any tasks that dont block
+              bp.blockers = [];//blockers will contain any of the tasks that block others in the project
+              console.log('Creating blueprint: ' , r.doc.name);
+            break;
+            case ROLE:
+              //roles will arrive next, expand the bp assignment role with the role doc
+              bp.roles.push(r.doc);
+            break;
+            case BLOCK:
+              if (r.doc.project !== bp.sourceId){
+                console.log("Blocker from another Coord, discarding...", r.doc.name);
+              } else {
+                console.log("Attach blocker to Coord: ", r.doc.name);
+                bp.blockers.push(r.doc);
+                taskMap[r.doc._id] = true;
+              }
+            break;
+            case TASK: 
+              //last will be the tasks. iterate the assigments for role.responsibilities and expand
+              if (!taskMap[r.doc._id]){
+                console.log("Attach task to Coord: ", r.doc.name);
+                bp.tasks.push(r.doc);
+              } else {
+                console.log("Task already in taskMap, discarding...", r.doc.name);
+              }
+            break;
+          }
+        });
 
-      fn(null, bp);
+        fn(null, bp);
+      }
     }
   });
 }
@@ -290,8 +345,9 @@ Blueprint.prototype.add = function(args, fn){
           console.log("ERROR", err);
           fn(err, false);
         } else {
+          //console.log("final blueprint", bp);
           db.save(bp, function(err, bpResp){
-            console.log("saved template", bpResp);
+            //console.log("saved template", bpResp);
             bp._id = bpResp.id;
             bp._rev = bpResp.rev;
             fn(null, bp);
@@ -355,11 +411,19 @@ exports.getAttachments = function(templateid, fn){
     } else {
       //create a doc the the attachments and return it
       //console.log("BLUEPRINT ATTACHMENTS", bp);
-      if (!bp._attachments){
+      if (!bp._attachments && !bp.blueprintAttachments){
         fn(false, {});
       } else {
         switch (bp.templateType){
           case "project":
+            if (bp.blueprintAttachments){
+              console.log("get project starter docs...");
+              
+              loadBlueprintAttachments(bp.blueprintAttachments, function(err, list){
+                fn(false, list);
+              });
+              
+            }
           break;
           case "task":
             loadAttachments({id:bp._id, attachments: bp._attachments}, function(err, atts){
