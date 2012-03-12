@@ -166,6 +166,7 @@ define({
 		  contact: "Add Person"
 		},
 		projectActions: {
+		  viewHeader: "View",
 		  edit: "Edit",
 		  requiredMessage: "Required",
 		  header: "Actions",

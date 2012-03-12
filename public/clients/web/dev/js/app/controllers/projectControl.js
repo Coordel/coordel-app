@@ -16,7 +16,8 @@ define([
   "app/views/ProjectAssignment/ProjectAssignment",
   "app/models/ProjectStatus",
   "app/views/ProjectForm/ProjectForm",
-  "app/views/ConfirmDialog/ConfirmDialog"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog) {
+  "app/views/ConfirmDialog/ConfirmDialog",
+  "app/views/BlockerInfo/BlockerInfo"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,BlockerInfo) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -59,6 +60,8 @@ define([
         */
         
         this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "setRightColumn");
+        
+        this.projViewChangeHandler = dojo.subscribe("coordel/projViewChange", this, "handleViewChange");
         
         //handle click of sendProjMessageButton
         dojo.connect(dijit.byId("projSendMessageButton"), "onClick", this, function(){
@@ -157,6 +160,44 @@ define([
         dojo.addClass("projDetailsSendContainer", "hidden");
         dojo.addClass(dijit.byId("projectDetailsFilter").domNode, "hidden");
         
+      },
+      
+      handleViewChange: function(args){
+        switch (args.view){
+          case "tasks":
+            this.showTasks();
+            break;
+          case "deliverables":
+            this.showDeliverables();
+            break;
+        }
+      },
+      
+      showDeliverables: function(){
+        console.log("showing Deliverables");
+        var store = db.projectStore;
+        var cont = dijit.byId("projTasksMain");
+        if (cont.hasChildren()){
+          cont.destroyDescendants();
+        }
+        
+        var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
+
+        //get the tasks with usual status
+        var del = store.taskMemory.query({db: db, focus: "hasDeliverables"}, {sort: sort});
+        
+        if (del.length === 0){
+          this.showEmptyTasks();
+        }
+        
+        console.log(" tasks with deliverables", del);
+        this.emptyGroup = new Empty({
+          emptyTitle: coordel.empty.projectTasksTitle,
+          emptyDescription: coordel.empty.projectTasksText
+        });
+        cont.addChild(this.emptyGroup);
+        
+      
       },
       
       showTasks: function(){

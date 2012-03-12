@@ -127,6 +127,20 @@ define([
           //console.log("cancel clicked");
           dojo.publish("coordel/projectAction", [{action: "markDone", project: this.project}]);
         });
+        
+        //views
+        dojo.connect(this.showTasks, "onclick", this, function(){
+          dojo.publish("coordel/projViewChange", [{view: "tasks"}]);
+          dojo.addClass(this.showTasks, "selected");
+          dojo.removeClass(this.showDeliverables, "selected");
+        });
+        
+        dojo.connect(this.showDeliverables, "onclick", this, function(){
+          dojo.publish("coordel/projViewChange", [{view: "deliverables"}]);
+          dojo.removeClass(this.showTasks, "selected");
+          dojo.addClass(this.showDeliverables, "selected");
+        });
+        
 
       }
   });

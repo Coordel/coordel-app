@@ -117,6 +117,13 @@ app.store.util.TaskQueryEngine = function(query, options){
   		};
   		break;
   		
+  		case "hasDeliverables":
+  		query = function(task){
+  		  var t = db.getTaskModel(task,true);
+  		  return t.hasDeliverables() && applyFilter(task);
+  		};
+  		break;
+  		
   		//this gets the current list for a user
   	  case "current":
   		query = function(task){
