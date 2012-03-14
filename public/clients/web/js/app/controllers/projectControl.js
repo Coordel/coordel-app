@@ -17,7 +17,7 @@ define([
   "app/models/ProjectStatus",
   "app/views/ProjectForm/ProjectForm",
   "app/views/ConfirmDialog/ConfirmDialog",
-  "app/views/BlockerInfo/BlockerInfo"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,BlockerInfo) {
+  "app/views/ProjectDeliverable/ProjectDeliverable"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -184,19 +184,25 @@ define([
         var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
 
         //get the tasks with usual status
-        var del = store.taskMemory.query({db: db, focus: "hasDeliverables"}, {sort: sort});
+        var tasks = store.taskMemory.query({db: db, focus: "hasDeliverables"}, {sort: sort});
         
-        if (del.length === 0){
-          this.showEmptyTasks();
+        if (tasks.length === 0){
+          this.emptyGroup = new Empty({
+            emptyTitle: coordel.empty.projectTasksTitle,
+            emptyDescription: coordel.empty.projectTasksText
+          });
+          cont.addChild(this.emptyGroup);
+        } else {
+          console.log(" tasks with deliverables", tasks);
+          
+          dojo.forEach(tasks, function(task){
+            var d = new ProjectDeliverable({
+              task: task
+            });
+            cont.addChild(d);
+          });
+          
         }
-        
-        console.log(" tasks with deliverables", del);
-        this.emptyGroup = new Empty({
-          emptyTitle: coordel.empty.projectTasksTitle,
-          emptyDescription: coordel.empty.projectTasksText
-        });
-        cont.addChild(this.emptyGroup);
-        
       
       },
       
