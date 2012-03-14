@@ -6,21 +6,22 @@
  */
 
 var express     = require('express'),
-    settings    = require('./settings'),
+    config      = require('konphyg')(__dirname + '/config'),
+    settings    = config('settings'),
     redisOpts   = settings.config.redisOptions,
     couchOpts   = settings.config.couchOptions,
+    couchName   = settings.config.couchName,
     RedisStore  = require('connect-redis')(express),
-    store       = require('redis').createClient(redisOpts.port, redisOpts.host),
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),
-    couch       = cn.database(settings.config.couchName),
-    ddoc        = require('./couchdb/ddoc'),
+    couch       = cn.database(couchName),
+    store       = require('redis').createClient(redisOpts.port, redisOpts.host),
     follow      = require('follow'),
     everyauth   = require('everyauth'),
     app         = module.exports = express.createServer(),
+    ddoc        = require('./couchdb/ddoc'),
     io          = require('socket.io').listen(app),
     util        = require('util'),
-    Promise     = everyauth.Promise,
     User        = require('./models/user'),
     Alert       = require('./models/alert'),
     nls         = require('i18n'),
@@ -28,8 +29,7 @@ var express     = require('express'),
     loggly      = require('loggly'),
     log         = loggly.createClient(settings.config.logglyOptions),
     home        = true;
-    
-//settings.auth contains all the security strings 
+
 var auth = settings.auth;
 
 //set io log level
@@ -48,13 +48,14 @@ everyauth
     .postLoginPath('/login')
     .loginView('users/login', {layout: 'users/layout'})
     .authenticate( function (login, password) {
+      console.log("authenticate", login, password);
       var errors = [];
       if (!login) errors.push('Missing login');
       if (!password) errors.push('Missing password');
       if (errors.length) return errors;
-      var promise = new Promise();
+      var promise = this.Promise();
       User.get(login, function(err, user){
-        console.log("USER", user);
+        //console.log("USER", user);
         if (err) promise.fulfill([err]);
         if (user.password !== password){
           promise.fulfill(['Login failed: invalid username or password']);
@@ -74,7 +75,7 @@ everyauth
     })
     .validateRegistration( function (newUserAttrs, errors) {
       var login = newUserAttrs.email;
-      var promise = new Promise();
+      var promise = this.Promise();
       User.get(login, function(err, user){
         if (err && err !=='Login not found') errors.push(err);
         if (user) errors.push('Login already taken');
@@ -88,7 +89,7 @@ everyauth
     })
     .registerUser( function (newUserAttrs) {
       var login = newUserAttrs[this.loginKey()];
-      var promise = new Promise();
+      var promise = this.Promise();
       newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){
         console.log("REGISTERED USER", user);
@@ -107,7 +108,7 @@ everyauth.linkedin
   .consumerKey(auth.linkedin.apiKey)
   .consumerSecret(auth.linkedin.apiSecret)
   .findOrCreateUser( function (sess, accessToken, accessSecret, linkedinUser) {
-    var promise = new Promise();
+    var promise = this.Promise();
     User.getLinkedinUser(linkedinUser, function(err, user){
       if (err) promise.fulfill([err]);
       promise.fulfill(user);
@@ -123,7 +124,7 @@ everyauth.google
   .findOrCreateUser( function (sess, accessToken, extra, googleUser) {
     googleUser.refreshToken = extra.refresh_token;
     googleUser.expiresIn = extra.expires_in;
-    var promise = new Promise();
+    var promise = this.Promise();
     User.getGoogleUser(googleUser, function(err, user){
       if (err) promise.fulfill([err]);
       promise.fulfill(user);
@@ -138,7 +139,7 @@ everyauth.facebook
   .appSecret(auth.fb.appSecret)
   .scope('email')
   .findOrCreateUser(function(session, accessToken, accessTokExtra, fbUserMetadata){
-    var promise = new Promise();
+    var promise = this.Promise();
     User.getFacebookUser(fbUserMetadata, function(err, user){
       if (err) promise.fulfill([err]);
       promise.fulfill(user);
@@ -161,7 +162,7 @@ var options = {
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'html');
-  //app.use(express.logger());
+ 
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -179,8 +180,11 @@ app.configure('development', function(){
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
+  app.use(express.logger()); 
 });
+
+if (app.settings.env === "development") console.log("development environment");
 
 app.register('.html', require('ejs'));
 
@@ -189,6 +193,7 @@ var validate = function(req, res, next){
   if (req.session.auth && req.session.auth.loggedIn){
     next();
   } else {
+    
     req.session.auth = {};
     req.session.auth.loggedIn = true;
     req.session.auth.userId = 'jeff.gorder@coordel.com';
@@ -227,7 +232,6 @@ app.get('/', function(req, res){
       //show the alt home page
       res.render('corp/home/content-b', {layout: 'corp/home', color: 'c-bg-green'});
     }
-    
   }
 });
 
@@ -253,7 +257,7 @@ couch.info(function(err, info){
         var map = Alert.getChangeAlertMap(change.doc);
         //console.log("ALERT MAP", map);
         for (var key in map){
-          console.log("CHANGE", key, change.doc.updater);
+          //console.log("CHANGE", key, change.doc.updater);
           changesIO.emit('changes:' + key, change.doc);
           
           //if this user didn't do the update, then alert when history exists
@@ -279,15 +283,17 @@ couch.info(function(err, info){
 
 /* ****************************  UTILITY DELETE FOR PRODUCTION  *************************/
 
-app.get('/flushdb', function(req, res){
-  store.flushdb();
-  console.log('redis flushed');
-  couch.destroy();
-  couch.create();
-  console.log('couch recreated');
-  delete req.session.auth;
-  res.redirect('/admin');
-});
+if (app.settings.env === "development"){
+  app.get('/flushdb', function(req, res){
+    store.flushdb();
+    console.log('redis flushed');
+    couch.destroy();
+    couch.create();
+    console.log('couch recreated');
+    delete req.session.auth;
+    res.redirect('/admin');
+  });
+}
 
 app.get('/loadTemplates', function(req, res){
   var templates = require('./couchdb/defaultTemplates');
@@ -296,16 +302,13 @@ app.get('/loadTemplates', function(req, res){
       console.log("ERROR adding temlates");
       res.redirect('/admin');
     } else {
-      console.log("Loaded default templates");
+      //console.log("Loaded default templates");
       res.redirect('/admin');
     }
   });
 });
 
-
-
 /* ************************************************************************************/
 
 everyauth.helpExpress(app);
 app.listen(8080);
-console.log("Coordel App Server listening on port %d in %s mode", app.address().port, app.settings.env);

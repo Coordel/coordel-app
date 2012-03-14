@@ -1,5 +1,6 @@
 var App         = require('./userApp'),
-    settings    = require('./../settings'),
+    config      = require('konphyg')(__dirname + './../config'),
+    settings    = config('settings'),
     redisOpts   = settings.config.redisOptions,
     couchOpts   = settings.config.couchOptions,
     redis       = require('redis').createClient(redisOpts.port, redisOpts.host),

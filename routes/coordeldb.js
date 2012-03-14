@@ -2,17 +2,21 @@
  * Coordel routes to CouchDb
  */
 
-var settings    = require('./../settings'),
+var config = require('konphyg')(__dirname + './../config'),
+    settings = config('settings'),
     couchOpts   = settings.config.couchOptions,
-    cradle      = require('cradle').setup(couchOpts),
-    nano        = require('nano')('http://'+couchOpts.host + ':' + couchOpts.port),
-    nanoCouch   = nano.use(settings.config.couchName),
-    cn          = new cradle.Connection(),
-    couch       = cn.database(settings.config.couchName),
+    couchName   = settings.config.couchName,
     App         = require('./../models/userApp'),
-    fs          = require('fs'),
-    Deferred    = require('promised-io/promise').Deferred,
-    promise     = require('promised-io/promise');
+    fs          = require('fs');
+    
+
+//console.log("settings", redisOpts, couchName, couchOpts);
+var cradle = require('cradle').setup(couchOpts);
+var cn  = new cradle.Connection();
+var couch = cn.database(couchName);
+var nano = require('nano')('http://'+couchOpts.host + ':' + couchOpts.port);
+var nanoCouch = nano.use(settings.config.couchName);
+
 
 module.exports = function(app, validate){
   

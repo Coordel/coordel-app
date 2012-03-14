@@ -9,7 +9,8 @@
  
  * this way, alerts are a bit stickier than a growl, but don't create something like an inbox
  */
- var settings    = require('./../settings'),
+ var config = require('konphyg')(__dirname + './../config'),
+     settings = config('settings'),
      redisOpts   = settings.config.redisOptions,
      redis       = require('redis').createClient(redisOpts.port, redisOpts.host),
      emailer     = require('./../lib/emailer');

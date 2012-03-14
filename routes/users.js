@@ -2,7 +2,8 @@ var User        = require('./../models/user'),
     Invite      = require('./../models/invite'),
     gravatar    = require('gravatar'),
     request     = require('request'),
-    settings    = require('./../settings');
+    config      = require('konphyg')(__dirname + './../config'),
+    settings    = config('settings');
 
 module.exports = function(app, validate){
   
@@ -23,16 +24,26 @@ module.exports = function(app, validate){
   
   app.get('/gravatar', function(req, res){
     
-    var defaultUrl = escape('http://' + settings.url + '/images/default_contact.png'),
+    var defaultUrl = 'http://' + settings.url + '/images/default_contact.png',
         url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
+    
+    console.log("gravatar url", req.query.email, url);
+    
+    var img = request.get(url);
+    img.pipe(res);
+    
+    //es.write(request.get(url));
         
-    if (req.query.email === "jeff.gorder@coordel.com"){
+    //if (req.query.email === "jeff.gorder@coordel.com"){
+      /*
        var img = request(url);
+       console.log("image returned", img);
         req.pipe(img);
         img.pipe(res);
-    } else {
-      res.end();
-    }
+        */
+    //} else {
+        //res.end();
+    //}
         
    
     

@@ -1,0 +1,283 @@
+#mainCenterContainer .tasklist-item:last-child{
+border-bottom: 1px solid #B5BCC7;
+}
+
+#mainCenterContainer .task-and-checklist .tasklist-item:last-child{
+border-bottom: 1px solid #eaeaea;
+}
+
+#mainCenterContainer .tasklist-group .tasklist-item:last-child{
+border-bottom: 1px solid #a3aab1;
+}
+
+#mainCenterContainer  .tasklist-group .task-and-checklist .tasklist-item:last-child{
+border-bottom: 1px solid #eaeaea;
+}
+
+#mainCenterContainer  .tasklist-group .task-and-checklist:last-child{
+border-bottom: 1px solid #a3aab1;
+}
+
+.tasklist-item{
+  height: 3em;
+  line-height:3em;
+  background: #fff;
+  border-bottom: 1px solid #eaeaea;
+  font-color: #333;
+  font-size: 1em;
+  padding-left:8px;
+
+}
+
+.tasklist-item:hover{
+  background: #fdfdfd;
+}
+
+.tasklist-item.glow {
+  background: #fdfdfd;
+  background-image: url(images/taskGlow.png);
+  background-repeat: repeat-y;
+}
+
+.tasklist-item .taskname.mine {
+  cursor: pointer;
+}
+
+.tasklist-item .taskname.mine:hover {
+  text-decoration: underline;
+}
+
+
+.tasklist-item .taskname {
+  cursor: default;
+}
+
+
+.tasklist-item .meta-info {
+  font-weight: bold;
+  display:inline-block;
+}
+
+.tasklist-item .sortable {
+  background: url(images/sortable.png) no-repeat;
+  float: left;
+  height: 7px;
+  margin-right: 4px;
+  margin-top: 15px;
+  filter:alpha(opacity=40);
+  opacity:0.4;
+  width: 4px;
+  
+}
+
+.tasklist-item .meta-deadline {
+  display:inline-block;
+  float: right;
+  font-size: 10px;
+  margin: 0 4px;
+  text-align: center;
+}
+
+.tasklist-item .meta-turbo{
+  display:inline-block;
+  float: right;
+  margin: 0 4px;
+  background: url(images/icons/meta-turbo.png) center center no-repeat;
+  opacity: 0.4;
+}
+
+
+
+.task-actions-holder {
+  height: 28px;
+  line-height: 30px;
+  float: right;
+  margin-top: 4px;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.tasklist-item .task-actions li {
+  display: none;
+}
+
+.tasklist-item .task-actions li.info {
+  display: block;
+}
+
+.tasklist-item .task-actions:hover li, .task-actions.active li {
+  background: #ccc url(images/titlebar1.png) repeat-x;
+  filter:alpha(opacity=70);
+  opacity:0.7;
+  border-top: 1px solid #a3aab1;
+  border-bottom: 1px solid #a3aab1;
+  border-right: 1px solid #a3aab1;
+  display:block;
+  cursor: pointer;
+}
+.tasklist-item .task-actions:hover li:first-child, .task-actions.active li:first-child {
+  border-left: 1px solid #a3aab1;
+}
+
+.tasklist-item .task-actions:hover li:hover, .task-actions.active li:hover {
+  background-color: #e5e5e5;
+  filter:alpha(opacity=90);
+  opacity:0.9;
+}
+
+.tasklist-item .task-actions:hover li a ins, .task-actions.active li a ins{
+  height: 12px;
+  width: 12px;
+  background-image: url(images/icons/task-actions.png);
+  filter:alpha(opacity=70);
+  opacity:0.7;
+}
+
+.tasklist-item .task-actions:hover li:hover a ins, .task-actions.active li:hover a ins {
+  filter:alpha(opacity=100);
+  opacity:1;
+}
+
+.tasklist-item .task-actions:hover li.edit a ins, .task-actions.active li.edit a ins {
+  background-position: 0;
+}
+
+.tasklist-item .task-actions:hover li.actions a ins, .task-actions.active li.actions a ins {
+  background-position: -24px;
+}
+
+
+.tasklist-item .task-actions:hover li.delete a ins, .task-actions.active li.delete a ins {
+  background-position: -48px;
+}
+
+.tasklist-item .task-actions:hover li.blockers a ins, .task-actions.active li.blockers a ins {
+  background-position: -72px;
+}
+
+.tasklist-item.task-actions:hover  li.prereqs a ins {
+  background-position: -96px;
+}
+
+.tasklist-item .task-actions:hover li.stream a ins, .task-actions.active li.stream a ins {
+  background-position: -120px;
+}
+
+.tasklist-item .task-actions:hover li.info a ins, .task-actions.active li.info a ins  {
+  background-position: -144px;
+}
+
+.tasklist-item .task-actions:hover li.accept a ins, .task-actions.active li.accept a ins  {
+  background-position: -312px;
+}
+
+.tasklist-item .task-actions:hover li.decline a ins, .task-actions.active li.decline a ins {
+  background-position: -288px;
+}
+
+.tasklist-item .task-actions:hover li.remove-defer a ins, .task-actions.active li.remove-defer a ins {
+  background-position: -384px;
+}
+
+
+.task-actions li.first{
+  border-bottom-left-radius: 25px 25px;
+  border-top-left-radius: 25px 25px;
+}
+
+.task-actions li.last{
+  border-bottom-right-radius: 25px 25px;
+  border-top-right-radius: 25px 25px;
+}
+
+.task-actions .menu-button {
+  text-indent: 0;
+}
+
+.task-actions .menu-button .dijitArrowButtonInner {
+	background-image: none;
+	display:none;
+}
+
+
+.task-actions li {
+  width: 1.8em;
+  
+  filter:alpha(opacity=30);
+  opacity:0.3;
+  
+  float: left;
+  height: 23px;
+  text-indent: -9999px;
+  width: 24px;
+  display: block;
+}
+
+.task-actions li.info a ins {
+  background-image: url(images/icons/task-actions.png);
+  background-position: -144px;
+  filter:alpha(opacity=40);
+  opacity:0.4;
+}
+
+.task-actions li a ins {
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+  display: block;
+  height: 12px;
+  margin: 6px 0px 0px 5px;
+  width: 12px;
+}
+
+/* override the claro checkbox styles*/
+.coordel .tasklist-item .dijitCheckBox, .coordel .dijitCheckBoxIcon {
+  background-image: url('images/checkboxStates.png');
+  /* checkbox sprite image */
+  
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 16px;
+  margin-top: -2px;
+  padding: 0;
+}
+.coordel .tasklist-item .dijitCheckBox, .coordel .dijitToggleButton .dijitCheckBoxIcon {
+  /* unchecked */
+  background-position: -20px;
+}
+.coordel .tasklist-item .dijitCheckBoxChecked, .coordel .dijitToggleButtonChecked .dijitCheckBoxIcon {
+  /* checked */
+
+  background-position: 0;
+}
+.coordel .tasklist-item .dijitCheckBoxDisabled {
+  /* disabled */
+
+  background-position: -100px;
+}
+.coordel .tasklist-item .dijitCheckBoxCheckedDisabled {
+  /* disabled but checked */
+
+  background-position: -80px;
+}
+.coordel .tasklist-item .dijitCheckBoxHover {
+  /* hovering over an unchecked enabled checkbox */
+
+  background-position: -60px;
+}
+.coordel .tasklist-item .dijitCheckBoxCheckedHover {
+  /* hovering over an checked enabled checkbox */
+
+  background-position: -40px;
+}
+
+.task-actions-corner-left {
+  border-bottom-left-radius: 25px 25px;
+  border-top-left-radius: 25px 25px;
+  border-left: 1px solid #a3aab1;
+  padding-left: 2px;
+}
+
+
+
+
+

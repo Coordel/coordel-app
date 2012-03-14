@@ -1,6 +1,7 @@
 require('date-utils');
 
-var settings    = require('./../settings'),
+var config = require('konphyg')(__dirname + './../config'),
+    settings = config('settings'),
     couchOpts   = settings.config.couchOptions,
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),

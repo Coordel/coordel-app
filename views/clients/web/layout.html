@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Coordel</title>
 	<link rel="shortcut icon" href="/images/favicon.gif">
-  <link rel="stylesheet" href="/clients/web/dev/css/app.css">
+  <link rel="stylesheet" href="/clients/web<%= version %>/css/app.css">
 	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
     var djConfig = {
@@ -15,7 +15,7 @@
 	<!-- APP -->
 </head>
 <body class="coordel loading">
-  <script data-main="/clients/web/dev/js/app/_base" src="/clients/web/dev/js/requirejs-0.24.0/require.js"></script>
+  <script data-main="/clients/web<%= version %>/js/app/_base" src="/clients/web<%= version %>/js/requirejs-0.24.0/require.js"></script>
 </body>
 <script type="text/javascript" charset="utf-8">
   var is_ssl = ("https:" == document.location.protocol);
