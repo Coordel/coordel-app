@@ -28,9 +28,14 @@ module.exports = function(app, validate){
         url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
     
     console.log("gravatar url", req.query.email, url);
-    
-    var img = request.get(url);
-    img.pipe(res);
+    try{
+      var img = request.get(url);
+      img.pipe(res);
+    } catch (err){
+      console.log("ERROR getting gravatar");
+      res.end();
+    }
+   
     
     //es.write(request.get(url));
         
