@@ -68,8 +68,8 @@ define(["dojo",
             	};
             	this.projectRemote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
               this.projectMemory = new mem({idProperty: "_id"});
-              this.projectMemory = new obs(this.memory);
-              this.projectStore = new obsCache(this.remote, this.memory);
+              this.projectMemory = new obs(this.projectMemory);
+              this.projectStore = new obsCache(this.projectRemote, this.projectMemory);
   
               
             	this.currentContext = "projectStream";
@@ -86,12 +86,10 @@ define(["dojo",
             	};
             	this.taskRemote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
               this.taskMemory = new mem({idProperty: "_id"});
-    
-              this.taskStore = new obsCache(this.remote, this.memory);
-            	
+              this.taskMemory = new obs(this.taskMemory);
+              this.taskStore = new obsCache(this.taskRemote, this.taskMemory);
             	this.currentContext = "taskStream";
             	this.currentContextId = task;
-            	
             	return this.taskStore.query(query);
             },
             loadContactStream: function(contact){
@@ -103,7 +101,7 @@ define(["dojo",
             	};
             	this.contactRemote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
               this.contactMemory = new mem({idProperty: "_id"});
-              this.contactStore = new obsCache(this.remote, this.memory);
+              this.contactStore = new obsCache(this.contactRemote, this.contactMemory);
             	
             	this.currentContext = "contactStream";
             	this.currentContextId = contact;

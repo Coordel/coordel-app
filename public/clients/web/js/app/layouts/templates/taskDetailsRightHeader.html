@@ -5,18 +5,22 @@
 		<td id="streamTab" style='width:33%' class='listHeader right-tab inactive double c-text-center'>${stream.taskStream}</td>
 	</tr>
 </table>
-<div style='background:#e5e5e5;border-bottom: 1px solid #a3aab1' class="coordel-toolbar">
+<div id="taskListDetailsContainer" style='background:#e5e5e5;border-bottom: 1px solid #a3aab1'>
 	<div>
-		
-		<div id="taskListDetailsSearch" style="visibility: hidden" class="c-padding hidden" dojoType="app.views.QuickSearch"></div>
-		<div id="taskListDetailsTurbo" dojoAttachPoint="goTurbo" title="${goTurbo}" dojoType="dijit.form.Button" iconClass="small-task-icon icon-turbo" showLabel="false"></div>
-		<div id="taskListDetailsFilter" style="visibility:hidden" dojoAttachPoint="filter" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" showLabel="false"></div>
-		<div id="taskListDetailsSort" dojoAttachPoint="sort" dojoType="dijit.form.DropDownButton" iconClass="small-task-icon icon-sort" showLabel="false">
+		<div id="taskListDetailsToolbar" class="coordel-toolbar">
+			<div id="taskListDetailsSearch" style="display:none" class="c-padding hidden" dojoType="app.views.QuickSearch"></div>
+			<div id="taskListDetailsTurbo" dojoAttachPoint="goTurbo" title="${goTurbo}" dojoType="dijit.form.Button" iconClass="small-task-icon icon-turbo" showLabel="false"></div>
+			<div id="taskListDetailsFilter" style="visibility:hidden" dojoAttachPoint="filter" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" showLabel="false"></div>
+			<div id="taskListDetailsSort" dojoAttachPoint="sort" dojoType="dijit.form.DropDownButton" iconClass="small-task-icon icon-sort" showLabel="false">
 			<div id="taskListDetailsSortMenu" dojoAttachPoint="sortDialog" class="menu" layoutAlign="top" dojoType="dijit.TooltipDialog">
-				
 			</div>
 		</div>
-		<div id="taskListDetailsInput" class="c-padding hidden"></div>
 	</div>
-	
+	<div id="taskListDetailsInput" class="task-form c-padding-t c-padding-l c-padding-r c-padding-b hidden">
+		<div id="taskSendMessageButton" class="c-float-r send-button" dojoType="dijit.form.Button" label="${send}"></div>
+		<div style="width: 81%" class="textarea-holder stream">
+			<textarea  id="taskMessageText" dojoType="dijit.form.Textarea"></textarea>
+		<div>
+		<div class="clear"></div>
+	</div>	
 </div>

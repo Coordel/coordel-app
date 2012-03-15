@@ -531,35 +531,23 @@ define([
       },
       
       showStream: function(){
-      
   		  var node = dijit.byId("projDetailsStream"),
   		      store = db.projectStore;
   		  
-  		  if (node.hasChildren()){
-  		    node.destroyDescendants();
-  		  }
-        
-        //dijit.byId("prMain").selectChild("projDetailsStream");
-        
-        console.log("stream context", db.focus, this.project._id);
-        
-        /*
-  		  var query = store.loadProjectStream(this.project._id);
-  		  
-  		  dojo.when(query, function(resp){
+  		  if (node){
   		    if (node.hasChildren()){
-            node.destroyDescendants();
-          }
-          */
+    		    node.destroyDescendants();
+    		  }
+
           var messages= store.streamMemory.query(null, {sort:[{attribute: "time", descending: true}]});
 
           node.addChild(new Stream({
             stream: messages
           }));
-          
-  		  //});
-  		  dojo.removeClass("projDetailsToolbar", "hidden");
-        this._openStreamTab();    
+
+    		  dojo.removeClass("projDetailsToolbar", "hidden");
+          this._openStreamTab();
+  		  }
   		}
   };
 });

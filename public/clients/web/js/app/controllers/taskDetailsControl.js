@@ -25,7 +25,8 @@ define([
   "app/views/TaskChecklistSort/TaskChecklistSort",
   "app/views/TaskNotes/TaskNotes",
   "app/views/Turbo/Turbo",
-  "app/views/TaskDetailsHeader/TaskDetailsHeader"], function(dojo, dijit, dialog, coordel, dModel, layout, ti, tw, ed, del, cpane, todo, note, Stream, tp, textbox, textarea, search, db, BlockerInfo, QuickEntry, Memory, Checklist, Sort, Notes, Turbo, Header) {
+  "app/views/TaskDetailsHeader/TaskDetailsHeader",
+  "app/models/StreamModel"], function(dojo, dijit, dialog, coordel, dModel, layout, ti, tw, ed, del, cpane, todo, note, Stream, tp, textbox, textarea, search, db, BlockerInfo, QuickEntry, Memory, Checklist, Sort, Notes, Turbo, Header, sModel) {
 	return {
 		db: null,
 		focus: null,
@@ -61,13 +62,13 @@ define([
 		  if (!task.notes){
 		    task.notes = [];
 		  }
-		  
+		
 		  //console.debug ("in taskDetailsController", task);
 		  //this.task = task;
 		  this.task = task;
 		  this.focus = focus;
 		  this.isTurbo = isTurbo;
-		  var tdc = this;
+		  var self = this;
 
 		  document.title = document.title + " > " + task.name;
 		  
@@ -75,6 +76,8 @@ define([
 		  
 		  
 		  this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "setRightColumn");
+		  
+		  this.streamNotifyHandler = dojo.subscribe("coordel/streamNotify", this, "handleStreamNotify");
 		  
 		  var cont = dijit.byId("workspaceMain"),
 		      title = coordel.deliverables,
@@ -99,7 +102,12 @@ define([
 		  this.showBlocking();
 		  
 		  //show the tab 
-		  this.updateRight();
+		  
+		  //load the task stream
+		  dojo.when(db.streamStore.loadTaskStream(this.task._id), function(res){
+		    console.log("got stream", res);
+		    self.updateRight();
+		  });
 		  
 		  dojo.removeClass(dijit.byId("taskListDetailsTurbo").domNode, "hidden");
       dojo.addClass(dijit.byId("taskListDetailsFilter").domNode, "hidden");
@@ -111,18 +119,6 @@ define([
         //console.debug("clicked checklist", evt);
         if (dojo.hasClass(evt.target, "inactive")){
           this.showChecklist();
-          /*
-          this.rightFocus = "todo";
-          this._resetTabs();
-          dojo.removeClass(evt.target, "inactive");
-          dojo.addClass(evt.target, "active");
-          this.showChecklist();
-          dijit.byId("cnMain").selectChild("taskDetailsChecklist");
-          dojo.removeClass(dijit.byId("taskListDetailsTurbo").domNode, "hidden");
-          dojo.removeClass(dijit.byId("taskListDetailsSort").domNode, "hidden");
-          dojo.removeClass(dijit.byId("taskListDetailsSearch").domNode, "hidden");
-          dijit.byId("rightDetailsLayout").resize();
-          */
         }
       });
       
@@ -140,6 +136,27 @@ define([
         if (dojo.hasClass(evt.target, "inactive")){
           this.showStream();
         }
+      });
+      
+      dojo.connect(dijit.byId("taskSendMessageButton"), "onClick", this, function(){
+        //console.log("project send message button clicked");
+        var self = this;
+
+        var node = dijit.byId("taskMessageText");
+        var message = node.get("value");
+
+        var stream = new sModel();
+
+        stream.init(db);
+
+        var send = stream.sendTaskMessage(message, self.task);
+
+        dojo.when(send, function(res){
+          console.log("sent message", res);
+          node.reset();
+          self.showStream();
+        });
+
       });
       
       //handle click of the header buttons
@@ -169,6 +186,13 @@ define([
 	    this.setRightColumn(dojo.hasClass(bn.domNode, "hidden"));
       
 		},
+		
+	  handleStreamNotify: function(args){
+      console.log("stream notify", args);
+      if (args.message.task === this.task._id){
+        this.showStream();
+      }
+    },
 		
 		updateRight: function(){
 		  switch (this.rightFocus){
@@ -206,6 +230,8 @@ define([
           dijit.byId("cnMain").selectChild("taskDetailsNotes");
           dojo.removeClass(dijit.byId("taskListDetailsSearch").domNode, "hidden");
           dijit.byId("rightDetailsLayout").resize();
+          dojo.style("taskListDetailsContainer", "background", "#e5e5e5");
+          dojo.style("taskListDetailsContainer", "border-bottom", "1px solid transparent");
   		    break;
 		    case "streamTab":
 		      this.rightFocus = "stream";
@@ -213,11 +239,8 @@ define([
           dojo.removeClass(tabId, "inactive");
           dojo.addClass(tabId, "active");
           dojo.removeClass("taskListDetailsInput", "hidden");
+          dojo.addClass("taskListDetailsToolbar", "hidden");
           dojo.removeClass(dijit.byId("taskListDetailsFilter").domNode, "hidden");
-          var text = new textbox({
-            placeHolder: "Click to send a message...",
-            type: "text"
-          }).placeAt("taskListDetailsInput");
           dijit.byId("cnMain").selectChild("taskDetailsStream");
           dijit.byId("rightDetailsLayout").resize();
   		    break;
@@ -288,8 +311,9 @@ define([
 		  dojo.removeClass("notesTab", "active");
 		  dojo.addClass("streamTab", "inactive");
 		  dojo.removeClass("streamTab", "active");
-		  dojo.empty("taskListDetailsInput");
 		  dojo.addClass("taskListDetailsInput", "hidden");
+		  dojo.removeClass("taskListDetailsToolbar", "hidden");
+		  dojo.style("taskListDetailsContainer", {background:"#e5e5e5", "border-bottom": "1px solid #a3aab1"});
 		  dojo.addClass(dijit.byId("taskListDetailsTurbo").domNode, "hidden");
       dojo.addClass(dijit.byId("taskListDetailsFilter").domNode, "hidden");
       dojo.addClass(dijit.byId("taskListDetailsSort").domNode, "hidden");
@@ -555,22 +579,23 @@ define([
 		showStream: function(){
 		  //console.debug("showStream called");
 		  var node = dijit.byId("taskDetailsStream"),
-		      store = db.streamStore;
+		      self = this;
 		      
 		  this._showTab("streamTab");
-		      
-		  var stream = store.loadTaskStream(this.task._id);
-
+		  
       if (node.hasChildren()){
         node.destroyDescendants();
+        console.log("destroyed descendants", node);
       }
       
-      dojo.when(stream, function(resp){
-        console.debug("stream in taskDetailsControl", resp);
-        node.addChild(new Stream({
-          stream: resp
-        }));
-      });
+      var stream = db.streamStore.taskMemory.query(null, {sort:[{attribute: "time", descending: true}]});
+  
+      console.debug("stream in taskDetailsControl", stream);
+      
+      node.addChild(new Stream({
+        stream: stream
+      }));
+      
 		}
 	};
 });

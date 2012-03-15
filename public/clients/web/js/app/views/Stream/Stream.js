@@ -52,7 +52,9 @@ define(
             last = false,
             hasEntries = false;
             
-        //console.debug("showStream stream.length:",  stream.length);
+        
+            
+        console.debug("showStream stream.length:",  stream.length);
               
         self.showProject = (db.streamStore.currentContext === "userStream" || db.streamStore.currentContext === "userMessages");
         
@@ -164,6 +166,7 @@ define(
   		},
   		
   		destroy: function(){
+  		  this.destroyDescendants();
   		  this.inherited(arguments);
   		  this.stream = [];
   		  console.debug("stream destroyed");

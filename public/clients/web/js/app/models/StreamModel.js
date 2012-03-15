@@ -59,19 +59,21 @@ define(
   	sendTaskMessage: function(message, task){
   	  
   	  var a = this._getMessage(message, task.project),
-  	      t = this.db.taskStore.store.get(task),
   	      db = this.db;
   	  
   	  //a task messages also has the task id
-  		a.task = t._id;
-  		//for a task message, only the user and responsible get the task
-  		a.users = [t.username, t.responsible];
-  		if (t.delegator){
+  		a.task = task._id;
+  		if (task.delegator){
   		  //unless there's a delegator then all three get the message
-  		  a.users.push(t.delegator);
+  		  a.users.push(task.delegator);
   		};
-      //console.debug("here's the message to send", a);
-  		//db.streamStore.store.add(a, {username: db.username()});
+      console.debug("here's the message to send", a, db.focus);
+      
+      if (db.focus === "task"){
+        console.log("adding to streamStore.taskStore");
+        return db.streamStore.taskStore.add(a, {username: db.username()});
+      }
+  		return db.streamStore.store.add(a, {username: db.username()});
   	}
       
   });
