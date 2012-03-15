@@ -18,7 +18,8 @@ define(["dojo",
               var def = new dojo.Deferred();
               var load = this._loadApp();
               load.then(function(app){
-          		  def.callback(app);
+                
+                def.callback(app);
               });
             	return def;
             },

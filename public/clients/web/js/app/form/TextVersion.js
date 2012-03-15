@@ -38,7 +38,7 @@ define(["dojo",
       }).placeAt(this.domNode);
       
       //refresh the timeago
-      this.interval = setInterval(dojo.hitch(this, this._refresh), 60000);
+      this.interval =  dojo.subscribe("coordel/timeUpdate", this, "_refresh");;
     },
     
     onPromote: function(){
@@ -51,7 +51,7 @@ define(["dojo",
     
     destroy: function(){
       this.inherited(arguments);
-      clearInterval(this.interval);
+      dojo.unsubscribe(this.interval);
     },
     
     baseClass: "text-version"

@@ -68,7 +68,8 @@ define(["dojo",
                 var load = new dojo.DeferredList([
                   self._loadRoles(project),
                   self._loadTasks(project),
-                  self._loadBlockers(project)
+                  self._loadBlockers(project),
+                  self._loadStream(project)
                 ]);
 
                 load.then(function(resp){
@@ -263,6 +264,22 @@ define(["dojo",
             	};
             	
             	return this.blockStore.query(queryArgs);
+            },
+            _loadStream: function(project){
+              console.log("loadProjectStream called", project);
+              var query = {
+                view: "coordel/projectStream",
+            		startkey: [project, {}],
+            		endkey: [project],
+            		descending: "true",
+            		limit: 50
+            	};
+            	this.streamRemote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
+              this.streamMemory = new mem({idProperty: "_id"});
+              this.streamMemory = new obs(this.streamMemory);
+              this.streamStore = new obsCache(this.streamRemote, this.streamMemory);
+            	
+            	return this.streamStore.query(query);
             }
         };
         

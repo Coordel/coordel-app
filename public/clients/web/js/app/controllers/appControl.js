@@ -617,16 +617,27 @@ define(['dojo',
   				  dojo.publish("coordel/taskNotify", [{task: chg}]);
   					break;
   				case "message":
+  				  console.log("message", chg.updater ,app.username, db.focus);
+  			
   				  //a message notify the stream store
   				  //if i sent it, it's an update, if I didn't send it , it's an add
   				  if (chg.updater !== app.username ){
   				    //I didn't send this message, it's an add
-  				    db.streamStore.store.notify(chg);
+  				    if (db.focus === "project"){
+  				      db.projectStore.streamStore.notify(chg);
+  				    }
+  				    
   				    console.log("Notify Message ADD", chg);
+  				    dojo.publish("coordel/streamNotify", [{message: chg}]);
   				  } else {
+  				    
   				    console.log("Notify Message UPDATE");
+  				    if (db.focus === "project"){
+  				      db.projectStore.streamStore.notify(chg, chg._id);
+  				    }
+  				    
   				    //I sent it, it's an update
-  				    db.streamStore.store.notify(chg, chg._id);
+  				    //db.streamStore.store.notify(chg, chg._id);
   				  }
   					break;
   				case "file":

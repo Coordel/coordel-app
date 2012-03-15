@@ -1,19 +1,21 @@
 <div>
 	<table style='width:100%;' cellpadding='0' cellspacing='0'>
 		<tr>
-			<td id="streamTab" style='width:33%' class='listHeader left-tab active double c-text-center'>${streamHeader}</td>
-			<td id="infoTab" style='width:33%' class='listHeader center-tab inactive double c-text-center'>${info}</td>
-			<td id="rolesTab" style='width:34%' class='listHeader right-tab inactive double c-text-center'>${roles}</td>
+			<td id="projStreamTab" style='width:33%' class='listHeader left-tab active double c-text-center'>${stream.projectStream}</td>
+			<td id="projInfoTab" style='width:33%' class='listHeader center-tab inactive double c-text-center'>${info}</td>
+			<td id="projRolesTab" style='width:34%' class='listHeader right-tab inactive double c-text-center'>${roles}</td>
 		</tr>
 	</table>
-	<div id="projDetailsToolbar" style='background:#e5e5e5;border-bottom: 1px solid #a3aab1' class="coordel-toolbar hidden">
-		
-		<span id="projectDetailsFilter" dojoAttachPoint="filterStream" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" showLabel="false"></span>
-		<span dojoType="dijit.form.Button" showLabel="false" style="visibility:hidden"></span>
+	<div id="projDetailsToolbar" style='background:#e5e5e5;border-bottom: 1px solid #a3aab1' >
+		<div class="coordel-toolbar">
+			<div id="projectDetailsFilter" dojoAttachPoint="filterStream" dojoType="dijit.form.Button" iconClass="small-task-icon icon-filter" style="display:none" showLabel="false"></div>
+		</div>
 		<div>
-			<div id="projDetailsSendContainer" class="coordel-body c-padding-l c-padding-r c-padding-b">
-				<span id="projSendMessageButton" class="c-float-r send-button" dojoType="dijit.form.Button" label="${send}"></span>
-				<textarea style="width: 82%" id="projMessageText" project-id="" dojoType="dijit.form.SimpleTextarea"></textarea>
+			<div id="projDetailsSendContainer" class="task-form c-padding-t c-padding-l c-padding-r c-padding-b">
+				<div id="projSendMessageButton" class="c-float-r send-button" dojoType="dijit.form.Button" label="${send}"></div>
+				<div style="width: 81%" class="textarea-holder stream">
+					<textarea  id="projMessageText" dojoType="dijit.form.Textarea"></textarea>
+				<div>
 				<div class="clear"></div>
 			</div>
 		</div>

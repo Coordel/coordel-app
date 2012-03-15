@@ -3,8 +3,9 @@ define(
   "i18n!app/nls/coordel",
   "text!app/views/Contact/templates/contact.html",
   "dijit/_Widget", 
-  "dijit/_Templated"], 
-  function(dojo, coordel, html, w, t) {
+  "dijit/_Templated",
+  "app/models/CoordelStore"], 
+  function(dojo, coordel, html, w, t, db) {
   
   dojo.declare(
     "app.widgets.Contact", 
@@ -28,23 +29,35 @@ define(
       postMixInProperties : function() {
         this.inherited(arguments);
         //console.log("Contact",this.contact);
-        var email = dojo.trim(this.contact.email.toLowerCase());
         
-        if (this.contact.email !== ""){
-          this.url = '/gravatar?email='+ escape(this.contact.email) + '&s=32';
-        }
       },
       
       postCreate: function(){
         this.inherited(arguments);
-        var con = this;
+   
         //console.debug("in Contact postCreate");
         
         this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
         
         this.setSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "setSelection");
         
-        dojo.connect(con.contactContainer, "onclick", this, function(evt){
+        var email = dojo.trim(this.contact.email.toLowerCase()),
+            self = this;
+        
+        if (this.contact.email !== ""){
+           dojo.xhrGet({
+              url: '/gravatar?email='+ escape(email) + '&s=32',
+              handleAs: "json",
+              load: function(res){
+                //console.log("url response", res);
+                self.userImage.src = res.url;
+              }
+            });
+        }
+        
+       
+        
+        dojo.connect(self.contactContainer, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);
           if (this.doNavigation){
              dojo.publish("coordel/primaryNavSelect", [ {name: "contact", id: this.contact.id}]);

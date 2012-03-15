@@ -39,6 +39,8 @@ define(["dojo",
             
             user: null,
             
+            userImage: "/images/default_contact.png",
+            
             focus: "task",
             
             username: function(){
@@ -148,6 +150,7 @@ define(["dojo",
                   sStore.init(app.id),
                   rStore.init(app.id)
                   
+                  
                 ]);
 
                 list.then(function(resp){
@@ -162,7 +165,7 @@ define(["dojo",
             
             uuid: function(){
               return this.newUUID();
-            },
+            }, 
             
             allDocs: function(options) {
               var type = "GET";

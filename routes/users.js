@@ -1,7 +1,6 @@
 var User        = require('./../models/user'),
     Invite      = require('./../models/invite'),
     gravatar    = require('gravatar'),
-    request     = require('request'),
     config      = require('konphyg')(__dirname + './../config'),
     settings    = config('settings');
 
@@ -28,30 +27,8 @@ module.exports = function(app, validate){
         url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
     
     console.log("gravatar url", req.query.email, url);
-    try{
-      var img = request.get(url);
-      img.pipe(res);
-    } catch (err){
-      console.log("ERROR getting gravatar");
-      res.end();
-    }
-   
-    
-    //es.write(request.get(url));
-        
-    //if (req.query.email === "jeff.gorder@coordel.com"){
-      /*
-       var img = request(url);
-       console.log("image returned", img);
-        req.pipe(img);
-        img.pipe(res);
-        */
-    //} else {
-        //res.end();
-    //}
-        
-   
-    
+    res.json({url:url});
+  
   });
 
   app.get('/invite', validate, function(req, res){

@@ -27,13 +27,10 @@ define(
         //try and set the url to the gravatar of this user
         //var defaultUrl = escape("http://" + location.host + db.db + "_design/coordel/images/default_contact.png");
         
-        if (this.contact.email && this.contact.email !== ""){
-          this.url = '/gravatar?email='+ escape(this.contact.email) + '&s=32';
-        }
-        
+       
         var c = this.contact;
         
-        console.debug("contact", this.contact);
+        //console.debug("contact", this.contact);
         
         //now set default to "" where the user hasn't provided the details value
         
@@ -69,6 +66,21 @@ define(
         if (c.skype === ""){
           dojo.addClass(this.skype, "hidden");
         }
+        
+        var email = dojo.trim(this.contact.email.toLowerCase()),
+            self = this;
+        
+        if (this.contact.email !== ""){
+           dojo.xhrGet({
+              url: '/gravatar?email='+ escape(email) + '&s=32',
+              handleAs: "json",
+              load: function(res){
+                //console.log("url response", res);
+                self.userImage.src = res.url;
+              }
+            });
+        }
+        
       
       },
       

@@ -58,6 +58,7 @@ define(["dojo",
             	return this.store.query(query);
             },
             loadProjectStream: function(project){
+              console.log("loadProjectStream called", project);
               var query = {
                 view: "coordel/projectStream",
             		startkey: [project, {}],
@@ -68,8 +69,8 @@ define(["dojo",
             	this.projectRemote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
               this.projectMemory = new mem({idProperty: "_id"});
               this.projectMemory = new obs(this.memory);
-              this.projectStore = new cache(this.remote, this.memory);
-              this.projectStore = new obs(this.store);
+              this.projectStore = new obsCache(this.remote, this.memory);
+  
               
             	this.currentContext = "projectStream";
             	this.currentContextId = project;

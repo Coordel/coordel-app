@@ -25,9 +25,15 @@ define([
       
       focus: "project",
       
+      tabFocus: "streamTab",
+      
       observeHandlers: [],
       
+      connections: [],
+      
       showRightColumnHandler: null,
+      
+      projViewChangeHandler: null,
       
       emptyGroup: null,
       
@@ -35,131 +41,177 @@ define([
         db.focus = this.focus;
         this.project = project;
         var self = this;
-        //console.debug("projectControl init called", db);
-        layout.showLayout(project);
-       
-        //load the project data
-       // if (db.projectStore.currentProject !== project._id){
-          //this project isn't in the cache, so load it and then show it
-          //console.debug("project not in cache, loading...");
-          dojo.when(db.projectStore.loadProject(project._id), function(){
-            self.showTasks();
-            
-            self.showStream();
-            //self.showRoles();
-          });
-          /*
-        } else {
-          //console.debug("project in cache");
-          //this project is currently in cache, so show it
-          self.showTasks();
-
-          self.showStream();
-          //self.showRoles();
+        
+        if (this.showRightColumnHandler){
+          dojo.unsubscribe(this.showRightColumnHandler);
+          this.showRightColumnHandler = null;
         }
-        */
+        
+        if (this.projViewChangeHandler){
+          dojo.unsubscribe(this.projViewChangeHandler);
+          this.projViewChangeHandler = null;
+        }
+        
+        if (this.streamNotifyHandler){
+          dojo.unsubscribe(this.streamNotifyHandler);
+          this.streamNotifyHandler = null;
+        }
+        
+        if (this.connections.length > 0){
+          dojo.forEach(this.connections, function(c){
+            dojo.disconnect(c);
+          });
+          this.connections = [];
+        }
+        
+        dojo.when(db.projectStore.loadProject(self.project._id), function(){
+          layout.showLayout(project);
+    	    var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
+          //check if we should show the right column
+    	    self.setRightColumn(showColumn);
+          self.showTasks();
+        
+          //handle click of the people and roles tabs
+          self.connections.push(dojo.connect(dojo.byId("projInfoTab"), "onclick", this, function(evt){
+            console.debug("clicked info", evt);
+            if (dojo.hasClass(evt.target, "inactive")){
+              self.showInfo();
+            }
+          }));
+
+          self.connections.push(dojo.connect(dojo.byId("projRolesTab"), "onclick", this, function(evt){
+            console.debug("clicked roles", evt);
+            if (dojo.hasClass(evt.target, "inactive")){
+              self.showRoles();
+            }
+          }));
+
+          self.connections.push(dojo.connect(dojo.byId("projStreamTab"), "onclick", this, function(evt){
+
+            console.debug("clicked stream", evt);
+            if (dojo.hasClass(evt.target, "inactive")){
+              self.showStream();
+            }
+          }));
+          
+          //handle click of sendProjMessageButton
+          self.connections.push(dojo.connect(dijit.byId("projSendMessageButton"), "onClick", this, function(){
+            //console.log("project send message button clicked");
+
+            var node = dijit.byId("projMessageText");
+            var message = node.get("value");
+
+            var stream = new sModel();
+
+            stream.init(db);
+
+            var send = stream.sendMessage(message, self.project._id);
+
+            dojo.when(send, function(){
+              node.reset();
+              self.showStream();
+            });
+
+          }));
+        });
+      
         
         this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "setRightColumn");
         
         this.projViewChangeHandler = dojo.subscribe("coordel/projViewChange", this, "handleViewChange");
         
-        //handle click of sendProjMessageButton
-        dojo.connect(dijit.byId("projSendMessageButton"), "onClick", this, function(){
-          //console.log("project send message button clicked");
-       
-          var node = dijit.byId("projMessageText");
-          var message = node.get("value");
-      
-          var stream = new sModel();
-        
-          stream.init(db);
-          
-          var def = stream.sendMessage(message, this.project._id);
-        
-          def.then(function(){
-            message.set("value", "");
-          });
-        
-        });
-        
-        //handle click of the people and roles tabs
-        dojo.connect(dojo.byId("infoTab"), "onclick", this, function(evt){
-          //console.debug("clicked people", evt);
-          if (dojo.hasClass(evt.target, "inactive")){
-            this.showInfo();
-          }
-        });
-
-        dojo.connect(dojo.byId("rolesTab"), "onclick", this, function(evt){
-          //console.debug("clicked roles", evt);
-          if (dojo.hasClass(evt.target, "inactive")){
-            this.showRoles();
-          }
-        });
-        
-        dojo.connect(dojo.byId("streamTab"), "onclick", this, function(evt){
-         
-          //console.debug("clicked roles", evt);
-          if (dojo.hasClass(evt.target, "inactive")){
-            this.showStream();
-          }
-        });
-        
-        var bn = dijit.byId("showRightColumn");
-  	    this.setRightColumn(dojo.hasClass(bn.domNode, "hidden"));
+        this.streamNotifyHandler = dojo.subscribe("coordel/streamNotify", this, "handleStreamNotify");
         
       },
       
+      _loadProject: function(){
+        var self = this;
+        var def = new dojo.Deferred();
+        var defList = new dojo.DeferredList([
+           db.projectStore.loadProject(self.project._id),
+           db.streamStore.loadProjectStream(self.project._id)
+        ]);
+        
+        defList.then(def.callback());
+       
+        return def;
+      },
+      
       setRightColumn: function(showColumn){
-
-  		  //console.debug("setRightColumn taskDetailsControl", showColumn);
+      
+  		  console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
 
         var col = dijit.byId("rightDetailsLayout");
 
-        //console.debug("right column", col);
+        console.debug("right column", col);
 
         if (col){
-           if (showColumn){
-             
-                dojo.removeClass(col.domNode, "hidden");
-        
-            
-            } else {
-       
-                dojo.addClass(col.domNode, "hidden");
-          
-            
+         if (showColumn){
+            switch (this.tabFocus){
+              case "streamTab":
+              this.showStream();
+              break;
+              case "infoTab":
+              this.showInfo();
+              break;
+              case "rolesTab":
+              this.showRoles();
+              break;
             }
-            dijit.byId("outerLayout").resize();
+            
+            dojo.removeClass(col.domNode, "hidden");
+          
+          } else {
+     
+            dojo.addClass(col.domNode, "hidden");
+          
+          }
+          dijit.byId("outerLayout").resize();
         }
 
       },
       
       _openTab: function(id){
         this._closeTabs();
+        this.tabFocus = id;
         dojo.addClass(id, "active");
         dojo.removeClass(id, "inactive");
         dijit.byId("rightDetailsLayout").resize();
       },
       
       _openStreamTab: function(){
+        console.log("in _openStreamTab");
         this._closeTabs();
+        this.tabFocus = "streamTab";
+        dojo.addClass("projStreamTab", "active");
+        dojo.removeClass("projStreamTab", "inactive");
+        console.log("showinng projDetailsStream");
+        dijit.byId("prMain").selectChild("projDetailsStream");
+        console.log("removing hidden class from the send container");
         dojo.removeClass("projDetailsSendContainer", "hidden");
-        dojo.removeClass(dijit.byId("projectDetailsFilter").domNode, "hidden");
-        this._openTab("streamTab");
+        dijit.byId("rightDetailsLayout").resize();
+        //dojo.removeClass(dijit.byId("projectDetailsFilter").domNode, "hidden");
+       
       },
       
       _closeTabs: function(){
-        
-        dojo.addClass("streamTab", "inactive");
-        dojo.removeClass("streamTab", "active");
-        dojo.addClass("infoTab", "inactive");
-        dojo.removeClass("infoTab", "active");
-        dojo.addClass("rolesTab", "inactive");
-        dojo.removeClass("rolesTab", "active");
+        console.log("in _closeTabs");
+        dojo.addClass("projStreamTab", "inactive");
+        dojo.removeClass("projStreamTab", "active");
+        dojo.addClass("projInfoTab", "inactive");
+        dojo.removeClass("projInfoTab", "active");
+        dojo.addClass("projRolesTab", "inactive");
+        dojo.removeClass("projRolesTab", "active");
         dojo.addClass("projDetailsSendContainer", "hidden");
         dojo.addClass(dijit.byId("projectDetailsFilter").domNode, "hidden");
         
+      },
+      
+      handleStreamNotify: function(args){
+        console.log("stream notify", args);
+        if (args.message.project === this.project._id){
+          this.showStream();
+        }
       },
       
       handleViewChange: function(args){
@@ -389,6 +441,9 @@ define([
       },
       
       showRoles: function(){
+        
+        console.log("showRoles");
+  
         //first get the container
         var cont = dijit.byId("projDetailsRoles"),
             contacts = db.contactStore,
@@ -450,14 +505,14 @@ define([
           })); 
         }
   
-        this._openTab("rolesTab");   
+        this._openTab("projRolesTab");   
         dijit.byId("prMain").selectChild("projDetailsRoles");
       },
       
       showInfo: function(){
         //show the project info
         //console.debug("showing info");
-        
+    
         var cont = dijit.byId("projDetailsInfo"),
             contacts = db.contactStore,
             resp = this.project.responsible;
@@ -470,34 +525,41 @@ define([
         
         cont.addChild(new Info({project: this.project}));
         
-        this._openTab("infoTab");
+        this._openTab("projInfoTab");
         dijit.byId("prMain").selectChild("projDetailsInfo");
         
       },
       
       showStream: function(){
-
+      
   		  var node = dijit.byId("projDetailsStream"),
-  		      store = db.streamStore;
-  		      
-  		  dojo.removeClass("projDetailsToolbar", "hidden");
-  		  this._openStreamTab();
-        dijit.byId("prMain").selectChild("projDetailsStream");
-
-  		  var stream = store.loadProjectStream(this.project._id);
+  		      store = db.projectStore;
   		  
-  		  dojo.when(stream, function(resp){
+  		  if (node.hasChildren()){
+  		    node.destroyDescendants();
+  		  }
+        
+        //dijit.byId("prMain").selectChild("projDetailsStream");
+        
+        console.log("stream context", db.focus, this.project._id);
+        
+        /*
+  		  var query = store.loadProjectStream(this.project._id);
+  		  
+  		  dojo.when(query, function(resp){
   		    if (node.hasChildren()){
             node.destroyDescendants();
           }
+          */
+          var messages= store.streamMemory.query(null, {sort:[{attribute: "time", descending: true}]});
 
           node.addChild(new Stream({
-            stream: resp
+            stream: messages
           }));
-
           
-  		  });
-
+  		  //});
+  		  dojo.removeClass("projDetailsToolbar", "hidden");
+        this._openStreamTab();    
   		}
   };
 });

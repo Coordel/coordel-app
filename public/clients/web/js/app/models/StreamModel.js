@@ -47,8 +47,12 @@ define(
       //console.debug("in StreamModel sendMessage", message, project);
       var a = this._getMessage(message, project),
           db = this.db;
+          
+      if (db.focus === "project"){
+        return db.projectStore.streamStore.add(a, {username: db.username()});
+      }
   		
-  		db.streamStore.store.add(a, {username: db.username()});
+  		return db.streamStore.store.add(a, {username: db.username()});
   		//console.debug("here's the message to send", a);
   	},
   	

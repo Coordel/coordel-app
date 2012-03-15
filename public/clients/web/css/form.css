@@ -97,6 +97,16 @@
 	border: none;
 }
 
+.textarea-holder.stream{
+  min-height: 30px;
+  max-height: 30px;
+  border: 1px solid #A3AAB1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: #ffffff;
+  padding: 1px;
+}
+
 .textarea-holder {
   min-height: 30px;
   max-height: 120px;

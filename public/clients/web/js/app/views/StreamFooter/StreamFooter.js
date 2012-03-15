@@ -35,20 +35,25 @@ define(
       
       created: "",
       
+      interval: null,
+      
       replyObj: null,
       
       _isReplyState: false, 
       
       allowOptions: false, //set this to true if mouseover should show footer options (i.e. reply)
       
+      
+      
       postCreate: function(){
         this.inherited(arguments);
         var project = this.project,
             self = this;
+            
+        this.interval = dojo.subscribe("coordel/timeUpdate", this, "_refresh");
         
         if (this.created !== ""){
           this._refresh();
-          this.interval = setInterval(dojo.hitch(self, self._refresh), 60000);
         }  
         
         if (this.allowOptions){
@@ -87,6 +92,11 @@ define(
       
       _refresh: function(){
         this.timeago.innerHTML = dt.ago(this.created);
+      },
+      
+      destroy: function(){
+        this.inherited(arguments);
+        dojo.unsubscribe(this.interval);
       },
       
       baseClass: "stream-footer"
