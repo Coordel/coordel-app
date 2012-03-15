@@ -1,5 +1,5 @@
 {
- 
+  "version": "",
   "config": {
     "redisOptions": {
       "host": "herring.redistogo.com",

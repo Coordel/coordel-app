@@ -1,4 +1,5 @@
 {
+  "version": "/0.0.1",
   "url" : "coordel-app.nodejitsu.com",
   "devUrl": "dev.coordel.com:8080",
   "auth" : {

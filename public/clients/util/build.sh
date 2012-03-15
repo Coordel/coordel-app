@@ -3,7 +3,7 @@
 set -e
 
 #The version here must match the one set at the end of the dir parameter in the profiles/app.js file
-VERSION="0.0.0"
+VERSION="0.0.1"
 
 UTILDIR=$(cd $(dirname $0) && pwd)
 RJSVERSION="0.24.0"

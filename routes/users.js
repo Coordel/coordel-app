@@ -26,7 +26,7 @@ module.exports = function(app, validate){
     var defaultUrl = 'http://' + settings.url + '/images/default_contact.png',
         url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
     
-    console.log("gravatar url", req.query.email, url);
+    //console.log("gravatar url", req.query.email, url);
     res.json({url:url});
   
   });

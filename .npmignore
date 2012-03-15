@@ -1,7 +1,6 @@
-/public/clients/web/js
-/public/clients/web/css
-/public/clients/web/images
-/public/clients/profiles
-/public/clients/util
+public/clients/web/js
+public/clients/web/css
+public/clients/web/images
+public/clients/profiles
+public/clients/util
 app_test.js
-.gitignore

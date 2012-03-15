@@ -1,16 +1,12 @@
-var User        = require('./../models/user');
+var User        = require('./../models/user'),
+    config      = require('konphyg')(__dirname + './../config'),
+    settings    = config('settings');
 
 module.exports = function(app, validate){
   
   
   app.get('/web', validate, function(req, res){
-    var version = "";
-
-    if (app.settings.env === "production"){
-      version = "/0.0.0";
-    }
-    
-    console.log("appURL", version);
+    var version = settings.version;
     
     User.get(req.session.auth.userId, function(err, user){
       if (err) res.redirect('/logout');

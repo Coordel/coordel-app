@@ -48,7 +48,6 @@ everyauth
     .postLoginPath('/login')
     .loginView('users/login', {layout: 'users/layout'})
     .authenticate( function (login, password) {
-      console.log("authenticate", login, password);
       var errors = [];
       if (!login) errors.push('Missing login');
       if (!password) errors.push('Missing password');
@@ -189,16 +188,22 @@ if (app.settings.env === "development") console.log("development environment");
 app.register('.html', require('ejs'));
 
 var validate = function(req, res, next){
-  
+  var idx = req.header('Accept').indexOf('application/json');
   if (req.session.auth && req.session.auth.loggedIn){
     next();
   } else {
-    
+    /*
     req.session.auth = {};
     req.session.auth.loggedIn = true;
     req.session.auth.userId = 'jeff.gorder@coordel.com';
-    next();
-    //res.redirect('/login');
+    */
+    if (idx < 0){
+      //go ahead and redirect
+      res.redirect('/login');
+    } else {
+      res.json({error: "Unauthorized"});
+    }
+    
   }
 };
 

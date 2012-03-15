@@ -36,7 +36,7 @@ module.exports = function(app, validate){
     couch.save(req.body, function(err, putRes){
       //console.log("PUT RESPONSE", putRes, err);
       if (err){
-        console.log("ERROR PUTTING TO COUCH", err);
+        console.log("ERROR PUTTING TO COUCH", err, req.body);
         res.json({error: err});
       } else {
         res.json(putRes);
