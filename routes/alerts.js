@@ -33,7 +33,7 @@ module.exports = function(app, validate){
    *
    * @param {integer} username
    */
-  app.del('/alerts/', function(req, res){
+  app.del('/alerts/',  function(req, res){
     var username = req.query.username;
     
     console.log("removing alerts for", username);

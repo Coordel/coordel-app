@@ -1,4 +1,4 @@
-module.exports = function(app, validate){
+module.exports = function(app){
   
   app.get('/icons', function(req, res){
     res.redirect('/icons/header');

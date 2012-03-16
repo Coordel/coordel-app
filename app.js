@@ -54,7 +54,7 @@ everyauth
       if (errors.length) return errors;
       var promise = this.Promise();
       User.get(login, function(err, user){
-        //console.log("USER", user);
+        console.log("USER", user);
         if (err) promise.fulfill([err]);
         if (user.password !== password){
           promise.fulfill(['Login failed: invalid username or password']);
@@ -162,11 +162,11 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'html');
  
-  app.use(express.cookieParser());
+  app.use(express.cookieParser('an0thers3cr3tpas$w0rd'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.session({ 
-    secret: 'coordelsecretpassword',
+    secret: 'c00rd3lsecretpa$$word',
     store: new RedisStore(options)
   }));
   app.use(everyauth.middleware());
@@ -189,7 +189,9 @@ app.register('.html', require('ejs'));
 
 var validate = function(req, res, next){
   var idx = req.header('Accept').indexOf('application/json');
+
   if (req.session.auth && req.session.auth.loggedIn){
+    //console.log("authenticated");
     next();
   } else {
     /*

@@ -143,6 +143,7 @@ module.exports = function(app, validate){
   });
 
   app.get('/coordel/view/:name', validate, function(req, res){
+  
     var view = req.params.name;
     view = 'coordel/' + view;
     //console.log('GET VIEW', view);
