@@ -6,9 +6,7 @@ var Step = module.exports = function Step (name, _module) {
 
   // defineProperty; otherwise,
   // clone will overflow when we clone a module
-  Object.defineProperty(this, 'module', {
-    value: _module
-  });
+  Object.defineProperty(this, 'module', { value: _module });
 };
 
 Step.prototype = {
@@ -51,7 +49,8 @@ Step.prototype = {
       } catch (breakTo) {
         // Catch any sync breakTo's if any
         if (breakTo.isSeq) {
-          console.log("breaking out to " + breakTo.name);
+          if (this.module.everyauth.debug)
+            console.log("breaking out to " + breakTo.name);
           breakTo.start.apply(breakTo, breakTo.initialArgs);
           // TODO Garbage collect the promise chain
           return;
@@ -128,6 +127,7 @@ Step.prototype = {
 
       return ret;
     }
+
     /**
      * Unwraps values (from the sequence) based on
      * the step's this.accepts spec.

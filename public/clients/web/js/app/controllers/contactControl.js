@@ -48,12 +48,6 @@ define([
             cont.destroyDescendants();
           }
           
-          
-          
-          
-          
-          
-          
           var cur = store.taskMemory.query({db: db, focus: "current"}, {sort: [{attribute: "contextDeadline", descending: false}]}),
               del = store.taskMemory.query({db: db, focus: "delegated"}, {sort: [{attribute: "contextDeadline", descending: false}]}),
               bl = store.taskMemory.query({db: db, focus: "blocked"}, {sort: [{attribute: "contextDeadline", descending: false}]}),
@@ -84,8 +78,7 @@ define([
 
         _addGroup: function(header, tasks){
           var cont = dijit.byId("contactTasksMain");
-
-
+          console.log("adding contact tasks group", header, tasks);
           //this function add
           cont.addChild(new tlg({
             header: header,

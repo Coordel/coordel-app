@@ -83,11 +83,14 @@ define([
           dojo.style(this.decline.domNode, {"margin-right": "0"});
               
         } else {
-          //need to get rid of the margin on the action button it none of the other buttons are showing
+          //need to get rid of the margin on the action button if none of the other buttons are showing
           //and this user isn't responsible (send and done are hidden)
+          //UPDATED because added the view button which always shows
+          /*
           if (username !== this.project.responsible){
             dojo.style(this.chooseAction.domNode, {"margin-right": "0"});
           }
+          */
         }
         
         

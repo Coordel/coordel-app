@@ -26,20 +26,12 @@ define(
       
       setSelectionHandler: null,
       
-      postMixInProperties : function() {
-        this.inherited(arguments);
-        //console.log("Contact",this.contact);
-        
-      },
-      
       postCreate: function(){
         this.inherited(arguments);
    
         //console.debug("in Contact postCreate");
         
         this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
-        
-        this.setSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "setSelection");
         
         var email = dojo.trim(this.contact.email.toLowerCase()),
             self = this;
@@ -55,15 +47,13 @@ define(
             });
         }
         
-       
-        
-        dojo.connect(self.contactContainer, "onclick", this, function(evt){
+        dojo.connect(self.domNode, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);
           if (this.doNavigation){
              dojo.publish("coordel/primaryNavSelect", [ {name: "contact", id: this.contact.id}]);
           }
   	      //dojo.addClass(con.contactContainer, "active selected");
-  	      this.onClick();
+  	      //this.onClick();
   	    });
 
       },
@@ -87,14 +77,16 @@ define(
         
       },
       
-      clearSelection: function(){
+      clearSelection: function(args){
         //console.debug("in clear selection", this.domNode);
         if (this.domNode){
           dojo.removeClass(this.domNode, "active selected");
+          this.setSelection(args);
         }
       },
       
       setSelection: function(args){
+        //console.log("args", args.id, this.contact.id);
         if (args.id === this.contact.id){
           if (this.domNode){
             dojo.addClass(this.domNode, "active selected");

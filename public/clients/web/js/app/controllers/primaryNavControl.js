@@ -22,6 +22,8 @@ define(['dojo',
     
   return {
     activeTab: "projects",
+    
+    currentFocus: "",
   
     navFocus: "",
   
@@ -102,7 +104,6 @@ define(['dojo',
       //listen for added Tasks and update the count
       if (!this.setPrimaryBoxCountHandler){
         this.setPrimaryBoxCountHandler = dojo.subscribe("coordel/setPrimaryBoxCounts", this, "setCounts");
-        
       }
       
       //listen for turbo activation and deactivation
@@ -125,8 +126,7 @@ define(['dojo',
     setPrimaryController: function(args){
     
       //console.debug("in primaryNavControl.setPrimaryView", this.currentArgs, args);
-    
-    
+  
       //detect what was sent and then create a new controller and init() it.
       var focus = "current",
           name = "",
@@ -220,24 +220,27 @@ define(['dojo',
     },
   
     activateContacts: function(){
-      this.showContactList();
-      if (dojo.hasClass("rightOtherListTab", "inactive")){
-        dojo.removeClass("rightOtherListTab", "inactive");
-        dojo.addClass("leftOtherListTab", "inactive");
-        dijit.byId("otherListMain").forward();
-        this.activeTab = "contacts";
-      }
-    
+  
+        
+        if (dojo.hasClass("rightOtherListTab", "inactive")){
+          this.showContactList();
+          dojo.removeClass("rightOtherListTab", "inactive");
+          dojo.addClass("leftOtherListTab", "inactive");
+          dijit.byId("otherListMain").forward();
+          this.activeTab = "contacts";
+        }
+      
     },
   
     activateProjects: function(){
-      if (dojo.hasClass("leftOtherListTab", "inactive")){
-        dojo.removeClass("leftOtherListTab", "inactive");
-        dojo.addClass("rightOtherListTab", "inactive");
-        dijit.byId("otherListMain").back();
-        this.activeTab = "projects";
-      }
-    
+
+        if (dojo.hasClass("leftOtherListTab", "inactive")){
+          dojo.removeClass("leftOtherListTab", "inactive");
+          dojo.addClass("rightOtherListTab", "inactive");
+          dijit.byId("otherListMain").back();
+          this.activeTab = "projects";
+        }
+   
     },
   
     setCounts: function(){
@@ -435,7 +438,7 @@ define(['dojo',
 
 
     showContactList: function(){
-      console.debug("primayNav.showContactList");
+      //console.debug("primayNav.showContactList");
       
       var cont = dijit.byId("otherListContacts");
       if (cont.hasChildren()){
