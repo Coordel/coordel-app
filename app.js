@@ -189,23 +189,25 @@ app.register('.html', require('ejs'));
 
 var validate = function(req, res, next){
   var idx = req.header('Accept').indexOf('application/json');
-
+  
   if (req.session.auth && req.session.auth.loggedIn){
     //console.log("authenticated");
     next();
   } else {
-    /*
-    req.session.auth = {};
-    req.session.auth.loggedIn = true;
-    req.session.auth.userId = 'jeff.gorder@coordel.com';
-    */
-    if (idx < 0){
-      //go ahead and redirect
-      res.redirect('/login');
-    } else {
-      res.json({error: "Unauthorized"});
-    }
     
+    if (app.settings.env === "development"){
+      req.session.auth = {};
+      req.session.auth.loggedIn = true;
+      req.session.auth.userId = 'jeff.gorder@coordel.com';
+      next();
+    } else {
+      if (idx < 0){
+        //go ahead and redirect
+        res.redirect('/login');
+      } else {
+        res.json({error: "Unauthorized"});
+      }
+    }   
   }
 };
 

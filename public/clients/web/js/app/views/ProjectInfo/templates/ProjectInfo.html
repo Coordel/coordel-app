@@ -13,22 +13,22 @@
 				</li>
 			
 				<li dojoAttachPoint="infoDeadline">
-					<span class="field-icon dark-deadline"></span>
+					<span title="${coordel.projDetails.deadline}"  class="field-icon dark-deadline"></span>
 					<span>${coordel.projDetails.deadline} <span><span dojoAttachPoint="deadline" dojoType="app.views.Label"></span>
 				</li>
 					
 				<li dojoAttachPoint="infoResponsible">
-					<span class="field-icon dark-responsible"></span>
+					<span title="${coordel.projDetails.responsible}"  class="field-icon dark-responsible"></span>
 					<span dojoAttachPoint="responsible" dojoType="app.views.Label"></span>
 				</li>
 			
 				<li dojoAttachPoint="infoDeferDate">
-					<span class="field-icon dark-defer"></span>
+					<span title="${coordel.projDetails.defer}"  class="field-icon dark-defer"></span>
 					<span>${coordel.projDetails.starts} </span><span dojoAttachPoint="deferred" dojoType="app.views.Label"></span>
 				</li>
 					
 				<li dojoAttachPoint="infoAttachments">
-					<span class="field-icon dark-attachments"></span>
+					<span title="${coordel.projDetails.attachments}"  class="field-icon dark-attachments"></span>
 					<span>${coordel.projDetails.attachments} </span>
 					<div dojoAttachPoint="attachments" style="padding-left: 24px"></div>
 				</li>

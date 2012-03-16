@@ -16,6 +16,8 @@ define(
       
       id: null,
       
+      imageCss: "project-tasks",
+      
       observeHandler: null,
       
       postCreate: function(){

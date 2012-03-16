@@ -157,6 +157,10 @@
   background-position: -650px;
 }
 
+.coordelHeaderIconView {
+  background-position: -700px;
+}
+
 
 
 .header.dijitDropDownButtonFocused .dijitButtonNode, .header .dijitDropDownButtonFocused .dijitButtonNode, .header.dijitButtonFocused {

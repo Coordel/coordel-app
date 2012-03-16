@@ -240,8 +240,9 @@ define([
         
         if (tasks.length === 0){
           this.emptyGroup = new Empty({
-            emptyTitle: coordel.empty.projectTasksTitle,
-            emptyDescription: coordel.empty.projectTasksText
+            emptyTitle: coordel.empty.projectDeliverablesTitle,
+            emptyDescription: coordel.empty.projectDeliverablesText,
+            imageCss: "project-deliverables"
           });
           cont.addChild(this.emptyGroup);
         } else {

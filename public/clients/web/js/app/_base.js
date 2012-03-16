@@ -1,5 +1,5 @@
 require({
-  baseUrl: 'clients/web/0.0.1/js/',
+  baseUrl: 'clients/web/js/',
 
   // set the paths to our library packages
   packages: [

@@ -71,7 +71,7 @@ define([
           dojo.removeClass(this.follow.domNode, "hidden");
           dojo.addClass(this.chooseAction.domNode, "hidden");
           
-          dojo.style(this.decline.domNode, {"margin-right": "0"});
+          dojo.style(this.showView.domNode, {"margin-right": "0"});
           
         } else if (pStatus.isInvitedNew(this.project, username) || 
             pStatus.isInvitedAgreed(this.project, username) || 
@@ -80,7 +80,7 @@ define([
           dojo.removeClass(this.decline.domNode, "hidden");
           dojo.removeClass(this.participate.domNode, "hidden");
           
-          dojo.style(this.decline.domNode, {"margin-right": "0"});
+          dojo.style(this.showView.domNode, {"margin-right": "0"});
               
         } else {
           //need to get rid of the margin on the action button if none of the other buttons are showing

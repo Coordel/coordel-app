@@ -60,6 +60,10 @@ background-image:url(images/emptyList/private.png);
 background-image: url(images/emptyList/taskList.png);
 }
 
+.empty-tasklist.project-deliverables .text {
+background-image: url(images/emptyList/deliverables.png);
+}
+
 .empty-tasklist p {
 font-size: 12px;
 font-weight: normal;

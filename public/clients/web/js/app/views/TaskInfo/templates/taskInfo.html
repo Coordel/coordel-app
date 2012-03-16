@@ -5,7 +5,7 @@
 				<h3 dojoAttachPoint="name" class="no-background hidden">${task.name}</h3>
 				<ul class="task-form">
 					<li dojoAttachPoint="infoPurpose"  >
-						<span class="field-icon dark-purpose"></span>
+						<span title="${coordel.taskDetails.purpose}" class="field-icon dark-purpose"></span>
 						<div class="field-inner">
 							<span dojoAttachPoint="purpose" dojoType="app.views.Label"></span>
 						</div>
@@ -17,22 +17,22 @@
 					</li>
 			
 					<li dojoAttachPoint="infoDeferDate">
-						<span class="field-icon dark-defer"></span>
+						<span  title="${coordel.taskDetails.defer}" class="field-icon dark-defer"></span>
 						<span>${coordel.taskDetails.starts} </span><span dojoAttachPoint="deferred" dojoType="app.views.Label"></span>
 					</li>
 		
 					<li dojoAttachPoint="infoDelegator">
-						<span class="field-icon dark-delegate"></span>
+						<span  title="${coordel.taskDetails.by}" class="field-icon dark-delegate"></span>
 						<span dojoAttachPoint="fullName" dojoType="app.views.Label"></span> <span>${coordel.taskDetails.by} </span><span dojoAttachPoint="delegator" dojoType="app.views.Label"></span>
 					</li>
 			
 					<li dojoAttachPoint="infoUsername">
-						<span class="field-icon dark-user"></span>
+						<span title="${coordel.taskDetails.user}" class="field-icon dark-user"></span>
 						<span dojoAttachPoint="username" dojoType="app.views.Label"></span>
 					</li>
 					
 					<li dojoAttachPoint="infoAttachments">
-						<span class="field-icon dark-attachments"></span>
+						<span title="${coordel.taskDetails.attachments}" class="field-icon dark-attachments"></span>
 						<span>${coordel.taskDetails.attachments} </span>
 						<div dojoAttachPoint="attachments" style="padding-left: 24px"></div>
 					</li>
@@ -68,19 +68,19 @@
 				<ul>
 			
 					<li>
-						<span dojoAttachPoint="projectIcon" class="field-icon dark-project"></span>
+						<span title="${coordel.taskDetails.project}" dojoAttachPoint="projectIcon" class="field-icon dark-project"></span>
 						<div class="field-inner">
 							<span dojoAttachPoint="projectName" dojoType="app.views.Label"></span>
 						</div>
 					</li>
 					
 					<li dojoAttachPoint="infoProjectDeadline">
-						<span class="field-icon dark-deadline"></span>
+						<span title="${coordel.taskDetails.projectDeadline}" class="field-icon dark-deadline"></span>
 						<span dojoAttachPoint="projectDeadline" dojoType="app.views.Label"></span>
 					</li>
 			
 					<li dojoAttachPoint="infoProjectResponsible">
-						<span class="field-icon dark-responsible"></span>
+						<span title="${coordel.taskDetails.projectResponsible}" class="field-icon dark-responsible"></span>
 						<span dojoAttachPoint="projectResponsible" dojoType="app.views.Label"></span>
 					</li>
 			

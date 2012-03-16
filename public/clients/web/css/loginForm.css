@@ -5,7 +5,7 @@ body.login {
 }
 
 body.loading {
-  background: #fff url(images/whiteLoading3.gif) no-repeat 50% 40%;
+  background: #fff url(images/splashLoading-tagline-gray.gif) no-repeat 50% 40%;
 }
 
 .large-shadow {
