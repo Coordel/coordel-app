@@ -10,7 +10,7 @@ module.exports = function(app, validate){
     }
   }
   
-  app.get('/app', validate, function(req, res){
+  app.get('/app', function(req, res){
     
     //loads the current user's app
     App.get(req.session.auth.appId, function(err, app){
@@ -22,7 +22,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.post('/app/person', validate, function(req, res){
+  app.post('/app/person', function(req, res){
   
     //console.log('ADDING PERSON userAppId', req.body.userAppId, 'personAppId', req.body.personAppId);
     App.addPerson({
@@ -38,7 +38,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.del('/app/person', validate, function(req, res){
+  app.del('/app/person', function(req, res){
     //console.log('REMOVING PERSON userAppId', req.body.userAppId, 'personAppId', req.body.personAppId);
     App.remPerson({
       userAppId: req.body.userAppId,
@@ -53,7 +53,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.post('/app/vip', validate, function(req, res){
+  app.post('/app/vip', function(req, res){
     App.addVip({
       userAppId: req.session.auth.appId,
       personAppId: req.body.personAppId
@@ -66,7 +66,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.get('/app/people', validate, function(req, res){
+  app.get('/app/people', function(req, res){
     App.getPeople(req.query.appId, function(err, people){
       if (err) {
         res.json({rows: [], error: 'Error getting people'});
@@ -77,7 +77,7 @@ module.exports = function(app, validate){
   });
   
 
-  app.get('/app/people/:id', validate, function(req, res){
+  app.get('/app/people/:id', function(req, res){
     App.get(req.params.id, function(err, person){
       if (err) {
         res.json({rows: [], error: 'Error getting person ' + req.params.id});
@@ -87,7 +87,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.get('/app/vips/:id', validate, function(req, res){
+  app.get('/app/vips/:id', function(req, res){
     App.getVips(req.body.id, function(err, vips){
       if (err) {
         res.json({rows: [], error: 'Error getting vips'});

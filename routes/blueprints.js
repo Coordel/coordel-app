@@ -6,7 +6,7 @@ var Blueprint = require('./../models/blueprint');
 
 module.exports = function(app, validate){
   
-  app.get('/blueprint/attachments', validate, function(req, res){
+  app.get('/blueprint/attachments', function(req, res){
     //when a blueprint has attachments, apps should call this function to get a doc back with
     //the attachments
     var id = req.query.id;
@@ -22,7 +22,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.post('/blueprint', validate, function(req, res){
+  app.post('/blueprint', function(req, res){
     //ADD Blueprint - this will be an object type doc that comes in
     //when an object (project, task, role, deliverable) is blueprinted, a copy is made and saved as a
     //template for the user who made the blueprint
@@ -61,7 +61,7 @@ module.exports = function(app, validate){
    * @args {obj} usernames, market details(price) 
    * @return {obj}
    */
-  app.put('/blueprint', validate, function(req, res){
+  app.put('/blueprint', function(req, res){
   
     //when an object (project, task, role, deliverable) is shared, a copy is made and saved for the user
     //with whom is was shared

@@ -20,7 +20,7 @@ var nanoCouch = nano.use(settings.config.couchName);
 
 module.exports = function(app, validate){
   
-  app.post('/coordel', validate, function(req, res){
+  app.post('/coordel', function(req, res){
     //console.log("POST", req.body);
   });
   
@@ -31,7 +31,7 @@ module.exports = function(app, validate){
    * @return {obj}
    * @api validated
    */
-  app.put('/coordel/:id', validate, function(req, res){
+  app.put('/coordel/:id', function(req, res){
     //console.log("PUT coordel/:id");
     couch.save(req.body, function(err, putRes){
       //console.log("PUT RESPONSE", putRes, err);
@@ -51,7 +51,7 @@ module.exports = function(app, validate){
    * @return {obj} project/task
    * @api validated
    */
-  app.get('/coordel/files/:id', validate, function(req, res){
+  app.get('/coordel/files/:id', function(req, res){
     
     couch.get(req.params.id, function(err, doc){
       if (err){
@@ -63,7 +63,7 @@ module.exports = function(app, validate){
   });
   
   
-  app.put('/coordel/files/:id/:name', validate, function(req, res){
+  app.put('/coordel/files/:id/:name', function(req, res){
     var id = req.params.id,
         name = req.params.name,
         rev = req.query.rev,
@@ -89,7 +89,7 @@ module.exports = function(app, validate){
         req.pipe(stream);
   });
   
-  app.del('/coordel/files/:id/:name', validate, function(req, res){
+  app.del('/coordel/files/:id/:name', function(req, res){
     var id = req.params.id,
         name = req.params.name,
         rev = req.query.rev;
@@ -110,7 +110,7 @@ module.exports = function(app, validate){
 
   });
    
-  app.get('/coordel/uuids', validate, function(req, res){
+  app.get('/coordel/uuids', function(req, res){
     //console.log("UUIDS", req.query.count);
     cn.uuids(req.query.count, function(err, uuids){
       //console.log("UUID response", uuids);
@@ -118,7 +118,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.get('/coordel/people', validate, function(req, res){
+  app.get('/coordel/people', function(req, res){
     //loads the current user's session
     var appId;
     if (req.session.auth && req.session.auth.appId){
@@ -130,7 +130,7 @@ module.exports = function(app, validate){
     });
   });
 
-  app.get('/coordel/:id', validate, function(req, res){
+  app.get('/coordel/:id', function(req, res){
     //console.log('GET ID', req.params.id);
     couch.get(req.params.id, function(err, obj){
       if (err){
@@ -142,7 +142,7 @@ module.exports = function(app, validate){
     });
   });
 
-  app.get('/coordel/view/:name', validate, function(req, res){
+  app.get('/coordel/view/:name', function(req, res){
   
     var view = req.params.name;
     view = 'coordel/' + view;

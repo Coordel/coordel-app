@@ -103,9 +103,11 @@ define([
         this.wizardTp.set("content", this.wizard);
         
         //if this task doesn't have attachments hide the attachments button
+        /*
         if(!this.model.hasAttachments()){
           dojo.addClass(this.wizard.transferTaskNode, "hidden");
         }
+        */
         
         //wire up the buttons
         //delete

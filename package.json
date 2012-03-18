@@ -1,7 +1,8 @@
 {
+  "domains": ["beta.coordel.com"],
   "name": "coordel-app",
   "author": "Coordel <support@coordel.com>",
-  "version": "0.1.0-31",
+  "version": "0.1.0-35",
   "scripts": {
     "start": "./app.js"
   },

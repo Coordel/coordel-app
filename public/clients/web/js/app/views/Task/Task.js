@@ -299,7 +299,7 @@ define(
           this.taskCheckbox.set("disabled", true);
           
           //show accept/decline on invite/agreed/amended
-          if ((t.status === "CURRENT" && t.substatus === "DELEGATED") || t.isAgreed() || t.isAmended()){
+          if ((t.username === username && t.status === "CURRENT" && t.substatus === "DELEGATED") || t.isAgreed() || t.isAmended()){
             dojo.removeClass(this.declineTask, "hidden");
             dojo.removeClass(this.acceptTask, "hidden");
           }
@@ -834,6 +834,10 @@ define(
             
         //has deadline
         //console.debug("_setDeadline", has, pdead, this);
+        //don't update the deadline for done and cancelled tasks
+        if (t.isDone() || t.isCancelled()){
+          return;
+        }
     
         //check if this has a deadline
         if (has){

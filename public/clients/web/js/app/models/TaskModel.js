@@ -871,6 +871,12 @@ define("app/models/TaskModel",
         task.isTemplate = false;
         
         //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
+        task.isMyPrivate = false;
+        if (task.project === app.myPrivateProject){
+          task.isMyPrivate = true;
+        }
+        
+        //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
         task.isMyDelegated = false;
         if (task.project === app.myDelegatedProject){
           task.isMyDelegated = true;
@@ -983,6 +989,18 @@ define("app/models/TaskModel",
         //console.debug("update task", task, db.focus);
             
         task.isNew = false;
+        
+        //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
+        task.isMyPrivate = false;
+        if (task.project === app.myPrivateProject){
+          task.isMyPrivate = true;
+        }
+        
+        //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
+        task.isMyDelegated = false;
+        if (task.project === app.myDelegatedProject){
+          task.isMyDelegated = true;
+        }
         
         /*
         //make the UPDATE activity for the task update

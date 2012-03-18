@@ -31,7 +31,7 @@ module.exports = function(app, validate){
   
   });
 
-  app.get('/invite', validate, function(req, res){
+  app.get('/invite', function(req, res){
     res.render('users/invite');
   });
 

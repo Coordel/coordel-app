@@ -18,7 +18,7 @@ define([
     
         this.contact = contact;
         var self = this;
-        console.debug("contactControl init called", db);
+        //console.debug("contactControl init called", db);
         
         //the contact layout will show any tasks this person has in any of the current user's
         //projects
@@ -42,7 +42,7 @@ define([
       },
       
        showTasks: function(){
-         console.debug("showTasks contactControl");
+         //console.debug("showTasks contactControl");
           var store = db.contactStore,
               cont = dijit.byId("contactTasksMain"),
               sort = [{attribute: "name", descending: true}];
@@ -125,7 +125,7 @@ define([
           var cont = dijit.byId("contactTasksMain"),
               self = this;
               
-          console.log("adding contact tasks group", header, tasks);
+          //console.log("adding contact tasks group", header, tasks);
           //this function add
           
           var group = new tlg({
