@@ -79,7 +79,8 @@ define(["dojo",
             	return this.blockStore.query(queryArgs);
             },
             getBlocking: function(task){
-              var blocking = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
+              var def = new dojo.Deferred(),
+                  blocking = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
               
               var queryArgs = {
                 view: "coordel/taskBlocking",
@@ -88,7 +89,12 @@ define(["dojo",
             		include_docs: true
             	};
             	
-            	var def = blocking.query(queryArgs);
+            	var query = blocking.query(queryArgs);
+            	
+            	dojo.when(query, function(res){
+            	  console.log("blocking", res);
+            	  def.callback(res);
+            	});
             	
             	//console.debug("returning getBlocking");
             	return def;

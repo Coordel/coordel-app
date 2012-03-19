@@ -64,3 +64,9 @@
 
 }
 
+.task-info-dialog .dijitTitlePaneContentInner {
+  padding: 4px 8px 8px 8px;
+  border-bottom: 0px solid transparent;
+}
+
+

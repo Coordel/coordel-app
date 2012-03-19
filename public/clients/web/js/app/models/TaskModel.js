@@ -370,6 +370,11 @@ define("app/models/TaskModel",
   		  
   		},
   		
+  		isBlocking: function(){
+  		  //returns true if this task is blocking other tasks
+  		  
+  		},
+  		
   		isProjectInvite: function(){
         //this is invited if it's any of the invited states
         var t = this,

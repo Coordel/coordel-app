@@ -27,6 +27,7 @@ define([
       
       postCreate: function(){
         this.inherited(arguments);
+        console.log("in post create taskInfoDialog");
         this._setTask();
       },
         
@@ -75,27 +76,34 @@ define([
       },
       
       _setBlocking: function(){
-        var blocking = db.taskStore.getBlocking(this.task._id);
-        if (blocking.length > 0){
-          console.debug("this task was blocking", blocking);
-        
-          //add the blockers to a container
-          var bPane = new cp({
-            style: "padding:0"
-          });
-          
-          blocking.forEach(function(t){
-            //create the info for each blocking task
-            var b = new Info({task:t});
-            bPane.addChild(b);
-          });
-          
-          this.taskBlocking.set("content", bPane);
-        } else {
-          //console.debug("task wasn't blocking, hid the title pane TaskInfoDialog");
-          dojo.addClass(this.taskBlocking.domNode, "hidden");
-        }
-      } 
+        console.log("setting blocking");
+        var query = db.taskStore.getBlocking(this.task._id),
+            self = this;
+        dojo.when(query, function(blocking){
+          console.log("blocking", blocking);
+          if (blocking.length > 0){
+            console.debug("this task was blocking", blocking);
+
+            //add the blockers to a container
+            var bPane = new cp({
+              style: "padding:0"
+            });
+
+            blocking.forEach(function(t){
+              //create the info for each blocking task
+              var b = new Info({task:t});
+              bPane.addChild(b);
+            });
+
+            self.taskBlocking.set("content", bPane);
+          } else {
+            //console.debug("task wasn't blocking, hid the title pane TaskInfoDialog");
+            dojo.addClass(self.taskBlocking.domNode, "hidden");
+          }
+        });
+      },
+      
+      baseClass: "task-info-dialog"
       
   });
   return app.views.TaskInfoDialog;    
