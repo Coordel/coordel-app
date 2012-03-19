@@ -68,14 +68,16 @@ define("app/models/TaskModel",
       getDeadline: function(){
         
         var t = this,
-            deadline = t.deadline;
+            deadline = t.deadline,
+            db = this.db;
             
-        //console.debug("deadline", deadline);s
+        
+            
+        //console.debug("deadline", deadline);
             
         if (!t.hasDeadline() && !t.isPrivate() && !t.isDelegated()){
           //console.debug("no deadline not private", t);
           deadline = t.projDeadline();
-          
           //it might be that a project doesn't have a deadline set for some reason
           //so don't try and fix it
           if (deadline !== ""){
@@ -88,6 +90,26 @@ define("app/models/TaskModel",
             deadline = stamp.toISOString(newDate);
           }
           
+          if (t.hasBlocking()){
+            var derived = deadline;
+            //need to load the blocking and see when their deadlines are;
+            //console.log("t.task.blocking", t.task.name, t.task.blocking, t.task);
+            dojo.forEach(t.task.blocking, function(id){
+              var block = db.taskStore.blockingStore.get(id);
+              //console.log("blocking task: ", block.name);
+              var b = db.getTaskModel(block, true);
+              //console.log("blocking deadline: ", deadline, derived, b.getDeadline(), b.getDeadline()< derived);
+              //var comp = dojo.date.compare(dojo.date.stamp.fromISOString(b.getDeadline()),dojo.date.stamp.fromISOString(derived));
+              //console.log("comp", comp);
+              var test = b.getDeadline();
+              if (b.getDeadline() < derived){
+                
+                derived = test;
+                //console.log("Sooner: ", block.name, test, derived, deadline);
+              }
+            });
+            deadline = derived;
+          }
     
         } else if (!t.hasDeadline() && (t.isPrivate() || t.isDelegated())) {
           deadline = "";
@@ -617,6 +639,9 @@ define("app/models/TaskModel",
     	hasBlockers: function(){
     	  return (this.coordinates && this.coordinates.length > 0);
     	},
+    	hasBlocking: function(){
+    	  return (this.blocking && this.blocking.length > 0);
+    	},
     	hasDelegator: function(){
     	  return (this.delegator && this.delegator !== "");
     	},
@@ -904,6 +929,8 @@ define("app/models/TaskModel",
       			icon: t.icon.delegateItem
       		}, task);
         }
+        
+        t.updateBlocking(task);
   
         var def = p.updateAssignments(task);
         
@@ -1018,6 +1045,8 @@ define("app/models/TaskModel",
     		*/
         p.updateAssignments(task);
         
+        t.updateBlocking(task);
+        
         //use the appropriate store based on the focus of the db
         switch(db.focus){
           case "project":
@@ -1032,6 +1061,71 @@ define("app/models/TaskModel",
         }
         
         dojo.publish("coordel/setPrimaryBoxCounts");
+      },
+      
+      updateBlocking: function(task){
+        //this function keeps blocking tasks in sync with this one.
+        var db = this.db,
+            p = this.p;
+        console.log("updateBlocking", task);
+        if (task.coordinates){
+          console.log("task has coordinates entry");
+          var query;
+          if (task.coordinates.length > 0){
+            console.log("has more than 0 coordinates");
+            
+            //if a task has blockers, then get the blockers and 
+            //make a blocking entry for each
+            query = db.taskStore.getBlockers(task._id);
+            dojo.when(query, function(blockers){
+              console.log("got blockers for this task", blockers);
+              dojo.forEach(blockers, function(item){
+                console.log("updating blocked task", item);
+                if (!item.blocking){
+                  item.blocking = [];
+                }
+                console.log("testing if this has the blocking item", item.blocking, task._id);
+                if (dojo.indexOf(item.blocking, task._id) === -1){
+                  console.log(task.name + " has blockers, making blocking entry: ", item.name);
+                  item.blocking.push(task._id);
+                  var t = db.getTaskModel(item, true);
+                  item = t.addActivity({
+              			verb: "ADD-BLOCKING",
+              			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+              			icon: t.icon.addBlocking,
+              			body: coordel.task + ": " + task.name
+              		}, item);
+                  t.update(item);
+                }
+              });
+            });
+          
+          } else {
+            //if a task doesn't have blockers, load any tasks that have blocking
+            //entries for this task and clear them
+            console.log("coordinates length isn't > 0");
+            query = db.taskStore.getBlocking(task._id);
+            dojo.when(query, function(blocking){
+              console.log("blocking entries for this task");
+              if (blocking.length > 0){
+                dojo.forEach(blocking, function(item){
+                  if (dojo.indexOf(item.blocking, task._id) > -1){
+                    console.log(task.name + " doesn't have blockers, remove blocking entry: ", item.name);
+                    item.blocking = dojo.filter(item, function(id){return id !== task._id ;});
+                    var t = db.getTaskModel(item, true);
+                    item = t.addActivity({
+                			verb: "REMOVE-BLOCKING",
+                			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+                			icon: t.icon.removeBlocking,
+                			body: coordel.task + ": " + task.name
+                		}, item);
+                    t.update(item);
+                  }
+                });
+              }
+            });
+          }
+        }
       },
   
       archive: function(task){

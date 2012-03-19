@@ -750,11 +750,11 @@ define(["dojo",
                 obj = task;
               } else {
                 //console.debug("getBlockerModel is loading blocker");
-                if (focus === "task") {
+                //if (focus === "task") {
                   obj = new tModel(this.taskStore.blockStore.get(task));
-                } else if (focus === "project"){
-                  obj = new tModel(this.projectStore.blockStore.get(task));
-                }
+                //} else if (focus === "project"){
+                  //obj = new tModel(this.projectStore.blockStore.get(task));
+                //}
               }
               
               var t = new tModel(obj);

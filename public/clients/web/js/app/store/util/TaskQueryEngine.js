@@ -39,6 +39,10 @@ app.store.util.TaskQueryEngine = function(query, options){
   	//would be project: id (the project identifier)
   	var filters = queryObject.filters;
   	
+  	if (filters || query.filters){
+  	  console.log("queryObject", queryObject, query.filters);
+  	}
+  	
  	if (query.focus){ 	
   	// create our matching query function based on the incoming focus
   	switch(queryObject.focus){
@@ -187,7 +191,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   	}
 	} else {
 	  
-	  //console.debug("no focus in tqe", filters);
+	  console.debug("no focus in tqe", filters);
 	  
 	  //just return everything, or apply filters to everything if no focus
 		query = function(task){
@@ -213,8 +217,9 @@ app.store.util.TaskQueryEngine = function(query, options){
 	  if (filters){
 	    
   	  for(var key in filters){
+  	    console.log("key in applyFilter", key);
   			var required = filters[key];
-  			//console.debug("required", required, required.test, task[key]);
+  			console.debug("required", required, required.test, task[key]);
   			if(required && required.test){
   				if(!required.test(task[key])){
   					return false;

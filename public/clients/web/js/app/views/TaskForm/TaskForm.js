@@ -361,6 +361,7 @@ define(
               var all = store.taskMemory.query({db: db});
               //console.debug("all tasks sorted alphabetically", all);
               
+              
               dojo.forEach(all, function(task){
                 //console.debug("here's the task", task);
                 var check = new CheckBox({
@@ -411,12 +412,19 @@ define(
                   }
                 });
                 
+                //disable the checkbox if this task is in the list
+                console.log("testing if current = task", current._id, task._id);
+                if (current._id === task._id){
+                  console.log("should disable", task._id);
+                  check.checkbox.set("disabled", true);
+                }
+                
                 //disable the checkbox if this projectTask has current as a blocker
                 //to avoid causing a circular reference 
                 if (task.coordinates && task.coordinates.length > 0){
                   dojo.forEach(task.coordinates, function(id){
                     if (current._id === id){
-                      check.set("disabled", true);
+                      check.checkbox.set("disabled", true);
                     }
                   });
                   

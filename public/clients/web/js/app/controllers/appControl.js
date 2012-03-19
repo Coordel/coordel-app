@@ -585,7 +585,7 @@ define(['dojo',
   				  
   	        //since the user could make any task in any project a blocker,
   	        //there's no way to tell if the store needs updated except to check the existing 
-  	        //blockers. if it was chosed before, it will be in this store
+  	        //blockers. if it was chosen before, it will be in this store
   			    if (dojo.indexOf(db.getBlockerArray(), chg._id) > -1){
 				      console.debug("Notify Blockers UPDATE");
 				      db.taskStore.blockStore.notify(chg, chg._id);

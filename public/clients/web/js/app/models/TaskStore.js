@@ -28,7 +28,8 @@ define(["dojo",
 
               var loadDef = new dojo.DeferredList([
                 this._loadTasks(username),
-                this._loadBlockers(username)
+                this._loadBlockers(username),
+                this._loadBlocking(username)
               ]);
               
               loadDef.then(function(resp){
@@ -78,7 +79,47 @@ define(["dojo",
             	//this.obsBlock = this.blockStore.query(queryArgs);
             	return this.blockStore.query(queryArgs);
             },
+            _loadBlocking: function(username){
+     
+              this.blockingMemory = new mem({idProperty: "_id"});
+              this.blockingRemote = new couch({target: this.db, idProperty: "_id", queryEngine: tqe});
+              this.blockingMemory = new obs(this.blockingMemory);
+              this.blockingStore = new obsCache(this.blockingRemote, this.blockingMemory);
+              
+              var queryArgs = {
+                view: "coordel/userBlocking",
+            		startkey: [username],
+            		endkey: [username,{}],
+            		include_docs: true
+            	};
+            	
+            	//this.obsBlock = this.blockStore.query(queryArgs);
+            	return this.blockingStore.query(queryArgs);
+            },
+            getBlockers: function(task){
+              //this function gets the blockers from the dbase to make sure they are completely up to date
+              var def = new dojo.Deferred(),
+                  blocking = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
+              
+              var queryArgs = {
+                view: "coordel/taskBlockers",
+            		startkey: [task],
+            		endkey: [task,{}],
+            		include_docs: true
+            	};
+            	
+            	var query = blocking.query(queryArgs);
+            	
+            	dojo.when(query, function(res){
+            	  console.log("blocking", res);
+            	  def.callback(res);
+            	});
+            	
+            	//console.debug("returning getBlocking");
+            	return def;
+            },
             getBlocking: function(task){
+              //this function gets the blockers from the dbase to make sure they are completely up to date
               var def = new dojo.Deferred(),
                   blocking = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
               
@@ -100,8 +141,7 @@ define(["dojo",
             	return def;
             
             }
-            
-            
+
         };
         
         return taskStore;

@@ -109,6 +109,10 @@ module.exports = function(app, validate){
     });
 
   });
+  
+  app.get('/coordel/all', function(req, res){
+    
+  });
    
   app.get('/coordel/uuids', function(req, res){
     //console.log("UUIDS", req.query.count);

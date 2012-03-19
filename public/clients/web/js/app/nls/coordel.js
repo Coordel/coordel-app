@@ -674,6 +674,14 @@ define({
   			"ack": {
   			  "verb": "acknowledged cancel",
   			  "preposition": "in"
+  			},
+  			"add-blocking": {
+  			  "verb": "added as blocking",
+  			  "preposition": ""
+  			},
+  			"remove-blocking": {
+  			  "verb": "removed from blocking",
+  			  "preposition": ""
   			}
   		}
 		},

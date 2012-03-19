@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.25",
+  version: "0.1.28",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -550,6 +550,39 @@ module.exports = {
           		);
             });
       		}
+      		
+      		if (doc.blocking){
+      		  doc.blocking.forEach(function(block){
+      		    emit(
+          			[block],
+          			{"_id": doc._id}
+          		);
+      		  });
+      		}
+        }
+      }
+    },
+    
+    taskBlockers: {
+      map: function (doc){
+        //this returns any tasks this taskid is blocking
+
+        if (doc.docType === "task"
+            && doc.status !== "IN-ITEM"
+      			&& doc.status !== "TRASH"
+      			&& doc.status !== "ARCHIVE"
+      			&& doc.status !== "SOMEDAY"
+      			&& doc.substatus !== "TRASH"
+      			&& doc.substatus !== "ARCHIVE"){
+
+      		if (doc.coordinates){
+      		  doc.coordinates.forEach(function(coord){
+              emit(
+          			[doc._id],
+          			{"_id": coord}
+          		);
+            });
+      		}
 
         }
       }
@@ -674,10 +707,25 @@ module.exports = {
         			emit(
         				[doc.username],
         				{
-        				  "_id": coord,
-        				  task: doc._id,
-        				  docType: "prequisite",
-        				  username: doc.username
+        				  "_id": coord
+        			});
+        		});
+      	  }
+      	}
+      }
+    },
+    
+    userBlocking: {
+      map: function (doc){
+
+      	if (doc.docType == "task"){
+
+      	  if (doc.blocking){
+      	    doc.blocking.forEach(function(id){
+        			emit(
+        				[doc.username],
+        				{
+        				  "_id": id
         			});
         		});
       	  }
