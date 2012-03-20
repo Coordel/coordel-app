@@ -26,11 +26,20 @@ define(
     },
     
     getProject: function(id){
-      return this.db.get(id);
+      //return this.db.get(id);
+      return dojo.xhrGet({
+        url: "/coordel/" + id,
+        handleAs: "json"
+      });
     },
     
     getFile: function(id){
-      return this.db.get(id);
+      //console.log("get file", id);
+      //return this.db.get(id);
+      return dojo.xhrGet({
+        url: "/coordel/" + id,
+        handleAs: "json"
+      });
     },
     
     removeAll: function(obj){
@@ -63,6 +72,7 @@ define(
     },
     
     getAttachedFiles: function(field){
+      //console.log("get attached files", field);
       
       var db = this.db;
       
@@ -85,17 +95,29 @@ define(
     },
     
     removeAttachment: function(fileId){
+      //console.log("remove attachment", fileId);
       return this.db.remove(fileId);
     },
     
     attachFile: function(file, username){
+      //console.log("attachFile", file, username);
       //this file saves a file to a deliverable and returns all the files of the field
       //console.debug("attachFile", file, username);
-      var db = this.db;
+      var db = this.db,
+          def = new dojo.Deferred(),
+          self = this;
+          
+      var put = db.put(file, {username: username});
+      dojo.when(put, function(resFile){
+        //console.log("put complete", resFile);
+        var load = self.getAttachedFiles(file.field);
+        dojo.when(load, function(files){
+          //console.log("load complete", files);
+          def.callback(files);
+        });
+      });
       
-      db.put(file, {username: username});
-      
-      return this.getAttachedFiles(file.field);
+      return def;
     },
     
     removeFile: function(task, file){
@@ -138,7 +160,10 @@ define(
       file.then(function(resp){
         //console.debug("file to promote", resp);
         var x = db.put(resp, {username: username});
-        def.callback(x);
+        dojo.when(x, function(xResp){
+          //console.log("xResp", xResp);
+          def.callback(xResp);
+        });
       });
       return def;
     }

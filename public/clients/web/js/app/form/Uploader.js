@@ -17,7 +17,7 @@ define(["dojo",
     
     onProgress: function(customEvt){
       this.inherited(arguments);
-      console.log("onProgress", customEvt);
+      //console.log("onProgress", customEvt);
     }
     
     

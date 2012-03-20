@@ -36,7 +36,7 @@ function(dojo, JsonRest, stamp) {
       		
       		var id = ("id" in options) ? options.id : this.getIdentity(object);
       		var hasId = typeof id != "undefined";
-      		
+      		var def = new dojo.Deferred();
       	  //console.debug("CouchDbStore put called object, options, id, hasId", object, options, id, hasId);
       		
       		dojo.when(dojo.xhr(hasId && !options.incremental ? "PUT" : "POST", {
@@ -53,11 +53,11 @@ function(dojo, JsonRest, stamp) {
   				    object._rev = res.rev;
   				  }
     			  //return object;
-    			  return object;
+    			  def.callback(object);
     			}, function(err){
     			  //console.log("error received in CouchDBStore put", err);
     			});
-    			
+    			return def;
       	},
         query: function(query, options) {
             // summary:

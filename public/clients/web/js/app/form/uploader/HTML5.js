@@ -53,10 +53,10 @@ dojo.declare("app.form.plugins.HTML5", [], {
 		//console.log("upload html5");
 		this.onBegin(this.getFileList());
 		if(this.supports("FormData")){
-		  console.log("sending with formdata");
+		  //console.log("sending with formdata");
 			this.uploadWithFormData(formData);
 		}else if(this.supports("sendAsBinary")){
-		  console.log("sending as binary");
+		  //console.log("sending as binary");
 			this.sendAsBinary(formData);
 		}
 	},
@@ -67,7 +67,7 @@ dojo.declare("app.form.plugins.HTML5", [], {
 		//
 		form = !!form ? form.tagName ? form : this.getForm() : this.getForm();
 		var data = dojo.formToObject(form);
-		console.log("form data:", data);
+		//console.log("form data:", data);
 		this.upload(data);
 	},
 
@@ -307,12 +307,14 @@ dojo.declare("app.form.plugins.HTML5", [], {
 				//console.debug("COMPLETE", resp);
 				def.callback(resp);
 			} else if (xhr.readyState === 1){
-  		  console.debug("OPENED", file.info.type);
+  		  //console.debug("OPENED", file.info.type);
   		  xhr.setRequestHeader("Content-Type", file.info.type);
   		}
 		});
 		
 		var url = this.getUrl() + "/" + escape(file.info.name);
+		
+		//console.log("URL", url);
 		
 		if (rev){
 		  url = url + '/?rev=' + rev;

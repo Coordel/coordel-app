@@ -89,6 +89,23 @@ module.exports = function(app, validate){
         req.pipe(stream);
   });
   
+  app.del('/coordel/:id', function(req, res){
+     var id = req.params.id,
+         rev = req.query.rev;
+
+     console.log("delete called", id, rev);
+     
+     couch.remove(id, rev, function(err, docRes){
+       if (err){
+         console.log("ERR removing doc", err);
+         res.json({error: err});
+       } else {
+         res.json(docRes);
+       }
+     });
+
+   });
+  
   app.del('/coordel/files/:id/:name', function(req, res){
     var id = req.params.id,
         name = req.params.name,

@@ -27,7 +27,7 @@ define("app/models/RoleModel",
       },
       
       updateResponsibilities: function(roleid, task, isMyPrivate){
-        console.debug("updating responsibilities", roleid, task);
+        //console.debug("updating responsibilities", roleid, task);
         
         //when a task is added or updated, the project's assignments track what's happening
     	  //role responsibilities (tasks) are also created, and the status of the responsibility(task) is tracked in the role
@@ -40,14 +40,14 @@ define("app/models/RoleModel",
 			  dojo.when(def, function(store){
 			    //try {
 			      
-			      console.debug("loaded project, store", store);
+			      //console.debug("loaded project, store", store);
 			      
 			      var hasRole = false;
 			      
 			      var resRole = db.projectStore.roleMemory.get(roleid);
 			      
 			      //dojo.when(updateRole, function(resRole){
-			        console.log("update role", resRole);
+			        //console.log("update role", resRole);
 			        if (resRole){
 			          //console.log("hasRole set to true");
 			          hasRole = true;
@@ -67,7 +67,7 @@ define("app/models/RoleModel",
     			      r.username = task.username;
     			      r.project = task.project;
     			      r.responsibilities = [];
-    			      console.debug("didn't find the role, it's new", r);
+    			      //console.debug("didn't find the role, it's new", r);
   			      }
 
        				//need to check if the responsibility exists in the role

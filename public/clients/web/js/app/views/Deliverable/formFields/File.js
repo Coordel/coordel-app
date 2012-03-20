@@ -54,7 +54,7 @@ define(
         fModel.field = this.field;
         
         this.currentId = db.uuid();
-        this.uploader.set("url", db.db + this.currentId);
+        this.uploader.set("url", db.db + "files/" + this.currentId);
         
         this.currentFile = new cp({style: "padding:0"}).placeAt(this.current);
         
@@ -92,8 +92,8 @@ define(
           self.field.value = newVal;
         });
         
-        dojo.connect(this.uploader, "onComplete", this, function(){
-          //console.debug("file uploaded");
+        dojo.connect(this.uploader, "onComplete", this, function(args){
+          //console.debug("file uploaded", args);
 
           //when the file (or files) is uploaded, a new doc is created to hold it (the) and we get it back.
           //we then need to add the docType and the deliverable id to the file so
@@ -111,7 +111,7 @@ define(
           //console.debug("file", file);
           
           file.then(function(resp){
-       
+            
             //set the field id
             resp.field = self.field.id;
             resp.docType = "file";
@@ -122,8 +122,14 @@ define(
             var attach = self.fileDb.attachFile(resp, self.username);
             
             attach.then(function(files){
-              //console.debug("attached field files", files);
+              //console.debug("attached field files", files, self);
               self.field.value = files[0]._id;
+              
+              if (!self.field.data){
+                self.field.data = {};
+                self.field.data.ready = false;
+                self.field.data.variables = [];
+              }
               
               //a file is created as a data field. need to set the data.ready variable true
               //since we have a file now
@@ -134,7 +140,7 @@ define(
               
               //reset the uploader
               self.currentId = db.uuid();
-              self.uploader.set("url", db.db + self.currentId);
+              self.uploader.set("url", db.db +"files/"  + self.currentId);
               self.uploader.set("rev", null);
               
               self.hideLoading();
