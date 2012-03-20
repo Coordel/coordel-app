@@ -1,13 +1,15 @@
 {
-  "domains": ["beta.coordel.com"],
+  "domains": [
+    "beta.coordel.com"
+  ],
   "name": "coordel-app",
   "author": "Coordel <support@coordel.com>",
-  "version": "0.1.0-35",
+  "version": "0.1.0-37",
   "scripts": {
     "start": "./app.js"
   },
   "dependencies": {
-    "express": "2.5.0",
+    "express": "2.5.x",
     "jade": ">= 0.0.1",
     "connect-redis": "1.2.x",
     "ejs": "0.6.x",
