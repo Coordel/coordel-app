@@ -1,7 +1,6 @@
 {
   "version": "/0.0.1",
   "url" : "beta.coordel.com",
-  "devUrl": "dev.coordel.com:8080",
   "auth" : {
     "fb": {
       "appId": "145674338818252", 

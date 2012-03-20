@@ -88,19 +88,24 @@ module.exports = [
         "templateType": "deliverable",
        "multipart": false,
        "fields": [
-           {
-               "value": "",
-               "default": "file field",
-               "required": false,
-               "primitiveType": "url",
-               "label": "File",
-               "fieldType": "input",
-               "id": "unique",
-               "position": "full",
-               "order": "0",
-               "inputType": "file",
-               "size": "large"
-           }
+          {
+              "value": "",
+              "default": "file field",
+              "required": false,
+              "primitiveType": "url",
+              "label": "File",
+              "fieldType": "input",
+              "id": "unique",
+              "position": "full",
+              "order": "0",
+              "inputType": "file",
+              "size": "large",
+              "data": {
+                  "ready": false,
+                  "variables": [
+                  ]
+              }
+          }
        ],
        "instructions": "Upload deliverable file here",
        "id": "180efe932ec61ff0fec30a70af1dc4ae",
