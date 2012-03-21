@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.28",
+  version: "0.1.29",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -100,7 +100,7 @@ module.exports = {
       		return dtArray;
       	}
 
-      	if (doc.docType == "task" 
+      	if (doc.docType == "task" && !doc.isMyPrivate
       			&& doc.status !== "IN-ITEM"
       			&& doc.status !== "TRASH"
       			&& doc.status !== "ARCHIVE"

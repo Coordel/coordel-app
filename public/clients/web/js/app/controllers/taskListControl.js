@@ -653,10 +653,11 @@ define(["dojo",
 
       //need to watch and see if there is a change to this list
       var handler = group.tasks.observe(function(task, removedFrom, insertedInto){
-        //console.debug("tasks observed in taskListControl", task, removedFrom, insertedInto, group.focus);
+        console.debug("tasks observed in taskListControl", task, removedFrom, insertedInto, group.focus);
 
         //was this a delete
         if (removedFrom > -1){
+          group.removeChild(removedFrom);
           console.debug("NOT REMOVING FROM GROUP BUT SUPPOSED TO remov" + focus, removedFrom, task);
         }
 

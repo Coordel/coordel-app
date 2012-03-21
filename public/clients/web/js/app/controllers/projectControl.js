@@ -73,14 +73,14 @@ define([
         
           //handle click of the people and roles tabs
           self.connections.push(dojo.connect(dojo.byId("projInfoTab"), "onclick", this, function(evt){
-            console.debug("clicked info", evt);
+            //console.debug("clicked info", evt);
             if (dojo.hasClass(evt.target, "inactive")){
               self.showInfo();
             }
           }));
 
           self.connections.push(dojo.connect(dojo.byId("projRolesTab"), "onclick", this, function(evt){
-            console.debug("clicked roles", evt);
+            //console.debug("clicked roles", evt);
             if (dojo.hasClass(evt.target, "inactive")){
               self.showRoles();
             }
@@ -88,7 +88,7 @@ define([
 
           self.connections.push(dojo.connect(dojo.byId("projStreamTab"), "onclick", this, function(evt){
 
-            console.debug("clicked stream", evt);
+            //console.debug("clicked stream", evt);
             if (dojo.hasClass(evt.target, "inactive")){
               self.showStream();
             }
@@ -139,11 +139,11 @@ define([
       
       setRightColumn: function(showColumn){
       
-  		  console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
+  		  //console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
 
         var col = dijit.byId("rightDetailsLayout");
 
-        console.debug("right column", col);
+        //console.debug("right column", col);
 
         if (col){
          if (showColumn){
@@ -180,14 +180,14 @@ define([
       },
       
       _openStreamTab: function(){
-        console.log("in _openStreamTab");
+        //console.log("in _openStreamTab");
         this._closeTabs();
         this.tabFocus = "streamTab";
         dojo.addClass("projStreamTab", "active");
         dojo.removeClass("projStreamTab", "inactive");
-        console.log("showinng projDetailsStream");
+        //console.log("showinng projDetailsStream");
         dijit.byId("prMain").selectChild("projDetailsStream");
-        console.log("removing hidden class from the send container");
+        //console.log("removing hidden class from the send container");
         dojo.removeClass("projDetailsSendContainer", "hidden");
         dijit.byId("rightDetailsLayout").resize();
         //dojo.removeClass(dijit.byId("projectDetailsFilter").domNode, "hidden");
@@ -195,7 +195,7 @@ define([
       },
       
       _closeTabs: function(){
-        console.log("in _closeTabs");
+        //console.log("in _closeTabs");
         dojo.addClass("projStreamTab", "inactive");
         dojo.removeClass("projStreamTab", "active");
         dojo.addClass("projInfoTab", "inactive");
@@ -208,7 +208,7 @@ define([
       },
       
       handleStreamNotify: function(args){
-        console.log("stream notify", args);
+        //console.log("stream notify", args);
         if (args.message.project === this.project._id){
           this.showStream();
         }
@@ -226,7 +226,7 @@ define([
       },
       
       showDeliverables: function(){
-        console.log("showing Deliverables");
+        //console.log("showing Deliverables");
         var store = db.projectStore;
         var cont = dijit.byId("projTasksMain");
         if (cont.hasChildren()){
@@ -246,7 +246,7 @@ define([
           });
           cont.addChild(this.emptyGroup);
         } else {
-          console.log(" tasks with deliverables", tasks);
+          //console.log(" tasks with deliverables", tasks);
           
           dojo.forEach(tasks, function(task){
             var d = new ProjectDeliverable({
@@ -264,7 +264,7 @@ define([
         var self = this;
         var showEmpty = true;
         
-        console.log("showing tasks in project control");
+        //console.log("showing tasks in project control");
         
         //make sure to delete any groups that are there and clear the empty group
         var cont = dijit.byId("projTasksMain");
@@ -291,7 +291,7 @@ define([
         var bl = store.taskMemory.query({db: db, focus: "blocked"}, {sort: sort});
         var un = store.taskMemory.query({db:db, focus: "unassigned"}, {sort: sort});
         
-        console.log("current tasks", cur);
+        //console.log("current tasks", cur);
         
         //get the invited tasks
         //TASK invited (for users who have accepted the project)
@@ -443,7 +443,7 @@ define([
       
       showRoles: function(){
         
-        console.log("showRoles");
+        //console.log("showRoles");
   
         //first get the container
         var cont = dijit.byId("projDetailsRoles"),

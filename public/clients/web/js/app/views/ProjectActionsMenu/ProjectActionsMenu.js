@@ -208,7 +208,7 @@ define([
     				      dojo.removeClass(this.follow, "hidden");
     				      dojo.removeClass(this.decline, "hidden");
 
-    				    } else if (myAssign.status === "FOLLOWING"){
+    				    } else if (myAssign.status === "ACCEPTED"){
     				      //not owner - unfollow
     				      dojo.removeClass(this.unfollow, "hidden");
     				    }
@@ -222,19 +222,18 @@ define([
     				      dojo.removeClass(this.leave, "hidden");
     				    } 
     				    
-    				    if (projSub && projSub === "CANCELLED"){
-    				      dojo.addClass(this.leave, "hidden");
-    				      dojo.removeClass(this.ackCancel, "hidden");
-    				    }
+    				    
     				    
     				  }
   				  } else {
   				    //console.debug("should show no options");
   				    this.hasOptions = false;
   				  }
-  				  
-  				  
   				}
+  				if (projSub && projSub === "CANCELLED"){
+			      dojo.addClass(this.leave, "hidden");
+			      dojo.removeClass(this.ackCancel, "hidden");
+			    }
   				break;
   			  case "ARCHIVE":
   			    if (own){

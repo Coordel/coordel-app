@@ -55,6 +55,7 @@ define("app/models/CoordelBase",["dojo", "dojo/Stateful", "dojo/date/stamp"], fu
       	invite: "ui-icon-arrowreturnthick-1-e",
       	join: "ui-icon-arrowthick-2-e-w",
       	follow: "ui-icon-arrowthick-2-e-w",
+      	unfollow: "ui-icon-close",
       	leave: "ui-icon-close",
       	note: "ui-icon-note",
       	comment: "ui-icon-comment",

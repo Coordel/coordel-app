@@ -98,10 +98,16 @@ define([
           p.leave(username, project, message);
           break;
         case "follow": 
-          p.follow(project, message);
+          p.follow(username, project, message);
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
           break;
         case "unfollow":
-          p.unfollow(project, message);
+          p.unfollow(username, project, message);
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
           break;
         case "send":
           p.send(project, message);

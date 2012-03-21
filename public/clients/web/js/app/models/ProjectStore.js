@@ -53,7 +53,7 @@ define(["dojo",
             
             loadProject: function(project){
               
-              console.debug("loadProject called", project, this.currentProject);
+              //console.debug("loadProject called", project, this.currentProject);
               
               var def = new dojo.Deferred(),
                   self = this;
@@ -73,7 +73,7 @@ define(["dojo",
                 ]);
 
                 load.then(function(resp){
-                  console.debug("loaded project", resp);
+                  //console.debug("loaded project", resp);
                   self.currentProject = project;
                   def.callback(self);
                 });
@@ -266,7 +266,7 @@ define(["dojo",
             	return this.blockStore.query(queryArgs);
             },
             _loadStream: function(project){
-              console.log("loadProjectStream called", project);
+              //console.log("loadProjectStream called", project);
               var query = {
                 view: "coordel/projectStream",
             		startkey: [project, {}],

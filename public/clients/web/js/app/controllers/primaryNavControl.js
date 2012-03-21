@@ -325,7 +325,7 @@ define(['dojo',
     },
   
     showProjectList: function(){
-      console.debug("primaryNavControl.showProjectList called");
+      //console.debug("primaryNavControl.showProjectList called");
     
       var self = this;
     

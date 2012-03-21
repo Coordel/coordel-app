@@ -70,7 +70,6 @@ define([
           dojo.removeClass(this.decline.domNode, "hidden");
           dojo.removeClass(this.follow.domNode, "hidden");
           dojo.addClass(this.chooseAction.domNode, "hidden");
-          
           dojo.style(this.showView.domNode, {"margin-right": "0"});
           
         } else if (pStatus.isInvitedNew(this.project, username) || 
@@ -83,15 +82,25 @@ define([
           dojo.style(this.showView.domNode, {"margin-right": "0"});
               
         } else {
-          //need to get rid of the margin on the action button if none of the other buttons are showing
+          //need to get rid of the margin on the view button if none of the other buttons are showing
           //and this user isn't responsible (send and done are hidden)
-          //UPDATED because added the view button which always shows
-          /*
+      
+        
           if (username !== this.project.responsible){
-            dojo.style(this.chooseAction.domNode, {"margin-right": "0"});
+            dojo.style(this.showView.domNode, {"margin-right": "0"});
           }
-          */
+    
         }
+        
+        var sub = this.project.substatus;
+        
+        if (sub && (sub === "CANCELLED" || sub === "DONE")){
+          dojo.addClass(this.editProject.domNode, "hidden");
+          dojo.addClass(this.markDone.domNode, "hidden");
+          dojo.style(this.showView.domNode, {"margin-right": "0"});
+        }
+        
+        
         
         
         //handle button clicks

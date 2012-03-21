@@ -607,6 +607,10 @@ define(
         text = "",
         con;
         
+        if (t.delegator){
+          del = t.delegator;
+        }
+        
         var username = t.username;
         
         if(t.isIssue()){
@@ -616,6 +620,7 @@ define(
         if (t.isSubmitted()){
           username = resp;
         }
+        
         
         //if the username of the task isn't the logged on user, then show the name unless this is the
         //contact view when all the tasks belong to the contact selected
@@ -660,14 +665,17 @@ define(
           
           //get who sent the invite, might be project responsible, might be the delegator
           con = db.contactFullName(resp);
-
-          if (t.delegator && t.delegator !== ""){
+        
+          if (t.hasDelegator()){
             del = t.delegator;
             con = db.contactFullName(del);
+            console.log("it's an invite and there was a delegator", con, u, del);
           }
+ 
+          //console.log("delegation", t.hasDelegator(), con, del, u, username);
           
           //don't need to show from if this is me or if it's a project invite
-          if (resp !== u && del !== u){
+          if (!t.hasDelegator() && resp !== u || t.hasDelegator() && del !== u){
             text = coordel.metainfo.invite + " " + con + " : ";
           }
           

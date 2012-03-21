@@ -467,10 +467,35 @@ define("app/models/ProjectModel",
     		//dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: project._id}]);
     	},
     	
+    	unfollow: function(username, project){
+    	  var p  = this;
+    	  //follow just removes the user from the project and kills the assignment
+    	  if (!project){
+    	    project = this.db.projectStore.store.get(this._id);
+    	  }
+    	  
+    	  project.users = dojo.filter(project.users, function(u){
+    	    return u !== username;
+    	  });
+    	  
+    	  project.assignments = dojo.filter(project.assignments, function(assign){
+    	    return assign.username !== username;
+    	  });
+    	  
+    	  p.addActivity({
+    			verb: "UNFOLLOW",
+    			icon: this.icon.unfollow
+    		}, project);
+    		
+    		p.update(project);
+    	},
+    	
     	follow: function(username, project){
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
     	  }
+    	  
+    	  
     	  
     	  //make sure this user is in the user list
     	  var hasUser = false,

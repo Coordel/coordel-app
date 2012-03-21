@@ -37,6 +37,12 @@ define(
             self = this;
         //console.debug("db in TaskListGroup", db);
         //is this grouped
+        self._showTasks();
+      },
+      
+      _showTasks: function(){
+        var self = this;
+        
         if (self.tasks.length > 0){
           //add the tasks
           self.tasks.forEach(function(task){
@@ -57,12 +63,12 @@ define(
               });
             }
         
-    	      list.addChild(item);
+    	      self.addChild(item);
     	    });
         } else {
           //hide this group
           self.hide();
-        } 
+        }
       },
       
       //if the groups tasks go to zero, then we need to hide this group until it gets another task

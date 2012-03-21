@@ -327,7 +327,6 @@ background:transparent url(file-types/page_white_excel.png) center left no-repea
 /* Word Document Links */
 a[href$='.doc'],a[href$='.docx'], a[href$='.rtf'], a[href$='.wps'] {
 background:transparent url(file-types/page_white_word.png) center left no-repeat !important;
-
 }
 
 /* Text Document Links */

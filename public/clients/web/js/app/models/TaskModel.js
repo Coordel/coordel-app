@@ -261,7 +261,8 @@ define("app/models/TaskModel",
     		}
     		
     		//console.debug("coordinates length", task.coordinates.length);
-    		//if it's delegated (in my delegated project) it's not current
+    		//if it's delegated (in my delegated project, or i delegated in a project i'm responsible for) 
+    		//it's not current
     		if (t.isDelegated()){
     		  test = false;
     		  //if the task is delegated and it submitted for approval, then it's current
@@ -554,11 +555,11 @@ define("app/models/TaskModel",
     	  
     	  //tasks I've delegated in a project that I'm not responsible also show in the delegated list
     	  //this allows me to track tasks I've delegated in projects
-    	  /*
-    	  if (t.delegator && t.delegator === username){
+    	  
+    	  if (t.hasDelegator() && t.username !== username && !t.isDone()){
     	    isDelegated = true;
     	  }
-    	  */
+    
     	  return isDelegated;
     	},
     	

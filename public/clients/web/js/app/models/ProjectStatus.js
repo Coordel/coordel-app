@@ -43,12 +43,12 @@ define("app/models/ProjectStatus",
         
         if (this.isActive(project, username)){
           dojo.forEach(project.assignments, function(assign){
-            if (assign.username === username && assign.role === "FOLLOWER"){
+            if (assign.username === username && assign.role === "FOLLOWER" && assign.status === "INVITE"){
               test = true;
             }
           });
         }
-        
+        //console.log("isInvitedFollow", project, username, isNew, test);
         return test;
       },
       

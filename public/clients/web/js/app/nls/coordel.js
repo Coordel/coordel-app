@@ -596,6 +596,10 @@ define({
   		    "verb": "followed",
   		    "preposition": ""
   		  },
+  		  "unfollow": {
+  		    "verb": "unfollowed",
+  		    "preposition": ""
+  		  },
   		  "accept": {
   		    "verb":"accepted",
   		    "preposition": "in"
