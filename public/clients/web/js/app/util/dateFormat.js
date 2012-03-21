@@ -167,6 +167,10 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
             thisYr = now.getYear(),
             diff = 0,
             dtYr = 0;
+        
+        if (showTime){
+          compare = dojo.date.compare(d, now, "datetime");
+        }
             
         //console.debug ("deadline in dateFormat", date, d);
             
@@ -185,15 +189,18 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
           if (diff === 0){
             if (showTime){
               
-              hrs = dojo.date.difference(now,d,"hour");
               mins = dojo.date.difference(now,d,"minute");
+              hrs = parseInt(mins/60, 10);
               
-              
-            
+              //need to add 1 to hours because rounding goes up after 30mins
+              if (hrs === 1 && mins < 60){
+                hrs = 0;
+              }
+        
               mins = mins % 60;
               
               //console.log("mins", mins);
-              toReturn = hrs.toString() + ":" + dojo.string.pad(mins.toString(), 2, "0") + " " + coordel.metainfo.left;
+              toReturn = dojo.string.pad(hrs.toString(), 2, "0") + ":" + dojo.string.pad(mins.toString(), 2, "0") + " " + coordel.metainfo.left;
             } else {
               toReturn = coordel.metainfo.today;
             }
@@ -259,11 +266,35 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
           //console.debug("the deadline is past");
           diff = dojo.date.difference(d,now,"day");
           toReturn = diff.toString() + " " + coordel.metainfo.daysLate;
-          /*
           if (diff === 0){
-            toReturn === coordel.metainfo.today;
+            if (showTime){
+            
+             
+              mins = dojo.date.difference(now,d,"minute");
+              hrs = parseInt(mins/60, 10);
+              
+              //need to add 1 to hours because rounding goes up after 30mins
+              if (hrs === -1 && mins > -60){
+                hrs = 0;
+              }
+              
+              mins = mins % 60;
+              
+              //get rid of the negative signs
+              if (hrs < 0){
+                hrs = hrs.toString().split("-")[1] ;
+              }
+              
+              if (mins < 0){
+                mins = mins.toString().split("-")[1] ;
+              }
+
+              //console.log("mins", mins);
+              toReturn = dojo.string.pad(hrs.toString(), 2, "0") + ":" + dojo.string.pad(mins.toString(), 2, "0") + " " + coordel.metainfo.late;
+            } else {
+              toReturn = coordel.metainfo.today;
+            }
           }
-          */
           if (diff === 1){
             toReturn = diff.toString() + " " + coordel.metainfo.dayLate;
           }

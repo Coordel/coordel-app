@@ -82,7 +82,6 @@ define(
   	      if (smb.sortOptions.attribute === "byTaskName" || smb.sortOptions.attribute === "byPriority"){
   	        smb.setSortOptions({id: "byCreated", value: "created", type: "attribute"});
   	      }
-  	      smb._hideNonTimeAttributes();
   	      smb.setSortOptions({id: "grpTimeline", value: !smb.sortOptions.grpTimeline, type: "group"});
   	    }));
   	    
@@ -104,12 +103,6 @@ define(
   	      smb.setSortOptions({id: "optShowChecklist", value: !smb.sortOptions.optShowChecklist, type: "option"});
   	    }));
         
-      },
-      
-      _hideNonTimeAttributes: function(){
-        //when grouped by Timeline, it doesn't make sense to sort non-date fields so hide them
-        dojo.addClass(this.byTaskName, "hidden");
-        dojo.addClass(this.byPriority, "hidden");
       },
       
       _showAllAttributes:function(){

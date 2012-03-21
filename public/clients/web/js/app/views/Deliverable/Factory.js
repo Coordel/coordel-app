@@ -88,7 +88,7 @@ define([
   		    //addField knows how to handle the control it's going to receive 
   		    var f = this._createField(field);
   		    
-  		    console.debug("field in deliverble", f);
+  		    //console.debug("field in deliverble", f);
   		    
   		    //if this is a display view, then disable the field
   		    if (obj.view === "displayGrid" || obj.view === "displayForm"){
@@ -196,7 +196,7 @@ define([
   
   		  var ctl = new RadioList({field:field, displayVersions: this.displayVersions});
   	
-        console.debug("radio control", ctl);
+        //console.debug("radio control", ctl);
   		  return ctl;
   		}
     });

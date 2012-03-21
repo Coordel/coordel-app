@@ -92,6 +92,7 @@ define(
         //NOTE: need to update the project select to update max and update deadline
         //if it's set later than the project deadline
         var min = stamp.toISOString(new Date(), {selector: "date"});
+        
         if (self.isNew){
           self.taskFormDeadline.set("minMax",{min: min});
           self.taskFormDefer.set("constraints",{min: min});
@@ -465,7 +466,8 @@ define(
         });
         
         //deadline
-        dojo.connect(this.taskFormDeadlineValue.removeValue, "onclick", this, function(){
+        dojo.connect(this.taskFormDeadlineValue.removeValue, "onclick", this, function(evt){
+          evt.stopPropagation();
           this.taskFormDeadline.reset();
           delete this.task.deadline;
           //hide the pill
@@ -1157,6 +1159,7 @@ define(
           this._setTip(field, this._getTipTemplate(field));
           this._resetDropDowns(field);
         });
+        
         dojo.connect(tc, "onBlur", this, function(){
           //dojo.destroy("taskFormTipContainer");
           dojo.addClass(this[field+"Tip"], "hidden");
@@ -1187,6 +1190,16 @@ define(
         var tipInfo = dojo.position(li, true),
             left = tipInfo.x + tipInfo.w + 12,
             top = tipInfo.y - tipInfo.h;
+        
+        //for some reason when on private, the name tip messes up this fixes it.
+        if (left < 352){
+          left = 352;
+        }
+        if (top < 52){
+          top = 52;
+        }
+            
+        //console.log("info", tipInfo, left, top);
             
         //to position the tip appropriately, we want the pointer to to be 12 px to the right center
         //of the li element, the top of the tipContainer to be the top of the li element

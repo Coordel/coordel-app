@@ -4,7 +4,7 @@ define(["dojo"], function(dojo) {
     null, 
     {
       addField: function(field){
-        console.debug("addField called in Deliverable", field);
+        //console.debug("addField called in Deliverable", field);
         field.placeAt(this.fieldsContainer);
       }
   });

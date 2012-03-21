@@ -18,7 +18,7 @@ define(
       
       hasTime: false,
       
-      submitLabel: coordel.save,
+      submitLabel: coordel.done,
       
       templateString: html,
       
@@ -34,6 +34,10 @@ define(
         }
       },
       
+      onChange: function(deadline){
+        
+      },
+      
       postCreate: function(){
         this.inherited(arguments);
         var self = this;
@@ -43,9 +47,10 @@ define(
         });
         
         this.date.watch("value", function(prop, oldVal, newVal){
-          //console.debug("task deadline changed", prop, oldVal, newVal);
+          console.debug("task deadline date changed", prop, oldVal, newVal);
           //self.set("deadline", newVal);
           if (newVal){
+            self.onChange(self._getDeadline());
             //console.log("new deadline value", newVal);
             self.time.set("disabled", false);
             //self.task.deadline = stamp.toISOString(new Date(newVal), {selector: "datetime"});
@@ -55,19 +60,20 @@ define(
         });
         
         this.time.watch("value", function(prop, oldVal, newVal){
-          //console.debug("task deadline changed", prop, oldVal, newVal);
+          console.debug("task deadline time changed", prop, oldVal, newVal);
           //self.set("deadline", newVal);
           if (newVal){
+            
             //console.log("new time value", newVal);
             self.hasTime = true;
+            self.onChange(self._getDeadline());
             //self.task.deadline = stamp.toISOString(new Date(newVal), {selector: "datetime"});
           } else {
             self.hasTime = false;
           }
           
         });
-  
-        
+
         //console.log("date constraints", this.date.get("constraints"));
       },
       

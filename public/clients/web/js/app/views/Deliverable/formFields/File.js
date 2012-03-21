@@ -270,7 +270,7 @@ define(
           
           //console.debug("current file", key, file);
           var f = new CurrentFile({
-            fileUrl: db.db + file._id + "/" + key,
+            fileUrl: db.db + "files/" + file._id + "/" + key,
             prettyDate: date.ago(file.updated),
             fileDate: file.updated,
             fileName: key,

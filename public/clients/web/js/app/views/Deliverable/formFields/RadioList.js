@@ -23,7 +23,7 @@ define([
         this.inherited(arguments);
         var self = this;
         
-        console.debug("field in radiolist", self.field);
+        //console.debug("field in radiolist", self.field);
         dojo.forEach(this.field.children, function(child){
           
           var box = this._getChoice(child);
@@ -34,7 +34,7 @@ define([
       },
       
       onChange: function(chg){
-        console.debug("RadioList changed", chg);
+        //console.debug("RadioList changed", chg);
       },
       
       _getChoice: function(child){
@@ -50,7 +50,7 @@ define([
           label: child.label,
           checked: child.value,
           onChange: function(chg){
-            console.debug("radio changed", child.id);
+            //console.debug("radio changed", child.id);
             self.onChange(child.id);
           }
         }).placeAt(node);

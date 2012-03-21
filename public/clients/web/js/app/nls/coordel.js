@@ -343,6 +343,7 @@ define({
 		  "dayLeft": "day left",
 		  "dayLate": "day late",
 		  "left": "left",
+		  "late": "late",
 		  "hr": "hr",
 		  "hrs": "hrs",
 		  "min": "min",

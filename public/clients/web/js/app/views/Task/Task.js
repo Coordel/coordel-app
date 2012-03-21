@@ -40,8 +40,6 @@ define(
       
       isProjectInvite: false,
       
-      isByPriority: false,
-      
       role: "project",
       
       postMixInProperties: function(){
@@ -191,8 +189,10 @@ define(
             t = db.getTaskModel(this.task, true);
             
         if (this.task.username !== username){
-          console.log("removing mine");
+          
+          //console.log("removing mine");
           //if I don't own this task, then it shouldn't have a link to go to task details;
+        
           dojo.removeClass(this.showDetails, "mine");
         }
           
@@ -377,12 +377,6 @@ define(
           dojo.query(".actions", this.domNode).addClass("hidden");
           dojo.query(".delete", this.domNode).addClass("hidden");
           dojo.query(".stream", this.domNode).addClass("task-actions-corner-left");
-        }
-        
-        //show the sort image if this is priority
-        if (this.isByPriority){
-          dojo.addClass(this.domNode, "dojoDndItem");
-          dojo.removeClass(this.showSort, "hidden");
         }
         
         //wire up the task checkbox so clicking it submits to approve if not project responsible
@@ -615,8 +609,6 @@ define(
         
         var username = t.username;
         
-        
-        
         if(t.isIssue()){
           username = resp;
         }
@@ -771,6 +763,7 @@ define(
         
         //issue
         if (t.isIssue()){
+       
           //console.debug("issue");
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent(coordel.metainfo.issue + " : ");
         }
@@ -783,6 +776,7 @@ define(
         
         //submitted for approval
         if (t.isSubmitted()){
+        
           //console.debug("it's submitted");
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-active").addContent(coordel.metainfo.submitted + " : ");
         }
@@ -829,9 +823,9 @@ define(
             deadline = "",  //if no project deadline, it's blank (this will be the case with delegated and private tasks)
             past = false, //if it does have a deadline, then need to make sure that it gets colored active
             today = false,
+            showTime = false,
             now = new Date();
-            
-            
+   
         //has deadline
         //console.debug("_setDeadline", has, pdead, this);
         //don't update the deadline for done and cancelled tasks
@@ -841,20 +835,24 @@ define(
     
         //check if this has a deadline
         if (has){
+          
+          var test = t.deadline.split("T");
+          
+          if (test.length>1){
+            showTime = true;
+          }
+          
           //check if this deadline has passed?
-          var c = dojo.date.compare(stamp.fromISOString(t.deadline), now, "date");
+          var c = dojo.date.compare(stamp.fromISOString(t.deadline), now, "date"); 
+          if (showTime){
+            c = dojo.date.compare(stamp.fromISOString(t.deadline), now, "datetime");
+          }
+          
           if ( c < 0){
             past = true;
           } else if (c === 0){
             today = true;
           }
-          
-          var test = t.deadline.split("T"),
-              showTime = false;
-          if (test.length>1){
-            showTime = true;
-          }
-          
           
           deadline = dt.deadline(t.deadline, showTime);
           
@@ -877,6 +875,7 @@ define(
           // if not, get the project deadline
           if (pdead && pdead !== ""){
             var co = dojo.date.compare(stamp.fromISOString(pdead), now, "date");
+            
             if ( co < 0){
               past = true;
             } else if (co === 0){

@@ -7,7 +7,8 @@ var config = require('konphyg')(__dirname + './../config'),
     couchOpts   = settings.config.couchOptions,
     couchName   = settings.config.couchName,
     App         = require('./../models/userApp'),
-    fs          = require('fs');
+    fs          = require('fs'),
+    request     = require('request');
     
 
 //console.log("settings", redisOpts, couchName, couchOpts);
@@ -60,6 +61,11 @@ module.exports = function(app, validate){
         res.json(doc);
       }
     });
+  });
+  
+  app.get('/coordel/files/:id/:name', function(req, res){
+    var url = 'http://'+ couchOpts.host + ':'+couchOpts.port+'/' + couchName + '/'+req.params.id+'/'+req.params.name;
+    request(url).pipe(res);
   });
   
   

@@ -65,7 +65,12 @@ define(
         
         //console.log("minMax", this.minMax);
         this.dropDown.date.set("constraints", this.minMax);
-      
+        
+        dojo.connect(this.dropDown, "onChange", this, function(deadline){
+          this.hasTime = this.dropDown.hasTime;
+          this.set("value", deadline);
+          this.onChange();
+        });
         
         dojo.connect(this.dropDown, "onSave", this, function(deadline){
           this.hasTime = this.dropDown.hasTime;
