@@ -132,6 +132,12 @@ app.store.util.TaskQueryEngine = function(query, options){
   	  case "current":
   		query = function(task){
   		  var t = db.getTaskModel(task, true);
+  		  
+  		  //if i've delegated this task in a project, then it won't be current for me
+    		if (t.hasDelegator() && t.delegator === db.username()){
+    		  return false;
+    		}
+    		
   			return t.isCurrent() && !pStatus.isDeferred(t.p.project) && !pStatus.isPending(t.p.project, t.username) && applyFilter(task);
   		};
   		break;
@@ -161,7 +167,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   		case "delegated":
   		query = function(task){
   			var t = db.getTaskModel(task, true);
-  			return t.isDelegated() && applyFilter(task);
+  			return t.isDelegated() || (t.hasDelegator() && t.delegator === db.username()) && applyFilter(task);
   		};
   		break;
   		case "private":

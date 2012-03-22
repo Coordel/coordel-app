@@ -19,12 +19,15 @@ define(
       
       focus: "current",
       
+      showProjectLabel: false,
+      
       postCreate: function(){
         this.inherited(arguments);
         
         var t = new Task({
           task: this.task,
-          focus: this.focus
+          focus: this.focus,
+          showProjectLabel: this.showProjectLabel
         }).placeAt(this.taskContain);
         
         if (this.task.todos && this.task.todos.length > 0){

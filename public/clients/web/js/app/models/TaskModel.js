@@ -202,6 +202,9 @@ define("app/models/TaskModel",
     			  reason = "Task was current",
     			  test = false;
     			  
+    		
+    		
+    			  
        	//if it's deleted, it's not current
     		if (t.isDeleted()){
     		  return false;
@@ -261,9 +264,10 @@ define("app/models/TaskModel",
     		}
     		
     		//console.debug("coordinates length", task.coordinates.length);
-    		//if it's delegated (in my delegated project, or i delegated in a project i'm responsible for) 
+    		//if it's delegated (in my delegated project) 
     		//it's not current
     		if (t.isDelegated()){
+    		  
     		  test = false;
     		  //if the task is delegated and it submitted for approval, then it's current
     		  //for the responsible
@@ -280,6 +284,8 @@ define("app/models/TaskModel",
     		  //console.debug(t.name + " was delegated, it's not current");
     		  return test;
     		}
+    		
+    		
     		
     		//if it's cancelled, it's not current :)
     		if (t.isCancelled()){
@@ -555,11 +561,11 @@ define("app/models/TaskModel",
     	  
     	  //tasks I've delegated in a project that I'm not responsible also show in the delegated list
     	  //this allows me to track tasks I've delegated in projects
-    	  
+    	  /*
     	  if (t.hasDelegator() && t.username !== username && !t.isDone()){
     	    isDelegated = true;
     	  }
-    
+        */
     	  return isDelegated;
     	},
     	

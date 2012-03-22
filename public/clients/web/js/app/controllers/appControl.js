@@ -17,8 +17,10 @@ define(['dojo',
         "app/views/ConfirmDialog/ConfirmDialog",
         "app/views/ProjectForm/ProjectForm",
         "app/views/ProjectAction/ProjectAction",
-        "app/views/PersonForm/PersonForm"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm) {
+        "app/views/PersonForm/PersonForm",
+        "app/views/Dialog/Dialog",
+        "app/views/Tutorial/Tutorial"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -138,6 +140,9 @@ define(['dojo',
 	  	
 	  	//listen for alerts clear
 	  	this.handlers.push(dojo.subscribe("coordel/clearAlerts", this, "handleClearAlerts"));
+	  	
+	  	//listten for support actions
+	  	this.handlers.push(dojo.subscribe("coordel/support", this, "handleSupport"));
 	  	
   		dojo.removeClass(document.body, "loading login");
 		  //console.debug("database has loaded, in the deferred function",resp);
@@ -361,6 +366,54 @@ define(['dojo',
 	      break;
 	    }
 	  },
+	  
+	  handleSupport: function(args){
+	    var title = "",
+	        template = "support/quickStart.html",
+	        d;
+	    
+	    switch (args){
+	      case "showQuickStart":
+	      title = "Welcome to Coordel!";
+	      console.log("show quick start");
+	      break;
+	     
+	      case "showTutorial":
+	      title = "Tutorial";
+	      template = "support/tutorial.html";
+	      console.log("show tutorial");
+	      break;
+	      
+	      case "showEmailIntegration":
+	      title = "Email Integration";
+	      template = "support/emailIntegration.html";
+	      console.log("show email integration");
+	      break;
+	    }
+	    
+	    if (args === "showTutorial"){
+	      d = new vDialog({
+  	      title: title,
+  	      content: new Tutorial(),
+  	      onCancel: function(){
+  	        d.destroy();
+  	      }
+  	    });
+	    } else {
+	      d = new vDialog({
+  	      title: title,
+  	      href: template,
+  	      onCancel: function(){
+  	        d.destroy();
+  	      }
+  	    });
+	    }
+	    
+	    
+	    
+	    d.show();
+	  },
+	  
 	  
 	  _showProjectForm: function(){
 	    //console.debug("create a project");
@@ -621,7 +674,7 @@ define(['dojo',
   			
   				  //a message notify the stream store
   				  //if i sent it, it's an update, if I didn't send it , it's an add
-  				  if (chg.updater !== app.username ){
+  				  if (chg.updater !== app.username){
   				    //I didn't send this message, it's an add
   				    if (db.focus === "project" && db.projectStore.streamStore){
   				      db.projectStore.streamStore.notify(chg);
@@ -635,11 +688,11 @@ define(['dojo',
   				  } else {
   				    
   				    console.log("Notify Message UPDATE");
-  				    if (db.focus === "project" && db.projectStore.streamStore){
+  				    if (db.focus === "project" && db.projectStore.streamStore && chg.project === db.projectStore.currentProject){
   				      db.projectStore.streamStore.notify(chg, chg._id);
   				    }
   				    
-  				    if (db.focus === "task" && db.streamStore.taskStore){
+  				    if (db.streamStore.currentContext==="task" && db.streamStore.currentContextId === chg.task){
   				      db.streamStore.taskStore.notify(chg, chg._id);
   				    }
   				    

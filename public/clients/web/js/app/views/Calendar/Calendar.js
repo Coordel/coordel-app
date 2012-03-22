@@ -129,9 +129,11 @@ define(
             id: task._id,
             type: "task",
             name: task.name,
+            project: t.p.project.name,
             deadline: t.getDeadline(),
             isTaskInvite: t.isTaskInvite(),
-            isProjectInvite: false
+            isProjectInvite: false,
+            isBlocked: t.isBlocked()
           });
         });
 
@@ -156,6 +158,7 @@ define(
             id: proj._id,
             type: "project",
             name: proj.name,
+            project: "",
             deadline: p.getDeadline(),
             isProjectInvite: isInvite,
             isTaskInvite: false

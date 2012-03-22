@@ -42,6 +42,8 @@ define(
       
       role: "project",
       
+      showProjectLabel: false,
+      
       postMixInProperties: function(){
         this.inherited(arguments);
         //task.docType = project then we need to convert
@@ -580,7 +582,7 @@ define(
           this.blueprintDialog.show();
           
           var confirm = dojo.connect(this.blueprintDialog, "onConfirm", this, function(){
-            console.debug("should blueprint the task");
+            //console.debug("should blueprint the task");
             var t = db.getTaskModel(args.task, true);
             t.reuse(args.task);
             dojo.disconnect(confirm);
@@ -605,7 +607,8 @@ define(
         u = db.username(),
         isProjInvite = this.isProjectInvite,
         text = "",
-        con;
+        con,
+        self = this;
         
         if (t.delegator){
           del = t.delegator;
@@ -620,7 +623,6 @@ define(
         if (t.isSubmitted()){
           username = resp;
         }
-        
         
         //if the username of the task isn't the logged on user, then show the name unless this is the
         //contact view when all the tasks belong to the contact selected
@@ -669,7 +671,7 @@ define(
           if (t.hasDelegator()){
             del = t.delegator;
             con = db.contactFullName(del);
-            console.log("it's an invite and there was a delegator", con, u, del);
+            //console.log("it's an invite and there was a delegator", con, u, del);
           }
  
           //console.log("delegation", t.hasDelegator(), con, del, u, username);
@@ -685,6 +687,14 @@ define(
             dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(text);
           }
     
+        } else {
+          //if there is a delegator then everyone needs to see who did the delegation
+          if (t.hasDelegator()){
+            del = t.delegator;
+            con = db.contactFullName(del);
+            dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.taskDetails.by + " " + con + " : ");
+          }
+          
         }
         
         //project invites
@@ -819,6 +829,20 @@ define(
             dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-error").addContent( coordel.metainfo.declined + " : ");
           }
         }  
+        
+        //show project name
+        if (self.showProjectLabel){
+          var p = t.p.project;
+              
+          dojo.when(p, function(project){
+            if (!project.isMyDelegated && !project.isMyPrivate){
+              //console.log("show project name", t);
+              dojo.removeClass(self.metaProjectInfo, "hidden");
+              self.metaProjectInfo.innerHTML = project.name + " : ";
+            }
+          });
+          
+        }
       },
       
       _setDeadline: function(){

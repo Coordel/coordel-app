@@ -1,0 +1,39 @@
+.support {
+  width: 600px;
+  min-height: 400px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.support h1 {
+  text-transform: uppercase;
+  padding-bottom: 16px;
+}
+
+.support h2 {
+  text-transform: uppercase; 
+  color: #a3aab1;
+}
+
+.support img {
+  border: 1px solid #A3AAB1;
+}
+
+.support p {
+  padding-bottom: 16px;
+}
+
+.support.quick-start{
+  padding: 0;
+  width: 832px;
+  max-height: 600px;
+}
+
+.support.quick-start .section{
+  border-top: 1px solid #A3AAB1; 
+  padding: 16px;
+}
+
+.tutorial {
+  width: 800px;
+}

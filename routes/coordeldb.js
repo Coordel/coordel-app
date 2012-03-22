@@ -8,7 +8,10 @@ var config = require('konphyg')(__dirname + './../config'),
     couchName   = settings.config.couchName,
     App         = require('./../models/userApp'),
     fs          = require('fs'),
-    request     = require('request');
+    request     = require('request'),
+    loggly      = require('loggly'),
+    logger      = loggly.createClient(settings.config.logglyOptions),
+    logId       = settings.config.logId;
     
 
 //console.log("settings", redisOpts, couchName, couchOpts);
@@ -37,7 +40,7 @@ module.exports = function(app, validate){
     couch.save(req.body, function(err, putRes){
       //console.log("PUT RESPONSE", putRes, err);
       if (err){
-        console.log("ERROR PUTTING TO COUCH", err, req.body);
+        logger.log(logId, "Error putting to couch: " + JSON.stringify(err) + " Doc: " + JSON.stringify(req.body));
         res.json({error: err});
       } else {
         res.json(putRes);
@@ -56,6 +59,7 @@ module.exports = function(app, validate){
     
     couch.get(req.params.id, function(err, doc){
       if (err){
+        logger.log(logId, "Error getting files: " + JSON.stringify(err));
         res.json({error: "ERROR getting files: " + err});
       } else {
         res.json(doc);
@@ -84,7 +88,7 @@ module.exports = function(app, validate){
             contentType: type
         }, function(err, attachRes){
           if (err) {
-            console.log("ERROR saving file", err);
+            logger.log(logId, "Error saving file" + JSON.stringify(err));
             res.json({error: err});
           } else {
             //console.log("RESPONSE", attachRes);
@@ -99,11 +103,11 @@ module.exports = function(app, validate){
      var id = req.params.id,
          rev = req.query.rev;
 
-     console.log("delete called", id, rev);
+     //console.log("delete called", id, rev);
      
      couch.remove(id, rev, function(err, docRes){
        if (err){
-         console.log("ERR removing doc", err);
+         logger.log(logId, "Error removing doc: " + JSON.stringify(err));
          res.json({error: err});
        } else {
          res.json(docRes);
@@ -124,7 +128,7 @@ module.exports = function(app, validate){
     
     nanoCouch.attachment.destroy(id, name, rev, function(e,b,h){
       if (e){
-        console.log("ERROR deleting file", e);
+        logger.log(logId, "ERROR deleting file: " + JSON.stringify(e));
       } else {
         //console.log("RESPONSE", b);
         res.json(b);
@@ -161,7 +165,7 @@ module.exports = function(app, validate){
     //console.log('GET ID', req.params.id);
     couch.get(req.params.id, function(err, obj){
       if (err){
-        console.log("ERROR getting " + req.params.id + ": " + err.error);
+        logger.log(logId, "ERROR getting " + req.params.id + ": " + err.error);
       } else {
         res.json(obj);
       }

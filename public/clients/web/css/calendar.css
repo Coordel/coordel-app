@@ -23,26 +23,41 @@
   border-bottom: none;
 }
 
+.calendar-entry {
+  padding-bottom: 4px;
+}
+
+.calendar-entry-container {
+  margin-left: 14px;
+}
+
 .calendar-entry .project.project-invite{
   background-image: url(images/icons/project-invite-10x10.png);
+  background-position: left center;
   /*background-color: #642F6C;
   color: #642F6C;*/
 }
 
 .calendar-entry .project {
-  padding-left: 14px;
   background: url(images/icons/project-10x10.png) no-repeat left center;
 }
 
 .calendar-entry .task.task-invite{
   background-image: url(images/icons/check-green.png);
+  background-position: left center;
   /*background-color: #97D700;
   color: #97D700;*/
 }
 
+.calendar-entry .task.blocked{
+  background-image: url(images/icons/check-red.png);
+  background-position: left center;
+  /*background-color: #97D700;
+  color: #97D700;*/
+}
 
 .calendar-entry .task {
-  padding-left: 14px;
+
   background: url(images/icons/check.png) no-repeat left center;
 }
 
@@ -55,14 +70,6 @@
 .calendar-entry:hover{
   color: #000000;
 }
-
-
-
-
-
-
-
-
 
 .coordel h3.dijitCalendarYearLabel {
 	border: none;

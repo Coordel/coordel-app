@@ -2,9 +2,10 @@ define(
   ["dojo",
     "dijit/_Widget",
     "dijit/_Templated",
-    "text!./templates/CalendarEntry.html"
+    "text!./templates/CalendarEntry.html",
+    "i18n!app/nls/coordel"
     ], 
-  function(dojo, w, t, html) {
+  function(dojo, w, t, html, coordel) {
   
   dojo.declare(
     "app.views.CalendarEntry", 
@@ -16,6 +17,8 @@ define(
       entryId: null,
       
       name: "",
+      
+      project: "",
       
       type: "task",
       
@@ -34,6 +37,15 @@ define(
           dojo.addClass(this.entry, "project");
         } else if (this.type === "task"){
           dojo.addClass(this.entry, "task");
+          if (this.isBlocked){
+            dojo.addClass(this.entry, "blocked");
+            this.entry.title = coordel.blocked;
+          }
+        }
+        
+        if (this.project && this.project !== ""){
+          dojo.removeClass(this.projectName, "hidden");
+          this.projectName.innerHTML = this.project + " : ";
         }
         
         if (this.isProjectInvite){

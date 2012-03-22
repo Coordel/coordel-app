@@ -42,6 +42,7 @@ define({
 		"notes": "Task Notes",
 		"streamHeader": "Stream",
 		"current": "Current",
+		"private": "Private",
 		"invited": "Invited",
 		"upcoming": "Upcoming",
 		"deferred": "Deferred",
@@ -89,6 +90,10 @@ define({
 	  updated: "Updated",
 	  options: "Options",
 	  preferences: "Preferences",
+	  support: "Support",
+	  quickStart: "Quick Start Guide",
+	  tutorial: "Tutorial",
+	  emailIntegration: "Email Integration",
 	  logout: "Logout",
 	  deadlineCalendar: "Deadline Calendar",
 		status: {

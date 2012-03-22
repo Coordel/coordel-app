@@ -27,7 +27,8 @@ var express     = require('express'),
     nls         = require('i18n'),
     passHash    = require('password-hash'),
     loggly      = require('loggly'),
-    log         = loggly.createClient(settings.config.logglyOptions),
+    logger      = loggly.createClient(settings.config.logglyOptions),
+    logId       = settings.config.logId,
     home        = true;
 
 var auth = settings.auth;
@@ -54,7 +55,7 @@ everyauth
       if (errors.length) return errors;
       var promise = this.Promise();
       User.get(login, function(err, user){
-        console.log("USER", user);
+        logger.log(logId, "User Login: " + user.email);
         if (err) promise.fulfill([err]);
         if (user.password !== password){
           promise.fulfill(['Login failed: invalid username or password']);
@@ -91,7 +92,7 @@ everyauth
       var promise = this.Promise();
       newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){
-        console.log("REGISTERED USER", user);
+        logger.log(logId, "Registered User: " + JSON.stringify(user));
         if (err) return promise.fulfill([err]);
         return promise.fulfill(user);
       });
@@ -255,7 +256,7 @@ var changesIO = io.sockets.on('connection', function (client) {
 //Get the the update sequence of the dbase and start following changes
 couch.info(function(err, info){
   if (err){
-    console.log("ERROR getting update sequence when starting to monitor couch changes", err);
+    logger.log(logId, "ERROR getting update sequence when starting to monitor couch changes: " + JSON.stringify(err));
   } else {
     var since = info.update_seq;
     //start the changes stream using the latest sequence
@@ -271,7 +272,7 @@ couch.info(function(err, info){
           
           //if this user didn't do the update, then alert when history exists
           if (change.doc.username !== "UNASSIGNED" && change.doc.updater !== key && change.doc.history && change.doc.history.length > 0){
-            console.log("ALERT", key);
+            logger.log(logId, "Alert: ", JSON.stringify(chg));
             var alert = change.doc.history.shift();
             changesIO.emit('alerts:' + key, alert);
             var a = new Alert({
@@ -280,7 +281,7 @@ couch.info(function(err, info){
             });
             
             a.add(function(err, res){
-              if (err) console.log("ERROR adding alert", err);
+              if (err) logger.log(logId, "ERROR adding alert: " + err);
             });       
           }
         }

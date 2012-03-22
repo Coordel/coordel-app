@@ -28,6 +28,8 @@ define(
       
       showingEmpty: false,
       
+      showProjectLabel: false, 
+      
       taskList: [],
       
       observeHandler: null, 
@@ -38,6 +40,7 @@ define(
         var self = this;
         
         //console.debug("in postCreate in TaskList ", self.listFocus);
+        //console.log("showProjectLabel in TaskList", self.showProjectLabel);
         self.showList();
 
         /*
@@ -83,12 +86,14 @@ define(
             if (self.showChecklist){
               item = new TaskCheck({
                 focus: self.listFocus,
-                task: task
+                task: task,
+                showProjectLabel: self.showProjectLabel
               });
             } else {
               item = new Task({
                 focus: self.listFocus,
-                task: task
+                task: task,
+                showProjectLabel: self.showProjectLabel
               });
             }
           
@@ -127,7 +132,8 @@ define(
             //console.debug("adding to list", task, self.listFocus, removedFrom, insertedInto);
             self.addChild(new Task({
               focus: self.listFocus,
-              task: task
+              task: task,
+              showProjectLabel: self.showProjectLabel
             }));
             
             self.onInsert(task);

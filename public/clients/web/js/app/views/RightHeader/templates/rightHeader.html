@@ -17,9 +17,23 @@
 	   <div id="coordelUserPreferencesMenu" dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden">
 			<h3 class="menu-header">${coordel.options}</h3>
 			<ul class="menu-items">
-				<li dojoAttachPoint="optPreferences" id="optPreferences" class="option"><ins></ins><a>${coordel.preferences}...</a></li>
 				<li dojoAttachPoint="doNotDisturb" class="option"><ins></ins><a>${coordel.doNotDisturbOff}</a></li>
 				<li dojoAttachPoint="doNotDisturbOff" class="option"><ins></ins><a>${coordel.doNotDisturb}...</a></li>
+			</ul>
+			<hr>
+			<h3 class="menu-header">${coordel.profile}</h3>
+			<ul class="menu-items">
+				<li dojoAttachPoint="optPreferences" id="optPreferences" class="option"><ins></ins><a>${coordel.preferences}...</a></li>
+			</ul>
+			<hr>
+			<h3 class="menu-header">${coordel.support}</h3>
+			<ul class="menu-items">
+				<li dojoAttachPoint="supQuickStart" class="option"><ins></ins><a>${coordel.quickStart}...</a></li>
+				<li dojoAttachPoint="supTutorial" class="option"><ins></ins><a>${coordel.tutorial}...</a></li>
+				<li dojoAttachPoint="supEmail" class="option"><ins></ins><a>${coordel.emailIntegration}...</a></li>
+			</ul>
+			<hr>
+			<ul class="menu-items">
 				<li dojoAttachPoint="refresh" class="option"><ins></ins><a>${coordel.refresh}</a></li>
 				<li dojoAttachPoint="optLogout" id="optLogout" class="option"><ins></ins><a>${coordel.logout}</a></li>
 			</ul>

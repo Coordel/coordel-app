@@ -393,12 +393,12 @@ define([
         var cont = dijit.byId("projTasksMain"),
             self = this;
         
-        //console.debug("_addGroup tasks", header, tasks);
+        //console.debug("_addGroup tasks", header, tasks, self.focus );
         //this function add
         var group = new tlg({
           header: header,
           tasks: tasks,
-          focus: this.focus,
+          focus: self.focus,
           db: db
         });
         

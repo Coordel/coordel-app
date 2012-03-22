@@ -45,6 +45,8 @@
       }
     },
     
+    "logId": "dc5b9381-331b-4d0e-88a2-b598707260f1",
+    
     "sendgridOptions": {
       "host" : "smtp.sendgrid.net",           
       "port" : "587",

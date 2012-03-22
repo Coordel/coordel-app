@@ -20,6 +20,7 @@ define(["dojo",
         'app/views/QuickSearch/QuickSearch'], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry) {
   return {
     controllerName: "taskListControl",
+    showProjectLabel: false,
     isIntialized: false,
     focus: null,
     taskList: [], 
@@ -59,8 +60,6 @@ define(["dojo",
       //init also gets the name of the focus
       tlc.focus = focus;
       
-      
-      
 	    //console.debug("focus tasks", focus, tasks);
       tlc._showHeader(focus, isTurbo);
   
@@ -70,7 +69,7 @@ define(["dojo",
 	    
       //show the quick entry
       this._showQuickEntry();
-	    
+	    //console.log("focus in tasklist control",  txt[focus]);
 	    //set the title
       document.title = "Coordel > " + txt[focus];
 	    
@@ -437,6 +436,7 @@ define(["dojo",
         //this.taskList = db.projectStore.memory.query("invitedAgreed", {sort:this.sortOptions.sortKeys});
 
       } else if (focus === "deferred"){
+        this.showProjectLabel = true;
         this._cancelObserveHandlers();
         this.header.sortButton.sortDropdown.set("disabled", true);
         //we'll hide the the groups (project and timeline) and show a timeline of defer date
@@ -461,6 +461,7 @@ define(["dojo",
         //if this list should be grouped do it otherwise, just show a tasklist
         //timeline
         if (this.sortOptions.grpTimeline){
+          this.showProjectLabel = true;
           //add the timeline map groups
           //the groups will depend on the sort field (created, updated are in the past; deadline, defer date are in the future)
           //if (this.sortOptions.attribute === "deadline"){
@@ -481,6 +482,7 @@ define(["dojo",
             }  
           
         } else if (this.sortOptions.grpProject){
+          this.showProjectLabel = false;
           //console.debug("adding the project lists");
           //add groups for all projects (those with no tasks will be hidden)
           var projList = db.projects(true);
@@ -497,6 +499,7 @@ define(["dojo",
           //add the contact map groups
           
         } else {
+          this.showProjectLabel = true;
           
           //console.debug("focus", focus);
           
@@ -506,7 +509,8 @@ define(["dojo",
           var list = new tl({
   	        listFocus: focus,
   	        taskList: this.taskList,
-  	        showChecklist: this.sortOptions.showChecklist
+  	        showChecklist: this.sortOptions.showChecklist,
+  	        showProjectLabel: this.showProjectLabel
   	      });
           cont.addChild(list);
 
@@ -646,14 +650,15 @@ define(["dojo",
         focus: focus,
         projectStatus: status,
         db: db,
-        showChecklist: self.sortOptions.showChecklist
+        showChecklist: self.sortOptions.showChecklist,
+        showProjectLabel: this.showProjectLabel
       });
 
       cont.addChild(group);
 
       //need to watch and see if there is a change to this list
       var handler = group.tasks.observe(function(task, removedFrom, insertedInto){
-        console.debug("tasks observed in taskListControl", task, removedFrom, insertedInto, group.focus);
+        //console.debug("tasks observed in taskListControl", task, removedFrom, insertedInto, group.focus);
 
         //was this a delete
         if (removedFrom > -1){
@@ -712,7 +717,7 @@ define(["dojo",
       var self = this;
       self.isEmpty = true;
       var cont = dijit.byId("taskListMain");
-      console.debug("showing empty", this.emptyGroup);
+      //console.debug("showing empty", this.emptyGroup);
       //if (!this.emptyGroup){
       //  console.debug("empty group didin't exist yet", self);
         this.emptyGroup = new etl({
@@ -726,7 +731,7 @@ define(["dojo",
 
     hideEmptyTasks: function(){
       this.isEmpty = false;
-      console.debug("in hideEmptyTasks, taskListControl");
+      //console.debug("in hideEmptyTasks, taskListControl");
       if (this.emptyGroup){
         this.emptyGroup.destroy();
         this.emptyGroup = null;

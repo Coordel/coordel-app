@@ -28,6 +28,8 @@ define([
       
       db: null,
       
+      backLabel: "",
+      
       widgetsInTemplate: true,
       
       taskActionHandler: null,
@@ -36,7 +38,10 @@ define([
       
       postMixInProperties : function() {
         //set values for button labels and titles
-        this.coordel = coordel;
+        this.backLabel = this.focus;
+        if (this.focus === "project"){
+          this.backLabel = coordel.project;
+        }
       },
       
       showRightColumnHandler: false,

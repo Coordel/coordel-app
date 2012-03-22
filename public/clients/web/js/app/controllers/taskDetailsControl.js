@@ -144,19 +144,21 @@ define([
 
         var node = dijit.byId("taskMessageText");
         var message = node.get("value");
-
+        
+        node.reset();
         var stream = new sModel();
 
         stream.init(db);
 
         var send = stream.sendTaskMessage(message, self.task);
-
+        
+        /*
         dojo.when(send, function(res){
           console.log("sent message", res);
           node.reset();
           self.showStream();
         });
-
+        */
       });
       
       //handle click of the header buttons

@@ -127,6 +127,7 @@ define(
         if (this.showName){
           dojo.removeClass(this.name, "hidden");
         }
+        
         //purpose
         if (task.purpose && task.purpose !== ""){
           self.purpose.set("value", task.purpose);

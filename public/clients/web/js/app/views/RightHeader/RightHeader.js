@@ -55,7 +55,7 @@ define(
         });
         
         dojo.connect(this.optLogout, "onclick", this, function(){
-          dijit.byId(this.coordelUserPreferences).closeDropDown();
+          this.coordelUserPreferences.closeDropDown();
           dojo.publish("coordel/logout");
         });
         
@@ -65,6 +65,21 @@ define(
           dojo.forEach(dijit.findWidgets(this.alertsContainer), function(child){
             child.destroyRecursive();
           });
+        });
+        
+        dojo.connect(this.supQuickStart, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          dojo.publish("coordel/support", ["showQuickStart"]);
+        });
+        
+        dojo.connect(this.supTutorial, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          dojo.publish("coordel/support", ["showTutorial"]);
+        });
+        
+        dojo.connect(this.supEmail, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          dojo.publish("coordel/support", ["showEmailIntegration"]);
         });
         
         dojo.connect(this.showNotifications, "onClick", this, function(){

@@ -21,6 +21,10 @@ define(
       
       isHidden: false,
       
+      viewFocus: null,
+      
+      showProjectLabel: false,
+      
       widgetsInTemplate: true, 
       
       header: "",
@@ -41,7 +45,8 @@ define(
       },
       
       _showTasks: function(){
-        var self = this;
+        var self = this,
+            focus = this.focus;
         
         if (self.tasks.length > 0){
           //add the tasks
@@ -53,13 +58,15 @@ define(
               item = new TaskCheck({
                 focus: focus,
                 task: task,
-                projectStatus: self.projectStatus
+                projectStatus: self.projectStatus,
+                showProjectLabel: self.showProjectLabel
               });
             } else {
               item = new Task({
                 focus: focus,
                 task: task,
-                projectStatus: self.projectStatus
+                projectStatus: self.projectStatus,
+                showProjectLabel: self.showProjectLabel
               });
             }
         

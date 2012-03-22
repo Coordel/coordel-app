@@ -32,8 +32,10 @@ define(
         dojo.forEach(this.entries, function(e){
           var entry = new Entry({
             name: e.name,
+            project: e.project,
             entryId: e.id,
             type: e.type,
+            isBlocked: e.isBlocked,
             isTaskInvite: e.isTaskInvite,
             isProjectInvite: e.isProjectInvite,
             listFocus: this.listFocus
