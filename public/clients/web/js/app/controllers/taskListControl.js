@@ -44,8 +44,6 @@ define(["dojo",
       //console.debug("init taskListControl focus", focus);
       var tlc = this;
       
-     
-      
       db.streamStore.currentContext = "userStream";
       
       this._clearSubscribeHandlers();
@@ -66,9 +64,9 @@ define(["dojo",
       //show the task list
 	    tlc.showTaskList(focus);
 	    
-	    
       //show the quick entry
       this._showQuickEntry();
+      
 	    //console.log("focus in tasklist control",  txt[focus]);
 	    //set the title
       document.title = "Coordel > " + txt[focus];
@@ -403,7 +401,7 @@ define(["dojo",
       
       this.header.sortButton.sortDropdown.set("disabled", false);
       
-      //console.debug("focus in showTaskList", focus);
+      console.debug("focus in showTaskList", focus);
       
       if (focus === "project-invited"){
         this._cancelObserveHandlers();
@@ -501,17 +499,20 @@ define(["dojo",
         } else {
           this.showProjectLabel = true;
           
-          //console.debug("focus", focus);
+          console.debug("focus", focus);
           
           //query for the tasks in focus
           this.taskList = db.taskStore.memory.query({db: db, focus: focus, filters: []}, {sort:this.sortOptions.sortKeys});
-
+          
+          console.log("taskList", this.taskList);
+          
           var list = new tl({
   	        listFocus: focus,
   	        taskList: this.taskList,
   	        showChecklist: this.sortOptions.showChecklist,
   	        showProjectLabel: this.showProjectLabel
   	      });
+  	      
           cont.addChild(list);
 
   	      dojo.connect(list, "onInsert", this, function(task){
@@ -550,21 +551,29 @@ define(["dojo",
     
     _showQuickEntry: function(){
       //console.log("focus", this.focus);
-      if (this.focus === "private"){
-        console.debug("should show quickentry");
+      //if (this.focus === "private"){
+        //console.debug("should show quickentry");
        
-        var qe = new QuickEntry({
-          entryType: "task",
-          addTitle: txt.quickAddTask,
-          onSave: function(args){
-            var t = db.getTaskModel(args.entry, true);
-            t.add(args.entry);
-            qe.showEdit();
-          }
-        }).placeAt(dojo.byId("taskListQuickEntry"));
-        
-      }
+      var qe = new QuickEntry({
+        entryType: "task",
+        addTitle: txt.quickAddTask,
+        onSave: function(args){
+          var t = db.getTaskModel(args.entry, true);
+          t.add(args.entry);
+          qe.showEdit();
+        },
+        onShowEdit: function(){
+          //console.log("resizing onShowEdit");
+          dijit.byId("taskListBorderContainer").resize();
+        },
+        onHideEdit: function(){
+          //console.log("resizing onHideEdit");
+          dijit.byId("taskListBorderContainer").resize();
+        }
+      }).placeAt("taskListHeader");
       
+    //}
+    
       dijit.byId("mainCenterContainer").resize();
     },
         
@@ -663,7 +672,7 @@ define(["dojo",
         //was this a delete
         if (removedFrom > -1){
           group.removeChild(removedFrom);
-          console.debug("NOT REMOVING FROM GROUP BUT SUPPOSED TO remov" + focus, removedFrom, task);
+          //console.debug("NOT REMOVING FROM GROUP BUT SUPPOSED TO remov" + focus, removedFrom, task);
         }
 
         if (insertedInto > -1){
@@ -720,12 +729,19 @@ define(["dojo",
       //console.debug("showing empty", this.emptyGroup);
       //if (!this.emptyGroup){
       //  console.debug("empty group didin't exist yet", self);
+      console.log("focus in showEmptyTasks", self.focus);
+      if (self.focus === "project-invited" || self.focus === "invite"){
+        //we don't show empty because the option goes away
+        dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+      } else {
         this.emptyGroup = new etl({
           emptyClass: self.focus, 
           emptyTitle: txt.empty[self.focus+"Title"], 
           emptyDescription: txt.empty[self.focus+"Text"]
         });
         cont.addChild(this.emptyGroup);
+      }
+        
       //} 
     },
 

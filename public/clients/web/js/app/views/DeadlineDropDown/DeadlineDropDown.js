@@ -84,8 +84,6 @@ define(
           this.dropDown.time.reset();
         });
         
-        
-        
       },
       
       setData: function(deadline){
@@ -143,7 +141,7 @@ define(
   	    
   	    dojo.style(this.dropDown.domNode, boxStyle);
   	    
-  	    this.dropDown.date.focus();
+  	    this.dropDown.date.openDropDown();
 
   	  },
       

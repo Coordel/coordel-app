@@ -30,7 +30,10 @@
 .task-form .dijitPlaceHolder, .project-form .dijitPlaceHolder, .c-placeholder{
 	font-style: normal;
 	font-size: 10px;
-	color: #a9a9a9 !important;
+	color: darkGray !important;
+	background: transparent;
+	padding: 0;
+	border: none;
 }
 
 .task-name .c-placeholder {
@@ -90,6 +93,7 @@
 
 .quick-entry .task-form li.field .field-inner{
   padding: 0 0 0 4px;
+  height: 21px;
 }
 
 

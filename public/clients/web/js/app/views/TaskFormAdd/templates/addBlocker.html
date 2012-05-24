@@ -5,6 +5,23 @@
 				<span class="name">${coordel.taskFormAdd.blockers.instructions}</span>
 			</div>
 			<div style="max-height: 150px; padding: 0" dojoType="app.widgets.ContainerPane" dojoAttachPoint="projectTasksContainer"></div>
+			<div dojoAttachPoint="durationContainer" style="margin-top: 8px; border-top: 1px solid #eaeaea;padding-top: 8px" class="hidden">
+				<div class="instructions c-padding"><span style="font-weight:bold">${coordel.duration}: </span>${coordel.taskFormAdd.blockers.durationInstructions}
+				</div> 
+				<div class="c-padding">
+					<input dojoAttachPoint="durNumber" value="0" dojoType="dijit.form.TextBox" style="width: 30px"/>
+					<span dojoAttachPoint="durationChoices">
+						<label class="instructions">${coordel.mins}</label>
+						<input checked="checked" value="m" dojoType="dijit.form.RadioButton" name="blockedDuration"/>
+						<label class="instructions">${coordel.hrs}</label>
+						<input value="h" dojoType="dijit.form.RadioButton" name="blockedDuration"/>
+						<label value="d" class="instructions">${coordel.days}</label>
+						<input dojoType="dijit.form.RadioButton" name="blockedDuration"/>
+						<label class="instructions">${coordel.weeks}</label>
+						<input value="w" dojoType="dijit.form.RadioButton" name="blockedDuration"/>
+					</span>
+				</div>
+			</div>
 		</div>
 		<div dojoAttachPoint="saveFieldValue" class="footer-button c-text-center ui-corner-bottom">${coordel.save}</div>
 	</div>

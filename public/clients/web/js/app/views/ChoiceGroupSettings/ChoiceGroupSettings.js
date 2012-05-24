@@ -3,9 +3,10 @@ define(
     "dijit/_Widget",
     "dijit/_Templated",
     "text!./templates/choiceGroupSettings.html",
-    "app/views/ChoiceSettings/ChoiceSettings"
+    "app/views/ChoiceSettings/ChoiceSettings",
+    "app/models/CoordelStore"
     ], 
-  function(dojo,coordel, w, t, html, ChoiceSettings) {
+  function(dojo,coordel, w, t, html, ChoiceSettings,db) {
   
   dojo.declare(
     "app.widgets.ChoiceGroupSettings", 
@@ -72,17 +73,15 @@ define(
       },
       
       createChoice: function(label){
-        var choiceId = this._getChoiceId(),
-            self = this;
-        choiceId.then(function(resp){
-          var c = {
-            id: resp.uuids[0],
-            value: false,
-            label: label
-          };
-          self.addChoice(c);
-          self.field.children.push(c);
-        });
+        var self = this;
+        var c = {
+          id: db.uuid(),
+          value: false,
+          label: label
+        };
+        self.addChoice(c);
+        self.field.children.push(c);
+   
       },
       
       addChoice: function(choice){
@@ -144,20 +143,6 @@ define(
           }
           
         });
-      },
-      
-      _getChoiceId: function(){
-       
-        var def = dojo.xhrGet ({
-          url: "/_uuids",
-          content: {count: 1},
-          handleAs: "json",
-          sync: true,
-          error: function(resp){
-            console.log("Failed to retrieve UUID",resp);
-          }
-        });
-        return def;
       }
       
   });

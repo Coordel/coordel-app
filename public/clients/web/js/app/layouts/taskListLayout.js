@@ -49,6 +49,12 @@ define([
         
       }).placeAt(list);
       
+      var listHead = new pane({
+        region: "top",
+        id: "taskListHeader",
+        style: "padding: 0;background: #eaeaea;"
+      }).placeAt(listCont);
+      
       //main workspace
       var listMain = new pane({
         region: "center",

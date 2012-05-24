@@ -54,7 +54,7 @@ define(['dojo',
 	        def = db.init();
 	    
 	    def.then(function(res){
-	      console.log("DATABASE LOADED: ", res);
+	      console.log("DATABASE LOADED: ", res, db.appStore.username);
 	      app.username = db.appStore.username;
 	      app.showApp();
 	      var alerts = db.getAlerts(app.username);
@@ -78,7 +78,7 @@ define(['dojo',
 	  },
 	  
 	  playSound: function(sound){
-	    console.debug("PLAYING SOUND", sound);
+	    //console.debug("PLAYING SOUND", sound);
 	    switch (sound){
 	      case "ding":
 	      this.dingSound.play();
@@ -101,7 +101,7 @@ define(['dojo',
 	    
 	    var socket = io.connect(window.location.host);
 	    
-	    //console.log("showing app", this.username);
+	    console.log("showing app", this.username);
 		  
 			//register for socketio events
 			socket.on("changes:" + this.username.toString(), function (change) {
@@ -159,6 +159,7 @@ define(['dojo',
       //init the primary nav controller 
       app.navController = pNavControl.init(ac.username);
       
+      console.log("after primary nav control init");
       
 	  },
 	  
@@ -283,7 +284,7 @@ define(['dojo',
 	        d,
 	        proj;
 	        
-	    console.log("project action args", args);
+	    //console.log("project action args", args);
 	    
 	    if (args.action === "reuse"){
 	      //need to show the project form with blueprint titles
@@ -375,19 +376,19 @@ define(['dojo',
 	    switch (args){
 	      case "showQuickStart":
 	      title = "Welcome to Coordel!";
-	      console.log("show quick start");
+	      //console.log("show quick start");
 	      break;
 	     
 	      case "showTutorial":
 	      title = "Tutorial";
 	      template = "support/tutorial.html";
-	      console.log("show tutorial");
+	      //console.log("show tutorial");
 	      break;
 	      
 	      case "showEmailIntegration":
 	      title = "Email Integration";
 	      template = "support/emailIntegration.html";
-	      console.log("show email integration");
+	      //console.log("show email integration");
 	      break;
 	    }
 	    
@@ -538,7 +539,7 @@ define(['dojo',
   					break;
   				case "template":
   				  db.appStore.templateStore.notify(chg, chg._id);
-  				  console.log("templateStore notified", chg);
+  				  //console.log("templateStore notified", chg);
   				  break;
   				case "project":
   				
@@ -580,8 +581,8 @@ define(['dojo',
   					  
   					} else {
   					  //this is an update
-  					  console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
-  					  db.projectStore.store.notify(chg, chg._id);
+  					  //console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
+  					  //db.projectStore.store.notify(chg, chg._id);
   					}
   					
   					break;
@@ -596,8 +597,8 @@ define(['dojo',
   				    db.roleStore.store.notify(null, chg._id);
   				  } else {
   				    //this was an update
-  				    console.debug("Notify Role UPDATE");
-  					  db.roleStore.store.notify(chg, chg._id);
+  				    //console.debug("Notify Role UPDATE");
+  					  //db.roleStore.store.notify(chg, chg._id);
   				  }
   				  
   				  break;
@@ -630,8 +631,9 @@ define(['dojo',
   				      
   				    } else {
   				      //this is an update
-  				      db.taskStore.store.notify(chg, chg._id);
-  				      console.log("Notify Task UPDATE", chg);
+  				      //db.taskStore.store.notify(chg, chg._id);
+  				  
+  				      //console.log("Notify Task UPDATE", chg);
   				    }
   				    
   				  }
@@ -660,8 +662,8 @@ define(['dojo',
   				      
   				    } else {
   				      //this is an update
-  				      console.debug("Notify Project Task UPDATE", chg);
-  				      db.projectStore.taskStore.notify(chg, chg._id);
+  				      //console.debug("Notify Project Task UPDATE", chg);
+  				      //db.projectStore.taskStore.notify(chg, chg._id);
   				    }
   				  } else {
   				    console.log("Task Project Not Current", chg);
@@ -696,7 +698,7 @@ define(['dojo',
   				      db.streamStore.taskStore.notify(chg, chg._id);
   				    }
   				    
-  				    db.streamStore.store.notify(chg, chg._id);
+  				    //db.streamStore.store.notify(chg, chg._id);
   				    //I sent it, it's an update
   				    //db.streamStore.store.notify(chg, chg._id);
   				  }

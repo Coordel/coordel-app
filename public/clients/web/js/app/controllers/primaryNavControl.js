@@ -125,7 +125,7 @@ define(['dojo',
   
     setPrimaryController: function(args){
     
-      //console.debug("in primaryNavControl.setPrimaryView", this.currentArgs, args);
+      console.debug("in primaryNavControl.setPrimaryView", this.currentArgs, args);
   
       //detect what was sent and then create a new controller and init() it.
       var focus = "current",
@@ -149,7 +149,7 @@ define(['dojo',
     
       this.navFocus = focus;
     
-      //console.debug("setting primary controller", focus, name, task, id);
+      console.debug("setting primary controller", focus, name, task, id);
     
       if (name === "project"){
       
@@ -214,7 +214,7 @@ define(['dojo',
         //console.debug("task list controller is", c, focus );
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);
-     
+        console.debug("after taskListControl init");
       }
   
     },

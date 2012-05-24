@@ -21,13 +21,13 @@
   },
   "config" : {
     "redisOptions":{
-      "host": "viperfish.redistogo.com",
-      "port": 10130,
+      "host": "barreleye.redistogo.com",
+      "port": 9351,
       "db": "coordel",
       "expressSessionPrefix": "sessions",
-      "auth": "313b4da5e2267e3faa2db3b0bc9bcb0b"
+      "auth": "4dbd78fa8e5679b37d9df21324c0c85e"
     },
-    
+
     "couchOptions":{
       "host": "coordel.iriscouch.com",
       "port": 5984,

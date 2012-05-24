@@ -121,6 +121,17 @@ body.loading {
 .register-form .reg-field{
   padding-bottom: .5em;
 }
+
+.warning {
+  color: #ffffff;
+  background: #DA291C;
+  padding:1em;
+  border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	font-size: 14px;
+}
+
 .login .links{
 	text-align:center; 
 	padding:2em;

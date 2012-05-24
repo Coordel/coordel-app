@@ -40,7 +40,7 @@ module.exports = function(app, validate){
     couch.save(req.body, function(err, putRes){
       //console.log("PUT RESPONSE", putRes, err);
       if (err){
-        logger.log(logId, "Error putting to couch: " + JSON.stringify(err) + " Doc: " + JSON.stringify(req.body));
+        console.log(logId, "Error putting to couch: " + JSON.stringify(err) + " Doc: " + JSON.stringify(req.body));
         res.json({error: err});
       } else {
         res.json(putRes);
@@ -59,7 +59,7 @@ module.exports = function(app, validate){
     
     couch.get(req.params.id, function(err, doc){
       if (err){
-        logger.log(logId, "Error getting files: " + JSON.stringify(err));
+        console.log(logId, "Error getting files: " + JSON.stringify(err));
         res.json({error: "ERROR getting files: " + err});
       } else {
         res.json(doc);
@@ -88,7 +88,7 @@ module.exports = function(app, validate){
             contentType: type
         }, function(err, attachRes){
           if (err) {
-            logger.log(logId, "Error saving file" + JSON.stringify(err));
+            console.log(logId, "Error saving file" + JSON.stringify(err));
             res.json({error: err});
           } else {
             //console.log("RESPONSE", attachRes);
@@ -107,7 +107,7 @@ module.exports = function(app, validate){
      
      couch.remove(id, rev, function(err, docRes){
        if (err){
-         logger.log(logId, "Error removing doc: " + JSON.stringify(err));
+         console.log(logId, "Error removing doc: " + JSON.stringify(err));
          res.json({error: err});
        } else {
          res.json(docRes);
@@ -128,7 +128,7 @@ module.exports = function(app, validate){
     
     nanoCouch.attachment.destroy(id, name, rev, function(e,b,h){
       if (e){
-        logger.log(logId, "ERROR deleting file: " + JSON.stringify(e));
+        console.log(logId, "ERROR deleting file: " + JSON.stringify(e));
       } else {
         //console.log("RESPONSE", b);
         res.json(b);
@@ -165,7 +165,7 @@ module.exports = function(app, validate){
     //console.log('GET ID', req.params.id);
     couch.get(req.params.id, function(err, obj){
       if (err){
-        logger.log(logId, "ERROR getting " + req.params.id + ": " + err.error);
+        console.log(logId, "ERROR getting " + req.params.id + ": " + err.error);
       } else {
         res.json(obj);
       }

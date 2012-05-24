@@ -12,7 +12,7 @@ define("app/models/RoleModel",
       db: null,
       
       add: function(role){
-        console.debug("adding ROLE", role);
+        //console.debug("adding ROLE", role);
         this.role = role;
         this.role.docType = "role";
         var username = this.db.username();
@@ -96,7 +96,7 @@ define("app/models/RoleModel",
       				//if the responsibiity doesn't exist
       				if (!hasResp){
       					//add a new responsibility to the role (username, task, status)
-      					console.debug("adding a new responsibility to role " + r._id);
+      					//console.debug("adding a new responsibility to role " + r._id);
       					if (!r.responsibilities){
       					  r.responsibilities = [];
       					}
@@ -109,10 +109,10 @@ define("app/models/RoleModel",
       				}
 
       				if (r.isNew){
-      				  console.log("Adding role", r);
+      				  //console.log("Adding role", r);
       				  self.add(r);
       				} else {
-      				  console.log("Updating role", r);
+      				  //console.log("Updating role", r);
       				  self.update(r);
       				}
 			        

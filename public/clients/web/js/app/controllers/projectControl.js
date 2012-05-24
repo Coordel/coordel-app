@@ -17,7 +17,8 @@ define([
   "app/models/ProjectStatus",
   "app/views/ProjectForm/ProjectForm",
   "app/views/ConfirmDialog/ConfirmDialog",
-  "app/views/ProjectDeliverable/ProjectDeliverable"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable) {
+  "app/views/ProjectDeliverable/ProjectDeliverable",
+  "app/views/QuickEntry/QuickEntry"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable, QuickEntry) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -41,6 +42,8 @@ define([
         db.focus = this.focus;
         this.project = project;
         var self = this;
+        
+        
         
         if (this.showRightColumnHandler){
           dojo.unsubscribe(this.showRightColumnHandler);
@@ -66,6 +69,7 @@ define([
         
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
           layout.showLayout(project);
+          self._showQuickEntry();
     	    var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
           //check if we should show the right column
     	    self.setRightColumn(showColumn);
@@ -257,6 +261,34 @@ define([
           
         }
       
+      },
+      
+      _showQuickEntry: function(){
+        var self = this;
+        
+        var qe = new QuickEntry({
+          entryType: "task",
+          addTitle: coordel.quickAddProjectTask,
+          onSave: function(args){
+            
+            args.entry.project = self.project._id;
+            var t = db.getTaskModel(args.entry, true);
+            t.add(args.entry);
+            
+            //dijit.byId("projTasksBorderContainer").resize();
+          },
+          onShowEdit: function(){
+            //console.log("resizing onShowEdit");
+            dijit.byId("projTasksBorderContainer").resize();
+          },
+          onHideEdit: function(){
+            //console.log("resizing onHideEdit");
+            dijit.byId("projTasksBorderContainer").resize();
+          }
+        }).placeAt("projTasksListHeader");
+
+
+        dijit.byId("mainCenterContainer").resize();
       },
       
       showTasks: function(){

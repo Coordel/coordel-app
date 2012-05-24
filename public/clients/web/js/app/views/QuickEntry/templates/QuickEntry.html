@@ -5,18 +5,16 @@
 			<ul class="task-form">
 				<li dojoAttachPoint="nameAround" class="field task-name">
 					<div dojoAttachPoint="taskNameInnerNode" class="c-margin-t">
-						<div dojoAttachPoint="taskName" placeHolder="${coordel.taskForm.phName}"  dojoType="dijit.form.Textarea" class="taskFormName" tabindex="0"></div>
+						<div dojoAttachPoint="taskName" placeHolder="${coordel.taskForm.phName}"  dojoType="dijit.form.TextBox" class="taskFormName" tabindex="0"></div>
 					</div>
 				</li>
-				
 				<li dojoAttachPoint="purposeAround" class="field purpose">
 					<div class="field-inner">
 						<div dojoAttachPoint="taskPurpose" dojoType="dijit.form.Textarea" placeHolder="${coordel.taskForm.phPurpose}" value="${coordel.taskForm.phPurpose}" class="c-placeholder" tabindex="0"></div>
 					</div>
 				</li>
-				
 				<li dojoAttachPoint="deadlineAround" class="field task-deadline">
-					<div class="field-inner">
+					<div class="field-inner" style="max-width: 300px">
 						<div dojoAttachPoint="taskFormDeadline" dojoType="dijit.form.DateTextBox" hasDownArrow="false" constraints="{formatLength:'medium'}" placeHolder="${coordel.taskForm.phDeadline}" layoutAlign="bottom" taskFormField="deadline"></div>
 					</div>
 				</li>

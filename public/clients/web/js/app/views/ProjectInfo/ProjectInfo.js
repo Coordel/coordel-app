@@ -138,6 +138,7 @@ define(
       
       showAttachments: function(project){
         var files = project._attachments;
+        dojo.empty(this.attachments);
         //console.debug("showing attachments", files);
     		for (var key in files){
     		  var file = dojo.create("a", {

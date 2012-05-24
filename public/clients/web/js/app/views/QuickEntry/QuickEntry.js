@@ -153,6 +153,7 @@ define(
           entryType: "task",
           entry: task
         });
+        
         var self = this;
         
         dojo.addClass(this.taskPurpose.domNode, "c-placeholder");
@@ -237,8 +238,13 @@ define(
         
       },
       
+      onShowEdit: function(){
+        
+      },
+      
       showEdit: function(){
         if (!this.isEditing){
+          
           var type = this.entryType;
           this.isEditing = true;
           dojo.toggleClass(this.quickEntry, "inactive");
@@ -256,9 +262,13 @@ define(
               dojo.toggleClass(this.taskEnter, "hidden");
               break;
           }
+          this.onShowEdit();
         }
       },
     
+      onHideEdit: function(){
+        
+      },
       
       hideEdit: function(){
         if (this.isEditing){
@@ -279,6 +289,7 @@ define(
               dojo.toggleClass(this.taskEnter, "hidden");
               break;
           }
+          this.onHideEdit();
         }
       },
       

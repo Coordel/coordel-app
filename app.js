@@ -55,7 +55,7 @@ everyauth
       if (errors.length) return errors;
       var promise = this.Promise();
       User.get(login, function(err, user){
-        logger.log(logId, "User Login: " + user.email);
+        console.log(logId, "User Login: " + user.email);
         if (err) promise.fulfill([err]);
         if (user.password !== password){
           promise.fulfill(['Login failed: invalid username or password']);
@@ -92,7 +92,7 @@ everyauth
       var promise = this.Promise();
       newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){
-        logger.log(logId, "Registered User: " + JSON.stringify(user));
+        console.log(logId, "Registered User: " + JSON.stringify(user));
         if (err) return promise.fulfill([err]);
         return promise.fulfill(user);
       });
@@ -162,14 +162,17 @@ var options = {
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'html');
- 
+  app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
   app.use(express.cookieParser('an0thers3cr3tpas$w0rd'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  
   app.use(express.session({ 
     secret: 'c00rd3lsecretpa$$word',
     store: new RedisStore(options)
   }));
+  
+  //app.use(express.session({ secret: 'c00rd3lsecretpa$$word' }));
   app.use(everyauth.middleware());
   app.use(app.router);
   app.use(express["static"](__dirname + '/public'));
@@ -256,7 +259,7 @@ var changesIO = io.sockets.on('connection', function (client) {
 //Get the the update sequence of the dbase and start following changes
 couch.info(function(err, info){
   if (err){
-    logger.log(logId, "ERROR getting update sequence when starting to monitor couch changes: " + JSON.stringify(err));
+    console.log(logId, "ERROR getting update sequence when starting to monitor couch changes: " + JSON.stringify(err));
   } else {
     var since = info.update_seq;
     //start the changes stream using the latest sequence
@@ -272,7 +275,7 @@ couch.info(function(err, info){
           
           //if this user didn't do the update, then alert when history exists
           if (change.doc.username !== "UNASSIGNED" && change.doc.updater !== key && change.doc.history && change.doc.history.length > 0){
-            logger.log(logId, "Alert: ", JSON.stringify(chg));
+            console.log(logId, "Alert: ", JSON.stringify(change));
             var alert = change.doc.history.shift();
             changesIO.emit('alerts:' + key, alert);
             var a = new Alert({
@@ -281,7 +284,7 @@ couch.info(function(err, info){
             });
             
             a.add(function(err, res){
-              if (err) logger.log(logId, "ERROR adding alert: " + err);
+              if (err) console.log(logId, "ERROR adding alert: " + err);
             });       
           }
         }

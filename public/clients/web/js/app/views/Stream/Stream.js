@@ -54,7 +54,7 @@ define(
             
         
             
-        console.debug("showStream stream.length:",  stream.length);
+        //console.debug("showStream stream.length:",  stream.length);
               
         self.showProject = (db.streamStore.currentContext === "userStream" || db.streamStore.currentContext === "userMessages");
         
@@ -113,7 +113,7 @@ define(
           self.addChild(entry);
         }
         */
-        console.debug("hasEntries", hasEntries);
+        //console.debug("hasEntries", hasEntries);
         if (hasEntries){
           self.addChild(entry);
         }
@@ -169,7 +169,7 @@ define(
   		  this.destroyDescendants();
   		  this.inherited(arguments);
   		  this.stream = [];
-  		  console.debug("stream destroyed");
+  		  //console.debug("stream destroyed");
   		},
       
       baseClass: "stream"

@@ -8,6 +8,7 @@ define({
 	  alerts: "Alerts",
 	  noDeadline: "No Deadline",
 	  quickAddTask: "Quick Add Task",
+	  quickAddProjectTask: "Quick Add Coord Task",
 	  refresh: "Refresh",
 	  date: "Date",
 	  time: "Time",
@@ -96,6 +97,11 @@ define({
 	  emailIntegration: "Email Integration",
 	  logout: "Logout",
 	  deadlineCalendar: "Deadline Calendar",
+	  duration: "Duration",
+	  mins: "mins",
+	  hrs: "hrs",
+	  days: "days",
+	  weeks: "weeks",
 		status: {
 		  label: "Status",
 		  INVITE: "Invited",
@@ -464,7 +470,7 @@ define({
 		  "deliverablesTitle": "Add Deliverables to this Task",
 		  "deliverablesText": "Deliverables are what gets done by this Task. Don't worry if you don't know. The Person doing the Task probably does and can add it before accepting the Task.<br><br>Start typing to choose or press down arrow to see all possible Deliverables.",
 		  "blockersTitle": "Select Tasks that Block this one",
-		  "blockersText": "Blockers are Tasks that have Deliverables that must be done before starting this one. Tasks from one Coord can block Tasks in another Coord.<br><br>To set a Blocker, start typing to find the Coord and choose it, then tick the box nexts to the blocking Task.<br><br>Press down arrow to see all Coords.",
+		  "blockersText": "Blockers are Tasks that have Deliverables that must be done before starting this one. Tasks from one Coord can block Tasks in another Coord.<br><br>To set a Blocker, start typing to choose the Coord and tick the box next to the blocking Tasks.<br><br>Press down arrow to see all Coords.",
 		  "attachmentsTitle": "Add an Attachment",
 		  "attachmentsText": "An Attachment is something needed to get this Task done. It might be a Template, a report, or some other file."
 		},
@@ -506,7 +512,8 @@ define({
 		    name: "Name"
 		  },
 		  "blockers": {
-		    "instructions": "Select Blocking Tasks"
+		    "instructions": "Select Blocking Tasks",
+		    "durationInstructions": "To calculate blocker deadlines, indicate the time required to complete this Task."
 		  }
 		},
 		"deliverableSettings": {

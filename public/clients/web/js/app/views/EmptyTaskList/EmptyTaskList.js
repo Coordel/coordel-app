@@ -22,6 +22,18 @@ define(
       
       observeHandler: null,
       
+      postMixInProperties: function(){
+        this.inherited(arguments);
+        //in case null values are passed in, make sure there is a string passed so the 
+        //template doesn't bomb
+        if (!this.emptyTitle){
+          this.emptyTitle = "";
+        }
+        if (!this.emptyDescription){
+          this.emptyDescription = "";
+        }
+      },
+      
       postCreate: function(){
         this.inherited(arguments);
         

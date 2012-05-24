@@ -11,14 +11,20 @@
 to a list (i.e. private tasks, checklist, choices, etc)*/
 .c-quick-entry{ 
   color: #66727F;
-  
   border-bottom: 1px solid #a3aab1;
   border-top: 1px solid #a3aab1;
-
   white-space: nowrap;
   font-size: .9em;
   font-family: helvetica;
   line-height: 2em; 
+}
+
+.c-quick-entry .dijitTextBox .dijitInputInner {
+  color: #000;
+}
+
+#taskListHeader .c-quick-entry, #projTasksListHeader .c-quick-entry {
+  line-height: 1.8em;
 }
 
 .c-quick-entry.inactive{

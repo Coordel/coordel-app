@@ -209,7 +209,6 @@ define(
           }
         });
         
-        
         dojo.connect(this.taskFormDeliverables, "closeDropDown", this, function(){
           //when this closes, need to reset all the pills
           //console.debug("resetting the pills");
@@ -356,12 +355,25 @@ define(
             
             //get the checkedmultiselect
             var cp = this.taskFormBlockers.altDropDown.projectTasksContainer;
+            var dur = this.taskFormBlockers.altDropDown.durationContainer;
+            var durNumber = this.taskFormBlockers.altDropDown.durNumber;
+            var durChoices = this.taskFormBlockers.altDropDown.durationChoices;
             var def = db.projectStore.loadProject(project);
             
             def.then(function(){
-              var all = store.taskMemory.query({db: db});
-              //console.debug("all tasks sorted alphabetically", all);
+              var all = store.taskMemory.query({db: db}),
+                  showDuration = false; //track whether we should show duration or not
               
+              //console.log("there is a duration", current.duration);
+              if (current.duration){
+                //console.log("durNumber, durChoices", durNumber, durChoices);
+                durNumber.set("value", current.duration.number);
+                dojo.forEach(dijit.findWidgets(durChoices), function(choice){
+                  if (choice.value === current.duration.unit){
+                    choice.set("checked", true);
+                  }
+                });
+              }
               
               dojo.forEach(all, function(task){
                 //console.debug("here's the task", task);
@@ -375,6 +387,7 @@ define(
                       dojo.forEach(current.coordinates, function(id){
                         if (task._id === id){
                           isChecked = true;
+                          showDuration = true;
                         }
                       });
                     }
@@ -384,6 +397,9 @@ define(
                   onChange: function(isChecked){
                     //if it's checked then add the id to this.task's coordinates. if not, remove it
                     if (isChecked){
+                      //need to show the duration container
+                      dojo.removeClass(dur, "hidden");
+                      
                       //make sure there is a coordinates entry
                       //console.debug("it was selected, add the blocker");
                       if (!current.coordinates){
@@ -410,13 +426,27 @@ define(
                         }
                       });
                     }
+                    if (!current.coordinates || (current.coordinates && current.coordinates.length === 0)){
+                      if (current.duration){
+                        //console.log("resetting current duration");
+                        durNumber.set("value", 0);
+                        dojo.forEach(dijit.findWidgets(durChoices), function(choice){
+                          if (choice.value === "m"){
+                            choice.set("checked", true);
+                          }
+                        });
+                        current.duration = false;
+                      }
+                      //console.log("deleted current duration", current);
+                      dojo.addClass(dur, "hidden");
+                    }
                   }
                 });
                 
                 //disable the checkbox if this task is in the list
-                console.log("testing if current = task", current._id, task._id);
+                //console.log("testing if current = task", current._id, task._id);
                 if (current._id === task._id){
-                  console.log("should disable", task._id);
+                  //console.log("should disable", task._id);
                   check.checkbox.set("disabled", true);
                 }
                 
@@ -430,7 +460,12 @@ define(
                   });
                   
                 }
+                
                 cp.addChild(check);
+                
+                //if there were ticked checkboxes, then show the duration
+                if (showDuration) dojo.removeClass(dur, "hidden");
+  
               });
            
             });
@@ -542,12 +577,14 @@ define(
         });
         
         //blockers
-        dojo.connect(this.taskFormBlockers, "onAddOption", this, function(){
-          //console.debug("adding blockers");
+        dojo.connect(this.taskFormBlockers, "onAddOption", this, function(duration){
+          console.debug("adding blockers", duration);
           
+          self.task.duration = duration;
+          
+      
           self.taskFormBlockers.reset();
           self.taskFormBlockers.focus();
-          
           self._setPills("blockers");
         });
         

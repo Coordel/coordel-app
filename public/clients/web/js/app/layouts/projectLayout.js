@@ -38,6 +38,12 @@ define([
         style: "width:100%;height:100%;padding:0",
         gutters: false
        }).placeAt("mainCenterContainer");
+       
+      var listBc = new bc({
+         region: "center",
+         id: "projTasksBorderContainer",
+         style: "padding: 0; background: transparent; border:none;"
+       }).placeAt(details);
 
       //left taskList and results
       var projTasksCont = new bc({
@@ -45,7 +51,13 @@ define([
         id: "projTasksContainer",
         style:"padding: 0"
 
-      }).placeAt(details);
+      }).placeAt(listBc);
+      
+      var listHead = new pane({
+        region: "top",
+        id: "projTasksListHeader",
+        style: "padding: 0;background: #eaeaea;"
+      }).placeAt(listBc);
 
       //main space for tasks and task results
       //at the top, this will hold undone tasks, below, it will show the results of done tasks

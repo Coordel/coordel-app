@@ -119,7 +119,17 @@ dojo.declare(
     },
     
     _addBlocker: function(){
-      this.onAddOption();
+      var duration = {};
+      
+      duration.number = this.altDropDown.durNumber.get("value");
+      
+      dojo.forEach(dijit.findWidgets(this.altDropDown.durationChoices), function(choice){
+        if (choice.checked){
+          duration.unit = choice.value;
+        }
+      });
+      
+      this.onAddOption(duration);
     },
     
     _addContact: function(){
@@ -286,6 +296,7 @@ dojo.declare(
 		
 	
 		onFocus: function(){
+		  //console.log("onFocus", this._status);
 		  var incoming = this._status;
 		  if (this._status === "closed" || this._status === "saved"){
 		    this._status = "select";

@@ -63,6 +63,7 @@ define([
         }));
         
         this.connections.push(dojo.connect(this.taskFormCancel, "onClick", this, function(){
+          this.taskForm._resetDropDowns();
           this.editTask.closeDropDown();
         }));
         
