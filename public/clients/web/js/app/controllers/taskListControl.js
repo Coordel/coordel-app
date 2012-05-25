@@ -564,11 +564,12 @@ define(["dojo",
         },
         onShowEdit: function(){
           //console.log("resizing onShowEdit");
-          dijit.byId("taskListBorderContainer").resize();
+          dijit.byId("taskListContainer").resize();
+           
         },
         onHideEdit: function(){
           //console.log("resizing onHideEdit");
-          dijit.byId("taskListBorderContainer").resize();
+          dijit.byId("taskListContainer").resize();
         }
       }).placeAt("taskListHeader");
       

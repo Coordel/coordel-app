@@ -242,7 +242,7 @@ define({
 		  reuseDeliverables: "Blueprint Deliverables",
 		  "raiseIssue": "Raise Issue",
 		  "clearIssue": "Clear Issue",
-		  "cancel": "Cancel",
+		  "cancel": "Cancel Task",
 		  "pause": "Pause",
 		  "resume": "Resume",
 		  "accept": "Accept",
