@@ -43,8 +43,6 @@ define([
         this.project = project;
         var self = this;
         
-        
-        
         if (this.showRightColumnHandler){
           dojo.unsubscribe(this.showRightColumnHandler);
           this.showRightColumnHandler = null;
@@ -60,12 +58,23 @@ define([
           this.streamNotifyHandler = null;
         }
         
+        if (this.projectNotifyHandler){
+          dojo.unsubscribe(this.projectNotifyHandler);
+          this.projectNotifyHandler = null;
+        }
+        
+        if (this.taskNotifyHandler){
+          dojo.unsubscribe(this.taskNotifyHandler);
+          this.taskNotifyHandler = null;
+        }
+        
         if (this.connections.length > 0){
           dojo.forEach(this.connections, function(c){
             dojo.disconnect(c);
           });
           this.connections = [];
         }
+     
         
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
           layout.showLayout(project);
@@ -91,7 +100,6 @@ define([
           }));
 
           self.connections.push(dojo.connect(dojo.byId("projStreamTab"), "onclick", this, function(evt){
-
             //console.debug("clicked stream", evt);
             if (dojo.hasClass(evt.target, "inactive")){
               self.showStream();
@@ -100,7 +108,7 @@ define([
           
           //handle click of sendProjMessageButton
           self.connections.push(dojo.connect(dijit.byId("projSendMessageButton"), "onClick", this, function(){
-            //console.log("project send message button clicked");
+            console.log("project send message button clicked");
 
             var node = dijit.byId("projMessageText");
             var message = node.get("value");
@@ -126,10 +134,16 @@ define([
         
         this.streamNotifyHandler = dojo.subscribe("coordel/streamNotify", this, "handleStreamNotify");
         
+        this.projectNotifyHandler = dojo.subscribe("coordel/projectNotify", this, "handleProjectNotify");
+        
+        //this.taskNotifyHandler = dojo.subscribe("coordel/taskNotify", this, "handleTaskNotify");
+        
       },
       
       _loadProject: function(){
         var self = this;
+        
+        console.log("in _loadProject", self.project._id);
         var def = new dojo.Deferred();
         var defList = new dojo.DeferredList([
            db.projectStore.loadProject(self.project._id),
@@ -143,11 +157,11 @@ define([
       
       setRightColumn: function(showColumn){
       
-  		  //console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
+  		  console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
+  		  
+  		  
 
         var col = dijit.byId("rightDetailsLayout");
-
-        //console.debug("right column", col);
 
         if (col){
          if (showColumn){
@@ -172,6 +186,8 @@ define([
           }
           dijit.byId("outerLayout").resize();
         }
+        
+      
 
       },
       
@@ -211,8 +227,28 @@ define([
         
       },
       
+      handleTaskNotify: function(args){
+        console.log("handleTaskNotify", args);
+        var self = this;
+        if (self.project._id === args.task.project){
+          if (self.tabFocus === "rolesTab"){
+            self.showRoles();
+          }
+        }
+      },
+      
+      handleProjectNotify: function(args){
+        console.log("handleProjectNotify", args);
+        if (this.project._id === args.project._id){
+          this.project = args.project;
+        }
+        var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
+        //check if we should show the right column
+  	    this.setRightColumn(showColumn);
+      },
+      
       handleStreamNotify: function(args){
-        //console.log("stream notify", args);
+        console.log("stream notify", args);
         if (args.message.project === this.project._id){
           this.showStream();
         }
@@ -475,7 +511,7 @@ define([
       
       showRoles: function(){
         
-        //console.log("showRoles");
+        console.log("showRoles");
   
         //first get the container
         var cont = dijit.byId("projDetailsRoles"),
@@ -501,15 +537,17 @@ define([
             own = assign;
           } else if (assign.role === "FOLLOWER"){
             if (assign.status !== "DECLINED"){
-              follow.push(db.contactStore.store.get(assign.username));
+              //console.log("follower",assign, assign.username);
+              follow.push(assign);
             }
           } else {
             part.push(assign);
           }
         }, this);
         
-        //console.debug("responsible", own);
-        //console.debug("participants", part);
+        console.debug("responsible", own);
+        console.debug("participants", part);
+        console.debug("followers", follow);
         
         //add the responsible
         cont.addChild(new Assign({
@@ -519,15 +557,15 @@ define([
         }));
        
         //add the participants
-        
-        dojo.forEach(part, function(assign){
-          cont.addChild(new Assign({
-            assignment: assign,
-            isResponsible: false,
-            isFollowers: false
-          }));
-        });
-        
+        if (part.length > 0){
+          dojo.forEach(part, function(assign){
+            cont.addChild(new Assign({
+              assignment: assign,
+              isResponsible: false,
+              isFollowers: false
+            }));
+          });
+        }
         
         //add the followers if there are any
         if (follow.length > 0){
@@ -538,7 +576,8 @@ define([
           })); 
         }
   
-        this._openTab("projRolesTab");   
+        this._openTab("projRolesTab");
+        this.tabFocus = "rolesTab";  
         dijit.byId("prMain").selectChild("projDetailsRoles");
       },
       
@@ -559,6 +598,7 @@ define([
         cont.addChild(new Info({project: this.project}));
         
         this._openTab("projInfoTab");
+        this.tabFocus = "infoTab";
         dijit.byId("prMain").selectChild("projDetailsInfo");
         
       },

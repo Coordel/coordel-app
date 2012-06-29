@@ -91,6 +91,13 @@
 .stream-activity .activity-verb{
   color: #000000;
   font-weight: bold;
+  text-transform: lowercase;
+}
+
+.stream-activity .activity-details{
+  color: #555555;
+  font-weight: bold;
+  text-transform: lowercase;
 }
 
 .stream-activity .activity-footer{

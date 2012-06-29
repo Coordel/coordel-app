@@ -54,45 +54,45 @@ define(
           w.destroyRecursive();
         });
         
-        
-        dojo.forEach(entries, function(item){
-          var now = new Date(),
-              dead = stamp.fromISOString(item.deadline);
-              
-          var day = locale.format(dead,{datePattern: "EEEE d", selector: "date"}); //get the day of the entry
-          var mon = locale.format(dead,{datePattern: "MMMM", selector: "date"}); //get the month of the entry 
-          //if the item's deadline is before now, then it's overdue
-          if (dt.compare(dead, now) < 0){
-            mon = overdue; 
-            day = dtFormat.prettyISODate(item.deadline); //get the day of the entry
-          }
-          
-          if (!map[mon]){
-            map[mon]= {};
-          }
-          
-          if (!map[mon][day]){
-            map[mon][day] = [];
-          }
+        if (entries && entries.length > 0){
+          dojo.forEach(entries, function(item){
+            var now = new Date(),
+                dead = stamp.fromISOString(item.deadline);
 
-          map[mon][day].push(item);
-          
-          
-        });
-        
-        for (var mon in map){
+            var day = locale.format(dead,{datePattern: "EEEE d", selector: "date"}); //get the day of the entry
+            var mon = locale.format(dead,{datePattern: "MMMM", selector: "date"}); //get the month of the entry 
+            //if the item's deadline is before now, then it's overdue
+            if (dt.compare(dead, now) < 0){
+              mon = overdue; 
+              day = dtFormat.prettyISODate(item.deadline); //get the day of the entry
+            }
+
+            if (!map[mon]){
+              map[mon]= {};
+            }
+
+            if (!map[mon][day]){
+              map[mon][day] = [];
+            }
+
+            map[mon][day].push(item);
+
+
+          });
+
+          for (var mon in map){
             var css = "tasklist-titlepane calendar";
             if (mon === overdue){
               css = "overdue tasklist-titlepane calendar";
             }
-          
+
             var pane = new Pane({"class":css, duration: "0"}).placeAt(this.containerNode);
             pane.set("title", mon);
-            
+
             var node = dojo.create("div");
             //console.debug("head", mon);
             for (var day in map[mon]){
-              
+
               var calDay = new Calendar({
                 header: day,
                 entries: map[mon][day]
@@ -100,9 +100,14 @@ define(
               //console.debug("date", day, "items", map[mon][day]);
             }
             pane.set("content", node);
-            
+
           }
-     
+          dojo.addClass(this.emptyNode, "hidden");
+        } else {
+          console.log("no entries, show empty calendar");
+          dojo.removeClass(this.emptyNode, "hidden");
+        }
+      
         
         //console.debug("map", map);
       },

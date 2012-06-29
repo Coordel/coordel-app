@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.29",
+  version: "0.1.34",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -236,6 +236,35 @@ module.exports = {
       }
     },
     
+    opportunities: {
+      map: function(doc){
+        
+        function toISODateArray (date){
+      	  var dtString = date.split("T")[0];
+      	  dtString = dtString.split("-");
+      	  var tmString = date.split("T")[1];
+      	  tmString = tmString.split(".");
+      	  tmString = tmString[0].split(":");
+      	  return [
+      	    parseInt(dtString[0],10), 
+      	    parseInt(dtString[1],10), 
+      	    parseInt(dtString[2],10), 
+      	    parseInt(tmString[0],10), 
+      	    parseInt(tmString[1],10), 
+      	    parseInt(tmString[2],10)];
+      	}
+        
+        if (doc.docType === "project" && doc.status === "ACTIVE" && doc.substatus === "OPPORTUNITY"){
+          
+        	emit(
+      			[toISODateArray(doc.created), doc._id],
+      			doc
+      		);
+        	
+        }
+      }
+    },
+    
     projectAssignments: {
       map: function (doc){
 
@@ -445,6 +474,21 @@ module.exports = {
       			[doc.project],
       			{"_id": doc._id}
       		);
+      	}
+      }
+    },
+    
+    /******************************* ROLES *****************************************************/
+    roles: {
+      map: function(doc){
+        //this gets tasks and any blockers
+        
+        if (doc.docType === "role"){
+      		//emit the role
+          emit(
+            [doc._id], 	
+            doc
+          );
       	}
       }
     },
@@ -828,9 +872,9 @@ module.exports = {
       	  //only allows projects through where users have accepted the project
 
       	  //current
-      	  if (doc.status === "ACTIVE" && (doc.substatus === "SENT" || doc.substatus === "RESUMED" || doc.substatus === "PAUSED")){
+      	  if (doc.status === "ACTIVE" && (doc.substatus === "SENT" || doc.substatus === "RESUMED" || doc.substatus === "PAUSED" || doc.substatus === "OPPORTUNITY")){
       	    //returns current project for all users with an assignment in the project
-            //if this project ACTIVE SENT, RESUMED, PAUSED and I have a role with status ACCEPTED it's current
+            //if this project ACTIVE SENT, RESUMED, PAUSED, or OPPORTUNITY and I have a role with status ACCEPTED it's current
 
       	    doc.assignments.forEach(function(assign){
 

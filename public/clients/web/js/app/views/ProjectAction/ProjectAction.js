@@ -1,16 +1,19 @@
 define([
-  "dojo", 
+  "dojo",
   "i18n!app/nls/coordel",
   "text!app/views/ProjectAction/templates/ProjectAction.html",
   "text!app/views/ProjectAction/templates/Blueprint.html",
   "text!app/views/ProjectAction/templates/Feedback.html",
+  "text!app/views/ProjectAction/templates/Opportunity.html",
   "dijit/_Widget", 
   "dijit/_Templated",
   "app/views/ConfirmDialog/ConfirmDialog",
   'app/widgets/ContainerPane',
   'app/models/CoordelStore',
   'app/views/ProjectForm/ProjectForm',
-  "app/views/feedback/RatingForm/RatingForm"], function(dojo, coordel, template, blueprint, feedback, w, t, Dialog, ContainerPane, db, Form, Rating) {
+  "app/views/feedback/RatingForm/RatingForm",
+  "dijit/form/NumberTextBox",
+  "dijit/form/CurrencyTextBox"], function(dojo, coordel, template, blueprint, feedback, opportunity, w, t, Dialog, ContainerPane, db, Form, Rating) {
   //return an object to define the "./newmodule" module.
   dojo.declare("app.views.ProjectAction", [w,t], {
     
@@ -39,6 +42,11 @@ define([
       
       if (this.action === "ackDone"){
         this.templateString = feedback;
+        console.log("it's feedback");
+      }
+      
+      if (this.action === "publish"){
+        this.templateString = opportunity;
       }
       
     },
@@ -52,10 +60,18 @@ define([
         this.project = db.projectStore.store.get(this.project.project);
       }
       
-      //make sure there is a message entered before enabling the save button
-      dojo.connect(this.actionText, "onKeyUp", this, function(){
-        this.validate();
-      });
+      if (this.action === "publish"){
+        //make sure there is a message entered before enabling the save button
+        dojo.connect(this.budget, "onKeyUp", this, function(){ 
+          this.validate();
+        });
+      } else {
+        //make sure there is a message entered before enabling the save button
+        dojo.connect(this.actionText, "onKeyUp", this, function(){ 
+          this.validate();
+        });
+        
+      }
       
       //the message, issue and proposed solution need to be entered before this can be saved
       this.onValidate(false);
@@ -85,11 +101,11 @@ define([
       
       switch(this.action){
         case "participate":
-          p.participate(username, project, message);
           //if we're participating the currently focused project, default back to current
           if (db.focus === "project" && db.projectStore.currentProject === project._id){
             dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
           }
+          p.participate(username, project, message);
           break;
         case "delegate":
           p.delegate(project, message);
@@ -98,16 +114,21 @@ define([
           p.leave(username, project, message);
           break;
         case "follow": 
-          p.follow(username, project, message);
+          console.log("before follow, db, username, project", db, username, project);
           if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            console.log("before primaryNavSelect");
             dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
           }
+          p.follow(username, project, message);
+          console.log("after follow");
+          
+          
           break;
         case "unfollow":
-          p.unfollow(username, project, message);
           if (db.focus === "project" && db.projectStore.currentProject === project._id){
             dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
           }
+          p.unfollow(username, project, message);
           break;
         case "send":
           p.send(project, message);
@@ -116,7 +137,24 @@ define([
             dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
           }
           break;
+        case "publish":
+          
+          //in order to publish an opportunity, the responsible had to give a budget and currency
+          var opp = {};
+          opp.budget = this.budget.get("value");
+          opp.currency = this.currency.get("value");
+          project.opportunity = opp;
+          
+          p.publish(project, message);
+          //if we're activating the currently focused project, default back to current
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
+          break;
         case "decline":
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
           p.decline(username, project, message);
           break;
         case "pause":
@@ -129,14 +167,19 @@ define([
           p.cancel(project, message);
           break;
         case "ackCancel":
-          p.ackCancel(username, project);
-          break;
-        case "deleteProject":
-          p.remove(project);
           //if we're deleting the currently focused project, default back to current
           if (db.focus === "project" && db.projectStore.currentProject === project._id){
             dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
           }
+          p.ackCancel(username, project);
+          break;
+        case "deleteProject":
+          //if we're deleting the currently focused project, default back to current
+          if (db.focus === "project" && db.projectStore.currentProject === project._id){
+            dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
+          }
+          p.remove(project);
+         
           break;
         case "reuse":
           //p.reuse(project);
@@ -158,18 +201,27 @@ define([
     validate: function(){
       var isValid = false,
           v = this.actionText.get("value");
-          
-      //turn the required dot red and show the footer instructions
+      
+      if (this.action === "publish"){
+        v = this.budget.get("value");
+        if (v){
+          isValid = true;
+          //turn the required dot gray
+          dojo.addClass(this.isRequired, "ready");
+        }
+      }
+         
+       
+      //turn the required dot red
       dojo.removeClass(this.isRequired, "ready");  
       if (v.length > 0){
         isValid = true;
-        //turn the required dot gray and hide the footer instructions
+        //turn the required dot gray
         dojo.addClass(this.isRequired, "ready");
       }
 
       this.onValidate(isValid);
     }
-       
   });
   return app.views.ProjectAction;    
 });

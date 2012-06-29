@@ -133,6 +133,11 @@ define(
           dojo.addClass(self.infoAttachments, "hidden");
         }
         
+        //opportunity: if this is an opportunity, then show it
+        if (!p.isOpportunity()){
+          dojo.addClass(self.infoOpportunity, "hidden");
+        }
+        
         //console.debug("finished setting the task");
       },
       

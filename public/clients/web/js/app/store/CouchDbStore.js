@@ -5,7 +5,7 @@ function(dojo, JsonRest, stamp) {
     {
         idProperty: "_id",
         add: function(object, options){
-          //console.debug("add override", object.username);
+          console.debug("add override", object, options.username);
           //console.debug("add override called", object, options);
           //username and _id must be provided or this is an error
           var t = stamp.toISOString(new Date(),{milliseconds:true});
@@ -37,7 +37,11 @@ function(dojo, JsonRest, stamp) {
       		var id = ("id" in options) ? options.id : this.getIdentity(object);
       		var hasId = typeof id != "undefined";
       		var def = new dojo.Deferred();
-      	  //console.debug("CouchDbStore put called object, options, id, hasId", object, options, id, hasId);
+      	  console.debug("CouchDbStore put called object", object, options);
+      	  
+      	  if (!object){
+      	    console.log("it wasn't an object");
+      	  }
       		
       		dojo.when(dojo.xhr(hasId && !options.incremental ? "PUT" : "POST", {
      				url: hasId ? this.target + id : this.target,
@@ -55,8 +59,9 @@ function(dojo, JsonRest, stamp) {
     			  //return object;
     			  def.callback(object);
     			}, function(err){
-    			  //console.log("error received in CouchDBStore put", err);
+    			  console.log("error received in CouchDBStore put", err);
     			});
+    			
     			return def;
       	},
         query: function(query, options) {

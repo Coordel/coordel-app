@@ -23,16 +23,28 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         
+        var self = this;
+        /*
         this.watch("role", function(prop, oldVal, newVal){
-          //console.debug("role changed", prop, oldVal, newVal);
+          console.debug("role changed", prop, oldVal, newVal);
         });
+        */
         
-        //console.debug("in Role: ", this.role);
+        console.debug("in Role: ", this.role);
         
         this.setResps();
         
+        this.roleNotifyHandler = dojo.subscribe("coordel/roleNotify", this, "handleRoleNotify");
+        
       },
       
+      handleRoleNotify: function(args){
+        if (this.role._id === args.role._id){
+          this.role = args.role;
+          this.setResps();
+        }
+      },
+     
       setResps: function(){
         this._clear(this.roleResps);
         

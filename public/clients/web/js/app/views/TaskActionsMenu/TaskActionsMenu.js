@@ -114,7 +114,8 @@ define([
     
     setMenuItems: function(){
       var stat = this.task.status + "-" + this.task.substatus,
-          own = false;
+          own = false,
+          t = db.getTaskModel(this.task, true);
           
       if (this.responsible === this.username){
         own = true;
@@ -207,7 +208,10 @@ define([
   			//not owner - reuse issue submit
   				if (!own){
   					dojo.removeClass(this.raiseIssue, "hidden");
-  					dojo.removeClass(this.submitTask, "hidden");
+  					if (t.isReady()){
+  						dojo.removeClass(this.submitTask, "hidden");
+  					}
+  				
   				} 
   				break;
   			case "CURRENT-RETURNED":
@@ -215,7 +219,9 @@ define([
   			//not owner - reuse issue submit
   				if (!own){
   					dojo.removeClass(this.raiseIssue, "hidden");
-  					dojo.removeClass(this.submitTask, "hidden");
+  					if (t.isReady()){
+  						dojo.removeClass(this.submitTask, "hidden");
+  					}
   				}
   				break;
   			case "CURRENT-CLEARED":
@@ -223,7 +229,9 @@ define([
   			//not owner - reuse issue submit
   				if (!own){
   					dojo.removeClass(this.raiseIssue, "hidden");
-  					dojo.removeClass(this.submitTask, "hidden");
+  					if (t.isReady()){
+  						dojo.removeClass(this.submitTask, "hidden");
+  					}
   				}
   				break;
   			case "CURRENT-DECLINED":
@@ -282,7 +290,7 @@ define([
   		  case "PROJECT-AGREED": 
   			  dojo.removeClass(this.proposeProjChange, "hidden");
   			  break;
-		}
+		    }
     }
        
   });

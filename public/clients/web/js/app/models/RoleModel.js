@@ -27,56 +27,64 @@ define("app/models/RoleModel",
       },
       
       updateResponsibilities: function(roleid, task, isMyPrivate){
-        //console.debug("updating responsibilities", roleid, task);
+        console.debug("updating responsibilities", roleid, task);
         
         //when a task is added or updated, the project's assignments track what's happening
     	  //role responsibilities (tasks) are also created, and the status of the responsibility(task) is tracked in the role
     	  //if there's no assignment
     	  var db = this.db,
     	      r = {},
-    	      self = this;
+    	      self = this,
+    	      def = new dojo.Deferred();
     	      
-  		  var def = db.projectStore.loadProject(task.project);
-			  dojo.when(def, function(store){
-			    //try {
-			      
-			      //console.debug("loaded project, store", store);
-			      
-			      var hasRole = false;
-			      
-			      var resRole = db.projectStore.roleMemory.get(roleid);
-			      
-			      //dojo.when(updateRole, function(resRole){
-			        //console.log("update role", resRole);
-			        if (resRole){
-			          //console.log("hasRole set to true");
-			          hasRole = true;
-			          r = resRole;
-			          r.isNew = false;
-			          //set the username of the role to the task because it might be that this 
-			          //role has been assigned to a new user
-			          r.username = task.username;
-			        }
-			        
-			        //console.debug("hasRole in updateResponsibilities", hasRole);
+  		  //var def = db.projectStore.loadProject(task.project);
+			  //dojo.when(def, function(store){
+			
+  			db.get(roleid).then(
+  			  
+  			  function(resRole){
+  			    if (resRole.error){
+  			      if (resRole.code === 404){
+  			        //if the role didn't exist, the error will have a 404 code, need to create a new role
+  			        console.log("didn't find role in updateResponsibilities, adding one");
+       			    r = {};
+      			    r.isNew = true;
+      			    r._id = roleid;
+      			    r.username = task.username;
+      			    r.responsible = task.responsible;
+      			    r.project = task.project;
+      			    r.responsibilities = [];
 
-  			      if (!hasRole){
-    			      r = {};
-    			      r.isNew = true;
-    			      r._id = roleid;
-    			      r.username = task.username;
-    			      r.project = task.project;
-    			      r.responsibilities = [];
-    			      //console.debug("didn't find the role, it's new", r);
+         				//add a new responsibility to the role (username, task, status)
+       					console.debug("adding a new responsibility to role " + r._id);
+       					r.responsibilities.push({
+       						username: task.username,
+       						task: task._id,
+       						status: task.status,
+       						substatus: task.substatus
+       					});		
+
+         				console.log("Adding role", r);
+         				self.add(r);
   			      }
+  			      
+  			    } else {
+  			      //found an existing role, update it
+  			      console.debug("loaded role in updateResponsibilities", resRole);
+  	          r = resRole;
+  	          r.isNew = false;
+  	          //set the username of the role to the task because it might be that this 
+  	          //role has been assigned to a new user and make sure responsible is updated in case
+  	          r.username = task.username;
+  	          r.responsible = task.responsible;
 
-       				//need to check if the responsibility exists in the role
-      				//and if it does, update it with the task's new status/substatus/username
-      				var hasResp = false,
-      				    deleteKey = false;
-      				dojo.forEach(r.responsibilities, function(resp, key) {
+         			//need to check if the responsibility exists in the role
+        			//and if it does, update it with the task's new status/substatus/username
+        			var hasResp = false,
+        				  deleteKey = false;
+        			dojo.forEach(r.responsibilities, function(resp, key) {
       					if (resp.task === task._id){
-      					  //console.debug("had the responsibility, updating status: ", resp.task, task.status);
+      					  console.debug("had the responsibility, updating status: ", resp.task, task.status);
         					hasResp = true;
       					  if(task.status === "TRASH" && isMyPrivate){
       					    //since this is a private project, delete the responsibility
@@ -93,10 +101,10 @@ define("app/models/RoleModel",
                 //console.debug("deleted the responsibility because it was in a private project");
                 r.responsibilities.splice(deleteKey, 1);
               }
-      				//if the responsibiity doesn't exist
+        			//if the responsibiity doesn't exist
       				if (!hasResp){
       					//add a new responsibility to the role (username, task, status)
-      					//console.debug("adding a new responsibility to role " + r._id);
+      					console.debug("adding a new responsibility to role " + r._id);
       					if (!r.responsibilities){
       					  r.responsibilities = [];
       					}
@@ -108,20 +116,69 @@ define("app/models/RoleModel",
       					});		
       				}
 
-      				if (r.isNew){
-      				  //console.log("Adding role", r);
-      				  self.add(r);
-      				} else {
-      				  //console.log("Updating role", r);
-      				  self.update(r);
-      				}
-			        
-			      //});
-			    //} catch (err){
-			      //didn't find the role, so this is new
-			   //   console.debug("ERROR getting role in RoleModel", err);
-			   // }
-			 });
+        			console.log("Updating role", r);
+        			self.update(r);
+  			    }
+  			  }
+  			  
+  			  /*
+  			  function(resRole){
+			  
+			      console.debug("loaded role in updateResponsibilities", resRole);
+	          r = resRole;
+	          r.isNew = false;
+	          //set the username of the role to the task because it might be that this 
+	          //role has been assigned to a new user and make sure responsible is updated in case
+	          r.username = task.username;
+	          r.responsible = task.responsible;
+		
+       			//need to check if the responsibility exists in the role
+      			//and if it does, update it with the task's new status/substatus/username
+      			var hasResp = false,
+      				  deleteKey = false;
+      			dojo.forEach(r.responsibilities, function(resp, key) {
+    					if (resp.task === task._id){
+    					  console.debug("had the responsibility, updating status: ", resp.task, task.status);
+      					hasResp = true;
+    					  if(task.status === "TRASH" && isMyPrivate){
+    					    //since this is a private project, delete the responsibility
+    					    deleteKey = key;
+    					  } else {
+    					    //update the status
+    					    resp.status = task.status;
+      						resp.substatus = task.substatus;
+      						resp.username = task.username;
+    					  }
+    					}
+    				});
+            if (deleteKey){
+              //console.debug("deleted the responsibility because it was in a private project");
+              r.responsibilities.splice(deleteKey, 1);
+            }
+      			//if the responsibiity doesn't exist
+    				if (!hasResp){
+    					//add a new responsibility to the role (username, task, status)
+    					console.debug("adding a new responsibility to role " + r._id);
+    					if (!r.responsibilities){
+    					  r.responsibilities = [];
+    					}
+    					r.responsibilities.push({
+    						username: task.username,
+    						task: task._id,
+    						status: task.status,
+    						substatus: task.substatus
+    					});		
+    				}
+
+      			console.log("Updating role", r);
+      			self.update(r);
+  
+			    }
+			    */
+			    , 
+			    function(err){
+			      console.log("Unhandled error", err);
+  			 });
       },
       
       displayName: function(){

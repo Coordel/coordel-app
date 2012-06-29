@@ -40,7 +40,7 @@ define(["dojo",
               });
               
               post.then(function(response){
-                console.log("added contact to user", response);
+                //console.log("added contact to user", response);
                 var query = self.store.get(appId);
                 //var query = self._loadContacts(self.username);
                 dojo.when(query, def.callback());

@@ -156,7 +156,7 @@ define("app/models/ProjectStatus",
         }
         */
         
-        test = (project.status === "ACTIVE" && (project.substatus === "SENT" || project.substatus === "RESUMED"));
+        test = (project.status === "ACTIVE" && (project.substatus === "SENT" || project.substatus === "RESUMED" || project.substatus === "OPPORTUNITY"));
         
         /*
         if (!test){
@@ -164,7 +164,24 @@ define("app/models/ProjectStatus",
         }
         */
         
+        //console.log("testing isActive", project.status, project.substatus, test);
+        
         return test;
+      },
+      
+      isLatestOpportunity: function(project, username){
+        //console.log("testing isLatestOpportunity", project, username);
+        var isLatest = true;
+        if (project.status === "ACTIVE" && project.substatus === "OPPORTUNITY"){
+          //console.log("it's an opportunity");
+          dojo.forEach(project.assignments, function(assign){
+            if (username === assign.username){
+              //console.log("username found", username, assign.username);
+              isLatest = false;
+            } 
+          });
+        }
+        return isLatest;
       },
       
       isPending: function(project, username){

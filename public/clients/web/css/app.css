@@ -32,6 +32,7 @@ you will probably want to include these two files.
 @import 'contactlist-details.css';
 @import 'tasklist-titlepane.css';
 @import 'empty-deliverable.css';
+@import 'empty-right.css';
 @import 'quick-entry.css';
 @import 'dialog.css';
 @import 'task-info.css';
@@ -193,12 +194,22 @@ hr {
   text-align: justify;
 }
 
+.c-bold {
+  font-weight: bold;
+}
+
 /* margin */
 .c-margin-large-t {
   margin-top: 8px;
 }
 .c-margin-large-b {
   margin-bottom: 8px;
+}
+.c-margin-large-l {
+  margin-left: 8px;
+}
+.c-margin-large-r {
+  margin-right: 8px;
 }
 .c-margin-b{
 	margin-bottom: 4px;
@@ -259,7 +270,13 @@ hr {
 .hidden{
   display: none !important;
 }
-
+.invisible{
+  visibility: hidden;
+}
+.opaque {
+  filter:alpha(opacity=100) !important;
+  opacity: 1 !important;
+}
 .clear {
   clear: both;
 }

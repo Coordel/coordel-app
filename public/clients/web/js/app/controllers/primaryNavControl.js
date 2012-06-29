@@ -13,12 +13,14 @@ define(['dojo',
   'app/controllers/taskDetailsControl',
   'app/controllers/projectControl',
   'app/controllers/contactControl',
+  'app/controllers/storeControl',
   'dojo/date/stamp',
   'app/models/CoordelStore',
   'dijit/TooltipDialog',
   'app/views/PrimaryFooter/PrimaryFooter',
   'app/views/ProjectGroup/ProjectGroup',
-  "i18n!app/nls/coordel"], function(dojo, dl, dijit, layout, ph, rh, add, pb, p, c, tf, tControl,tdControl, pControl, cControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel) {
+  "i18n!app/nls/coordel",
+  "app/views/EmptyTaskList/EmptyTaskList"], function(dojo, dl, dijit, layout, ph, rh, add, pb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel, etl) {
     
   return {
     activeTab: "projects",
@@ -44,6 +46,8 @@ define(['dojo',
     taskListControl: tControl,
   
     taskDetailsControl: tdControl,
+    
+    storeControl: sControl,
   
     primaryBoxes: null,
   
@@ -81,13 +85,14 @@ define(['dojo',
     
       pnc.showProjectList();
     
-      pnc.showContactList();
+      //pnc.showContactList();
     
       pnc.setPrimaryController();
     
       pnc.setCounts();
     
       //handle click of the projects and contacts tabs
+      /*
       dojo.connect(dojo.byId("rightOtherListTab"), "onclick",null, function(evt){
         pnc.activateContacts();
       });
@@ -95,12 +100,30 @@ define(['dojo',
       dojo.connect(dojo.byId("leftOtherListTab"), "onclick",null, function(evt){
         pnc.activateProjects();
       });
+      */
+      
+      dojo.connect(dojo.byId("projectsTab"), "onclick",null, function(evt){
+        pnc.activateProjects();
+      });
+      
+      dojo.connect(dojo.byId("contactsTab"), "onclick",null, function(evt){
+        pnc.activateContacts();
+      });
+      
+      dojo.connect(dojo.byId("storeTab"), "onclick",null, function(evt){
+        dojo.publish("coordel/primaryNavSelect", [{focus:"store", name: "store"}]);
+        pnc.activateStore();
+      });
     
       //listen for navSelection
       if (!this.navSelectHandler){
         this.navSelectHandler = dojo.subscribe("coordel/primaryNavSelect", this, "setPrimaryController");
       }
       
+      if(!this.projectNotifyHandler){
+        this.projectNotifyHandler = dojo.subscribe("coordel/projectNotify", this, "handleProjectNotify");
+      }
+    
       //listen for added Tasks and update the count
       if (!this.setPrimaryBoxCountHandler){
         this.setPrimaryBoxCountHandler = dojo.subscribe("coordel/setPrimaryBoxCounts", this, "setCounts");
@@ -116,7 +139,15 @@ define(['dojo',
 	    //alter the time remaining or ago
 	
     },
-  
+    
+    handleProjectNotify: function(args){
+      
+      if (this.activeTab === "projects"){
+        console.log("handleProjectNotify primaryNavControl", args);
+        this.activateProjects();
+      }
+    },
+    
     handleSetTurbo: function(args){
       //console.debug ("in handleSetTurbo", this.currentArgs, args);
       this.isTurbo = args.isTurbo;
@@ -125,7 +156,7 @@ define(['dojo',
   
     setPrimaryController: function(args){
     
-      console.debug("in primaryNavControl.setPrimaryView", this.currentArgs, args);
+      //console.debug("in primaryNavControl.setPrimaryView", this.currentArgs, args);
   
       //detect what was sent and then create a new controller and init() it.
       var focus = "current",
@@ -149,7 +180,7 @@ define(['dojo',
     
       this.navFocus = focus;
     
-      console.debug("setting primary controller", focus, name, task, id);
+      //console.debug("setting primary controller", focus, name, task, id);
     
       if (name === "project"){
       
@@ -205,7 +236,18 @@ define(['dojo',
           c.init(focus, resp, args.isTurbo);
         });
         //this.primaryController = tdControl;
-      }  else {
+        /*
+      } else if (focus === "opportunities"){
+        
+        console.log("show opportunities");
+        */
+      } else if (name === "store"){
+        db.projectStore.currentProject = "";
+        c = this.storeControl;
+        c.init(focus);
+        //console.debug("after storeControl init");
+        
+      } else {
         
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
@@ -214,33 +256,61 @@ define(['dojo',
         //console.debug("task list controller is", c, focus );
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);
-        console.debug("after taskListControl init");
+        //console.debug("after taskListControl init");
       }
+      
+      dojo.publish("coordel/setPrimaryBoxCounts");
   
     },
   
-    activateContacts: function(){
-  
-        
-        if (dojo.hasClass("rightOtherListTab", "inactive")){
-          this.showContactList();
-          dojo.removeClass("rightOtherListTab", "inactive");
-          dojo.addClass("leftOtherListTab", "inactive");
-          dijit.byId("otherListMain").forward();
-          this.activeTab = "contacts";
-        }
+    _openTab: function(id){
+      this._closeTabs();
+      this.tabFocus = id;
+      dojo.addClass(id, "active");
+      dojo.removeClass(id, "inactive");
+    },
+    
+    _closeTabs: function(){
+      //console.log("in _closeTabs");
+      dojo.addClass("projectsTab", "inactive");
+      dojo.removeClass("projectsTab", "active");
+      dojo.addClass("contactsTab", "inactive");
+      dojo.removeClass("contactsTab", "active");
+      dojo.addClass("storeTab", "inactive");
+      dojo.removeClass("storeTab", "active");
       
     },
   
-    activateProjects: function(){
+    activateProjects: function(){ 
+      console.log("activate Projects");
+      this._closeTabs();
+      this._openTab("projectsTab");
+      this.showProjectList();
+      //dojo.removeClass("leftOtherListTab", "inactive");
+      //dojo.addClass("rightOtherListTab", "inactive");
+      //dijit.byId("otherListMain").back();
+      dijit.byId("otherListMain").selectChild("otherListProjects");
+      this.activeTab = "projects";
+    },
+    
+    
+    activateContacts: function(){
+        this._closeTabs();
+        this._openTab("contactsTab");
+        this.showContactList();
+        //dojo.removeClass("rightOtherListTab", "inactive");
+        //dojo.addClass("leftOtherListTab", "inactive");
+        //dijit.byId("otherListMain").forward();
+        dijit.byId("otherListMain").selectChild("otherListContacts");
+        this.activeTab = "contacts";
+    },
 
-        if (dojo.hasClass("leftOtherListTab", "inactive")){
-          dojo.removeClass("leftOtherListTab", "inactive");
-          dojo.addClass("rightOtherListTab", "inactive");
-          dijit.byId("otherListMain").back();
-          this.activeTab = "projects";
-        }
-   
+    
+    activateStore: function(){
+      this._closeTabs();
+      this._openTab("storeTab");
+      this.showStore();
+      dijit.byId("otherListMain").selectChild("otherListStore");
     },
   
     setCounts: function(){
@@ -325,9 +395,35 @@ define(['dojo',
     },
   
     showProjectList: function(){
-      //console.debug("primaryNavControl.showProjectList called");
-    
+      console.debug("primaryNavControl.showProjectList called");
+
       var self = this;
+      
+      /*
+      if (self.projObserveHandlers.length > 0){
+        dojo.forEach(self.projObserveHandlers, function(handle){
+          console.log("cancel handle");
+          handle.cancel();
+        });
+        self.projObserveHandlers = [];
+      }
+      */
+      
+      /*
+      var active = db.projectStore.memory.query("active", {sort:[{attribute: "name", descending: false}]});
+      
+      var handler = active.observe(function(proj, removedFrom, insertedInto){
+        console.log("user project changed", proj, removedFrom, insertedInto);
+        //dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: proj._id}]);
+        self.activateProjects();
+      });
+      
+      
+      self.projObserveHandlers.push(handler);
+      */
+      
+      
+      dijit.byId("otherListProjects").destroyDescendants();
     
       //get all the potential possible project groups
       //responsible
@@ -355,6 +451,8 @@ define(['dojo',
      self._addProjectGroup(coordel.metainfo.paused, pause);
      self._addProjectGroup(coordel.done, done);
      self._addProjectGroup(coordel.cancelled, can);
+     
+     //console.log("through setPrimaryController");
    
     },
   
@@ -366,15 +464,19 @@ define(['dojo',
       //this function add
       var group = new ProjectGroup({
         header: header,
-        projects: projects
+        projects: projects,
+        currentArgs: self.currentArgs
       });
     
       cont.addChild(group);
-    
+      
+      /*
       //need to watch and see if there is a change to this list
       var handler = projects.observe(function(proj, removedFrom, insertedInto){
-        //console.debug("projects observed", proj, removedFrom, insertedInto);
-        //was this a delete
+        
+        
+        
+        
         if (removedFrom > -1){
           //console.debug("deleted from list", removedFrom);
           var toRemove = -1;
@@ -430,29 +532,47 @@ define(['dojo',
           group.hide();
           //dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
         }
+        
       
       }, true);
-    
+      
       self.projObserveHandlers.push(handler);
+      */
     },
 
 
     showContactList: function(){
       //console.debug("primayNav.showContactList");
+    
       
-      var cont = dijit.byId("otherListContacts");
+      var cont = dijit.byId("otherListContacts"),
+          self = this;
       if (cont.hasChildren()){
         cont.destroyDescendants();
       }
     
       var cons = db.contacts();
       //console.log("showContactList", cons);
-      
+
       dojo.forEach(cons, function(con){
         //console.log("creating contact", con);
-        cont.addChild(new c({contact: con, doNavigation: true}));
+        cont.addChild(new c({
+          contact: con, 
+          doNavigation: true,
+          currentArgs: self.currentArgs}));
       });
       
+    },
+    
+    showStore: function(){
+      var self = this;
+      console.log("show empty", self.navFocus);
+      
+      var empty = new etl({
+        emptyClass: self.navFocus, 
+        emptyTitle: coordel.empty[self.navFocus+"Title"], 
+        emptyDescription: coordel.empty[self.navFocus+"Text"]
+      }).placeAt("storeMain");
     }
   };
 });

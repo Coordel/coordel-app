@@ -19,8 +19,11 @@ define(['dojo',
         "app/views/ProjectAction/ProjectAction",
         "app/views/PersonForm/PersonForm",
         "app/views/Dialog/Dialog",
-        "app/views/Tutorial/Tutorial"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial) {
+        "app/views/Tutorial/Tutorial",
+        "app/views/TaskForm/TaskForm",
+        "app/widgets/ContainerPane",
+        "app/views/OpportunityAction/OpportunityAction"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, TaskForm, ContainerPane, OpportunityAction) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -78,7 +81,7 @@ define(['dojo',
 	  },
 	  
 	  playSound: function(sound){
-	    //console.debug("PLAYING SOUND", sound);
+	    console.debug("PLAYING SOUND", sound);
 	    switch (sound){
 	      case "ding":
 	      this.dingSound.play();
@@ -101,7 +104,7 @@ define(['dojo',
 	    
 	    var socket = io.connect(window.location.host);
 	    
-	    console.log("showing app", this.username);
+	    //console.log("showing app", this.username);
 		  
 			//register for socketio events
 			socket.on("changes:" + this.username.toString(), function (change) {
@@ -128,6 +131,9 @@ define(['dojo',
 	  	
 	  	//listen for project actions
 	  	this.handlers.push(dojo.subscribe("coordel/projectAction", this, "doProjectAction"));
+	  	
+	  	//listen for opportunity actions
+  	  this.handlers.push(dojo.subscribe("coordel/opportunityAction", this, "doOpportunityAction"));
 	  	
 	  	//listen for project edit
 	  	this.handlers.push(dojo.subscribe("coordel/editProject", this, "handleEditProject"));
@@ -159,7 +165,7 @@ define(['dojo',
       //init the primary nav controller 
       app.navController = pNavControl.init(ac.username);
       
-      console.log("after primary nav control init");
+      //console.log("after primary nav control init");
       
 	  },
 	  
@@ -187,7 +193,7 @@ define(['dojo',
 	    //shows the correct dialog to capture the user's message and save the state change
       var css = "highlight-button",
           title = coordel.taskActions[args.action],
-          executeText = coordel.taskActions[args.action];
+          executeText = coordel.ok;
       
       //trim reuse deliverables title and button
       /*
@@ -277,6 +283,53 @@ define(['dojo',
 
 	    d.show();
     },
+    
+    doOpportunityAction: function(args){
+      console.log("appControl should do opportunity action", args);
+      var css = "highlight-button",
+	        d,
+	        proj;
+	        
+      //show an opportunity action
+      if (args.cssClass){
+	      css = args.cssClass;
+	    }
+
+	    opp = new OpportunityAction({
+  	    project: args.project,
+  	    action: args.action
+  	  });
+
+	    d = new cDialog({
+	      title: "",
+	      confirmText: coordel.opportunityActions.confirmText[args.action],
+	      executeCss: css,
+	      //executeText: coordel.projectActions[args.action],
+	      executeText: coordel.ok,
+	      title:  coordel.opportunityActions[args.action],
+	      content: opp,
+	      onCancel: function(){
+	        d.destroy();
+	      }
+	    });
+
+      dojo.connect(opp, "onValidate", function(isValid){
+	      console.debug("opportunityAction got onValidate", isValid);
+	      d.validate(isValid);
+	    });
+
+	    dojo.connect(d, "onConfirm", opp, "save");
+
+	    if (args.validate){
+  	    dojo.addClass(d.confirmTextContainer, "action-form-header");
+  	    d.validate();
+	    } else {
+	      //not validating so hide the projectaction
+	      dojo.addClass(opp.domNode, "hidden");
+	    }
+
+	    d.show();
+    },
 	  
 	  doProjectAction: function(args){
 	    //console.debug("appControl should do project action", args);
@@ -329,7 +382,8 @@ define(['dojo',
   	      title: "",
   	      confirmText: coordel.projectActions.confirmText[args.action],
   	      executeCss: css,
-  	      executeText: coordel.projectActions[args.action],
+  	      //executeText: coordel.projectActions[args.action],
+  	      executeText: coordel.ok,
   	      title:  coordel.projectActions[args.action],
   	      content: proj,
   	      onCancel: function(){
@@ -348,8 +402,11 @@ define(['dojo',
     	    dojo.addClass(d.confirmTextContainer, "action-form-header");
     	    d.validate();
   	    } else {
-  	      //not validating so hide the projectaction
-  	      dojo.addClass(proj.domNode, "hidden");
+  	      //not validating so hide the projectaction unless it's feedback
+  	      if (args.action !== "ackDone"){
+  	        dojo.addClass(proj.domNode, "hidden");
+  	      }
+  	      
   	    }
 
   	    d.show();
@@ -361,6 +418,9 @@ define(['dojo',
 	    switch (args.object){
 	      case "project":
 	      this._showProjectForm();
+	      break;
+	      case "task":
+	      this._showTaskForm(args);
 	      break;
 	      case "contact":
 	      this._showContactForm();
@@ -458,6 +518,37 @@ define(['dojo',
 	    d.show();
 	  },
 	  
+	  _showTaskForm: function(args){
+	    //console.log("_showTaskForm", args);
+	    var task = new TaskForm({
+	      task: {
+	        project: args.project._id
+	      }, isNew: true, showTips: false});
+	    
+	    var c = new ContainerPane({
+	      style: "padding:0"
+	    });
+
+	    
+	    
+	    var d = new cDialog({
+	      title: coordel.newTask,
+	      baseClass: "task-form",
+	      executeText: coordel.save,
+	      content: c
+	    });
+	    
+	    var save = dojo.connect(d, "onConfirm", task, function(){
+	      task.save();
+	      dojo.disconnect(save);
+	      d.destroy();
+	    });
+	    
+	    d.show();
+	    c.addChild(task);
+	    task._setPills("project");
+	  },
+	  
 	  _showContactForm: function(){
 	    //console.debug("create a contact");
 	    
@@ -499,7 +590,7 @@ define(['dojo',
 	  
 	  handleChange: function(resp){
 	    
-	    //console.log("appControl handleChanges called", resp);
+	    console.log("appControl handleChanges called", resp);
 	  
   	  var notifications = [];
   		//resp.results.map(function(r){
@@ -529,7 +620,7 @@ define(['dojo',
   			
   	    
   	    
-  	    // first detect the docType (task, project, activity, comment) and notify the stores
+  	    // first detect the docType (task, project, activity, message) and notify the stores
   	    switch (chg.docType){
   				case "app":
   				  
@@ -549,7 +640,7 @@ define(['dojo',
   				      projects = db.projects(false),
   				      assignStatus = "";
   				      
-  				  //console.debug("projects in change test", projects);
+  				  console.debug("projects in change test", projects);
   				  
   				  //need to check if this is new because it may have been saved several times before it 
   				  //got to this user so its isNew property might be false
@@ -573,7 +664,12 @@ define(['dojo',
   					if (isNew && chg.creator !== app.username && chg.updater !== app.username && chg.status !== "ARCHIVE" && chg.status !== "TRASH" && !chg._deleted){
   					  //this is a new project that I didn't create so add
   					  console.debug("Notify Project ADD", chg._id, chg._rev);
-  					  db.projectStore.store.notify(chg);
+  					  if (chg.substatus === "OPPORTUNITY"){
+  					    db.projectStore.oppStore.notify(chg);
+  					  } else {
+  					    db.projectStore.store.notify(chg);
+  					  }
+  					  
   					} else if (assignStatus === "DECLINED" || chg.substatus === "DELETED" || chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   					  //this project was deleted
   					  console.debug("Notify Project DELETE",chg._id, chg._rev);
@@ -582,9 +678,14 @@ define(['dojo',
   					} else {
   					  //this is an update
   					  //console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
-  					  //db.projectStore.store.notify(chg, chg._id);
+  					  
+  					  if (chg.substatus === "OPPORTUNITY"){
+  					    db.projectStore.oppStore.notify(chg, chg._id);
+  					  } else {
+  					    db.projectStore.store.notify(chg, chg._id);
+  					  }
   					}
-  					
+  					dojo.publish("coordel/projectNotify", [{project: chg}]);
   					break;
   				case "role":
   				  if (chg.isNew && chg.creator !== app.username && chg.updater !== app.username  && chg.status !== "TRASH" && chg.status !== "ARCHIVE" && !chg._deleted){
@@ -598,9 +699,34 @@ define(['dojo',
   				  } else {
   				    //this was an update
   				    //console.debug("Notify Role UPDATE");
-  					  //db.roleStore.store.notify(chg, chg._id);
+  					  db.roleStore.store.notify(chg, chg._id);
   				  }
   				  
+  				  //if the role belongs to the current project, then need to update the project store;
+  				  
+  				  if (chg.project === db.projectStore.currentProject){
+  				    console.debug("Current Project Role", chg, app.username);
+  				    if (chg.isNew && chg.creator !== app.username && chg.status !== "TRASH" && !chg._deleted){
+  				      console.debug("Notify Project Role ADD", chg);
+  				      //this is a new task and I didn't create it so add 
+  				      db.projectStore.roleStore.notify(chg);
+  				      
+  				    } else if (chg.status === "TRASH" || chg._deleted){
+  				      console.debug("Notify Project Role DELETE", chg);
+  				      db.projectStore.roleStore.notify(null, chg._id);
+  				      
+  				    } else {
+  				      //this is an update
+  				      console.debug("Notify Project Role UPDATE", chg);
+  				      db.projectStore.roleStore.notify(chg, chg._id);
+  				    }
+  				  } else {
+  				    console.log("Role Project Not Current", chg);
+  				  }
+  				  
+  				  
+  				  
+  				  dojo.publish("coordel/roleNotify", [{role: chg}]);
   				  break;
   				case "task":
   				  //taskStore - incoming change to one of my tasks
@@ -631,9 +757,9 @@ define(['dojo',
   				      
   				    } else {
   				      //this is an update
-  				      //db.taskStore.store.notify(chg, chg._id);
+  				      db.taskStore.store.notify(chg, chg._id);
   				  
-  				      //console.log("Notify Task UPDATE", chg);
+  				      console.log("Notify Task UPDATE", chg);
   				    }
   				    
   				  }
@@ -663,7 +789,7 @@ define(['dojo',
   				    } else {
   				      //this is an update
   				      //console.debug("Notify Project Task UPDATE", chg);
-  				      //db.projectStore.taskStore.notify(chg, chg._id);
+  				      db.projectStore.taskStore.notify(chg, chg._id);
   				    }
   				  } else {
   				    console.log("Task Project Not Current", chg);
@@ -691,11 +817,11 @@ define(['dojo',
   				    
   				    console.log("Notify Message UPDATE");
   				    if (db.focus === "project" && db.projectStore.streamStore && chg.project === db.projectStore.currentProject){
-  				      db.projectStore.streamStore.notify(chg, chg._id);
+  				      //db.projectStore.streamStore.notify(chg, chg._id);
   				    }
   				    
   				    if (db.streamStore.currentContext==="task" && db.streamStore.currentContextId === chg.task){
-  				      db.streamStore.taskStore.notify(chg, chg._id);
+  				      //db.streamStore.taskStore.notify(chg, chg._id);
   				    }
   				    
   				    //db.streamStore.store.notify(chg, chg._id);

@@ -22,12 +22,14 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         var self = this;
-      
+        
+        /*
         this.watch("task", function(prop, oldVal, newVal){
           //console.debug("task changed", prop, oldVal, newVal);
           self.task = newVal;
           self.setResponsibility();
         });
+        */
         
         if (!this.task){
           console.debug("ERROR: no task was provided to RoleResponsiblility view");
@@ -45,6 +47,9 @@ define(
           //console.debug("remove highlight ", this.task.name);
           dojo.publish("coordel/glow", [{id: this.task._id, isGlowing: false}]);
         });
+        
+        //this.taskNotifyHandler = dojo.subscribe("coordel/taskNotify", this, "handleTaskNotify");
+        
         
       },
       
@@ -64,6 +69,7 @@ define(
         //if this task has deliverables defined, list them here;
         
         if (this.task.workspace && this.task.workspace.length > 0){
+          this._clear(this.deliverables);
           dojo.removeClass(this.deliverables, "hidden");
           
           dojo.forEach(this.task.workspace, function(del){
@@ -72,6 +78,12 @@ define(
           
         }
       
+      },
+      
+      _clear: function(id){
+        dojo.forEach(dijit.findWidgets(id), function(item){
+          item.destroy();
+        });
       },
       
       baseClass: "role-responsibility"

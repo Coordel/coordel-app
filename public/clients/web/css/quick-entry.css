@@ -10,7 +10,7 @@
 /* use quick entry style when a user can click in a textbox, type something, and press enter to add
 to a list (i.e. private tasks, checklist, choices, etc)*/
 .c-quick-entry{ 
-  color: #66727F;
+  color: #000000;
   border-bottom: 1px solid #a3aab1;
   border-top: 1px solid #a3aab1;
   white-space: nowrap;
@@ -33,7 +33,7 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
   background-color: #fafafa;
   background-position: left center;
   background-repeat: no-repeat;
-  opacity: .6;
+  opacity: .7;
   font-weight: bold;
 }
 

@@ -56,12 +56,24 @@ background-image:url(images/emptyList/delegated.png);
 background-image:url(images/emptyList/private.png);
 }
 
+.empty-tasklist.opportunities .text {
+background-image:url(images/emptyList/opportunities.png);
+}
+
 .empty-tasklist.project-tasks .text {
 background-image: url(images/emptyList/taskList.png);
 }
 
 .empty-tasklist.project-deliverables .text {
 background-image: url(images/emptyList/deliverables.png);
+}
+
+.empty-tasklist.store .text {
+background-image:url(images/emptyList/store.png);
+}
+
+.empty-tasklist.calendar .text {
+background-image: url(images/emptyList/calendar.png);
 }
 
 .empty-tasklist p {

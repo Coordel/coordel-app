@@ -10,9 +10,11 @@ define(
     "dijit/_Widget",
     "dijit/_Templated",
     "text!./templates/streamActivity.html",
-    "app/views/StreamFooter/StreamFooter"
+    "app/views/StreamFooter/StreamFooter",
+    "app/views/StreamDetails/StreamDetails",
+    "app/views/Label/Label"
     ], 
-  function(dojo, coordel, w, t, html, Footer) {
+  function(dojo, coordel, w, t, html, Footer, Details, Label) {
   
   dojo.declare(
     "app.widgets.StreamActivity", 
@@ -43,7 +45,7 @@ define(
         
         if (!this.body){
           this.body = "";
-        }
+        } 
         
         if (this.object.type !== "PROJECT"){
           //if the object is a project, just leave "Project" as the object name
@@ -55,10 +57,24 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         
-        //console.debug("activity", this);
-        
         if (!this.body || this.body === ""){
           dojo.addClass(this.bodyContainer, "hidden");
+          dojo.addClass(this.detailsContainer, "hidden");
+        } else {
+          //raise-issue and update will have json objects in them that need to be properly formatted
+          if (this.verb === "UPDATE" || this.verb === "RAISE-ISSUE"){ 
+            var d = new Details({
+              body: dojo.fromJson(this.body)
+            }).placeAt(this.detailsContainer);
+            dojo.addClass(this.bodyContainer, "hidden");
+            dojo.removeClass(this.detailsContainer, "hidden");
+          } else {
+            var l = new Label({
+              value: this.body
+            }).placeAt(this.bodyContainer);
+            dojo.addClass(this.detailsContainer, "hidden");
+            dojo.removeClass(this.bodyContainer, "hidden");
+          }
         }
         
         if (this.project.id){

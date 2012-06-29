@@ -4,8 +4,9 @@ define(
   "text!app/views/Contact/templates/contact.html",
   "dijit/_Widget", 
   "dijit/_Templated",
-  "app/models/CoordelStore"], 
-  function(dojo, coordel, html, w, t, db) {
+  "app/models/CoordelStore",
+  "app/views/PrimaryBoxes/PrimaryBoxes"], 
+  function(dojo, coordel, html, w, t, db, pb) {
   
   dojo.declare(
     "app.widgets.Contact", 
@@ -29,14 +30,14 @@ define(
       postCreate: function(){
         this.inherited(arguments);
    
-        //console.debug("in Contact postCreate");
+        //console.debug("in Contact postCreate", this.contact, this.currentArgs);
         
         this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
         
         var email = dojo.trim(this.contact.email.toLowerCase()),
             self = this;
         
-        if (this.contact.email !== ""){
+        if (this.contact.email && this.contact.email !== ""){
            dojo.xhrGet({
               url: '/gravatar?email='+ escape(email) + '&s=32',
               handleAs: "json",
@@ -50,11 +51,16 @@ define(
         dojo.connect(self.domNode, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);
           if (this.doNavigation){
-             dojo.publish("coordel/primaryNavSelect", [ {name: "contact", id: this.contact.id}]);
+            //console.log("doNavigation contact primaryNavSelect");
+            pb.currentBox = "contact";
+            dojo.publish("coordel/primaryNavSelect", [ {name: "contact", focus: "contact", id: this.contact.id}]);
+            
           }
   	      //dojo.addClass(con.contactContainer, "active selected");
   	      //this.onClick();
   	    });
+  	    
+  	    self.setSelection();
 
       },
       
@@ -78,20 +84,27 @@ define(
       },
       
       clearSelection: function(args){
-        //console.debug("in clear selection", this.domNode);
-        if (this.domNode){
-          dojo.removeClass(this.domNode, "active selected");
-          this.setSelection(args);
-        }
+        var self = this;
+
+          //console.debug("clearing contact selection", self.id);
+          if (self.domNode){
+            dojo.removeClass(self.domNode, "active selected");
+          }
+  
       },
       
-      setSelection: function(args){
-        //console.log("args", args.id, this.contact.id);
-        if (args.id === this.contact.id){
-          if (this.domNode){
-            dojo.addClass(this.domNode, "active selected");
-          }
+      setSelection: function(){
+        //console.log("current args", this.currentArgs);
+        if (this.currentArgs.name === "contact" && this.currentArgs.id === this.contact.id){
+          //console.log("setting contact selection", this.contact.id, this.currentArgs);
+          dojo.addClass(this.domNode, "active selected");
         }
+        
+      },
+      
+      destroy: function(){
+        this.inherited(arguments);
+        dojo.unsubscribe(this.clearSelectionHandler);
       }
   });
   return app.widgets.Contact;     

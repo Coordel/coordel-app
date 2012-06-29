@@ -63,8 +63,15 @@ define(
         switch(this.taskFormField){
           case "project":
           //console.debug("showing a project pill");
+          /*
           this.source = db.projectStore.store.get(value);
+          this.source.then(function(){})
           this.displayValue.innerHTML = this.source.name;
+          */
+          dojo.when(db.projectStore.store.get(value), function(project){
+            self.displayValue.innerHTML = project.name;
+          });
+          
           break;
           case "deadline":
           this.source = value;

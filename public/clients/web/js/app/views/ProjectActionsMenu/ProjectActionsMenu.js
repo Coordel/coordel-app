@@ -113,8 +113,15 @@ define([
       //wire up the send menu option
       dojo.connect(this.send, "onclick", this, function(){
         //console.log("cancel clicked");
-        dojo.publish("coordel/projectAction", [{action: "send", project: this.project, validate: true}]);
+        dojo.publish("coordel/projectAction", [{action: "send", project: this.project, validate: false}]);
       });
+      
+      //publish opportunity for pending project
+      dojo.connect(this.publish, "onclick", this, function(){
+        //console.log("cancel clicked");
+        dojo.publish("coordel/projectAction", [{action: "publish", project: this.project, validate: true}]);
+      });
+      
       
       //wire up the decline menu option
       dojo.connect(this.decline, "onclick", this, function(){
@@ -185,6 +192,7 @@ define([
   				
   				  if (projSub && projSub === "PENDING"){
   				    dojo.removeClass(this.send, "hidden");
+  				    dojo.removeClass(this.publish, "hidden");
     				  dojo.removeClass(this.deleteProject, "hidden");
     					dojo.addClass(this.cancel, "hidden");
     					dojo.addClass(this.pause, "hidden");

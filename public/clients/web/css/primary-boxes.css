@@ -66,6 +66,10 @@ li.blocked a {
 li.private a {
 	background: url(images/primaryBoxes/private.png) no-repeat left center;
 }
+li.opportunities a {
+	background: url(images/primaryBoxes/opportunities.png) no-repeat left center;
+}
+
 
 li.task-invited a {
 	background: url(images/primaryBoxes/task-invited.png) no-repeat left center;

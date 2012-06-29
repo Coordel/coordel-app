@@ -286,7 +286,21 @@ couch.info(function(err, info){
             a.add(function(err, res){
               if (err) console.log(logId, "ERROR adding alert: " + err);
             });       
+          } else if (change.doc.docType === "message" && change.doc.updater !== key){
+            console.log(logId, "message alert", change.doc);
+            changesIO.emit('alerts:' + key, change.doc);
+            
+            var b = new Alert({
+              username: key,
+              alert: change.doc
+            });
+            
+            b.add(function(err, res){
+              if (err) console.log(logId, "ERROR adding alert: " + err);
+            });
           }
+          
+          
         }
       } 
     });

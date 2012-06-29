@@ -1,13 +1,14 @@
-<div class="c-ellipsis">
-
-	<span dojoAttachPoint="actionsMenu" class="menu-button c-float-r hidden" style="height: 20px;width:20px;line-height: 20px">
-		<div dojoAttachPoint="showProjectMenu" dojoType="dijit.form.DropDownButton" iconClass="primary-nav-icon icon-project-actions" showLabel="false">
-			<div dojoAttachPoint="projActionDialog" class="menu" layoutAlign="top" dojoType="dijit.TooltipDialog">
-				<div dojoAttachPoint="menuHolder"></div>
+<div>
+	<div class="c-ellipsis">
+		<span dojoAttachPoint="actionsMenu" class="menu-button c-float-r hidden" style="height: 20px;width:20px;line-height: 20px">
+			<div dojoAttachPoint="showProjectMenu" dojoType="dijit.form.DropDownButton" iconClass="primary-nav-icon icon-project-actions" showLabel="false">
+				<div dojoAttachPoint="projActionDialog" class="menu" layoutAlign="top" dojoType="dijit.TooltipDialog">
+					<div dojoAttachPoint="menuHolder"></div>
+				</div>
 			</div>
-		</div>
-	</span>
+		</span>
 
-	<span dojoAttachPoint="projectIcon" class="primary-nav-icon ${icon} c-float-l"></span>
-	<a project-id="${project._id}" title="${project.name}">${project.name}</a>
+		<span dojoAttachPoint="projectIcon" class="primary-nav-icon ${icon} c-float-l"></span>
+		<a project-id="${project._id}" title="${project.name}">${project.name}</a>
+	</div>
 </div>

@@ -1,0 +1,61 @@
+<div>
+	<div class="listHeader">
+		<div dojoAttachPoint="name">
+			<div class="c-float-l c-margin-r">${project.name}</div>
+			<div dojoAttachPoint="actionsMenu" class="menu-button hidden">
+				<div dojoAttachPoint="showProjectMenu" dojoType="dijit.form.DropDownButton" iconClass="ui-icon-actions" showLabel="true" title="Actions">
+					
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+	<div class="project-info">
+		<div class="c-float-r" style="width: 35%">
+			<h3 class="no-background">${coordel.opportunity}</h3>
+			<ul class="task-form">
+
+				<li dojoAttachPoint="infoOpportunity">
+					<span title="${coordel.projDetails.budget}"  class="field-icon dark-budget"></span>
+					<span>${coordel.projDetails.budget} </span>
+					<div dojoAttachPoint="budget" style="padding-left: 24px"></div>
+				</li>
+			
+				<li dojoAttachPoint="infoFollowers">
+					<span title="${coordel.projDetails.followers}"  class="field-icon dark-followers"></span>
+					<span>${coordel.projDetails.followers} </span>
+					<div dojoAttachPoint="followers" style="padding-left: 24px"></div>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<ul class="task-form c-padding-large">
+				<li dojoAttachPoint="infoPurpose">
+					<span title="${coordel.projDetails.purpose}" class="field-icon dark-purpose"></span>
+					<div class="field-inner">
+						<span dojoAttachPoint="purpose" dojoType="app.views.Label"></span>
+					</div>
+				</li>
+		
+				<li dojoAttachPoint="infoDeadline">
+					<span title="${coordel.projDetails.deadline}"  class="field-icon dark-deadline"></span>
+					<span>${coordel.projDetails.deadline} <span><span dojoAttachPoint="deadline" dojoType="app.views.Label"></span>
+				</li>
+				
+				<li dojoAttachPoint="infoResponsible">
+					<span title="${coordel.projDetails.responsible}"  class="field-icon dark-responsible"></span>
+					<span dojoAttachPoint="responsible" dojoType="app.views.Label"></span>
+				</li>
+		
+				<li dojoAttachPoint="infoDeferDate">
+					<span title="${coordel.projDetails.defer}"  class="field-icon dark-defer"></span>
+					<span>${coordel.projDetails.starts} </span><span dojoAttachPoint="deferred" dojoType="app.views.Label"></span>
+				</li>
+				
+		
+			</ul>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>

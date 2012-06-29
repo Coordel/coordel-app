@@ -20,9 +20,11 @@ define(
       var a = this.activity,
   		  db = this.db,
   			proj = db.projectStore.store.get(project);
+  		
+  		console.log("_getMessage", db.user, proj);
   			
   		a.actor.id = db.username();
-      a.actor.name = db.user.first + " " + db.user.last;
+      a.actor.name = db.user.firstName + " " + db.user.lastName;
       a.actor.type = "PERSON";
   		a.target.id = proj._id;
   		a.target.name = proj.name;
@@ -44,16 +46,16 @@ define(
     },
     
     sendMessage: function(message, project){
-      //console.debug("in StreamModel sendMessage", message, project);
+      console.debug("in StreamModel sendMessage", message, project);
       var a = this._getMessage(message, project),
           db = this.db;
           
       if (db.focus === "project"){
         return db.projectStore.streamStore.add(a, {username: db.username()});
       }
-  		
+  		console.debug("here's the message to send", a);
   		return db.streamStore.store.add(a, {username: db.username()});
-  		//console.debug("here's the message to send", a);
+  		
   	},
   	
   	sendTaskMessage: function(message, task){

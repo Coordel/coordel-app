@@ -59,6 +59,10 @@ define(
           
           this.isProjectInvite = true;
 				}
+				
+				if (!this.task.name){
+				  this.task.name = "";
+				}
         
       },
       
@@ -219,7 +223,7 @@ define(
         
         //if i'm not the project responsible, delegator, or user of the task, then the
         //checkbox needs to be disabled so other members of the project can't mark it done
-        if (t.projResponsible() !== username && t.delegator !== username && t.username !== username){
+        if (t.projResponsible() !== username && t.delegator !== username && t.username !== username && !t.isDone()){
           this.taskCheckbox.set("disabled", true);
         }
         
@@ -255,6 +259,16 @@ define(
         
         //if this is deferred, set defered date as task metainfo
         if (t.isDeferred()){
+          
+          
+          //when a task is deferred, it might also need to show that it was cleared as an issue
+          //i.e. i raise an issue that I can't start til next week. the responsible changes the defer 
+          //date on the task to next week then clears it. it's now deferred, but the user needs to 
+          //see that it was cleared. (doesn't apply to the deferred view or the project view)
+          if (t.substatus === "CLEARED" && this.focus ==="deferred"){
+            dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.cleared + " : ");
+          }
+          
           //console.debug("it's deferred");
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.starts + " " + dt.deferred(t.calendar.start) + " : ");
           
@@ -262,7 +276,7 @@ define(
           if (this.focus === "deferred"){
             dojo.removeClass(this.removeDeferDate, "hidden");
           }
-        
+    
         }
         
         /*commented out because the task user is added in _setMetaInfo
@@ -526,7 +540,10 @@ define(
        
        //wire up the remove-defer button
        dojo.connect(this.removeDeferDate, "onclick", this, function(){
+         //call version to make a version of this taskModel's task
+         t.version();
          delete (this.task.calendar);
+         this.task = t.logActivity(this.task);
          t.update(this.task);
        });
     
@@ -701,6 +718,9 @@ define(
         if (this.isProjectInvite){
           text = "";
           
+          //don't show project label if this is a project invite
+          self.showProjectLabel = false;
+          
           //get who sent the invite, might be project responsible, might be the delegator
           con = db.contactFullName(resp);
 
@@ -788,7 +808,6 @@ define(
         
         //cleared
         if (t.isCleared()){
-          //console.debug("cleared");
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.cleared + " : ");
         }
         

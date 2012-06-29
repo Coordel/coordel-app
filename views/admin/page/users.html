@@ -1,0 +1,13 @@
+<div class="ui-corner-all large-shadow content-panel">
+	<h3>Users</h3>
+	<div style="padding: 16px">
+	<% for (var key in users) {%>
+		<div style="padding-bottom: 12px">
+			<div style="font-weight:bold"><%=users[key].firstName%> <%=users[key].lastName%></div>
+			<div>
+				<div style="float: left; padding-right: 8px"><%=users[key].appId%></div>
+				<div><%=users[key].id%></div>
+			</div>
+		</div>
+	<%}%>
+</div>

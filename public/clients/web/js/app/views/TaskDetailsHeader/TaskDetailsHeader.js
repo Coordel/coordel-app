@@ -104,13 +104,13 @@ define([
         //wire up the acceptTask button
         dojo.connect(this.acceptTask, "onClick", this, function(){
           console.log("acceptTask clicked");
-          dojo.publish("coordel/taskAction", [{action: "acceptTask", task: this.task}]);
+          dojo.publish("coordel/taskAction", [{action: "accept", task: this.task}]);
         });
         
         //wire up the declineTask button
         dojo.connect(this.declineTask, "onClick", this, function(){
           console.log("declineTask clicked");
-          dojo.publish("coordel/taskAction", [{action: "declineTask", task: this.task}]);
+          dojo.publish("coordel/taskAction", [{action: "decline", task: this.task, validate: true, cssClass: "warning-button"}]);
         });
         
         //wire up the edit button

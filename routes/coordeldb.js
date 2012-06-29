@@ -25,7 +25,11 @@ var nanoCouch = nano.use(settings.config.couchName);
 module.exports = function(app, validate){
   
   app.post('/coordel', function(req, res){
-    //console.log("POST", req.body);
+    console.log("POST", req.body);
+  });
+  
+  app.post('/coordel/:id', function(req, res){
+    console.log("POST", req.body);
   });
   
   /**
@@ -36,9 +40,9 @@ module.exports = function(app, validate){
    * @api validated
    */
   app.put('/coordel/:id', function(req, res){
-    //console.log("PUT coordel/:id");
+    console.log("PUT coordel/:id", req.body);
     couch.save(req.body, function(err, putRes){
-      //console.log("PUT RESPONSE", putRes, err);
+      console.log("PUT RESPONSE", putRes, err);
       if (err){
         console.log(logId, "Error putting to couch: " + JSON.stringify(err) + " Doc: " + JSON.stringify(req.body));
         res.json({error: err});
@@ -162,10 +166,22 @@ module.exports = function(app, validate){
   });
 
   app.get('/coordel/:id', function(req, res){
-    //console.log('GET ID', req.params.id);
+    console.log('GET ID', req.params.id);
     couch.get(req.params.id, function(err, obj){
       if (err){
+        
         console.log(logId, "ERROR getting " + req.params.id + ": " + err.error);
+        console.log(err);
+        if (err.error === "not_found"){
+          err.code = 404;
+          //res.send("ERROR getting " + req.params.id + ": " + err.error, 404);
+          res.json(err);
+        } else {
+          //res.send("Unexpected error " + req.params.id + ": " + err.error, 500);
+          err.code = 500;
+          res.json(err);
+        }
+        
       } else {
         res.json(obj);
       }

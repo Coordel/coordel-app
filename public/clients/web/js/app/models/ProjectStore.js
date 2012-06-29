@@ -53,16 +53,20 @@ define(["dojo",
             
             loadProject: function(project){
               
-              //console.debug("loadProject called", project, this.currentProject);
+              console.debug("loadProject called", project, this.currentProject);
               
               var def = new dojo.Deferred(),
                   self = this;
-                
+                  
               
-              if (project === this.currentProject){
+              if (!project && !this.currentProject){
+                def.errback({error: "Invalid project id", reason: "missing"});
+              } else if (project && project === this.currentProject){
                 def.callback(self);
               } else {
-              
+                if (!project){
+                  project = this.currentProject;
+                }
                 //current project is the project that is currently cached. that way
                 //the app can inspect it and if a different project is needed, it can be loaded
                 var load = new dojo.DeferredList([
@@ -80,6 +84,26 @@ define(["dojo",
               }
               return def;
               
+            },
+            loadOpportunities: function(username){
+              this.oppMemory = new mem({idProperty: "_id", queryEngine: dojo.store.util.SimpleQueryEngine});
+              this.oppRemote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.SimpleQueryEngine});
+              //this.remote = new obs(this.remote);
+              this.oppMemory = new obs(this.oppMemory);
+              this.oppStore = new obsCache(this.oppRemote, this.oppMemory);
+              
+              //latest opportunities
+              this.oppMemory.latest = function(project){
+                return pStatus.isLatestOpportunity(project, username);
+              };
+              
+              var queryArgs = {
+                view: "coordel/opportunities",
+            		descending: "true",
+            		limit: 50
+            	};
+            	
+            	return this.oppStore.query(queryArgs);
             },
             _loadProjects: function(username){
               

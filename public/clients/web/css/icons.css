@@ -110,6 +110,33 @@
 	background-position: -200px 0;
 }
 
+.dark-opportunity {
+  background-position: -240px -20px;
+}
+
+.field-icon-opportunity {
+	background-position: -240px 0;
+}
+
+.dark-budget {
+  background-position: -260px -20px;
+}
+
+.field-icon-budget {
+  background-position: -260px 0;
+}
+
+.dark-followers {
+  background-position: -280px -20px;
+}
+
+.field-icon-followers {
+  background-position: -280px 0;
+}
+
+
+
+
 .small-task-icon {
   height: 12px;
   width: 12px;
@@ -175,6 +202,15 @@
   background-position: center -2px;
 }
 
+.ui-icon-actions {
+  height: 16px;
+  width: 16px;
+  background-image: url(images/icons/actions.png);
+  display:inline-block;
+  margin-right: 4px;
+  background-repeat: no-repeat;
+}
+
 
 .icon-email {background-position:0;}
 .icon-phone {background-position:-16px;}
@@ -216,6 +252,9 @@
 .icon-project-following {background-position: -360px;}
 .icon-project-cancelled {background-position: -480px;}
 .icon-project-done {background-position: -520px;}
+.icon-owner-project-opportunity {background-position: -560px;}
+.icon-project-opportunity {background-position: -600px;}
+.icon-project-opportunity-following {background-position: -640px;}
 
 .active .icon-project {background-position:-120px;}
 .active .icon-owner-project {background-position:-180px;}
@@ -226,6 +265,9 @@
 .active .icon-owner-project.invite-error {background-position: -460px;}
 .active .icon-project-cancelled {background-position: -500px;}
 .active .icon-project-done {background-position: -540px;}
+.active .icon-owner-project-opportunity {background-position: -580px;}
+.active .icon-project-opportunity {background-position: -620px;}
+.active .icon-project-opportunity-following {background-position: -660px;}
 
 
 .highlight .icon-project, .active.highlight .icon-project {background-position:-140px;}

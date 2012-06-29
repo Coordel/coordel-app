@@ -25,6 +25,8 @@ define(['dojo',
 
        }).placeAt(left);
        
+       leftHead.startup();
+       
       //main
       var leftNavContainer = new bc({
         region: "center",
@@ -50,6 +52,8 @@ define(['dojo',
         //href: 'js/app/layouts/templates/otherListHeader.html'
         content: dojo.string.substitute(headHtml, coordel)
       }).placeAt(otherListNav);
+      
+      pcHead.startup();
 
       var pcMain = new stack({
         region: "center",
@@ -58,8 +62,15 @@ define(['dojo',
       }).placeAt(otherListNav);
       var projects = new cpane({id: "otherListProjects", style:"padding:0"});
       var contacts = new cpane({id: "otherListContacts", style:"padding:0"});
+      var store = new cpane({id: "otherListStore", style:"padding:0"});
       pcMain.addChild(projects);
       pcMain.addChild(contacts);
+      pcMain.addChild(store);
+      
+      projects.startup();
+      contacts.startup();
+      store.startup();
+      pcMain.startup();
 
       //footer
       var pcFoot = new cpane({
@@ -67,6 +78,11 @@ define(['dojo',
         splitter: false,
         id: "otherListFooter"
       }).placeAt(otherListNav);
+      
+      pcFoot.startup();
+      
+      otherListNav.startup();
+      leftNavContainer.startup();
     }
   };
 });

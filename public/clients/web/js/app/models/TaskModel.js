@@ -338,6 +338,7 @@ define("app/models/TaskModel",
     			return false;
     		}
 
+        
     		//if it's deferred, it can't be current
     		if (t.isDeferred()){
     			//console.debug(t.name + " was deferred, it's not current");
@@ -361,6 +362,8 @@ define("app/models/TaskModel",
     				//console.debug(t.name + " was CLEARED and I'm the project responsible, it's not current");
     				isCurrent = false;
     			};	
+    			
+    		
     		}
     
     		//if an action has been returned, it's not current if i'm the project responsible
@@ -480,6 +483,10 @@ define("app/models/TaskModel",
     		    isInvite = false,
     		    p = this.p,
     		    username = this.db.username();
+    		    
+    		if (t.isCancelled()){
+    		  return false;
+    		}
     		    
         //if the task is unassigned, it should only show as unassigned
   		  if (t.isUnassigned()){
@@ -658,8 +665,8 @@ define("app/models/TaskModel",
     		  && !t.isBlocked()
     		  && !t.isPaused()
     		  && !t.isIssue()
-    		  && !t.isCleared()
-    		  && !t.isReturned()
+    		  //&& !t.isCleared()
+    		  //&& !t.isReturned()
     			&& !t.isDone()
     			&& !t.isCancelled()
     			&& !t.isInvite()
@@ -887,8 +894,6 @@ define("app/models/TaskModel",
   	    //if I created this task, then I've already accepted by default
   	    task.substatus = "ACCEPTED"; 
   	    
-  	    
-  	    
   	    //default to the current user if username not set yet
   	    if (!task.username){
   	      //console.debug("no username, set to me", username);
@@ -946,7 +951,7 @@ define("app/models/TaskModel",
         task.docType = "task";
         task.isTemplate = false;
         
-        //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
+        //if this is in in myDelegatedProject, need to flag it delegated so the view can find it
         task.isMyPrivate = false;
         if (task.project === app.myPrivateProject){
           task.isMyPrivate = true;
@@ -986,6 +991,7 @@ define("app/models/TaskModel",
           //db.taskStore.store.add(taskResp, {username: username});
           switch(db.focus){
             case "project":
+          
             db.projectStore.taskStore.add(taskResp, {username: username});
             break;
             case "task":
@@ -1074,25 +1080,100 @@ define("app/models/TaskModel",
       update: function(task){
 
         var db = this.db,
+            app = db.appStore.app(),
             username = this.db.username(),
             p = this.p,
-            t = this;
+            t = this,
+            projResponsible = this.projResponsible();;
             
-        //console.debug("update task", task, db.focus);
+        
+            
+        //console.debug("update task", task, task._rev, db.focus, p.project);
             
         task.isNew = false;
         
+        //get rid of the calculated fields
+        delete task.contextDeadline;
+        delete task.contextStarts;
+        
+        //default to the current user if username not set yet
+  	    if (!task.username){
+
+  	      //no username was set, so it's my task. in an update, this will only happen if the 
+  	      //existing username was removed.
+  	      task.username = username;
+  	    }
+  	    
+  	    //when a user is removed from a task, then the existing status was also removed
+  	    //so need to reset it accordiningly here
+  	    if (!task.status){
+  	      
+  	      //CURRENT means that it can show in the Current list if not deferred or blocked
+  	      //since there was no name, need to make this task the responsibility of the user 
+  	      //that removed the existing name
+    	    task.status = "CURRENT"; 
+    	    //if I created this task, then I've already accepted by default
+    	    task.substatus = "ACCEPTED";
+          
+          //if i'm not the task user, then this is delegated
+    	    if (task.username !== username){
+    	      task.substatus = "DELEGATED";
+    	      isDelegated = true;
+    	    }
+    	    
+    	    //make a note that this was reassigned from the initial user since this was an update
+    	    task = t.addActivity({
+      			verb: "REASSIGN",
+      			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
+      			icon: t.icon.reassign
+      		}, task);
+        }
+  	    
+  	    //default to noName if there's no name set
+  	    if (!task.name){
+  	      task.name = coordel.noName;
+  	    }
+  	    
+  	    //if a project was set, set the responsible and, if applicable, the delegator
+  	    if (task.project){
+  	      //the task responsible is the project responsible
+          task.responsible = projResponsible;
+          
+          //if task isn't for me and the project responsible isn't me, then i'm the delegator
+          if (projResponsible !== username && task.username !== username){
+            task.delegator = username;
+          }
+  	    }
+  	    
+  	    //if no project and the task is mine then assign it to my private project
+  	    if (!task.project || task.project === null || task.project === ""){
+  	      //i'm the responsible when it's a private or delegated task
+  	      task.responsible = username;
+  	      task.project = app.myPrivateProject;
+  	      projId = app.myPrivateProject;
+  	      projName = "Private";
+  	      //it's a delegated project if the username isn't me
+  	      if (task.username !== username){
+  	        //assign it to my delegated project
+  	        task.project = app.myDelegatedProject;
+  	        projId = app.myDelegatedProject;
+    	      projName = "Delegated";
+  	      }
+  	    }
+        
         //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
         task.isMyPrivate = false;
-        if (task.project === app.myPrivateProject){
+        if (task.project === db.myPrivate()){
           task.isMyPrivate = true;
         }
         
         //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
         task.isMyDelegated = false;
-        if (task.project === app.myDelegatedProject){
+        if (task.project === db.myDelegated()){
           task.isMyDelegated = true;
         }
+        
+        
         
         /*
         //make the UPDATE activity for the task update
@@ -1103,24 +1184,35 @@ define("app/models/TaskModel",
     		}, task);
     		
     		*/
-        p.updateAssignments(task);
+    		//updating the assignments loads the role of the task, then updates the responsibilities
+    		//status of the role and saves it. If the project doesn't have a role for this user, it the 
+    		//adds the assignment (using th)
+        dojo.when(p.updateAssignments(task), function(updatedTask){
+          
+          //console.log("updated assignments", updatedTask, p.project);
+          //use the appropriate store based on the focus of the db
+           
+          switch(db.focus){
+            case "project":
+            //console.log("do projectStore.store.put", updatedTask);
+            db.projectStore.taskStore.put(updatedTask, {username: username});
+            break;
+            case "task":
+            //console.log("do taskStore.store.put", updatedTask);
+            db.taskStore.store.put(updatedTask, {username: username});
+            break;
+            case "contact":
+            //console.log("do contactStore.store.put", updatedTask);
+            db.contactStore.taskStore.put(updatedTask, {username: username});
+            break;
+          }
+          
+          t.updateBlocking(updatedTask);
+
+          dojo.publish("coordel/setPrimaryBoxCounts");
+        });
         
-        t.updateBlocking(task);
         
-        //use the appropriate store based on the focus of the db
-        switch(db.focus){
-          case "project":
-          db.projectStore.taskStore.put(task, {username: username});
-          break;
-          case "task":
-          db.taskStore.store.put(task, {username: username});
-          break;
-          case "contact":
-          db.contactStore.taskStore.put(task, {username: username});
-          break;
-        }
-        
-        dojo.publish("coordel/setPrimaryBoxCounts");
       },
       
       updateBlocking: function(task){
@@ -1272,6 +1364,7 @@ define("app/models/TaskModel",
        
        dojo.publish("coordel/setPrimaryBoxCounts");
       },
+      
       addBlocker: function(task, blocker){
         var t = this;
         
@@ -1300,6 +1393,7 @@ define("app/models/TaskModel",
         
         return task;
       },
+      
       returnNotDone: function(task, message){
         if (!message){
           message = "";
@@ -1319,8 +1413,9 @@ define("app/models/TaskModel",
     		}, task);
     		t.update(task);
     	},
+    	
       submitToApprove: function(task, message){
-        
+      
         if (!message){
           message = "";
         }
@@ -1329,17 +1424,20 @@ define("app/models/TaskModel",
     			db = this.db,
           p = this.p,
           username = db.username();
+          
+        //console.log("p in submitToApprove", p);
 
     		task.status = "CURRENT";
     		task.substatus = "DONE";
     		task = t.addActivity({
     			verb: "SUBMIT",
-    			target: {id:p.project._id, name: db.contactFullName(p.project.name, true), type: "PROJECT"},
+    			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
     			icon: t.icon.submitItem,
     			body: message
     		}, task);
         t.update(task);
     	},
+    	
     	approve: function(task, message){
     	  if (!message){
     	    message = "";
@@ -1359,6 +1457,7 @@ define("app/models/TaskModel",
     		
     	  t.update(task);
     	},
+    	
     	finish: function(task, message){
     	  if (!message){
     	    message = "";
@@ -1378,14 +1477,17 @@ define("app/models/TaskModel",
     		
     	  t.update(task);
     	},
+    	
     	raiseIssue: function(task, issue, solution){
     	  
     		var t = this,
     			db = this.db,
           p = this.p,
           body = {
-            issue: issue,
-            solution: solution
+            raiseIssue: {
+              issue: issue,
+              solution: solution
+            }
           };
 
         //convert the body object to a json string to store it in the body of the activity
@@ -1401,6 +1503,7 @@ define("app/models/TaskModel",
     		
     		t.update(task);
     	},
+    	
     	clearIssue: function(task, message){
     	  
     		var t = this,
@@ -1418,6 +1521,7 @@ define("app/models/TaskModel",
     		
     		t.update(task);
     	},
+    	
     	pause: function(task, message){
     		var t = this,
     			db = this.db,
@@ -1433,6 +1537,7 @@ define("app/models/TaskModel",
     		}, task);
         t.update(task);
     	},
+    	
     	resume: function(task, message){
     		var t = this,
     			db = this.db,
@@ -1448,6 +1553,7 @@ define("app/models/TaskModel",
     		}, task);
         t.update(task);
     	},
+    	
     	cancel: function(task, message){
     		var t = this,
     			db = this.db,
@@ -1463,6 +1569,7 @@ define("app/models/TaskModel",
     		}, task);
         t.update(task);
     	},
+    	
     	defer: function(task, date){
     	  
     	  //date is an iso string
@@ -1485,6 +1592,7 @@ define("app/models/TaskModel",
     	  t.update(task);
     	      
     	},
+    	
     	accept: function(task, message){
     	  //console.debug("accept called in TaskModel", task);
     		var t = this,
@@ -1506,6 +1614,7 @@ define("app/models/TaskModel",
     		
         t.update(task);
     	},
+    	
     	decline: function(task, message){
     	  
     	  //console.debug("declining task", task);
@@ -1532,6 +1641,7 @@ define("app/models/TaskModel",
     		//console.debug("task to decline", task);
     		t.update(task);
     	},
+    	
     	proposeChange: function(task, message){
     	  //when a task is delegated to a user, they might want clarification about what they should
     	  //do, they might want to define the deliverables more completely, or they might need
@@ -1560,6 +1670,7 @@ define("app/models/TaskModel",
     		t.update(task);
     	  
     	},
+    	
     	agreeChange: function(task, message){
     	  //if a task is in the proposed state, the delegator or responsible needs to then
     	  //agree to the proposal by ammending it. There can be further clarifications
@@ -1586,6 +1697,7 @@ define("app/models/TaskModel",
     		
     		t.update(task);
     	},
+    	
     	markDone: function(task){
     	  //submits to approve if not project responsible
         //or approves if project responsible. There won't be a message when checking the box
@@ -1617,6 +1729,7 @@ define("app/models/TaskModel",
         }
 
     	},
+    	
     	leave: function(task){
     	  	var t = this,
       			db = this.db,
@@ -1630,6 +1743,7 @@ define("app/models/TaskModel",
       		}, task);
           t.update(task);
     	},
+    	
     	reassign: function(task, username){
     	  	var t = this,
       			db = this.db,
@@ -1643,6 +1757,7 @@ define("app/models/TaskModel",
       		}, task);
           t.update(task);
     	},
+    	
     	reuse: function(task, isDeliverables){
     	  var bp = {
     	    username: this.db.username(),
@@ -1670,6 +1785,388 @@ define("app/models/TaskModel",
             //console.log("blueprint", res);
           }
         });
+    	},
+    	
+    	version: function(){
+    	    //create a version of this task when doing an edit
+          var task = this.task;
+
+          if (!task.versions){
+            task.versions = {};
+          }
+
+          if (!task.versions.latest){
+             task.versions.latest = dojo.clone(task);
+          } else {
+            if (!task.versions.history){
+              task.versions.history = [];
+            }
+            task.versions.history.push(task.versions.latest);
+            task.versions.latest = dojo.clone(task);
+          }
+
+          delete task.versions.latest.contextStarts;
+          delete task.versions.latest.contextDeadline;
+          delete task.versions.latest.history;
+          delete task.versions.latest.versions;
+          //console.log("setVersion in TaskModel", task.versions);
+    	},
+    	
+    	logActivity: function(task){
+    	  
+    	  var t = this,
+    			  db = this.db,
+            p = this.p,
+            changes = [],
+    	      latest = task.versions.latest,
+    	      hasChange = false,
+    	      recap;
+    	      
+        function prettyDate(date){
+          var hasTime = false,
+              test = date.split("T");
+          if(test.length > 1){
+            hasTime = true;
+          }
+          return dt.prettyISODate(date, hasTime);
+        }
+	      
+    	  function fix(val){
+    	    //use this function to make sure that we don't send undefined values in the 
+    	    //changes
+    	    if (val === undefined){
+    	      val = "";
+    	    }
+    	    return val;
+    	  }
+    	  
+    	  //purpose 
+    	  if (task.purpose){
+    	    if (!latest.purpose || latest.purpose === ""){
+    	      //added
+    	      hasChange = true;
+      	    //console.log("purpose changed");
+      	    changes.push({field: "purpose", prev: false, value: fix(task.purpose)});
+    	    } else {
+    	      if (task.purpose !== latest.purpose){
+    	        //changed
+      	      hasChange = true;
+        	    //console.log("purpose changed");
+        	    changes.push({field: "purpose", prev: fix(latest.purpose), value: fix(task.purpose)});
+    	      }
+    	    }
+    	  } else {
+    	    if (latest.purpose){
+    	      //removed 
+    	      hasChange = true;
+      	    //console.log("purpose changed");
+      	    changes.push({field: "purpose", prev: fix(latest.purpose), value: false});
+    	    }
+    	    
+    	  }
+    	  
+    	  //deferred
+  	    if (task.calendar){
+  	      if (!latest.calendar){
+  	        hasChange = true;
+  	        //console.log("deferred changed");
+    	      changes.push({field: "deferred", prev: false, value: fix(prettyDate(task.calendar.start))});
+  	      } else {
+  	        if (task.calendar.start !== latest.calendar.start){
+    	        hasChange = true;
+    	        //console.log("deferred changed");
+      	      changes.push({field: "deferred", prev: fix(prettyDate(latest.calendar.start)), value: fix(prettyDate(task.calendar.start))});
+    	      }
+  	      }
+  	    } else {
+  	      if (latest.calendar){
+    	      hasChange = true;
+  	        //console.log("deferred changed");
+    	      changes.push({field: "deferred", prev: fix(prettyDate(latest.calendar.start)), value: false});
+    	    }
+  	    }
+  	     
+  	    //deliverables
+  	    if (task.workspace){
+  	      //there are deliverables now, see if there were before
+    	    if(!latest.workspace){
+    	      //there weren't any deliverables before so all existing now were added
+    	      hasChange = true;
+    	      dojo.forEach(task.workspace, function(del){
+    	        //console.log("deliverable added");
+    	        changes.push({field: "deliverable", prev: false, value: fix(del.name)});
+    	      });
+    	    } else {
+    	      //there were deliverables before so need to do analysis to see what happend
+            recap = {
+              removed: [],
+              added: []
+            };
+            
+    	      //see if any of the deliverables have been removed
+    	      dojo.forEach(latest.workspace, function(l){
+    	        var isRemoved = true;
+    	        dojo.forEach(task.workspace, function(t){
+    	          if (l.id === t.id) isRemoved = false; 
+    	        });
+    	        if (isRemoved) recap.removed.push(l);
+    	      });
+    	      
+    	      //add change entries for removed deliverables
+    	      if (recap.removed.length > 0){
+    	        hasChange = true;
+    	        dojo.forEach(recap.removed, function(del){
+    	          //console.log("deliverable removed");
+      	        changes.push({field: "deliverable", prev: fix(del.name), value: false});
+    	        });
+    	      }
+    	      
+    	      //see if any of the deliverables have been added
+    	      dojo.forEach(task.workspace, function(t){
+    	        var isAdded = true;
+    	        dojo.forEach(latest.workspace, function(l){
+    	          if (t.id === l.id) isAdded = false;
+    	        });
+    	        if (isAdded) recap.added.push(t);
+    	      });
+    	      
+    	      //add change entries for added deliverables
+    	      if (recap.added.length > 0){
+    	        hasChange = true;
+    	        dojo.forEach(recap.added, function(del){
+    	          //console.log("deliverable added");
+      	        changes.push({field: "deliverable", prev: false, value: fix(del.name)});
+    	        });
+    	      }
+    	      
+    	      //compare the task deliverable update dates with latest to see if they have changed
+    	      //and make entries as required
+    	      dojo.forEach(task.workspace, function(t){
+  
+    	        dojo.forEach(latest.workspace, function(l){
+    	          if (t.id === l.id && t.updated !== l.updated){
+    	            hasChange = true;
+        	        //console.log("deliverables changed");
+        	        changes.push({field: "deliverable", prev: fix(l.name), value: fix(t.name)});
+    	          }
+    	        });
+    	      });
+    	    }
+    	  } else {
+    	    //there isn't a workspace, need to see if there was one before
+    	    if (latest.workspace){
+    	      //there was a previous workspace so that means all the previous deliverables were removed
+    	      hasChange = true;
+    	      dojo.forEach(latest.workspace, function(del){
+    	        //console.log("deliverable removed");
+    	        changes.push({field: "deliverable", prev: fix(del.name), value: false});
+    	      });
+    	      
+    	    }
+    	  }
+        
+        //deadline
+    	  if (task.deadline){
+    	    if (!latest.deadline){
+    	      //added
+    	      hasChange = true;
+      	    //console.log("deadline changed");
+      	    changes.push({field: "deadline", prev: false, value: fix(prettyDate(task.deadline))});
+    	    } else {
+    	      if (task.deadline !== latest.deadline){
+    	        //changed
+      	      hasChange = true;
+        	    //console.log("deadline changed");
+        	    changes.push({field: "deadline", prev: fix(prettyDate(latest.deadline)), value: fix(prettyDate(task.deadline))});
+    	      } 
+    	    }
+    	  } else {
+    	    if (latest.deadline){
+    	      //removed
+    	      hasChange = true;
+      	    //console.log("deadline changed");
+      	    changes.push({field: "deadline", prev: fix(prettyDate(latest.deadline)), value: false});
+    	    }
+    	  }
+    	  
+    	  //name
+    	  if (task.name !== latest.name){
+    	    var name = task.name;
+    	    if (!name || name === ""){
+    	      name = coordel.noName;
+    	    }
+    	    hasChange = true;
+    	    //console.log("name changed");
+    	    changes.push({field: "name", prev: fix(latest.name), value: fix(name)});
+    	  }
+    	  
+    	  //blockers
+    	  if (task.coordinates){
+    	    function getBlocker(task){
+    	      var def = new dojo.Deferred();
+    	      var mod = db.getBlockerModel(task);
+    	      dojo.when(mod, function(t){
+    	        var blocker = t.p.project.name + ": " + t.task.name;
+    	        def.callback(blocker);
+    	      });
+    	      return def;
+    	    }
+    	    
+    	    if (!latest.coordinates){
+    	      //all of these were added
+    	      hasChange = true;
+    	      dojo.forEach(task.coordinates, function(b){
+    	        var blocker = getBlocker(b);
+    	        dojo.when(blocker, function(bl){
+    	          changes.push({field: "blocker", prev: false, value: fix(bl)});
+    	        });
+    	      });
+    	    } else {
+            recap = {
+              removed: [],
+              added: []
+            };
+            
+    	      //see if any of the blockers have been removed
+    	      dojo.forEach(latest.coordinates, function(l){
+    	        var isRemoved = true;
+    	        dojo.forEach(task.coordinates, function(t){
+    	          if (l === t) isRemoved = false; 
+    	        });
+    	        if (isRemoved) recap.removed.push(l);
+    	      });
+    	      
+    	      //add change entries for removed blockers
+    	      if (recap.removed.length > 0){
+    	        hasChange = true;
+    	        dojo.forEach(recap.removed, function(b){
+    	          //console.log("deliverable removed");
+      	        var blocker = getBlocker(b);
+      	        dojo.when(blocker, function(bl){
+      	          changes.push({field: "blocker", prev: fix(bl), value: false});
+      	        });
+    	        });
+    	      }
+    	      
+    	      //see if any of the blockers have been added
+    	      dojo.forEach(task.coordinates, function(t){
+    	        var isAdded = true;
+    	        dojo.forEach(latest.coordinates, function(l){
+    	          if (t === l) isAdded = false;
+    	        });
+    	        if (isAdded) recap.added.push(t);
+    	      });
+    	      
+    	      //add change entries for added blockers
+    	      if (recap.added.length > 0){
+    	        hasChange = true;
+    	        dojo.forEach(recap.added, function(b){
+    	          //console.log("deliverable added");
+      	        var blocker = getBlocker(b);
+      	        dojo.when(blocker, function(bl){
+      	          changes.push({field: "blocker", prev: false, value: fix(bl)});
+      	        });
+    	        });
+    	      }
+    	    }
+    	  
+    	  } else {
+    	    if (latest.coordinates){
+    	      //all of these were removed
+    	      hasChange = true;
+    	      dojo.forEach(latest.coordinates, function(b){
+    	        //console.log("deliverable removed");
+    	        var blocker = getBlocker(b);
+    	        dojo.when(blocker, function(bl){
+    	          changes.push({field: "blocker", prev: fix(bl), value: false});
+    	        });
+    	      });
+    	      
+    	    }
+    	  }
+    	  
+    	  //attachments
+    	  if (task._attachments){
+    	    if (!latest._attachments){
+    	      //all of these were added
+    	      hasChange = true;
+    	      for (var add in task._attachments){
+    	        changes.push({field: "attachment", prev: false, value: fix(add)});
+    	      }
+    	    } else {
+            recap = {
+              removed: [],
+              added: []
+            };
+            
+    	      //test for removed attachments
+    	      for (var lrem in latest._attachments){
+    	        var isRemoved = true;
+    	        for (var trem in task._attachments){
+    	          if (lrem === trem) isRemoved = false;
+    	        }
+    	        if (isRemoved) recap.removed.push(lrem);
+    	      }
+    	     
+    	      //add change entries for removed attachments
+    	      if (recap.removed.length > 0){
+    	        hasChange = true;
+    	        dojo.forEach(recap.removed, function(file){
+    	          //console.log("deliverable removed");
+      	        changes.push({field: "attachment", prev: fix(file), value: false});
+    	        });
+    	      }
+    	      
+    	      //test for added attachments
+    	      for (var tadd in task._attachments){
+    	        var isAdded = true;
+    	        for (var ladd in latest._attachments){
+    	          if (ladd === tadd) isAdded = false;
+    	        }
+    	        if (isAdded) recap.added.push(tadd);
+    	      }
+    	      
+    	      //add change entries for added attachments
+    	      if (recap.added.length > 0){
+    	        hasChange = true;
+    	        dojo.forEach(recap.added, function(file){
+    	          //console.log("deliverable added");
+      	        changes.push({field: "attachment", prev: false, value: fix(file)});
+    	        });
+    	      }
+    	    }
+    	  
+    	  } else {
+    	    if (latest._attachments){
+    	      //all of these were removed
+    	      hasChange = true;
+    	      for (var rem in latest._attachments){
+    	        changes.push({field: "attachment", prev: fix(rem), value: false});
+    	      }
+    	    }
+    	  }
+    	  
+    	  
+    	  //project
+    	  if (task.project !== latest.project){
+    	    hasChange = true;
+    	    //console.log("project changed");
+    	    changes.push({field: "project", prev: fix(latest.project), value: fix(task.project)});
+    	  }
+    	  
+    	  //check now if there were any changes and log them if there were
+    	  //otherwise, just return the task as it was;
+    	  if (hasChange){
+    	    task = t.addActivity({
+      			verb: "UPDATE",
+      			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
+      			icon: t.icon.update,
+      			body:  dojo.toJson({changes: changes})
+      		}, task);
+    	  }
+    	  
+    		return task;
+    	  
     	},
     	
     	addActivity: function(opts, task){

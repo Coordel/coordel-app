@@ -27,15 +27,15 @@ define(
         
         this.groupHeader.innerHTML = this.header;
         var self = this;
-        
-        //console.debug("db in TaskListGroup", db);
+
         //is this grouped
         if (self.projects.length > 0){
           //add the tasks
           self.projects.forEach(function(proj){
           
     	      self.addChild(new Project({
-              project: proj
+              project: proj,
+              currentArgs: self.currentArgs
             }));
     	    });
         } else {

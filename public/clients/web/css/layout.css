@@ -81,11 +81,12 @@ h3 {
 	border-bottom: 1px solid #a3aab1;
 	white-space: nowrap;
   background: #e5e5e5 url(images/titlebar1.png);
-  font-size: .9em;
+  font-size: .9em !important;
   padding: 2px 8px 0px 8px;
   font-family: helvetica;
   line-height: 1.8em;
 	font-weight:bold;
+	max-height: 1.8em;
 }
 
 .primaryNavHeader {

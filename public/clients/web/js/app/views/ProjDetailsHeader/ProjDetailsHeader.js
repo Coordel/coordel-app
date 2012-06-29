@@ -116,6 +116,7 @@ define([
           dojo.publish("coordel/projectAction", [{action: "send", project: this.project}]);
         });
         
+        
         //decline
         dojo.connect(this.decline, "onClick", this, function(){
           //console.log("cancel clicked");

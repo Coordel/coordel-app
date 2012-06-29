@@ -27,7 +27,7 @@ Alert.prototype.add = function(fn){
   var key = 'coordel-alerts:'+ this.username,
       multi = redis.multi();
       
-  //console.log("ADD ALERT", this.username, this.alert);
+  console.log("ADD ALERT", this.username, this.alert);
       
   multi.lpush(key, JSON.stringify(this.alert));
   multi.ltrim(key, 0, 99);
@@ -44,6 +44,7 @@ Alert.prototype.add = function(fn){
 };
 
 exports.getUserAlerts = function(username, fn){
+  console.log("GETTING USER ALERTS");
   var key = 'coordel-alerts:' + username;
   redis.lrange(key,0,-1, function(err, res){
     if (err){
@@ -51,9 +52,14 @@ exports.getUserAlerts = function(username, fn){
       fn(err, null);
     } else {
       var alerts = [];
-      //console.log("Got alerts", res);
+      console.log("GOT ALERTS");
       res.forEach(function(alert){
-        alerts.push(JSON.parse(alert));
+        console.log("ALERT", alert);
+        try {
+          alerts.push(JSON.parse(alert));
+        } catch (err){
+          console.log("ALERT ERROR", err, alert);
+        }
       });
       fn(false, alerts);
     }
@@ -86,7 +92,7 @@ exports.getChangeAlertMap = function(change){
 	    doc.assignments.forEach(function(assign){
 	      
 	      //notify everyone who didn't decline or leave the project
-	      if (assign.status !== "LEFT" && assign.status !== "LEFT-ACK" && assign.status !== "DECLINED"){
+	      if (assign.status !== "LEFT" && assign.status !== "LEFT-ACK"){
 	        if (!map[assign.username]) map[assign.username] = true;
 	      }
   		});
@@ -105,6 +111,7 @@ exports.getChangeAlertMap = function(change){
   		  if (!map[resp.username]) map[resp.username] = true;
   		});
 	  }
+	  if (!map[doc.responsible]) map[doc.responsible] = true;
 	}
 
 	//users get the tasks when they own them and they aren't pending, declined, or left (set to unassigned)

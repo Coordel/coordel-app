@@ -6,7 +6,7 @@ define(
   ["dojo",
     "dojo/parser",
     "i18n!app/nls/coordel",
-    "text!./templates/empty.html",
+    "text!./templates/Stream.html",
     "app/views/StreamEntry/StreamEntry",
     "app/views/StreamMessage/StreamMessage",
     "app/views/StreamActivity/StreamActivity",
@@ -15,7 +15,7 @@ define(
     "dijit/_Templated", 
     "dijit/_Container",
     "app/models/CoordelStore"], 
-  function(dojo, parser, coordel, emptyHtml, Entry, Message, Activity, sModel, w, t, c, db) {
+  function(dojo, parser, coordel, html, Entry, Message, Activity, sModel, w, t, c, db) {
   
   dojo.declare(
     "app.views.Stream", 
@@ -26,19 +26,25 @@ define(
       
       widgetsInTemplate: true, 
       
-      templateString : '<div></div>',
+      templateString : html,
       
       showProject: false,
       
       isAlerts: false,
       
       stream: [],
+      
     
       postCreate: function(){
         
         this.inherited(arguments);
-
-        this.showStream();
+        
+        if (this.stream.length > 0){
+          this.showStream();
+          dojo.addClass(this.emptyContainer, "hidden");
+        } else {
+          dojo.removeClass(this.emptyContainer, "hidden");
+        }
         
       },
     
@@ -61,7 +67,7 @@ define(
         if (self.isAlerts){
           self.showProject = true;
         }
-  
+        
         stream.forEach(function(item, key){
           //console.debug("iterating stream", item, key);
           if (key === 0){

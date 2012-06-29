@@ -8,7 +8,7 @@ define(
   function(dojo, coordel, html, w, t, db) {
   
   dojo.declare(
-    "app.widgets.ContactDetails", 
+    "app.views.ContactDetails", 
     [w, t], 
     {
       
@@ -37,7 +37,7 @@ define(
         if (!c.fullName){
           c.fullName = db.contactFullName(c.id);
         }
-        
+  
         if (!c.email){
           c.email = "";
         }
@@ -55,16 +55,25 @@ define(
         this.inherited(arguments);
         var c = this.contact;
         
+        //console.log("contact details contact", c);
+        this.fullNameValue.innerHTML = db.contactFullName(c.id);
+        
         if (c.email === ""){
           dojo.addClass(this.email, "hidden");
+        } else {
+          this.emailValue.innerHTML = c.email;
         }
         
         if (c.phone === ""){
           dojo.addClass(this.phone,"hidden");
+        } else {
+          this.phoneValue.innerHTML = c.phone;
         }
         
         if (c.skype === ""){
           dojo.addClass(this.skype, "hidden");
+        } else {
+          this.skypeValue.innerHTMLinnerHTML = c.skype;
         }
         
         var email = dojo.trim(this.contact.email.toLowerCase()),
@@ -100,5 +109,5 @@ define(
       }
       
   });
-  return app.widgets.ContactDetails;     
+  return app.views.ContactDetails;     
 });

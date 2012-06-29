@@ -27,7 +27,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
             //if the date is this year, return MMM dd
             format = {datePattern: "MMM d", selector: "date"};
             if (showTime){
-              format = {datePattern: "MMM d, hh:mm", selector: "date"};
+              format = {datePattern: "MMM d, hh:mm a", selector: "date"};
             }
           } else {
             //if the date is not this year, return MMM dd, yyyy
@@ -214,7 +214,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
               //if the date is this year, return MMM dd
               format = {datePattern: "MMM d", selector: "date"};
               if (showTime){
-                format = {datePattern: "MMM d, hh:mm", selector: "date"};
+                format = {datePattern: "MMM d, hh:mm a", selector: "date"};
               }
             } else {
               //if the date is not this year, return MMM dd, yyyy
@@ -304,7 +304,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
               //if the date is this year, return MMM dd
               format = {datePattern: "MMM d", selector: "date"};
               if (showTime){
-                format = {datePattern: "MMM d, hh:mm", selector: "date"};
+                format = {datePattern: "MMM d, hh:mm a", selector: "date"};
               }
             } else {
               //if the date is not this year, return MMM dd, yyyy

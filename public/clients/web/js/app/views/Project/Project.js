@@ -11,15 +11,19 @@ define(
   function(dojo, coordel, html, w, t, db, pb, ActionsMenu) {
   
   dojo.declare(
-    "app.widgets.Project", 
+    "app.views.Project", 
     [w, t], 
     {
       
       name: null,
       
+      menuOpen: false,
+      
       id: null,
       
       widgetsInTemplate: true,
+      
+      connections: [],
       
       templateString: html,
       
@@ -34,19 +38,27 @@ define(
         //console.debug("project test", this.project.responsible);
         if (this.project.responsible === username){
           this.icon = "icon-owner-project";
+          
+          if (this.project.substatus === "OPPORTUNITY"){
+            //console.debug("set to icon-owner-project-opportunity", this.project.substatus);
+            this.icon = "icon-owner-project-opportunity";
+          }
+        } else {
+          dojo.forEach(self.project.assignments, function(assign){
+            if (assign.username === username && assign.role === "FOLLOWER"){
+              //show the following icon
+              self.icon = "icon-project-following";
+              if (self.project.substatus === "OPPORTUNITY"){
+                self.icon = "icon-project-opportunity-following";
+              }
+            } 
+          });
         }
         
         if (this.project.substatus && this.project.substatus === "PENDING"){
           this.icon = "icon-owner-project-pending";
         }
-        
-        dojo.forEach(self.project.assignments, function(assign){
-          if (assign.username === username && assign.role === "FOLLOWER"){
-            //show the following icon
-            self.icon = "icon-project-following";
-          }
-        });
-        
+
         if (self.project.substatus && self.project.substatus === "DONE"){
           self.icon = "icon-project-done";
         }
@@ -54,8 +66,7 @@ define(
         if (self.project.substatus && self.project.substatus === "CANCELLED"){
           self.icon = "icon-project-cancelled";
         }
-        
-        
+ 
       },
       
       showInvited: function(){
@@ -98,12 +109,12 @@ define(
       
       postCreate: function(){
         this.inherited(arguments);
+        
         var proj = this.project,
             self = this;
             
             
         //set the menu
-        
         var menu = new ActionsMenu({
           project: self.project,
           username: db.username()
@@ -111,38 +122,59 @@ define(
         
            
         //console.debug("in Project postCreate", proj);
-        
-        this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
-        
-        this.showInvited();
-        
+ 
         //show the project
-        dojo.connect(this.domNode, "onclick", function(evt){
-  	      //console.debug("current",evt);
+        dojo.connect(self.domNode, "onclick", function(evt){
+  	      //console.debug("project selected", proj._id);
   	      pb.currentBox = "project";
   	      dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: proj._id}]);
-  	      dojo.addClass(self.domNode, "active selected");
+  	    });
+  	    
+  	    dojo.connect(self.domNode, "ondblclick", function(evt){
+  	      evt.stopPropagation();
+  	      dojo.publish("coordel/editProject", [{project: proj}]);
   	    });
   	    
   	    //show the actions menu button when mousing over the project
-  	    dojo.connect(this.domNode, "onmouseover", this, function(){
-  	      dojo.removeClass(this.actionsMenu, "hidden");
+  	    dojo.connect(self.domNode, "onmouseover", this, function(){
+  	      dojo.removeClass(self.actionsMenu, "hidden");
   	    });
   	    
   	    //hide the actions menu button when mousing out of the project
-  	    dojo.connect(this.domNode, "onmouseout", this, function(){
-  	      dojo.addClass(this.actionsMenu, "hidden");
+  	    dojo.connect(self.domNode, "onmouseout", this, function(){
+  	      if (self.actionsMenu && !self.menuOpen){
+  	        dojo.addClass(self.actionsMenu, "hidden");
+  	      }
   	    });
   	    
-  	    dojo.connect(this.actionsMenu, "onclick", this, function(evt){
+  	    dojo.connect(self.projActionDialog, "onOpen", this, function(){
+  	      //console.log("onOpen");
+  	      self.menuOpen = true;
+  	      dojo.addClass(self.actionsMenu, "opaque");
+  	    });
+  	    
+  	    dojo.connect(self.projActionDialog, "onClose", this, function(){
+    	    //console.log("onClose");
+    	    dojo.addClass(self.actionsMenu, "hidden");
+    	    dojo.removeClass(self.actionsMenu, "opaque");
+    	    self.menuOpen = false;
+    	  });
+  	    
+  	    dojo.connect(self.actionsMenu, "onclick", this, function(evt){
   	      evt.stopPropagation();
   	    });
   	    
-  	    dojo.connect(this.showProjectMenu, "onClick", this, function(evt){
+  	    dojo.connect(self.showProjectMenu, "onClick", this, function(evt){
   	      evt.stopPropagation();
   	    });
   	    
   	    self.watch("project", self.showInvited);
+  	    
+        self.showInvited();
+        
+        self.setSelection();
+        
+        this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
 
       },
       
@@ -169,22 +201,37 @@ define(
       },
       
       clearSelection: function(args){
-        //console.debug("in clear selection", this.project._id);
-        if (this.domNode){
-          dojo.removeClass(this.domNode, "active selected");
-          this.setSelection(args);
+        var self = this;
+    
+          //console.debug("in clear project selection", args, self.project._id, self.domNode);
+
+          if (self.domNode){
+            dojo.removeClass(self.domNode, "active selected");
+          }
+      
+      },
+ 
+      
+      setSelection: function(){
+        var self = this;
+        if (self.currentArgs.focus === "project" && self.currentArgs.id === self.project._id){
+          //console.log("setting project selection", self.currentArgs, self.project._id);
+          dojo.addClass(self.domNode, "active selected");
+          //console.log("project should be active", self.project._id, self.currentArgs);
         }
       },
       
-      setSelection: function(args){
-        //console.log("setting project selection", this.project._id);
-        if (args.id === this.project._id){
-          if (this.domNode){
-            //console.log("project should be active", this.project._id);
-            dojo.addClass(this.domNode, "active selected");
-          }
+      destroy: function(args){
+        this.inherited(arguments);
+        
+        var self = this;
+        dojo.unsubscribe(this.clearSelectionHandler);
+        if (self.connections.length > 0){
+          dojo.forEach(self.connections, function(con){
+            dojo.disconnect(con);
+          });
         }
       }
   });
-  return app.widgets.Project;     
+  return app.views.Project;     
 });

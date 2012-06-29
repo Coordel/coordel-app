@@ -1,5 +1,6 @@
 define({
 	"root": {
+	  noText: "(no text)",
 	  invitationSubject: "Get More Done with me at Coordel",
 	  username: "Username",
 	  password: "Password",
@@ -19,7 +20,9 @@ define({
 	  "noName": "No Name",
 		"focus": "Tasks",
 		"invitations": "Invitations",
+		"opportunities": "Opportunities",
 		"project": "Coord",
+		opportunity: "Opportunity",
 		"responsible": "Responsible",
 		"participating": "Participating",
 		"following": "Following",
@@ -50,6 +53,7 @@ define({
 		"blocked": "Blocked",
 		"delegated": "Delegated",
 		"myPrivate": "Private",
+		"opportunites": "Opportunities",
 		"submitted": "For Approval",
 		"cancelled": "Cancelled",
 		"active": "Active",
@@ -83,6 +87,7 @@ define({
 		"newProject": "New Coord",
 		"newContact": "New Person",
 		"issue": "Issue",
+		proposedSolution: "Proposed Solution",
 		"reuse": "Blueprint",
 		"notStarted": "Not Started",
 		goTurbo: "Go Turbo",
@@ -102,6 +107,16 @@ define({
 	  hrs: "hrs",
 	  days: "days",
 	  weeks: "weeks",
+	  changes: {
+	    removed: "Removed",
+	    changed: "Changed",
+	    added: "Added",
+	    previous: "Previous",
+	    value: "New",
+	    deadline: {
+	      removedDeadline: "New Deadline defaults to Project Deadline."
+	    }
+	  },
 		status: {
 		  label: "Status",
 		  INVITE: "Invited",
@@ -176,6 +191,18 @@ define({
 		  project: "Add Coord",
 		  contact: "Add Person"
 		},
+		opportunityActions: {
+		  header: "Actions",
+		  follow: "Follow Opportunity",
+		  showProject: "Show Coord",
+		  proposeTask: "Propose Task",
+		  confirmText: {
+		    follow: "Click Ok to Follow this Opportunity. When you Follow an Opportunity you are indicating that it is interesting to you so it will be moved to your Following Coords list."
+		  },
+		  instructions: {
+		    
+		  }
+		},
 		projectActions: {
 		  viewHeader: "View",
 		  edit: "Edit",
@@ -192,6 +219,7 @@ define({
 		  defer: "Defer",
 		  deleteProject: "Delete",
 		  send: "Activate",
+		  publish: "Publish Opportunity",
 		  decline: "Decline",
 		  clear: "Clear",
 		  reuse: "Blueprint",
@@ -202,24 +230,26 @@ define({
 		  reassign: "Reassign",
 		  markDone: "Mark Done",
 		  ackDone: "Feedback",
+		  store: "Network",
 		  reassignLeft: "Task reassigned to Responsible because Person left Coord",
 		  cancelProject: "Responsible cancelled Coord",
 		  markDoneProject: "Responsible marked Coord done",
 		  confirmText: {
-		    participate: "Click Participate to agree to do Tasks in this Coord",
+		    participate: "Click Ok to agree to do Tasks in this Coord",
 		    leave: "This will permanently remove your access to this Coord and set all of your Current Tasks in the Coord Unassigned",
-		    follow: "Click Follow to gain access to this Coord",
-		    unfollow: "Click Unfollow to remove your access to this Coord",
+		    follow: "Click Ok to Follow this Coord and gain access to the Stream. You still need to agree to Participate before any Tasks will be assigned to you.",
+		    unfollow: "Click Ok to remove your access to this Coord",
 		    cancel: "This will permanently Cancel the Coord. All Tasks and Roles in the Coord will also be Cancelled",
 		    ackCancel: "This informs the other People that you know the Coord is cancelled and removes it from the list",
 		    pause: "This will pause all Tasks in the Coord",
 		    resume: "This will resume all Paused Tasks in the Coord",
 		    send: "This will activate the Coord and send Pending Tasks to the assigned People",
+		    publish: "Click Ok to  Publish an Opportunity that will show up in all Coordel Members' Opportunities.",
 	      deleteProject: "This will permanently delete this Coord",
 	      decline: "This will remove access from the Coord",
-	      reuse: "Click to save this Coord as a Blueprint Coord for reuse in the future",
+	      reuse: "Click Ok to save this Coord as a Blueprint Coord for reuse in the future",
 	      clear: "Clear from list",
-	      proposeChange: "Click to alert the Coord Responsible that you have made changes to the Role",
+	      proposeChange: "Click Ok to alert the Coord Responsible that you have made changes to the Role",
 	      agreeChange: "",
 	      markDone: "This will mark the Coord Done. It will cancel any undone Tasks",
 	      ackDone: "This will give feedback to the other People in this Coord. Indicate how much you would like to work with each Person again."
@@ -271,7 +301,10 @@ define({
 		    "proposeChange": "This will return the Task the person who Delegated it to you to Agree, Modify or Decline your changes.",
 		    "agreeChange": "This will notify the person who proposed the change or changes to the Task that you agree to the changes.",
 		    reuse: "Click to Blueprint this Task",
-		    reuseDeliverables: "Click to Blueprint this Task's Deliverables"
+		    reuseDeliverables: "Click to Blueprint this Task's Deliverables",
+		    "accept": "This will indicate you agree to do this Task",
+		    "decline": "This will indicate you Decline to do the work on this Task and will send it back to the Responsible"
+		    
 		    
 		  },
 		  "instructions": {
@@ -292,7 +325,7 @@ define({
 		    reuse: "",
 		    reuseDeliverables: "",
 		    "accept": "Accept the Task",
-		    "decline": "Decline the Task and send it back to the Responsible"
+		    "decline": "Enter why you are declining this Task"
 		    
 		  }
 		},
@@ -323,15 +356,19 @@ define({
 		  delegatedText: "Keep track of Tasks you've Delegated here",
 		  privateTitle: "No Private Tasks",
 		  privateText: "Keep track of Tasks only you care about. All new Tasks go here unless they are added to a Coord",
+		  opportunitiesTitle: "No Opportunities",
+		  opportunitiesText: "Track all Tasks available in Public Opportunity Coords here. To Publish an Opportunity, create a new Coord and then click Publish Opportunity rather than Activate.",
 		  projectTasksTitle: "No Coord Tasks",
 		  projectTasksText: "Track all Tasks for this Coord here",
 		  turboTitle: "Turbo Complete",
 		  turboText: "The list is Empty or you have Turbo'ed through the entire list. Restart to Turbo through the list again.",
 		  contactTitle: "No Tasks",
-		  contactText: "Follow this Peron's Tasks here",
+		  contactText: "Follow this Person's Tasks here",
 		  noDeliverables: "No Deliverables",
 		  projectDeliverablesTitle: "No Coord Deliverables",
-		  projectDeliverablesText: "Track all Deliverables for this Coord here"
+		  projectDeliverablesText: "Track all Deliverables for this Coord here",
+		  storeTitle: "Coming Soon!",
+		  storeText: "Buy and sell your Coords, Tasks, and Deliverable Blueprints here."
 		},
 		"metainfo" : {
 		  "follow": "Follow",
@@ -629,7 +666,7 @@ define({
   		    "preposition": "in"
   		  },
   		  "clear-issue": {
-  		    "verb": "cleared an issue with",
+  		    "verb": "cleared the issue with",
   		    "preposition": "in"
   		  },
   		  "reassign": {
@@ -703,6 +740,7 @@ define({
   		}
 		},
 		"taskDetails": {
+		  "name": "Task Name",
 		  "editTask": "Edit Task",
 		  "blueprintTask": "Blueprint Task",
 		  "declineTask": "Decline Task",
@@ -717,7 +755,10 @@ define({
 		  "deliverable": "Deliverable",
 		  "deliverables": "Deliverables",
 		  "defer": "Deferred",
+		  "deferDate": "Defer Date",
+		  "blocker": "Blocker",
 		  "attachments": "Attachments",
+		  "attachment": "Attachment",
 		  "by": "By",
 		  "project": "Coord",
 		  "projectDeadline": "Coord Deadline",
@@ -737,6 +778,9 @@ define({
 		  followers: "Followers",
 		  deadline: "Deadline",
 		  attachments: "Attachments",
+		  opportunity: "Opportunity",
+		  budget: "Budget",
+		  followers: "Followers",
 		  editProject: "Edit Coord",
 		  chooseAction: "Choose Coord Action",
 		  reuseProject: "Blueprint Coord",

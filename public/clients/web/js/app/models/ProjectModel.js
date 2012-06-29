@@ -51,6 +51,10 @@ define("app/models/ProjectModel",
         return has;    
       },
       
+      isOpportunity: function(){
+        return this.project.substatus === "OPPORTUNITY";
+      },
+      
       hasAttachments: function(){
         var count = 0,
     	      files = this.project._attachments;
@@ -229,7 +233,7 @@ define("app/models/ProjectModel",
     	
     	add: function(project){
     	  
-    	  //console.log("adding project", project);
+    	  console.log("adding project", project);
     	  
     	  var db = this.db,
   	        app = db.appStore.app(),
@@ -300,7 +304,7 @@ define("app/models/ProjectModel",
     	},
     	
     	update: function(project){
-    	  //console.log("updating project", project);
+    	  console.log("updating project", project);
     	  var db = this.db,
     	      username = db.username();
     	  project.isNew = false;
@@ -322,7 +326,7 @@ define("app/models/ProjectModel",
             status = "INVITE",
   	        hasUser = false;
   	        
-  	    //console.debug("updating project assignments", p, task.username);
+  	    console.debug("updating project assignments", p, task.username);
   	    //make sure this task's user is part of the project
       
   	    dojo.forEach(p.users, function(user){
@@ -385,15 +389,17 @@ define("app/models/ProjectModel",
   	    
   	    //set the roleid of the task
   	    task.role = roleid;
-
+        
+        console.log("before updateResponsibilities in projectModel");
   	    //update the role's responsibilities
   	    rm.updateResponsibilities(roleid, task, p.isMyPrivate);
-  	  
+  	    
+  	    console.log("after updateResponsibilities in projectModel");
       	//save project if an assignment was added or updated for a follower or responsible
       	if (doUpdate){
-      	  //console.debug("saving project, assignment was added or updated", p, task.username);
+      	  console.debug("saving project, assignment was added or updated", p, task.username);
       	  dojo.when(self.update(p), function(){
-      	    
+      	    console.log("updated project", p, task);
       	    def.callback(task);
       	  }, 
       	  function(err){
@@ -467,7 +473,21 @@ define("app/models/ProjectModel",
     		//dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: project._id}]);
     	},
     	
-    	unfollow: function(username, project){
+    	publish: function(project, opportunity, message){
+    	  var p = this,
+    	      db = this.db;
+    	    
+    	  project = p.addActivity({
+    	    verb: "POST",
+    	    icon: p.icon.post,
+    	    body: message
+    	  }, project);
+    	  
+    	  project.substatus = "OPPORTUNITY";
+    	  db.projectStore.store.put(project, {username: db.username()});
+    	},
+    	
+    	unfollow: function(username, project, message){
     	  var p  = this;
     	  //follow just removes the user from the project and kills the assignment
     	  if (!project){
@@ -484,13 +504,15 @@ define("app/models/ProjectModel",
     	  
     	  p.addActivity({
     			verb: "UNFOLLOW",
-    			icon: this.icon.unfollow
+    			icon: this.icon.unfollow,
+    			body: message
     		}, project);
     		
     		p.update(project);
     	},
     	
     	follow: function(username, project){
+    	  console.log("projectModel follow called", username, project);
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
     	  }
@@ -544,7 +566,7 @@ define("app/models/ProjectModel",
       			icon: this.icon.follow
       		}, project);
     	  }
-
+        console.log("before update in projectModel.follow");
     	  p.update(project);
     	},
     	
@@ -564,13 +586,14 @@ define("app/models/ProjectModel",
     	      docs = [];
     	  
     	  //set the assignment to decline
+    	  
     	  dojo.forEach(project.assignments, function(assign){
     	    if (assign.username === username){
     	      curAssign = assign;
     	      assign.status = "DECLINED";
     	    }
     	  });
-    	  
+  
     	  //make the activity stream mode
     	  p.addActivity({
     			verb: "DECLINE",
@@ -859,7 +882,7 @@ define("app/models/ProjectModel",
     	      }
     	    });
     	    
-    	    //console.log("PARTICIPATE DOCS", docs);
+    	    console.log("PARTICIPATE DOCS", docs);
           var u = db.username();
           dojo.forEach(docs, function(doc){
             switch(doc.docType){

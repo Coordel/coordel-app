@@ -29,6 +29,7 @@ define([
     templateString: template,
     
     postMixInProperties: function(){
+      console.debug ("task action", this.action);
       this.instructions = coordel.taskActions.instructions[this.action];
       
       //if this issue, then use the issue template
@@ -135,6 +136,12 @@ define([
           break;
         case "reuseDeliverables":
           t.reuse(task, true);
+          break;
+        case "accept":
+          t.accept(task, message);
+          break;
+        case "decline":
+          t.decline(task, message);
           break;
       }
     },

@@ -1,0 +1,41 @@
+<div style="border-top: 1px solid #999" class="c-padding-large">
+	<h3 class="no-background">${project.name}</h3>
+	<div class="instructions">${instructions}</div>
+	<div class="deliverable full">
+		<div class="left">
+			<div class="desc">
+				<span class="name">Budget</span>
+				<em dojoAttachpoint="isRequired" class="required">•</em>
+			</div>
+			<div dojoAttachPoint="hasInstructions" class="instructions">Enter your estimated Budget. You can change this later.</div>
+			<div dojoAttachPoint="budget" dojoType="dijit.form.NumberTextBox"></div>
+		</div>
+		<div class="right">
+			<div class="desc">
+				<span class="name">Currency</span>
+			</div>
+			<div dojoAttachPoint="hasInstructions" class="instructions">Choose the currency of your Budget</div>
+			<div dojoAttachPoint="fieldsContainer" class="deliverable-fields">
+				<select dojoAttachPoint="currency" dojoType="dijit.form.ComboBox">
+					<option id="USD">$ US Dollars</option>
+					<option id="EUR">€ Euros</option>
+					<option id="YEN">¥ Japanese Yen</option>
+					<option id="GBP">£ British Pounds</option>
+					<option id="CLS">Coordel Licenses</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="full c-padding-t">
+		<div class="desc">
+			<span class="name">${coordel.message}</span>
+			<em class="required"></em>
+		</div>
+		<div class="instructions">Enter a message you would like to add to the Stream about this Opportunity</div>
+		<div class="textarea">
+			<textarea dojoAttachPoint="actionText" dojoType="dijit.form.Textarea"></textarea>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>

@@ -111,9 +111,17 @@ dojo.declare(
     _addDeliverable: function(itemId){
       //the settings container's first child is the settings control and it has access to the deliverable
       var del = this.altDropDown.settingsContainer.getChildren()[0].getDeliverable();
+      
+      //need to set the date this deliverable was updated so we can track changes
+      var t = stamp.toISOString(new Date(),{milliseconds:true});
+      del.updated = t;
+      
       if (this.isEditing){
         this.onEditOption(del);
       } else {
+        //add the create date to the deliverable
+        del.created = t;
+        
         this.onAddOption(del);
       } 
     },

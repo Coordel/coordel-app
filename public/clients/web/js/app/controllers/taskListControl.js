@@ -16,8 +16,9 @@ define(["dojo",
         'app/views/Turbo/Turbo',
         'app/views/Calendar/Calendar',
         'app/views/QuickEntry/QuickEntry',
+        'app/views/OpportunityList/OpportunityList',
         'dojo/date/locale',
-        'app/views/QuickSearch/QuickSearch'], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry) {
+        'app/views/QuickSearch/QuickSearch'], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry, OpportunityList) {
   return {
     controllerName: "taskListControl",
     showProjectLabel: false,
@@ -91,7 +92,7 @@ define(["dojo",
       //handle click of the tabs
       //calendar
       dojo.connect(dojo.byId("calendarTab"), "onclick", this, function(evt){
-        //console.debug("clicked messages", evt.target);
+        //console.debug("clicked calendar", evt.target);
         if (dojo.hasClass(evt.target, "inactive")){
           this.showCalendar();
         } 
@@ -99,7 +100,7 @@ define(["dojo",
 
       //stream
       dojo.connect(dojo.byId("streamTab"), "onclick", this, function(evt){
-        //console.debug("clicked allActivity", evt.target);
+        //console.debug("clicked stream", evt.target);
         if (dojo.hasClass(evt.target, "inactive")){
           this.showStream();
         }
@@ -122,30 +123,35 @@ define(["dojo",
     },
     
     _showTab: function(tabId){
-      switch (tabId){
-        case "streamTab":
-        if (dojo.hasClass(tabId, "inactive")){
-          dojo.removeClass(tabId, "inactive");
-          dojo.addClass(tabId, "active");
-          dojo.addClass("calendarTab", "inactive");
-          dojo.removeClass("calendarTab", "active");
-          this.streamTarget = "streamActivity";
-          dijit.byId("streamContainer").selectChild("streamActivity");
-          dojo.removeClass(dijit.byId("showFullStreamFilter").domNode, "hidden");
+      
+      var node = dojo.byId(tabId);
+      if (node){
+        switch (tabId){
+          case "streamTab":
+          if (dojo.hasClass(node, "inactive")){
+            dojo.removeClass(node, "inactive");
+            dojo.addClass(node, "active");
+            dojo.addClass("calendarTab", "inactive");
+            dojo.removeClass("calendarTab", "active");
+            this.streamTarget = "streamActivity";
+            dijit.byId("streamContainer").selectChild("streamActivity");
+            dojo.removeClass(dijit.byId("showFullStreamFilter").domNode, "hidden");
+          }
+          break;
+          case "calendarTab":
+          if (dojo.hasClass(node, "inactive")){
+            dojo.removeClass(node, "inactive");
+            dojo.addClass(node, "active");
+            dojo.addClass("streamTab", "inactive");
+            dojo.removeClass("streamTab", "active");
+            this.streamTarget = "deadlineCalendar";
+            dijit.byId("streamContainer").selectChild("deadlineCalendar");
+            dojo.addClass(dijit.byId("showFullStreamFilter").domNode, "hidden");
+          }
+          break;
         }
-        break;
-        case "calendarTab":
-        if (dojo.hasClass(tabId, "inactive")){
-          dojo.removeClass(tabId, "inactive");
-          dojo.addClass(tabId, "active");
-          dojo.addClass("streamTab", "inactive");
-          dojo.removeClass("streamTab", "active");
-          this.streamTarget = "deadlineCalendar";
-          dijit.byId("streamContainer").selectChild("deadlineCalendar");
-          dojo.addClass(dijit.byId("showFullStreamFilter").domNode, "hidden");
-        }
-        break;
       }
+      
     },
       
     setDoNotDisturb: function(doNotDisturb){
@@ -393,7 +399,8 @@ define(["dojo",
       //console.debug("before add tasklist", focus);
       var cont = dijit.byId("taskListMain"),
           query,
-          map;
+          map,
+          self = this;
       
       if (cont.hasChildren()){
         cont.destroyDescendants();
@@ -401,7 +408,7 @@ define(["dojo",
       
       this.header.sortButton.sortDropdown.set("disabled", false);
       
-      console.debug("focus in showTaskList", focus);
+      //console.debug("focus in showTaskList", focus);
       
       if (focus === "project-invited"){
         this._cancelObserveHandlers();
@@ -454,6 +461,37 @@ define(["dojo",
         
         this._checkEmpty();
         
+      } else if (focus === "opportunities"){
+        this._cancelObserveHandlers();
+        //console.log("setting opportunities");
+        var def = db.projectStore.loadOpportunities(db.username());
+        def.then(function(opps){
+          
+          var latest = db.projectStore.oppMemory.query("latest");
+          if (latest.length >0){
+            var opp = new OpportunityList({projects:latest}).placeAt("taskListMain");
+          } else {
+            self.showEmptyTasks();
+          }
+          
+          latest.observe(function(project, removedFrom, insertedInto){
+            //console.debug("latest observed", project, removedFrom, insertedInto);
+
+            //was this a delete
+            if (removedFrom > -1){
+              //console.log("remove opportunity", removedFrom, project, opp);
+              opp.removeChild(removedFrom);
+            }
+
+            if (insertedInto > -1){
+             //console.log("add opportunity", insertedInto, project);
+             opp.addOpportunity(project);
+            }
+
+          });
+          
+        });
+        
       } else {
         this._cancelObserveHandlers();
         //if this list should be grouped do it otherwise, just show a tasklist
@@ -499,12 +537,12 @@ define(["dojo",
         } else {
           this.showProjectLabel = true;
           
-          console.debug("focus", focus);
+          //console.debug("focus", focus);
           
           //query for the tasks in focus
           this.taskList = db.taskStore.memory.query({db: db, focus: focus, filters: []}, {sort:this.sortOptions.sortKeys});
           
-          console.log("taskList", this.taskList);
+          //console.log("taskList", this.taskList);
           
           var list = new tl({
   	        listFocus: focus,
@@ -730,7 +768,7 @@ define(["dojo",
       //console.debug("showing empty", this.emptyGroup);
       //if (!this.emptyGroup){
       //  console.debug("empty group didin't exist yet", self);
-      console.log("focus in showEmptyTasks", self.focus);
+      //console.log("focus in showEmptyTasks", self.focus);
       if (self.focus === "project-invited" || self.focus === "invite"){
         //we don't show empty because the option goes away
         dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
@@ -784,6 +822,7 @@ define(["dojo",
       //console.debug("store data", db.streamStore.memory.data.length);
     
       var stream = db.streamStore.memory.query("all", {sort: [{attribute: "time", descending: true}]});
+      //var stream = db.streamStore.loadUserStream();
 
       dojo.when(stream, function(resp){
         //console.debug("stream", resp.length);

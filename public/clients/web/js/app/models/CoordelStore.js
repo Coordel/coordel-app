@@ -60,7 +60,8 @@ define(["dojo",
             changes: null,
             contact: function(username, noYou){
               var def = new dojo.Deferred(),
-                  self = this;
+                  self = this,
+                  c;
                   
               //console.debug("getting contact from contactStore", username);
               if (username !== "UNASSIGNED"){
@@ -69,9 +70,15 @@ define(["dojo",
               } else {
                 c = {id: "UNASSIGNED", email: ""};
               }
-              c = self._setFullName(c, noYou);
+              
+              dojo.when(c, function(contact){
+                //console.log("got the contact", contact);
+                contact = self._setFullName(contact, noYou);
+                def.callback(contact);
+              });
+              //c = self._setFullName(c, noYou);
     
-              return c;
+              return def;
             },
             
             _setFullName: function(contact, noYou){
@@ -239,7 +246,7 @@ define(["dojo",
                 //since there were attachments, get the starter docs for them
                 var q = self.getBlueprintAttachments(templateid);
                 q.then(function(docs){
-                  console.log("got starter project docs", docs);
+                  //console.log("got starter project docs", docs);
                   def.callback(self._getProjectFromBlueprint(bp, docs));
                 });
               } else {
@@ -272,8 +279,7 @@ define(["dojo",
               bp.project.isMyDelegated = template.project.isMyDelegated;
               bp.project.isMyPrivate = template.project.isMyPrivate;
               bp.project.isTemplate = template.project.isTemplate;
-              
-              
+
               
               if (template.project.assignments){
                 bp.project.assignments = template.project.assignments;
@@ -411,7 +417,7 @@ define(["dojo",
                 dojo.forEach(template.roles, function(r){
                   var role = {};
                   role.isNew = true;
-                  console.log("testing responsiblities", r);
+                  //console.log("testing responsiblities", r);
                   role._id = bp.idMap[r._id];
                   role.name = "";
                   if (r.name) role.name = r.name;
@@ -584,8 +590,28 @@ define(["dojo",
               });
             },
             
+            get: function(id){
+              var store = new couch({
+                target: this.db, 
+                idProperty: "_id"
+              });
+              
+              var def = new dojo.Deferred();
+              store.get(id).then(
+                function(doc){
+                  console.log("get the object in get");
+                  def.resolve(doc);
+                },
+                function(err){
+                  console.log("got an error in get", err);
+                  def.reject(err);
+                });
+              
+              return def;
+            },
+            
             getUser: function(email){
-              console.log("getting user", email);
+              //console.log("getting user", email);
               
               var store = new couch({
                 target: this.db, 
@@ -675,6 +701,8 @@ define(["dojo",
             },
         
             getTaskModel: function(task, isObject){
+              var def = new dojo.Deferred();
+              
               if (!isObject){
                 isObject = false;
               }
@@ -695,10 +723,12 @@ define(["dojo",
                   obj = db.projectStore.taskStore.get(task);
                 }
               }
+              
+              
               var t = new tModel(obj);
               t.task = obj;
               return t.init(db);
-        
+              
             },
             
             getRoleModel: function(role, isObject){

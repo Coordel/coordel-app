@@ -46,6 +46,11 @@ define(
   	      this.setSelection("private");
   	    });
   	    
+  	    dojo.connect(this.showOpportunities, "onclick", this, function(evt){
+  	      //console.debug("private",evt);
+  	      this.setSelection("opportunities");
+  	    });
+  	    
   	    dojo.connect(this.showTaskInvited, "onclick", this, function(evt){
   	      //console.debug("current",evt);
   	      this.setSelection("task-invited");

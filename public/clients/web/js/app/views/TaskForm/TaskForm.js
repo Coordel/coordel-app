@@ -44,7 +44,11 @@ define(
       
       id: null,
       
+      versions: null,
+      
       isNew: true,
+      
+      showTips: true,
       
       coordel: coordel,
       
@@ -77,6 +81,8 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         var self = this;
+        
+        if (!self.isNew) self._setVersion();
         
         //console.debug("task in TaskForm", self.task);
         
@@ -132,9 +138,10 @@ define(
           self._setPills("blockers");
           self._setPills("deliverables");
           self.taskFormName.set("value", self.task.name);
-          self.taskFormPurpose.set("value", self.task.purpose);
+          
           
           if (self.task.purpose && self.task.purpose !== "" && self.task.purpose !== coordel.taskForm.phPurpose){
+            self.taskFormPurpose.set("value", self.task.purpose);
             dojo.removeClass(self.taskFormPurpose.domNode, "c-placeholder");
           }
         
@@ -536,6 +543,11 @@ define(
           //get rid of the project
           delete this.task.username;
           
+          //need to remove the status as well because the user is changed so the new one 
+          //needs to have the opportunity to agree the task
+          delete this.task.status;
+          delete this.task.substatus;
+          
           //hide the pill
           dojo.addClass(this.taskFormDelegateValue.domNode, "hidden");
           dojo.removeClass(this.taskFormDelegate.domNode, "hidden");
@@ -578,7 +590,7 @@ define(
         
         //blockers
         dojo.connect(this.taskFormBlockers, "onAddOption", this, function(duration){
-          console.debug("adding blockers", duration);
+          //console.debug("adding blockers", duration);
           
           self.task.duration = duration;
           
@@ -591,6 +603,7 @@ define(
         //deliverables
         dojo.connect(this.taskFormDeliverables, "onAddOption", this, function(deliverable){
           //console.debug("adding deliverable", deliverable);
+          
           if (!self.task.workspace){
             self.task.workspace = [];
           }
@@ -678,10 +691,17 @@ define(
         //purpose
         this.taskFormPurpose.watch("value", function(prop, oldVal, newVal){
           
+          console.log("purpose", this.value, newVal);
+          
           //protect from saving the placeholder value
           if(this.value !== coordel.taskForm.phPurpose){
             //console.debug("task purpose changed", prop, oldVal, newVal);
-            self.task.purpose = newVal;
+            if (newVal === "") {
+              delete self.task.purpose;
+            } else {
+               self.task.purpose = newVal;
+            }
+           
             //self.set("purpose", newVal);
           }
          
@@ -750,7 +770,8 @@ define(
         
         });
         
-        if (self.isNew){
+        if (self.isNew && self.showTips){
+          
           this._initTips();
         }
         
@@ -829,9 +850,37 @@ define(
         //this is here to enable the focus to be set on the task name on load
       },
       
+      _setVersion: function(){
+        //this tracks the versions of this task.we need to clone the original here and
+        //track it so we don't create versions for every change if there aren't any
+        //or if the user changes their mind 
+        var self = this;
+        self.versions = dojo.clone(self.task.versions);
+        
+        if (!self.versions){
+          self.versions = {};
+        }
+        
+        if (!self.versions.latest){
+           self.versions.latest = dojo.clone(self.task);
+        } else {
+          if (!self.versions.history){
+            self.versions.history = [];
+          }
+          self.versions.history.push(self.versions.latest);
+          self.versions.latest = dojo.clone(self.task);
+        }
+        
+        delete self.versions.latest.contextStarts;
+        delete self.versions.latest.contextDeadline;
+        delete self.versions.latest.history;
+        delete self.versions.latest.versions;
+        //console.log("versions", self.versions);
+        
+      },
       
       _setPills: function(field){
-      
+        //console.log("_setPills", field, this.task.project);
         var self = this;
         //project and delegate because there can only be one
         //pill at a time and the TaskFormPill is in the html. for blockers and deliverables there can be
@@ -842,6 +891,7 @@ define(
             dojo.addClass(this.taskFormProject.domNode, "hidden");
             dojo.removeClass(this.taskFormProjectValue.domNode, "hidden");
             this.taskFormProjectValue.showPill(this.task.project);
+            
           }
           break;
           
@@ -876,6 +926,7 @@ define(
               this.taskFormDelegateValue.set("imageClass", false);
             }
             this.taskFormDelegateValue.showPill(this.task.username, self.pendingContact);
+            
           }
           break;
           case "deliverables":
@@ -927,6 +978,11 @@ define(
               });
               //now delete the deliverable
               deliverables.splice(dKey,1);
+              
+              //now if there aren't any deliverables left in the workspace, clear it too
+              if (self.task.workspace && self.task.workspace.length === 0){
+                delete self.task.workspace;
+              }
               
               //close in case we were editing
               dfs.forceClose(true);
@@ -1048,7 +1104,8 @@ define(
          
          dojo.forEach(list, function(obj, key){
            if (isContact){
-             store.newItem({name: obj.firstName + " " + obj.lastName, id: obj.id});
+             var name = obj.firstName + " " + obj.lastName;
+             store.newItem({name: name, id: obj.id, label: "<div><span class='c-bold'>" + name + "</span><span class='c-margin-l'>-</span><span class='c-margin-l'>" + obj.email + "</span></div"});
            } else {
              store.newItem({name: obj.name, _id: obj._id});
            }
@@ -1057,6 +1114,11 @@ define(
          control.displayMessage = function(){
            return false;
          };
+         
+         if (isContact){
+           control.set("labelAttr", "label");
+           control.set("labelType", "html");
+         }
          
          control.set("store" , store);
       },
@@ -1120,6 +1182,9 @@ define(
               if (self.isNew){
                 t.add(self.task);
               } else {
+                //console.log("updating versions");
+                self.task.versions = self.versions;
+                self.task = t.logActivity(self.task);
                 t.update(self.task);
               }
               self.cancel();
@@ -1131,6 +1196,9 @@ define(
           if (self.isNew){
             t.add(self.task);
           } else {
+            //console.log("updating versions");
+            self.task.versions = self.versions;
+            self.task = t.logActivity(self.task);
             t.update(self.task);
           }
           self.cancel();

@@ -627,8 +627,14 @@ define(
               
               console.log("removeId");
               
+              //remove the user from the users collection
               self.project.users = dojo.filter(people, function(d){
                 return d !== removeId;
+              });
+              
+              //if the user was a follower remove the assignment
+              self.project.assignments = dojo.filter(self.project.assignments, function(assign){
+                return (assign.username !== removeId && assign.role !== "FOLLOWER");
               });
 
               //close in case we were editing
@@ -723,7 +729,8 @@ define(
          
          dojo.forEach(list, function(obj, key){
            if (isContact){
-             store.newItem({name: obj.firstName + " " + obj.lastName, id: obj.id});
+             var name = obj.firstName + " " + obj.lastName;
+             store.newItem({name: name, id: obj.id, label: "<div><span class='c-bold'>" + name + "</span><span class='c-margin-l'>-</span><span class='c-margin-l'>" + obj.email + "</span></div"});
            } else {
              store.newItem({name: obj.name, _id: obj._id});
            }
@@ -732,6 +739,11 @@ define(
          control.displayMessage = function(){
            return false;
          };
+         
+         if (isContact){
+            control.set("labelAttr", "label");
+            control.set("labelType", "html");
+          }
          
          control.set("store" , store);
       },
@@ -785,7 +797,7 @@ define(
         }
         
         function save(p){
-          //console.log("saving coord", p, self.isNew, self.isBlueprint);
+          console.log("saving coord", p, self.isNew, self.isBlueprint);
           var def = new dojo.Deferred();
           
           if (self.isBlueprint){

@@ -148,7 +148,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   		  
   			var t = db.getTaskModel(task, true);
   			//console.log("testing projectCurrent", t.isCurrent(), t.isCleared(), t.isIssue(), t.isSubmitted(), t.isReturned(), t.isUnassigned());
-  			return (t.isCurrent() || t.isCleared() || t.isIssue() || t.isSubmitted() || t.isReturned()) && !t.isUnassigned() && applyFilter(task);
+  			return (t.isCurrent() || (t.isCleared() && !t.isDeferred()) || t.isIssue() || t.isSubmitted() || (t.isReturned() && !t.isDeferred())) && !t.isUnassigned() && applyFilter(task);
   		};
   		break;
   		case "blocked":

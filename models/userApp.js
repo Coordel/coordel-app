@@ -265,6 +265,11 @@ exports.addAppObjects = function(userData, fn){
 };
 
 
+exports.getApps = function(){
+  
+};
+
+
 exports.getVips = function(appId, fn){
   getUserApps(appId, 'vips', function(err, vips){
     if (err) return fn(err, false);
@@ -273,6 +278,7 @@ exports.getVips = function(appId, fn){
 };
 
 exports.getPeople = function(appId, fn){
+  console.log("getPeople", appId);
   getUserApps(appId, 'people', function(err, people){
     if (err) return fn(err, false);
     return fn(null, people);
@@ -280,9 +286,9 @@ exports.getPeople = function(appId, fn){
 };
 
 function getPeople(key, fn){
-  //console.log("GET PEOPLE", key);
+  console.log("GET PEOPLE", key);
   var arr = redis.smembers(key, function(err, keyArr){
-    //console.log("after getKeyArray", err, keyArr);
+    console.log("after getKeyArray", err, keyArr);
     if (err) return fn(err, false);
     return fn(null, keyArr);
   });
@@ -297,7 +303,7 @@ function getUserApps(appId, field, fn){
 
     appIds.forEach(function(id){
       var akey = 'coordelapp:' + id;
-      //console.log("GET USER APP FOR KEY", akey);
+      console.log("GET USER APP FOR KEY", akey);
       multi.hgetall(akey);
     });
 
