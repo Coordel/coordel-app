@@ -1,0 +1,23 @@
+<div class="ui-corner-all large-shadow content-panel">
+	<h3>Apps</h3>
+	<div style="padding: 16px">
+	<% for (var key in apps) {%>
+		<div style="padding-bottom: 12px">
+			<div style="font-weight:bold"><%=apps[key].firstName%> <%=apps[key].lastName%></div>
+			<div>
+				<div style="float: left; padding-right: 8px"><%=apps[key].id%></div>
+				<div><%=apps[key].user%></div>
+				<div><%=apps[key].email%></div>
+				
+				<% for (var user in apps[key].people)%>
+
+			</div>
+		</div>
+	<%}%>
+</div>
+
+<script>
+  function test(args){
+    console.log("tested", args);
+  }
+</script>

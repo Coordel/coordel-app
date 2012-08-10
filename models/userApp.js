@@ -13,22 +13,40 @@ var config      = require('konphyg')(__dirname + './../config'),
 redis.auth(redisOpts.auth);
 
 var App = exports = module.exports = function App(args){
+  
+  //console.log("userApp args", args);
   //auths, contacts, defaultTemplatesLoaded, deliverableTemplates, email, firstName, lastName, license, 
   //myDelegatedProject, myPrivateProject, myPrivateRole,  notifications, vips 
-  
   data.id = args.id;
   data.user = args.user;
-  data.email = args.email;
+  data.email = args.email.toLowerCase();
   data.auths = args.auths;
   data.people = args.people || [args.id];
   data.defaultTemplatesLoaded = args.defaultTemplatesLoaded || false;
-  data.firstName = args.firstName || 'None';
-  data.lastName = args.lastName || 'Given';
+  data.firstName = args.firstName || '';
+  data.lastName = args.lastName || '';
   data.license = args.license || '';
   data.myDelegatedProject = args.myDelegatedProject;
   data.myPrivateProject = args.myPrivateProject;
   data.myPrivateRole = args.myPrivateRole;
   data.vips = args.vips;
+  
+  
+  
+  //handle the incoming preferences
+  if (args.suppressEmail){
+    data.suppressEmail = args.suppressEmail;
+  } else {
+    delete data.suppressEmail;
+  }
+  
+  if (args.dndActive){
+    data.dndActive = args.dndActive;
+  } else {
+    delete data.dndActive;
+  }
+  
+  //console.log("in userapp", data);
 };
 
 App.prototype.add = function(fn){
@@ -43,12 +61,23 @@ App.prototype.add = function(fn){
 };
 
 App.prototype.update = function(fn){
+  //console.log("updating app", data);
   _save(data, function(err, res){
     if (err){
       fn(err, false);
     } else {
       fn(null, true);
     }
+  });
+};
+
+exports.remove = function(id, fn){
+  var key = 'coordel-apps';
+  var multi = redis.multi();
+  multi.srem(key, 'coordelapp:'+id);
+  multi.exec(function(err, reply){
+    if (err) return fn(err, false);
+    return fn(null, reply);
   });
 };
 
@@ -87,16 +116,35 @@ function _save(app, fn){
     multi.hset(key, 'myPrivateProject', data.myPrivateProject);
     multi.hset(key, 'myPrivateRole', data.myPrivateRole);
     
-    if (data.vips && data.vips.length){
-      var vipsKey = key + ':vips';
+    var vipsKey = key + ':vips';
+    if (data.vips && data.vips.length > 0){
+      multi.del(vipsKey);
       data.vips.forEach(function(v){
+        //console.log("adding vip", v);
         multi.sadd( vipsKey, v);
       });
+    } else {
+      //console.log("deleting vips");
+      multi.del(vipsKey);
     }
   
+    if (data.suppressEmail){
+      multi.hset(key,'suppressEmail', data.suppressEmail);
+    } else {
+      multi.hdel(key,'suppressEmail');
+    }
+    
+    if (data.dndActive){
+      multi.hset(key,'dndActive', data.dndActive);
+    } else {
+      multi.hdel(key,'dndActive');
+    }
+
     multi.sadd('coordel-apps', key);
     multi.exec(function(err, replies){
+      
       if (err) fn(err, false);
+      //console.log("_save replies", replies);
       fn(null, true);
     });
   } else {
@@ -125,51 +173,59 @@ exports.get = function(id, fn){
           //console.log("couldn't load existing invite from store",err);
           fn(err, false);
         } else {
-          //console.log("found the app", app);
-          var tLoaded = app.defaultTemplatesLoaded;
-          //redis convers boolean values to strings, so need to convert them to bool on return
-          //this might be a problem!
-          if (!JSON.parse(app.defaultTemplatesLoaded)){
-            //create the default templates for the user
-            db.view('coordel/defaultTemplates',{}, function(err, templates){
-              if (err){
-                console.log("ERROR loading default templates", err);
-              } else {
-                var userTemplates = [];
-                templates.forEach(function(t){
-                  //get rid of _id, _rev, default and public
-                  delete t._id;
-                  delete t._rev;
-                  delete t.isPublic;
-                  delete t.isDefault;
-                  //add the username and flag as user template
-                  t.username = app.id;
-                  t.isUserTemplate = true;
-                  t.isActive = true;
-                  userTemplates.push(t);
-                });
-        
-                db.save(userTemplates,function(err, reply){
-                  if (err){
-                    console.log("ERROR saving default user templates", err);
-                  } else {
-                    app.defaultTemplatesLoaded = true;
-                    var newApp = new App(app);
-                    newApp.update(function(err, reply){
-                      if (err){
-                        console.log("ERROR updating defaultTemplatesLoaded", err);
-                      } else {
-                        fn(false, app);
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          } else {
-            fn(false, app);
-          }
           
+          //now we need to get the vips
+          var vipKey = key+':vips';
+          //console.log('vipKey', vipKey);
+          redis.smembers(vipKey, function(err, vips){
+            if (vips && vips.length > 0){
+              app.vips = vips;
+            }
+            //console.log("found the app", app);
+            var tLoaded = app.defaultTemplatesLoaded;
+            //redis converts boolean values to strings, so need to convert them to bool on return
+            //this might be a problem!
+            if (!JSON.parse(app.defaultTemplatesLoaded)){
+              //create the default templates for the user
+              db.view('coordel/defaultTemplates',{}, function(err, templates){
+                if (err){
+                  console.log("ERROR loading default templates", err);
+                } else {
+                  var userTemplates = [];
+                  templates.forEach(function(t){
+                    //get rid of _id, _rev, default and public
+                    delete t._id;
+                    delete t._rev;
+                    delete t.isPublic;
+                    delete t.isDefault;
+                    //add the username and flag as user template
+                    t.username = app.id;
+                    t.isUserTemplate = true;
+                    t.isActive = true;
+                    userTemplates.push(t);
+                  });
+
+                  db.save(userTemplates,function(err, reply){
+                    if (err){
+                      console.log("ERROR saving default user templates", err);
+                    } else {
+                      app.defaultTemplatesLoaded = true;
+                      var newApp = new App(app);
+                      newApp.update(function(err, reply){
+                        if (err){
+                          console.log("ERROR updating defaultTemplatesLoaded", err);
+                        } else {
+                          fn(false, app);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            } else {
+              fn(false, app);
+            }
+          });
         }
       }); 
     }
@@ -241,7 +297,7 @@ exports.addAppObjects = function(userData, fn){
       toReturn.user = uuids[3];
       user.first = userData.firstName;
       user.last = userData.lastName;
-      user.email = userData.email;
+      user.email = userData.email.toLowerCase();
       user.app = userData.appId.toString();
       user.docType = "user";
       user.isTemplate = false; 
@@ -265,8 +321,45 @@ exports.addAppObjects = function(userData, fn){
 };
 
 
-exports.getApps = function(){
-  
+exports.getContacts = function(appId, fn){
+  db.view("coordel/userContacts", {
+    group: true,
+    startkey: [appId],
+    endkey: [appId, {}]
+  },
+  function(err, rows){
+    if (err) return fn(err, false);
+    var contacts = [];
+    rows.forEach(function(row){
+      contacts.push(row.key[1]);
+    });
+    return fn(null, contacts);
+  });
+};
+
+exports.updateContacts = function(appId, fn){
+  //this function is called when the app is loaded to make sure contacts are up to date
+  this.getContacts(appId, function(err, contacts){
+    if (err){
+      fn(err, false);
+    } else {
+       var key = 'coordelapp:'+ appId+':people';
+
+       if (contacts.length > 0){
+        var multi = redis.multi();
+        contacts.forEach(function(contact){
+          //console.log("add contact", contact);
+          multi.sadd(key, contact);
+        });
+        multi.exec(function(err, reply){
+          if (err) return fn(err, false);
+          return fn(null, true);
+        });
+      } else {
+        fn(null, true);
+      }
+    }
+  });
 };
 
 
@@ -278,7 +371,7 @@ exports.getVips = function(appId, fn){
 };
 
 exports.getPeople = function(appId, fn){
-  console.log("getPeople", appId);
+  //console.log("getPeople", appId);
   getUserApps(appId, 'people', function(err, people){
     if (err) return fn(err, false);
     return fn(null, people);
@@ -286,9 +379,9 @@ exports.getPeople = function(appId, fn){
 };
 
 function getPeople(key, fn){
-  console.log("GET PEOPLE", key);
+  //console.log("GET PEOPLE", key);
   var arr = redis.smembers(key, function(err, keyArr){
-    console.log("after getKeyArray", err, keyArr);
+    //console.log("after getKeyArray", err, keyArr);
     if (err) return fn(err, false);
     return fn(null, keyArr);
   });
@@ -300,10 +393,12 @@ function getUserApps(appId, field, fn){
   var key = 'coordelapp:'+appId+':' + field;
   getPeople(key, function(err, appIds){
     if (!appIds) appIds = [];
+    
+    //console.log('appIds', appIds);
 
     appIds.forEach(function(id){
       var akey = 'coordelapp:' + id;
-      console.log("GET USER APP FOR KEY", akey);
+      //console.log("GET USER APP FOR KEY", akey);
       multi.hgetall(akey);
     });
 

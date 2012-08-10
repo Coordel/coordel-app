@@ -11,9 +11,7 @@ define([
   'app/widgets/ContainerPane',
   'app/models/CoordelStore',
   'app/views/ProjectForm/ProjectForm',
-  "app/views/feedback/RatingForm/RatingForm",
-  "dijit/form/NumberTextBox",
-  "dijit/form/CurrencyTextBox"], function(dojo, coordel, template, blueprint, feedback, opportunity, w, t, Dialog, ContainerPane, db, Form, Rating) {
+  "app/views/feedback/RatingForm/RatingForm"], function(dojo, coordel, template, blueprint, feedback, opportunity, w, t, Dialog, ContainerPane, db, Form, Rating) {
   //return an object to define the "./newmodule" module.
   dojo.declare("app.views.ProjectAction", [w,t], {
     

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<title>
+			Coordel...and we're done!
+		</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="/css/main.css" type="text/css">
+		<link rel="stylesheet" href="/css/coordel-test.css" type="text/css">
+		<link rel="shortcut icon" href="images/favicon.gif">
+		<script type="text/javascript">
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-29334212-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+		</script>
+	</head>
+	<body>
+		<div id="body-container">
+			<div id="header-container" class="ui-corner-all large-shadow">
+				<div id="header">
+					<div id="site-links">
+						<span><a href="/register">Join Us</a></span><span><a href="/login">Sign In</a></span><span><a href="/?p=contact">Contact Us</a></span>
+					</div>
+					<a class="no-decoration" href='/'><div id="site-logo">
+						&nbsp;
+					</div></a>
+				</div><!-- #header -->
+			</div><!-- #header-container -->
+			<div id="container">
+				<div id="content" class="content ui-corner-all large-shadow page">
+					<div id="single-column">	
+						<%- body %>
+					</div>
+				</div><!-- .content .hfeed -->
+			</div><!-- #container -->
+			<div id="footer-container">
+				<div id="footer" class="ui-corner-all large-shadow">
+					<div class="footer-insert">
+						<div class="copyright">
+							© Coordel 2012 <span id="footer-links"><a href="/?p=disclaimer">Disclaimer</a></span>
+						</div>
+					</div>
+				</div><!-- #footer -->
+			</div><!-- #footer-container -->
+		</div><!-- #body-container -->
+	</body>
+</html>

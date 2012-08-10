@@ -1,0 +1,5 @@
+.preferences {
+  width: 400px;
+  padding: 16px;
+  overflow-y: auto;
+}

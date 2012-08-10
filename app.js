@@ -24,6 +24,7 @@ var express     = require('express'),
     util        = require('util'),
     User        = require('./models/user'),
     Alert       = require('./models/alert'),
+    App         = require('./models/userApp'),
     nls         = require('i18n'),
     passHash    = require('password-hash'),
     loggly      = require('loggly'),
@@ -47,7 +48,7 @@ everyauth
     .loginWith('email')
     .getLoginPath('/login')
     .postLoginPath('/login')
-    .loginView('users/login', {layout: 'users/layout'})
+    .loginView('users/login', {layout: 'users/corp'})
     .authenticate( function (login, password) {
       var errors = [];
       if (!login) errors.push('Missing login');
@@ -66,7 +67,7 @@ everyauth
     })
     .getRegisterPath('/register')
     .postRegisterPath('/register')
-    .registerView('users/register', {layout: 'users/layout'})
+    .registerView('users/register', {layout: 'users/corp'})
     .extractExtraRegistrationParams( function (req) { 
       return { 
           firstName: req.body.firstName,
@@ -74,7 +75,7 @@ everyauth
       }; 
     })
     .validateRegistration( function (newUserAttrs, errors) {
-      var login = newUserAttrs.email;
+      var login = newUserAttrs.email.toLowerCase();
       var promise = this.Promise();
       User.get(login, function(err, user){
         if (err && err !=='Login not found') errors.push(err);
@@ -92,7 +93,7 @@ everyauth
       var promise = this.Promise();
       newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){
-        console.log(logId, "Registered User: " + JSON.stringify(user));
+        //console.log(logId, "Registered User: " + JSON.stringify(user));
         if (err) return promise.fulfill([err]);
         return promise.fulfill(user);
       });
@@ -254,6 +255,41 @@ var changesIO = io.sockets.on('connection', function (client) {
   
 });
 
+function alertContacts(change){
+  //is this a project
+  if (change.docType === 'project'){
+    //NOTE: might want to test if this is an add or invite history entry
+    //console.log('substatus not PENDING', change.name );
+    change.users.forEach(function(user){
+      var doUpdate = false;
+      if (change.substatus === "PENDING" && user === change.responsible){
+        doUpdate = true;
+      } else if (change.substatus === "SENT"){
+        doUpdate = true;
+      }
+      if (doUpdate){
+        change.users.forEach(function(person){
+          if (user !== person){
+            //console.log("user: " + user + " person:" + person);
+            App.addPerson({
+              userAppId: user, personAppId: person
+            },
+            function(err, reply){
+              //console.log("after addPerson", err, reply);
+              if (err) return;
+              if (reply[0]){
+                App.get(person, function(err, contact){
+                  changesIO.emit('contacts:' + user, contact);
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+}
+
 
 
 //Get the the update sequence of the dbase and start following changes
@@ -268,6 +304,7 @@ couch.info(function(err, info){
     follow({db:dbUrl, since: since, include_docs:true}, function(error, change) {
       if(!error) {
         var map = Alert.getChangeAlertMap(change.doc);
+        alertContacts(change.doc);
         //console.log("ALERT MAP", map);
         for (var key in map){
           //console.log("CHANGE", key, change.doc.updater);
@@ -275,7 +312,7 @@ couch.info(function(err, info){
           
           //if this user didn't do the update, then alert when history exists
           if (change.doc.username !== "UNASSIGNED" && change.doc.updater !== key && change.doc.history && change.doc.history.length > 0){
-            console.log(logId, "Alert: ", JSON.stringify(change));
+            //console.log(logId, "Alert: ", JSON.stringify(change));
             var alert = change.doc.history.shift();
             changesIO.emit('alerts:' + key, alert);
             var a = new Alert({
@@ -287,7 +324,7 @@ couch.info(function(err, info){
               if (err) console.log(logId, "ERROR adding alert: " + err);
             });       
           } else if (change.doc.docType === "message" && change.doc.updater !== key){
-            console.log(logId, "message alert", change.doc);
+            //console.log(logId, "message alert", change.doc);
             changesIO.emit('alerts:' + key, change.doc);
             
             var b = new Alert({
@@ -299,8 +336,6 @@ couch.info(function(err, info){
               if (err) console.log(logId, "ERROR adding alert: " + err);
             });
           }
-          
-          
         }
       } 
     });
@@ -308,17 +343,22 @@ couch.info(function(err, info){
   
 });
 
-/* ****************************  UTILITY DELETE FOR PRODUCTION  *************************/
+/* ****************************  UTILITY DELETE FOR DEV and PRODUCTION  *************************/
 
 if (app.settings.env === "development"){
   app.get('/flushdb', function(req, res){
     store.flushdb();
     console.log('redis flushed');
-    couch.destroy();
-    couch.create();
-    console.log('couch recreated');
-    delete req.session.auth;
-    res.redirect('/admin');
+    couch.destroy(function(){
+      console.log('couch destroyed');
+      couch.create(function(){
+        console.log('couch recreated');
+        ddoc.update();
+        res.redirect('/admin');
+      });
+    });
+    
+    
   });
 }
 
@@ -329,7 +369,7 @@ app.get('/loadTemplates', function(req, res){
       console.log("ERROR adding temlates");
       res.redirect('/admin');
     } else {
-      //console.log("Loaded default templates");
+      console.log("Loaded default templates");
       res.redirect('/admin');
     }
   });

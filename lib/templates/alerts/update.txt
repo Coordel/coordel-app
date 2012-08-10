@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  		<title>Coordel</title>
+  		<meta charset="utf-8">
+      <style>
+
+        #streamMessages, #streamActivity {
+          padding: 0;
+        }
+
+        .alerts .stream-entry:last-child{
+          border-bottom: none;
+          margin-bottom: 0;
+        }
+
+        .stream-entry:last-child{
+          border-bottom: 1px solid #a3aab1;
+          margin-bottom: 1.8em;
+        }
+
+        /*the stream entry can be a single activity or message entry or a collection of them*/
+        .stream-entry {
+          color:#555555;
+          background: #fafafa;
+          border-bottom: 1px solid #cccccc;
+          font-size: 10px;
+        }
+
+        .stream-entry .entry-header {
+          border-bottom: 1px solid #eaeaea;
+          padding: 4px;
+          background: #f1f1f1;
+        }
+        
+        .stream-entry .entry-project, .stream-entry .entry-contact {
+          cursor: pointer;
+        }
+
+        .stream-entry .entry-project:hover, .stream-entry .entry-contact:hover{
+          color: #000000;
+        }
+
+        .stream-entry .entry-contact {
+          font-weight: bold;
+          color: #333333;
+          font-size: 12px;
+        }
+
+        .stream-entry .entry-children {
+          padding: 0;
+        }
+
+        .stream-entry .stream-message:last-child, .stream-entry .stream-activity:last-child{
+          border-bottom: none;
+        }
+
+        .stream-entry .stream-message, .stream-entry .stream-activity {
+          border-bottom: 1px solid #eaeaea;
+        }
+
+        .stream-message .message-body{
+          background-color: #ffffff;
+          color: #333333;
+          font-size: 11px;
+          padding: 4px 4px 0 8px;
+        }
+
+        .stream-activity .activity-message {
+          color: #333333;
+          font-size: 11px;
+          padding: 4px 4px 0 8px;
+        }
+
+        .stream-message .message-footer {
+          background-color: #ffffff;
+          color: #a9a9a9;
+          padding: 2px 4px 4px 8px;
+        }
+
+        .stream-activity .activity-body{
+          padding: 4px 4px 0 8px;
+        }
+
+
+        .stream-activity .activity-verb{
+          color: #000000;
+          font-weight: bold;
+          text-transform: lowercase;
+        }
+
+        .stream-activity .activity-details{
+          color: #555555;
+          font-weight: bold;
+          text-transform: lowercase;
+        }
+
+        .stream-activity .activity-footer{
+          color: #a9a9a9;
+          padding: 2px 4px 4px 8px;
+        }
+
+        .stream-footer .footer-reply{
+          margin-left: 4px;
+          color: #555555;
+          cursor: pointer;
+        }
+        .stream-footer .footer-reply:hover{
+          color: #000000;
+        }
+
+        #streamHeader {
+          padding: 0;
+        }
+
+        #streamContainer {
+          background-color: transparent;
+        }
+      </style>
+	</head>
+	<body>
+		<div>
+    	<div class="activity-body">
+    		<span class="activity-verb">${prettyVerb} </span>
+    		<span class="activity-object">${prettyObjectName}</span>
+    	</div>
+    	<div class="activity-message" dojoAttachPoint="bodyContainer"></div>
+    	<div class="activity-message hidden" dojoAttachPoint="detailsContainer"></div>
+    	<div dojoAttachPoint="footContainer" class="activity-footer"></div>
+    </div>
+    <div>
+    	<div dojoAttachPoint="changes" class="hidden">
+    		<div dojoAttachPoint="changesContainer"></div>
+    	</div>
+    </div>
+	</body>
+</html>
+	

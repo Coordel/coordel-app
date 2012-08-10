@@ -62,7 +62,7 @@ define(
           dojo.addClass(this.detailsContainer, "hidden");
         } else {
           //raise-issue and update will have json objects in them that need to be properly formatted
-          if (this.verb === "UPDATE" || this.verb === "RAISE-ISSUE"){ 
+          if (this.verb === "UPDATE" || this.verb === "RAISE-ISSUE" || this.verb === "ADD-BLOCKING" || this.verb === "REMOVE-BLOCKING"){ 
             var d = new Details({
               body: dojo.fromJson(this.body)
             }).placeAt(this.detailsContainer);

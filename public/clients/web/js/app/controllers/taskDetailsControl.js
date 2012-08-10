@@ -74,7 +74,6 @@ define([
 		  
 		  layout.showLayout(focus, task, db.username(), task.responsible);
 		  
-		  
 		  this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "setRightColumn");
 		  
 		  this.streamNotifyHandler = dojo.subscribe("coordel/streamNotify", this, "handleStreamNotify");
@@ -188,7 +187,7 @@ define([
 	    this.setRightColumn(dojo.hasClass(bn.domNode, "hidden"));
       
 		},
-		
+	
 	  handleStreamNotify: function(args){
       console.log("stream notify", args);
       if (args.message.task === this.task._id){

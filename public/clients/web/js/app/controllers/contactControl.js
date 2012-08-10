@@ -38,7 +38,7 @@ define([
         }
         
         //add profile to container
-        document.title = "Coordel > " + db.contactFullName(this.contact);
+        document.title = "Coordel > " + coordel.contacts + " > " + db.contactFullName(this.contact);
       },
       
        showTasks: function(){

@@ -134,10 +134,11 @@ app.store.util.TaskQueryEngine = function(query, options){
   		  var t = db.getTaskModel(task, true);
   		  
   		  //if i've delegated this task in a project, then it won't be current for me
+  		  /*
     		if (t.hasDelegator() && t.delegator === db.username()){
     		  return false;
     		}
-    		
+    		*/
   			return t.isCurrent() && !pStatus.isDeferred(t.p.project) && !pStatus.isPending(t.p.project, t.username) && applyFilter(task);
   		};
   		break;
@@ -148,7 +149,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   		  
   			var t = db.getTaskModel(task, true);
   			//console.log("testing projectCurrent", t.isCurrent(), t.isCleared(), t.isIssue(), t.isSubmitted(), t.isReturned(), t.isUnassigned());
-  			return (t.isCurrent() || (t.isCleared() && !t.isDeferred()) || t.isIssue() || t.isSubmitted() || (t.isReturned() && !t.isDeferred())) && !t.isUnassigned() && applyFilter(task);
+  			return (t.isCurrent() || (t.isCleared() && !t.isDeferred()) || (t.isDelegated() && !t.isInvite() && !t.isProjectInvite()) || t.isIssue() || t.isSubmitted() || (t.isReturned() && !t.isDeferred())) && !t.isUnassigned() && applyFilter(task);
   		};
   		break;
   		case "blocked":
@@ -167,13 +168,13 @@ app.store.util.TaskQueryEngine = function(query, options){
   		case "delegated":
   		query = function(task){
   			var t = db.getTaskModel(task, true);
-  			return t.isDelegated() || (t.hasDelegator() && t.delegator === db.username()) && applyFilter(task);
+  			return t.isDelegated() && applyFilter(task);
   		};
   		break;
   		case "private":
   		query = function(task){
   			var t = db.getTaskModel(task, true);
-  			return (t.isPrivate() && !t.isBlocked() && !t.isDeferred() && applyFilter(task));
+  			return (t.isPrivate() && !t.isBlocked() && !t.isDeferred() && !t.isDeleted() && applyFilter(task));
   		};
   		break;
   		case "submitted":

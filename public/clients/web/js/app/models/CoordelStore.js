@@ -161,7 +161,7 @@ define(["dojo",
                 ]);
 
                 list.then(function(resp){
-
+    
                   
                   //console.debug("user and appStore loaded, other stores set", resp);
                   def.callback(self);
@@ -599,7 +599,27 @@ define(["dojo",
               var def = new dojo.Deferred();
               store.get(id).then(
                 function(doc){
-                  console.log("get the object in get");
+                  //console.log("get the object in get");
+                  def.resolve(doc);
+                },
+                function(err){
+                  console.log("got an error in get", err);
+                  def.reject(err);
+                });
+              
+              return def;
+            },
+            
+            batch: function(list){
+              var store = new couch({
+                target: this.db, 
+                idProperty: "_id"
+              });
+              
+              var def = new dojo.Deferred();
+              store.get(id).then(
+                function(doc){
+                  //console.log("get the object in get");
                   def.resolve(doc);
                 },
                 function(err){

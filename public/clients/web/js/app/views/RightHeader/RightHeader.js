@@ -14,9 +14,11 @@ define(
     "app/util/dateFormat",
     'app/views/AddTaskButton/AddTaskButton',
     "app/views/DNDDialog/DNDDialog",
-    "app/views/Stream/Stream"
+    "app/views/Stream/Stream",
+    "app/models/CoordelStore",
+    "app/views/VipsDialog/VipsDialog"
     ], 
-  function(dojo, coordel, w, t, html, stamp, dt, add, dialog, Stream) {
+  function(dojo, coordel, w, t, html, stamp, dt, add, dialog, Stream, db, vipsDialog) {
   
   dojo.declare(
     "app.widgets.RightHeader", 
@@ -31,6 +33,28 @@ define(
       
       currentAlerts: [],
       
+      filterAlerts: function(alerts){
+        
+        
+        var app = db.appStore.app();
+        
+        if (app.dndActive){
+          if (app.vips && app.vips.length > 0){
+            //console.log("filter the alerts for vips");
+            alerts = dojo.filter(alerts, function(item){
+              return dojo.some(app.vips, function(vip){
+                return vip === item.actor.id; 
+              });
+            });
+          } else {
+            alerts = [];
+          }
+        }
+        
+        return alerts;
+        
+      },
+      
       userFullName: null,
       
       templateString: html,
@@ -43,6 +67,8 @@ define(
       
       postCreate: function(){
         this.inherited(arguments);
+        
+        
         
         dojo.connect(this.showRight, "onClick", this, function(){
           //console.debug("showRight clicked");
@@ -82,12 +108,18 @@ define(
           dojo.publish("coordel/support", ["showEmailIntegration"]);
         });
         
+        dojo.connect(this.optPreferences, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          dojo.publish("coordel/support", ["preferences"]);
+        });
+        
         dojo.connect(this.showNotifications, "onClick", this, function(){
           dojo.forEach(dijit.findWidgets(this.alertsContainer), function(child){
             child.destroyRecursive();
           });
+          
           var alerts = new Stream({
-            stream: this.currentAlerts,
+            stream: this.filterAlerts(this.currentAlerts),
             isAlerts: true,
             onCancel: function(){
               alerts.destroy();
@@ -106,17 +138,32 @@ define(
           //do not disturb is on, click this to turn it off
           //console.debug("onExecute fired in primary header");
           //clicking do not disturb off shows the stream and restarts alerts
+          
+          //clear the dndIndicator
+          dojo.destroy("dndIndicator");
+          
+          //handle the menu and publish event
+          this.coordelUserPreferences.closeDropDown();
           dojo.addClass(this.doNotDisturb, "hidden");
           dojo.removeClass(this.doNotDisturbOff, "hidden");
           dojo.removeClass(this.showNotifications, "hidden");
-          dojo.publish("coordel/doNotDisturb", [false]);
+          dojo.publish("coordel/doNotDisturb", [{isActive: false, app:null}]);
         });
         
         dojo.connect(this.doNotDisturbOff, "onclick", this, function(){
           //do not disturb is off, click this to activate
           //console.debug("onClick fired in primary header. showing dialog");
+     
+          this.coordelUserPreferences.closeDropDown();
           var d = new dialog();
           dojo.connect(d, "onConfirm", this, "confirm");
+          d.show();
+        });
+        
+        dojo.connect(this.vips, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          var d = new vipsDialog();
+          //dojo.connect(d, "onConfirm", this, "confirm");
           d.show();
         });
         
@@ -132,6 +179,13 @@ define(
         //subscribe to notifications updates
         this.updateNotificationCountHandler = dojo.subscribe("coordel/updateNotificationCount", this, "updateNotificationCount");
         this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "handleShowRightColumn");
+        
+        //if we're in dnd mode, need to update the menu item
+        if (db.appStore.app().dndActive){
+          dojo.removeClass(this.doNotDisturb, "hidden");
+          dojo.addClass(this.doNotDisturbOff, "hidden");
+          //dojo.addClass(this.showNotifications, "hidden");
+        }
       },
       
       handleShowRightColumn: function(args){
@@ -146,7 +200,8 @@ define(
       
       updateNotificationCount: function(args){
         //console.debug("updateNotificationCount called", args);
-        this.currentAlerts = args.currentAlerts;
+        this.currentAlerts = this.filterAlerts(args.currentAlerts);
+      
         var count = this.currentAlerts.length;
         var node = dijit.byId(this.showNotifications);
         if (node){
@@ -166,7 +221,6 @@ define(
         dojo.removeClass(this.doNotDisturb, "hidden");
         dojo.addClass(this.doNotDisturbOff, "hidden");
         dojo.addClass(this.showNotifications, "hidden");
-        dojo.publish("coordel/doNotDisturb", [true]);
       },
       
       destroy: function(){

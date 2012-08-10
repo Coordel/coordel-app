@@ -53,7 +53,7 @@ define(["dojo",
             
             loadProject: function(project){
               
-              console.debug("loadProject called", project, this.currentProject);
+              //console.debug("loadProject called", project, this.currentProject);
               
               var def = new dojo.Deferred(),
                   self = this;

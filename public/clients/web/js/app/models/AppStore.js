@@ -24,11 +24,29 @@ define(["dojo",
             	return def;
             },
             
+            post: function(app){
+              var self = this;
+              var def = new dojo.Deferred();
+              
+              return new dojo.xhrPost({
+                url: "/app/",
+                handleAs: "json",
+                postData: dojo.toJson(app),
+                headers:{
+        					"Content-Type": "application/json; charset=UTF-8",
+        					"Accept": "application/json"
+        				}
+              });
+              
+              
+            },
+            
             app: function(){
-              //console.debug("app", this._app);
+              //console.debug("appstore app", this._app);
               return this._app;
           
             },
+            
             _loadApp: function(){
               var self = this;
               var def = new dojo.Deferred();

@@ -20,6 +20,8 @@ define([
       
       coordel: coordel,
       
+      backLabel: coordel['project-invited'],
+      
       postCreate: function(){
         this.inherited(arguments);
         var pdh = this,
@@ -71,6 +73,7 @@ define([
           dojo.removeClass(this.follow.domNode, "hidden");
           dojo.addClass(this.chooseAction.domNode, "hidden");
           dojo.style(this.showView.domNode, {"margin-right": "0"});
+          dojo.removeClass(this.projBackToFocus.domNode, "hidden");
           
         } else if (pStatus.isInvitedNew(this.project, username) || 
             pStatus.isInvitedAgreed(this.project, username) || 
@@ -78,6 +81,7 @@ define([
           //if project is newInvite, agreeInvite, or amendedInvite then show accept/decline
           dojo.removeClass(this.decline.domNode, "hidden");
           dojo.removeClass(this.participate.domNode, "hidden");
+          dojo.removeClass(this.projBackToFocus.domNode, "hidden");
           
           dojo.style(this.showView.domNode, {"margin-right": "0"});
               
@@ -152,6 +156,10 @@ define([
           dojo.publish("coordel/projViewChange", [{view: "deliverables"}]);
           dojo.removeClass(this.showTasks, "selected");
           dojo.addClass(this.showDeliverables, "selected");
+        });
+        
+        dojo.connect(this.projBackToFocus, "onClick", this, function(){
+          dojo.publish("coordel/primaryNavSelect", [{focus:"project-invited", name: "", id:"", setSelection: true}]);
         });
         
 

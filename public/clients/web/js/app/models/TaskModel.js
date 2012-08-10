@@ -241,9 +241,8 @@ define("app/models/TaskModel",
     			  reason = "Task was current",
     			  test = false;
     			  
-    		
-    		
-    			  
+    		//console.log("isSubmitted", t.isSubmitted(), "isDelegated", t.isDelegated(), "isProjectDelegated", t.isProjectDelegated());
+
        	//if it's deleted, it's not current
     		if (t.isDeleted()){
     		  return false;
@@ -290,7 +289,7 @@ define("app/models/TaskModel",
     		//console.debug("before calling t.isInvite(): ");
     		//if it's an invite, it's not current because I haven't accepted it yet
     		if (t.isInvite()){
-    			//console.debug(t.name + " was INVITE, it's current");
+    			console.debug(t.name + " was INVITE, it's not current");
     			return false;
     		}
     		
@@ -303,10 +302,10 @@ define("app/models/TaskModel",
     		}
     		
     		//console.debug("coordinates length", task.coordinates.length);
-    		//if it's delegated (in my delegated project) 
+    		//if it's delegated (in my delegated project) or delegated to someone else
     		//it's not current
-    		if (t.isDelegated()){
-    		  
+    		if (t.isDelegated() || t.isProjectDelegated()){
+    		  //console.log("isDelegated", t.isDelegated(), "isProjectDelegated", t.isProjectDelegated());
     		  test = false;
     		  //if the task is delegated and it submitted for approval, then it's current
     		  //for the responsible
@@ -324,7 +323,10 @@ define("app/models/TaskModel",
     		  return test;
     		}
     		
-    		
+    		//if it's paused, it's not current
+    		if (t.isPaused()){
+    		  return false;
+    		}
     		
     		//if it's cancelled, it's not current :)
     		if (t.isCancelled()){
@@ -407,8 +409,14 @@ define("app/models/TaskModel",
  		    //if this task is paused, it's blocked by the project responsible pausing the task
   		  //because the user is still responsible, but can't do work on it at this time
   		  //this makes it easier for project responsibles to manage what is current for users
-  		  //when the project list is show, though, don't block because of pausing
-  		  if (t.isPaused() && db.focus !== "project"){
+  
+  		  if (t.isPaused()){
+  		    
+  		    //if the task is delegated and i'm the responsible, then it's not blocked for me
+  		    if (t.isDelegated() && t.responsible === db.username()){
+  		      return false;
+  		    }
+  		  
   		    return true;
   		  }
   		  
@@ -584,6 +592,7 @@ define("app/models/TaskModel",
   		    isCurrent = true;
   		  }
   		  
+  		  //console.log("before isCurrent in isTaskInvite", isCurrent);
   		  if (isCurrent){
   		    //console.debug(t._id, t.name + " is task invite", "invite=" + t.isInvite(), "proposed=" + t.isProposed(), "agreed=" + t.isAgreed(), "decline=" + t.isDeclined());
   		  }
@@ -599,20 +608,45 @@ define("app/models/TaskModel",
     	      delProj = this.db.myDelegated(),
     	      username = this.db.username();
     	      
+    	  //if i'm responsible and this is submitted or issue, it's not delegated
+    	  if (t.responsible === username && (t.isSubmitted() || t.isIssue())){
+    	    return false;
+    	  }
+    	  
+    	      
     	  //console.debug ("delegated project", delProj, t.project);
     	  //tasks placed in the delegated project are all delegated  
-    	  if (t.project === delProj && !t.isDone()){
+    	  if (t.project === delProj && !t.isDone() && !t.isCancelled()){
     	    isDelegated = true;
+    	    //console.log("task in my delegated project", delProj, t);
     	  } 
     	  
     	  //tasks I've delegated in a project that I'm not responsible also show in the delegated list
     	  //this allows me to track tasks I've delegated in projects
-    	  /*
-    	  if (t.hasDelegator() && t.username !== username && !t.isDone()){
+    	  if (t.hasDelegator() && t.responsible !== t.delegator && t.delegator === username && !t.isDone()){
+    	    
+    	    //if this task is submitted and there is a delegator, it's not delegated if i'm the responsible
     	    isDelegated = true;
+    	    //console.log("task delegated by non-responsible", t.responsible, t.delegator, username, t.isDone(), t);
     	  }
-        */
+        
     	  return isDelegated;
+    	},
+    	
+    	isProjectDelegated: function(){
+    	  var t = this,
+    	      username = this.db.username(),
+    	      test = false;
+    	      
+    	  //tasks that are delegated by the project responsible
+    	  if (t.status === "CURRENT" && t.substatus === "ACCEPTED" && t.responsible === username && t.username !== username && this.db.focus !== "project"){
+    	    console.log("task delegated by project responsible", t.responsible, t.username, t);
+    	    test = true;
+    	  }
+    	      
+    	  
+    	  return test;
+    	  
     	},
     	
     	isDeclined: function(){
@@ -658,7 +692,7 @@ define("app/models/TaskModel",
   		  if (t.isUnassigned()){
   		    return false;
   		  }	
-  		  
+
   		  //the assumption is that once a task gets going, it's not deferred any more
     		if (t.hasDeferDate()
     		  && !t.isSubmitted()
@@ -674,6 +708,7 @@ define("app/models/TaskModel",
     				isDeferred = true;
     				//console.log(t.task.name + " is DEFERRED");
     		}
+    	  
     		return isDeferred;	
     	},
     	
@@ -893,6 +928,9 @@ define("app/models/TaskModel",
   	    task.status = "CURRENT"; 
   	    //if I created this task, then I've already accepted by default
   	    task.substatus = "ACCEPTED"; 
+  	    //not private or delegated by default
+  	    task.isMyPrivate = false;
+	      task.isMyDelegated = false;
   	    
   	    //default to the current user if username not set yet
   	    if (!task.username){
@@ -928,16 +966,19 @@ define("app/models/TaskModel",
   	      //i'm the responsible when it's a private or delegated task
   	      task.responsible = username;
   	      task.project = app.myPrivateProject;
+  	      task.isMyPrivate = true;
   	      projId = app.myPrivateProject;
-  	      projName = "Private";
+  	      projName = coordel.myPrivate;
   	      //it's a delegated project if the username isn't me
   	      if (task.username !== username){
   	        //assign it to my delegated project
   	        task.project = app.myDelegatedProject;
+  	        task.isMyPrivate = false;
+  	        task.isMyDelegated = true;
   	        projId = app.myDelegatedProject;
-    	      projName = "Delegated";
+    	      projName = coordel.delegated + " (" + db.fullName() + ")";
   	      }
-  	    }
+  	    } 
   	    
   	    //if the substatus of the project is PENDING then the task status should be pending
   	    //if this user isn't the responsible
@@ -951,6 +992,7 @@ define("app/models/TaskModel",
         task.docType = "task";
         task.isTemplate = false;
         
+        /*
         //if this is in in myDelegatedProject, need to flag it delegated so the view can find it
         task.isMyPrivate = false;
         if (task.project === app.myPrivateProject){
@@ -962,6 +1004,7 @@ define("app/models/TaskModel",
         if (task.project === app.myDelegatedProject){
           task.isMyDelegated = true;
         }
+        */
         
         //handle the activity stream
         //make the POST activity for the task creation
@@ -981,30 +1024,33 @@ define("app/models/TaskModel",
       		}, task);
         }
         
-        t.updateBlocking(task);
+       
   
         var def = p.updateAssignments(task);
         
         //need to make sure the update to the project happens before the task is added
         def.then(function(taskResp){
-          //console.debug("adding task with status", taskResp, taskResp.status);
+          console.debug("adding task with status", taskResp, taskResp.status);
           //db.taskStore.store.add(taskResp, {username: username});
+          var save;
           switch(db.focus){
             case "project":
           
-            db.projectStore.taskStore.add(taskResp, {username: username});
+            save = db.projectStore.taskStore.add(taskResp, {username: username});
             break;
             case "task":
-            db.taskStore.store.add(taskResp, {username: username});
+            save = db.taskStore.store.add(taskResp, {username: username});
             break;
             case "contact":
-            db.contactStore.taskStore.add(taskResp, {username: username});
+            save = db.contactStore.taskStore.add(taskResp, {username: username});
             break;
           }
           
-          
-          
-          dojo.publish("coordel/updatePrimaryBoxCount");
+          dojo.when(save, function(){
+             t.updateBlocking(taskResp);
+             dojo.publish("coordel/updatePrimaryBoxCount");
+          });
+
         });
     
         //return task;
@@ -1088,7 +1134,7 @@ define("app/models/TaskModel",
             
         
             
-        //console.debug("update task", task, task._rev, db.focus, p.project);
+        console.debug("update task", task, task._rev, db.focus, p.project);
             
         task.isNew = false;
         
@@ -1139,8 +1185,8 @@ define("app/models/TaskModel",
   	      //the task responsible is the project responsible
           task.responsible = projResponsible;
           
-          //if task isn't for me and the project responsible isn't me, then i'm the delegator
-          if (projResponsible !== username && task.username !== username){
+          //if task is delegated and isn't for me and the project responsible isn't me, then i'm the delegator
+          if (projResponsible !== username && task.username !== username && task.status === "DELEGATED"){
             task.delegator = username;
           }
   	    }
@@ -1150,17 +1196,21 @@ define("app/models/TaskModel",
   	      //i'm the responsible when it's a private or delegated task
   	      task.responsible = username;
   	      task.project = app.myPrivateProject;
+  	      task.isMyPrivate = true;
   	      projId = app.myPrivateProject;
-  	      projName = "Private";
+  	      projName = coordel.myPrivate;
   	      //it's a delegated project if the username isn't me
   	      if (task.username !== username){
   	        //assign it to my delegated project
   	        task.project = app.myDelegatedProject;
+  	        task.isMyPrivate = false;
+  	        task.isMyDelegated = true;
   	        projId = app.myDelegatedProject;
-    	      projName = "Delegated";
+    	      projName = coordel.delegated + "(" + db.fullName() + ")";
   	      }
-  	    }
+  	    } 
         
+        /*
         //if this is in in myDelegatedProject, need to flag it delegegated so the view can find it
         task.isMyPrivate = false;
         if (task.project === db.myPrivate()){
@@ -1172,7 +1222,7 @@ define("app/models/TaskModel",
         if (task.project === db.myDelegated()){
           task.isMyDelegated = true;
         }
-        
+        */
         
         
         /*
@@ -1191,48 +1241,151 @@ define("app/models/TaskModel",
           
           //console.log("updated assignments", updatedTask, p.project);
           //use the appropriate store based on the focus of the db
+          
+          var save;
            
           switch(db.focus){
             case "project":
             //console.log("do projectStore.store.put", updatedTask);
-            db.projectStore.taskStore.put(updatedTask, {username: username});
+            save = db.projectStore.taskStore.put(updatedTask, {username: username});
             break;
             case "task":
             //console.log("do taskStore.store.put", updatedTask);
-            db.taskStore.store.put(updatedTask, {username: username});
+            save = db.taskStore.store.put(updatedTask, {username: username});
             break;
             case "contact":
             //console.log("do contactStore.store.put", updatedTask);
-            db.contactStore.taskStore.put(updatedTask, {username: username});
+            save = db.contactStore.taskStore.put(updatedTask, {username: username});
             break;
           }
           
-          t.updateBlocking(updatedTask);
+          dojo.when(save, function(args){
+            console.log("updating blocking", updatedTask);
+            t.updateBlocking(updatedTask);
 
-          dojo.publish("coordel/setPrimaryBoxCounts");
+            dojo.publish("coordel/setPrimaryBoxCounts");
+          }); 
         });
         
         
       },
       
       updateBlocking: function(task){
+        
         //this function keeps blocking tasks in sync with this one.
         var db = this.db,
             p = this.p;
-        //console.log("updateBlocking", task);
-        if (task.coordinates){
-          //console.log("task has coordinates entry");
+      
+        //console.log("updateBlocking for task: ", task._id, task.name);
+        
+        var tModel = db.getTaskModel(task, true);
+        var body = {
+          project: tModel.p.project.name,
+          task: task.name
+        };
+        
+        
+        //first get any existing blocking tasks for this task
+        var qBlocking = db.taskStore.getBlocking(task._id);
+        
+        dojo.when(qBlocking, function(blocking){
+          console.log("got blocking for task", task.name, blocking);
+          if (task.coordinates && task.coordinates.length > 0){
+            console.log("task has coordinates entry");
+            var query;
+            //if (task.coordinates.length > 0){
+              //console.log("has more than 0 coordinates");
+
+              //if a task has blockers, then get the blockers and 
+              //make a blocking entry for each
+              query = db.taskStore.getBlockers(task._id);
+              dojo.when(query, function(blockers){
+  
+                //iterate over the existing blocking tasks to make sure they are still blocked
+                //if not remove them
+                dojo.forEach(blocking, function(item){
+                  console.log("iterating blocking", task.coordinates, item._id);
+                  if (dojo.indexOf(task.coordinates, item._id) === -1){
+                    //this blocking task isn't blocking any more
+                    console.log(task._id + " is no longer blocked, removing blocking entry: ", item._id);
+                    item.blocking = dojo.filter(item.blocking, function(id){
+                      return id !== task._id;
+                    });
+                    var t = db.getTaskModel(item, true);
+
+                    item = t.addActivity({
+                			verb: "REMOVE-BLOCKING",
+                			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+                			icon: t.icon.removeBlocking,
+                			body: dojo.toJson(body)
+                		}, item);
+                    t.update(item);
+                  }
+                });
+                
+                //iterate over the existing blockers to make sure there are blocking entries
+                dojo.forEach(blockers, function(item){
+                  if (!item.blocking){
+                    item.blocking = [];
+                  }
+                  console.log("testing if this has the blocking item", item.blocking, task._id);
+                  if (dojo.indexOf(item.blocking, task._id) === -1){
+                    console.log(task.name + " is now blocked, making blocking entry: ", item.name);
+                    item.blocking.push(task._id);
+                    var t = db.getTaskModel(item, true);
+
+                    item = t.addActivity({
+                			verb: "ADD-BLOCKING",
+                			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+                			icon: t.icon.addBlocking,
+                			body: dojo.toJson(body)
+                		}, item);
+                    t.update(item);
+                  }
+                });
+              });
+
+            } else {
+              //if a task doesn't have blockers, load any tasks that have blocking
+              //entries for this task and clear them
+                if (blocking.length > 0){
+                  console.log("task has no blockers, removing existing");
+                  dojo.forEach(blocking, function(item){
+                    console.log("blocking", item);
+                    if (dojo.indexOf(item.blocking, task._id) > -1){
+                      console.log(task.name + " doesn't have blockers, remove blocking entry: ", item.name);
+                      item.blocking = dojo.filter(item.blocking, function(id){return id !== task._id ;});
+                      var t = db.getTaskModel(item, true);
+                      item = t.addActivity({
+                  			verb: "REMOVE-BLOCKING",
+                  			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+                  			icon: t.icon.removeBlocking,
+                  			body: dojo.toJson(body)
+                  		}, item);
+                      t.update(item);
+                    }
+                  });
+                }
+         
+            //}
+          }
+        });
+        
+  
+        /*
+        if (task.coordinates && task.coordinates.length > 0){
+          console.log("task has coordinates entry");
           var query;
-          if (task.coordinates.length > 0){
+          //if (task.coordinates.length > 0){
             //console.log("has more than 0 coordinates");
             
             //if a task has blockers, then get the blockers and 
             //make a blocking entry for each
             query = db.taskStore.getBlockers(task._id);
             dojo.when(query, function(blockers){
-              //console.log("got blockers for this task", blockers);
+              console.log("got blockers for this task", blockers);
               dojo.forEach(blockers, function(item){
-                //console.log("updating blocked task", item);
+                console.log("updating blocked task", item);
                 if (!item.blocking){
                   item.blocking = [];
                 }
@@ -1241,11 +1394,12 @@ define("app/models/TaskModel",
                   //console.log(task.name + " has blockers, making blocking entry: ", item.name);
                   item.blocking.push(task._id);
                   var t = db.getTaskModel(item, true);
+                  
                   item = t.addActivity({
               			verb: "ADD-BLOCKING",
               			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
               			icon: t.icon.addBlocking,
-              			body: coordel.task + ": " + task.name
+              			body: dojo.toJson(body)
               		}, item);
                   t.update(item);
                 }
@@ -1255,29 +1409,32 @@ define("app/models/TaskModel",
           } else {
             //if a task doesn't have blockers, load any tasks that have blocking
             //entries for this task and clear them
-            //console.log("coordinates length isn't > 0");
+            console.log("coordinates length isn't > 0");
+            
             query = db.taskStore.getBlocking(task._id);
             dojo.when(query, function(blocking){
-              //console.log("blocking entries for this task");
+              console.log("blocking entries for this task", blocking);
               if (blocking.length > 0){
                 dojo.forEach(blocking, function(item){
+                  console.log("blocking", item);
                   if (dojo.indexOf(item.blocking, task._id) > -1){
-                    //console.log(task.name + " doesn't have blockers, remove blocking entry: ", item.name);
-                    item.blocking = dojo.filter(item, function(id){return id !== task._id ;});
+                    console.log(task.name + " doesn't have blockers, remove blocking entry: ", item.name);
+                    item.blocking = dojo.filter(item.blocking, function(id){return id !== task._id ;});
                     var t = db.getTaskModel(item, true);
                     item = t.addActivity({
                 			verb: "REMOVE-BLOCKING",
                 			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
                 			icon: t.icon.removeBlocking,
-                			body: coordel.task + ": " + task.name
+                			body: dojo.toJson(body)
                 		}, item);
                     t.update(item);
                   }
                 });
               }
             });
-          }
+          //}
         }
+        */
       },
   
       archive: function(task){
@@ -1336,7 +1493,7 @@ define("app/models/TaskModel",
         
         if (task.project !== db.myPrivate()){
           task.status = "TRASH";
-          task.substatus = "";
+          task.substatus = "TRASH";
           if (p.project.status === "TRASH"){
       			task.substatus = "TRASH";
       		} else if (p.project.substatus === "ARCHIVE"){
@@ -1356,7 +1513,7 @@ define("app/models/TaskModel",
         } else {
           //db.taskStore.store.remove(task._id);
           task.status = "TRASH";
-          task.substatus = "";
+          task.substatus = "TRASH";
         
           t.update(task);
           //console.debug("private task, remove was used", task._id);
@@ -1558,9 +1715,14 @@ define("app/models/TaskModel",
     		var t = this,
     			db = this.db,
           p = this.p;
+        
+        
 
     		task.status = "DONE";
     		task.substatus = "CANCELLED";
+    		
+    		console.log("cancelling task", task);
+    		
     		task = t.addActivity({
     			verb: "CANCEL",
     			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
@@ -1711,6 +1873,7 @@ define("app/models/TaskModel",
         //console.debug("user, responsible", this.username, t.projResponsible());
         
         task.completed = (new Date()).toISOString();
+        task.hasSaveDone = true;
 
         if (username === t.projResponsible()){
           if (t.username === username){
@@ -2006,7 +2169,7 @@ define("app/models/TaskModel",
     	      var def = new dojo.Deferred();
     	      var mod = db.getBlockerModel(task);
     	      dojo.when(mod, function(t){
-    	        var blocker = t.p.project.name + ": " + t.task.name;
+    	        var blocker = coordel.task + ": "  + t.task.name + " | " + coordel.project + ": " + t.p.project.name;
     	        def.callback(blocker);
     	      });
     	      return def;
@@ -2040,7 +2203,7 @@ define("app/models/TaskModel",
     	      if (recap.removed.length > 0){
     	        hasChange = true;
     	        dojo.forEach(recap.removed, function(b){
-    	          //console.log("deliverable removed");
+    	          console.log("blocker removed");
       	        var blocker = getBlocker(b);
       	        dojo.when(blocker, function(bl){
       	          changes.push({field: "blocker", prev: fix(bl), value: false});
@@ -2061,7 +2224,7 @@ define("app/models/TaskModel",
     	      if (recap.added.length > 0){
     	        hasChange = true;
     	        dojo.forEach(recap.added, function(b){
-    	          //console.log("deliverable added");
+    	          console.log("blocker added");
       	        var blocker = getBlocker(b);
       	        dojo.when(blocker, function(bl){
       	          changes.push({field: "blocker", prev: false, value: fix(bl)});
@@ -2075,7 +2238,7 @@ define("app/models/TaskModel",
     	      //all of these were removed
     	      hasChange = true;
     	      dojo.forEach(latest.coordinates, function(b){
-    	        //console.log("deliverable removed");
+    	        console.log("blocker removed");
     	        var blocker = getBlocker(b);
     	        dojo.when(blocker, function(bl){
     	          changes.push({field: "blocker", prev: fix(bl), value: false});
@@ -2166,7 +2329,7 @@ define("app/models/TaskModel",
     	  }
     	  
     		return task;
-    	  
+    	   
     	},
     	
     	addActivity: function(opts, task){

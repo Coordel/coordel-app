@@ -604,10 +604,7 @@ define(
           dojo.empty(self.projectFormPeopleValue);
           var people = self.project.users,
               pending = self.pendingUsers;
-              
-          
-          
-                 
+   
           dojo.forEach(people, function(user){
 
             //need to create a new pill for each user
@@ -755,7 +752,7 @@ define(
       },
       
       save: function(){
-        //console.debug("save project");
+        //console.debug("save project", this.project);
         var self = this;
         var p = db.getProjectModel(self.project, true);
         
@@ -780,7 +777,7 @@ define(
              //console.log("invited users", userList);
              dojo.forEach(userList, function(user){
                if (user[0]){
-                 //console.log("invited user", user[1]);
+                 console.log("invited user", user[1]);
                  p.project = p.invite(user[1].appId, p.project);
                  
                } else {
@@ -797,7 +794,7 @@ define(
         }
         
         function save(p){
-          console.log("saving coord", p, self.isNew, self.isBlueprint);
+          console.log("saving project", p, self.isNew, self.isBlueprint);
           var def = new dojo.Deferred();
           
           if (self.isBlueprint){

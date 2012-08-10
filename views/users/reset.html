@@ -1,12 +1,17 @@
-<div class="c-float-l logo">&nbsp;</div>
-<div class="c-float-l signin-form">
-	<div class="handwritten">Enter your email and we'll send you instructions how to reset your password</div>
-	<form action="/login" method="post">
+
+<div style="width: 23em">
+	<div class="handwritten c-padding-large-b">Enter your email and we'll send you instructions how to reset your password</div>
+	<form action="/password" method="post">
 		<div class="full" style="padding-bottom:1em">
 			<input name="email" type="text" class="text x-large">
 		</div>
 		<div>
-  		<input type="submit" class="submit-button c-margin-b c-float-r" value="Reset">
+		  <button id="resetPassword" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Reset
+	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+          // Do something:
+          castor.info("buttonClick=resetPassword");
+        </script>
+	    </button>
 			<div class="clear"></div>
 		</div>
 	</form>

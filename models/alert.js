@@ -8,6 +8,9 @@
  * more than 99 alerts because they will also be trimmed
  
  * this way, alerts are a bit stickier than a growl, but don't create something like an inbox
+ 
+ * to get the user used to using coordel, when an alert is added, an email is sent by default
+ * The user can then disable the email alerts when they get used to logging onto coordel regularly
  */
  var config = require('konphyg')(__dirname + './../config'),
      settings = config('settings'),
@@ -27,7 +30,7 @@ Alert.prototype.add = function(fn){
   var key = 'coordel-alerts:'+ this.username,
       multi = redis.multi();
       
-  console.log("ADD ALERT", this.username, this.alert);
+  //console.log("ADD ALERT", this.username, this.alert);
       
   multi.lpush(key, JSON.stringify(this.alert));
   multi.ltrim(key, 0, 99);
@@ -36,7 +39,7 @@ Alert.prototype.add = function(fn){
       console.log("ERROR adding alert", err);
       fn(err, null);
     } else {
-      console.log("saved alert", res);
+      //console.log("saved alert", res);
       fn(false, res);
     }
   });
@@ -44,7 +47,7 @@ Alert.prototype.add = function(fn){
 };
 
 exports.getUserAlerts = function(username, fn){
-  console.log("GETTING USER ALERTS");
+  //console.log("GETTING USER ALERTS");
   var key = 'coordel-alerts:' + username;
   redis.lrange(key,0,-1, function(err, res){
     if (err){
@@ -52,9 +55,9 @@ exports.getUserAlerts = function(username, fn){
       fn(err, null);
     } else {
       var alerts = [];
-      console.log("GOT ALERTS");
+      //console.log("GOT ALERTS");
       res.forEach(function(alert){
-        console.log("ALERT", alert);
+        //console.log("ALERT", alert);
         try {
           alerts.push(JSON.parse(alert));
         } catch (err){
@@ -69,13 +72,13 @@ exports.getUserAlerts = function(username, fn){
 exports.deleteUserAlerts = function(username, fn){
   
   var key = 'coordel-alerts:' + username;
-  console.log('deleting Alerts', key);
+  //console.log('deleting Alerts', key);
   redis.ltrim(key, 2, 1, function(err, res){
     if (err){
       console.log("ERROR deleting alerts", err);
       fn(err, null);
     } else {
-      console.log("ltrim results", res);
+      //console.log("ltrim results", res);
       fn(false, true);
     }
   });
@@ -117,11 +120,43 @@ exports.getChangeAlertMap = function(change){
 	//users get the tasks when they own them and they aren't pending, declined, or left (set to unassigned)
 	if(doc.docType == "task" && doc.status !== "PENDING" && doc.substatus !== "DECLINED" && doc.substatus !=="UNASSIGNED") {
 	   if (!map[doc.username]) map[doc.username] = true;
+	   if (doc.delegator && doc.delegator !== doc.responsible){
+	     if (!map[doc.delegator]) map[doc.delegator] = true;
+	   }
 	} 
 	
-	//responsible gets notified of the tasks assigned to isMyDelegated
+	//users get the tasks when they own them and they are blocking
+	if (doc.docType === "task" && doc.blocking && doc.blocking.length > 0){
+	  doc.blocking.forEach(function(id){ 
+	    if (!map[id]) map[id] = true;
+	    console.log("notify blocking");
+	  });
+	}
+	
+	//responsible and delegator get notified of changes to tasks
 	if(doc.docType == "task") {
-	   if (!map[doc.responsible]) map[doc.responsible] = true;
+	  if (doc.history && doc.history.length){
+	    var alert = doc.history[0];
+  	  if (alert.verb !== "SAVE"){
+  	    //the responsible doesn't need to get notified when the user saves the workspace
+  	    if (!map[doc.responsible]) map[doc.responsible] = true;
+  	  
+  	    //need to alert the delegator if there is one
+  	    if (doc.delegator){
+  	      if (!map[doc.delegator]) map[doc.delegator] = true;
+  	      console.log("notify delegator");
+  	    }
+  	  } 
+	  } else {
+	    //the responsible doesn't need to get notified when the user saves the workspace
+	    if (!map[doc.responsible]) map[doc.responsible] = true;
+	  
+	    //need to alert the delegator if there is one
+	    if (doc.delegator){
+	      if (!map[doc.delegator]) map[doc.delegator] = true;
+	      console.log("notify delegator");
+	    }
+	  }
 	}
 
 	//only the responsible gets notified of pending tasks
@@ -138,18 +173,22 @@ exports.getChangeAlertMap = function(change){
 	if(doc.docType == "task" && doc.substatus == "ISSUE") {
 		if (!map[doc.responsible]) map[doc.responsible] = true;
 	}
+	
 	//the responsible needs to get the change to know the issue was cleared 
 	if(doc.docType == "task" && doc.substatus == "CLEARED") {
 		if (!map[doc.responsible]) map[doc.responsible] = true;
 	}
+	
 	//the responsible needs change to know the task was submitted 
 	if(doc.docType == "task" && doc.status == "CURRENT" && doc.substatus == "DONE") {
 		if (!map[doc.responsible]) map[doc.responsible] = true;
 	}
+	
 	//the responsible needs change to know the task was returned 
 	if(doc.docType == "task" && doc.substatus == "RETURNED") {
 		if (!map[doc.responsible]) map[doc.responsible] = true;
 	}
+	
 	//the responsible needs change to get the done notification
 	if(doc.docType == "task" && doc.substatus == "APPROVED") {
 		if (!map[doc.responsible]) map[doc.responsible] = true;
@@ -166,7 +205,6 @@ exports.getChangeAlertMap = function(change){
 	if (doc.docType == "template" && doc.username){
 	  //notify the user that a template is available
 		if (!map[doc.username]) map[doc.username] = true;
-		
 	}
 	
 	if (doc.docType == "file" && doc._attachments != undefined){

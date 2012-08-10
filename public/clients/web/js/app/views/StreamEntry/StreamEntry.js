@@ -3,9 +3,10 @@ define(
     "dijit/_Widget",
     "dijit/_Templated",
     "text!./templates/StreamEntry.html",
+    "app/models/CoordelStore",
     "app/widgets/ContainerPane"
     ], 
-  function(dojo, w, t, html) {
+  function(dojo, w, t, html, db) {
   
   dojo.declare(
     "app.views.StreamEntry", 
@@ -31,7 +32,7 @@ define(
         self._showProject(self.showProject);
         
         //if the user clicks the project link, show the project 
-        dojo.connect(this.projectLink, "onclick", this, function(){
+        var pLink = dojo.connect(this.projectLink, "onclick", this, function(){
   	      console.debug("showProject", this.project);
   	      dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus:"project", id: this.project}]);
   	    });
@@ -40,6 +41,17 @@ define(
         dojo.connect(this.contactLink, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);
   	      dojo.publish("coordel/primaryNavSelect", [ {name: "contact", id: this.username}]);
+  	    });
+  	    
+  	    
+  	    //don't allow navigation if this is a delgated project
+  	    var p = db.projectStore.store.get(this.project);
+  	    dojo.when(p, function(){
+  	      if (p.isMyDelegated){
+  	        dojo.disconnect(pLink);
+  	        dojo.removeClass(self.projectLink, "entry-project");
+  	        dojo.style(self.projectLink, "cursor", "default");
+  	      }
   	    });
         
       },

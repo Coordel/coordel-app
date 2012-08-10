@@ -38,8 +38,19 @@
   color: #642F6C;*/
 }
 
+.calendar-entry .follow.follow-invite{
+  background-image: url(images/icons/follow-invite-10x10.png);
+  background-position: left center;
+  /*background-color: #642F6C;
+  color: #642F6C;*/
+}
+
 .calendar-entry .project {
   background: url(images/icons/project-10x10.png) no-repeat left center;
+}
+
+.calendar-entry .follow {
+  background: url(images/icons/follow-10x10.png) no-repeat left center;
 }
 
 .calendar-entry .task.task-invite{
@@ -51,6 +62,13 @@
 
 .calendar-entry .task.blocked{
   background-image: url(images/icons/check-red.png);
+  background-position: left center;
+  /*background-color: #97D700;
+  color: #97D700;*/
+}
+
+.calendar-entry .task.issue{
+  background-image: url(images/icons/issue-10x10.png);
   background-position: left center;
   /*background-color: #97D700;
   color: #97D700;*/

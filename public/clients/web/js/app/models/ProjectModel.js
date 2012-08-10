@@ -186,9 +186,18 @@ define("app/models/ProjectModel",
       		  role: "FOLLOWER",
       		  status: "INVITE"
       		});
+      		
+      		
+      		console.log("username in invite", username, p.db.contactFullName(username), this.db.contactFullName(username));
+      		//NOTE: this is here because sometimes the contact isn't created yet and won't be because it's new
+      		//so we need to make sure undefined doesn't get sent into the function
+      		var name = p.db.contactFullName(username);
+      		if (name === undefined){
+      		  name = false;
+      		}
 
       		p.addActivity({
-      			object: {id: username, name: p.db.contactFullName(username), type: "PERSON"},
+      			object: {id: username, name: name, type: "PERSON"},
       			target: {id: project._id, name: project.name, type: "PROJECT"},
       			verb: "INVITE",
       			icon: p.icon.invite
@@ -233,7 +242,7 @@ define("app/models/ProjectModel",
     	
     	add: function(project){
     	  
-    	  console.log("adding project", project);
+    	  //console.log("adding project", project);
     	  
     	  var db = this.db,
   	        app = db.appStore.app(),
@@ -304,7 +313,7 @@ define("app/models/ProjectModel",
     	},
     	
     	update: function(project){
-    	  console.log("updating project", project);
+    	  //console.log("updating project", project);
     	  var db = this.db,
     	      username = db.username();
     	  project.isNew = false;
@@ -390,20 +399,20 @@ define("app/models/ProjectModel",
   	    //set the roleid of the task
   	    task.role = roleid;
         
-        console.log("before updateResponsibilities in projectModel");
+        //console.log("before updateResponsibilities in projectModel");
   	    //update the role's responsibilities
   	    rm.updateResponsibilities(roleid, task, p.isMyPrivate);
   	    
-  	    console.log("after updateResponsibilities in projectModel");
+  	    //console.log("after updateResponsibilities in projectModel");
       	//save project if an assignment was added or updated for a follower or responsible
       	if (doUpdate){
       	  console.debug("saving project, assignment was added or updated", p, task.username);
       	  dojo.when(self.update(p), function(){
-      	    console.log("updated project", p, task);
+      	    //console.log("updated project", p, task);
       	    def.callback(task);
       	  }, 
       	  function(err){
-      	    console.log("ERROR failed to update project", err);
+      	    //console.log("ERROR failed to update project", err);
       	  });
         } else {
       	  def.callback(task);
@@ -512,7 +521,7 @@ define("app/models/ProjectModel",
     	},
     	
     	follow: function(username, project){
-    	  console.log("projectModel follow called", username, project);
+    	  //console.log("projectModel follow called", username, project);
     	  if (!project){
     	    project = this.db.projectStore.store.get(this._id);
     	  }
@@ -566,7 +575,7 @@ define("app/models/ProjectModel",
       			icon: this.icon.follow
       		}, project);
     	  }
-        console.log("before update in projectModel.follow");
+        //console.log("before update in projectModel.follow");
     	  p.update(project);
     	},
     	
@@ -882,7 +891,7 @@ define("app/models/ProjectModel",
     	      }
     	    });
     	    
-    	    console.log("PARTICIPATE DOCS", docs);
+    	    //console.log("PARTICIPATE DOCS", docs);
           var u = db.username();
           dojo.forEach(docs, function(doc){
             switch(doc.docType){
@@ -1050,7 +1059,7 @@ define("app/models/ProjectModel",
             			verb: "REASSIGN",
             			target: {id:project._id, name: project.name, type: "PROJECT"},
             			icon: t.icon.reassign,
-            			body: coordel.projectAction.reassignLeft
+            			body: coordel.projectActions.reassignLeft
             		}, task);
     	        } 
     	        //make the status of the task left

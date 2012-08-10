@@ -70,40 +70,41 @@ define(
         
         stream.forEach(function(item, key){
           //console.debug("iterating stream", item, key);
-          if (key === 0){
-            username = item.actor.id;
-            project = self._getProject(item);
-            //this is the first item, need to create a new entry
-            entry = new Entry({showProject: self.showProject, username: username, contact: db.contactFullName(username), project: project.id, projectName: project.name});
-            entry.addChild(self._getChild(item));
-            hasEntries = true;
-            //most entries are about something that happened in a project, so need to track the project
-            //if there was only one entry, then make sure it get's added
-            if (stream.length === 1){
-              self.addChild(entry);
-              hasEntries = false;
-            }
-   
-          } else if (key > 0){
-            //if the username and project are the same, then we need to add a child to the entry
-            if (item.actor.id === username && project.id === self._getProject(item).id){
-              entry.addChild(self._getChild(item));
-              hasEntries = true;
-            } else {
-              //otherwise add the existing entry to the stream
-              self.addChild(entry);
-              
-     
+          if (item.verb !== "SAVE"){
+            if (key === 0){
               username = item.actor.id;
               project = self._getProject(item);
-     
-              //and then start a new entry and add a child to it
-              entry = new Entry({showProject: self.showProject, username:username, contact: db.contactFullName(username), project: project.id, projectName: project.name});
+              //this is the first item, need to create a new entry
+              entry = new Entry({showProject: self.showProject, username: username, contact: db.contactFullName(username), project: project.id, projectName: project.name});
               entry.addChild(self._getChild(item));
-              last = true;
+              hasEntries = true;
+              //most entries are about something that happened in a project, so need to track the project
+              //if there was only one entry, then make sure it get's added
+              if (stream.length === 1){
+                self.addChild(entry);
+                hasEntries = false;
+              }
+
+            } else if (key > 0){
+              //if the username and project are the same, then we need to add a child to the entry
+              if (item.actor.id === username && project.id === self._getProject(item).id){
+                entry.addChild(self._getChild(item));
+                hasEntries = true;
+              } else {
+                //otherwise add the existing entry to the stream
+                self.addChild(entry);
+
+
+                username = item.actor.id;
+                project = self._getProject(item);
+
+                //and then start a new entry and add a child to it
+                entry = new Entry({showProject: self.showProject, username:username, contact: db.contactFullName(username), project: project.id, projectName: project.name});
+                entry.addChild(self._getChild(item));
+                last = true;
+              }
             }
           }
- 
         });
         
         //make sure the last one gets added

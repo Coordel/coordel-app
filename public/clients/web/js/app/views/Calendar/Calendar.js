@@ -104,7 +104,7 @@ define(
           }
           dojo.addClass(this.emptyNode, "hidden");
         } else {
-          console.log("no entries, show empty calendar");
+          //console.log("no entries, show empty calendar");
           dojo.removeClass(this.emptyNode, "hidden");
         }
       
@@ -130,16 +130,21 @@ define(
         
         dojo.forEach(tasks, function(task){
           var t = db.getTaskModel(task, true);
-          entries.push({
-            id: task._id,
-            type: "task",
-            name: task.name,
-            project: t.p.project.name,
-            deadline: t.getDeadline(),
-            isTaskInvite: t.isTaskInvite(),
-            isProjectInvite: false,
-            isBlocked: t.isBlocked()
-          });
+          //console.log("isInvitedNew", pStatus.isInvitedNew(t.p.project, task.username));
+          //if the project is invited new, then don't show the task yet
+          if (!pStatus.isInvitedNew(t.p.project, task.username)){
+            entries.push({
+              id: task._id,
+              type: "task",
+              name: task.name,
+              project: t.p.project.name,
+              deadline: t.getDeadline(),
+              isTaskInvite: t.isTaskInvite(),
+              isProjectInvite: false,
+              isBlocked: t.isBlocked(),
+              isIssue: t.isIssue()
+            });
+          }
         });
 
         var projects = db.projectStore.memory.query("calendar", {sort: [{attribute:"deadline", descending:false}]});
@@ -153,19 +158,20 @@ define(
           
           var p = db.getProjectModel(proj, true),
               username = db.username(),
-              isInvite = (
+              isProject = (
                 pStatus.isInvitedNew(proj, username) ||
-                pStatus.isInvitedAgreed(proj, username)
-              );
+                pStatus.isInvitedAgreed(proj, username)),
+              isFollow = pStatus.isInvitedFollow(proj, username);
           
-          //console.debug("projectInvite", p.isInvite(db.username()), db.username());
+          //console.debug("projectInvite", proj, username,isProject, isFollow);
           entries.push({
             id: proj._id,
             type: "project",
             name: proj.name,
             project: "",
             deadline: p.getDeadline(),
-            isProjectInvite: isInvite,
+            isProjectInvite: isProject,
+            isFollowInvite: isFollow,
             isTaskInvite: false
           });
         });

@@ -1,16 +1,15 @@
-<div class="c-float-l confirm-message">
+<div>
 	<div class="handwritten">
 		<div>Hi <%=firstName%>,</div>
 		<br/>
-		<div>Welcome to Coordel. You're about to have more fun and get more done.</div>
+		<div>Welcome to Coordel. You're about to get more productive.</div>
 		<br/>
-		<div>All we need is a Password and then your ready to log in.</div>
+		<div>All you need to do is set your Password and then you're ready to go.</div>
 		<br/>
-		<div>Follow the links below if you have questions or want more info.</div>
+
 	</div>
 </div>
-<div class="c-float-l confirm-form">
-	<div class="header-logo">&nbsp;</div>
+<div class="register-form" style="border-right: none;width: 23em">
 	<form action="/password" method="post">
 		<ul>
 			<li>
@@ -26,8 +25,15 @@
 				<div>
 			</li>
 		</ul>
+		<input type="hidden" name="email" value="<%=email%>">
 		<div class="c-padding-large-t">
-  		<input id="submitLogin" type="submit" class="submit-button c-margin-b c-float-r" value="Set Password">
+		  <button id="submitLogin" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Set Password
+	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+          // Do something:
+          castor.info("buttonClick=setPassword");
+        </script>
+	    </button>
+  		
 			<div class="clear"></div>
 		</div>
 	</form>

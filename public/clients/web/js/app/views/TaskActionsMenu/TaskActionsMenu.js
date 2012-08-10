@@ -113,6 +113,7 @@ define([
     },
     
     setMenuItems: function(){
+      console.log("task in task actions", this.task);
       var stat = this.task.status + "-" + this.task.substatus,
           own = false,
           t = db.getTaskModel(this.task, true);
@@ -123,8 +124,9 @@ define([
               
       //reuse shows by default but hide it if this is a PROJECT invite
       if (this.task.status === "PROJECT"){
+        console.log("it's a project invite", this.task.status, this.task.substatus);
         dojo.addClass(this.reuseTask, "hidden");
-        dojo.addClass(this.reuseDeliverables, "hidden");
+        //dojo.addClass(this.reuseDeliverables, "hidden");
       }
           
       //if I'm the owner, I can usually see cancel pause unless this
@@ -139,6 +141,8 @@ define([
           }
         }
       }
+      
+      console.log("stat", stat);
              
       switch(stat){	
         case "CURRENT-PAUSED":
@@ -253,15 +257,18 @@ define([
   				} 
   				break;
   			case "CURRENT-ISSUE":
-  			//owner - cancel pause reuse clear
+  			//owner - cancel reuse clear
   			//not owner - reuse
   				if (own){
   					dojo.removeClass(this.clearIssue, "hidden");
+  					//can't pause a task if there is an issue because that would clear the issue
+  					dojo.addClass(this.pauseTask, "hidden");
   				}
   				break;
   		  case "PROJECT-INVITE":
   			//owner
   			//not owner - propose
+  		    console.log("this.task in project-invite case", this.task);
   			  if (this.task.role !== "follower"){
   			    dojo.removeClass(this.proposeProjChange, "hidden");
   			  } 

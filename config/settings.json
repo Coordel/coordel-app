@@ -47,6 +47,18 @@
     
     "logId": "dc5b9381-331b-4d0e-88a2-b598707260f1",
     
+    "corpLogglyOptions": {
+      "subdomain": "coordel",
+      "auth": {
+        "username": "coordelloggly",
+        "password": "coordel1129"
+      },
+      "json": true
+    },
+    
+    
+    "corpLogId": "a9ca9bbc-d314-4a31-9223-d0a59e37a52e",
+    
     "sendgridOptions": {
       "host" : "smtp.sendgrid.net",           
       "port" : "587",

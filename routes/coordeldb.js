@@ -25,7 +25,7 @@ var nanoCouch = nano.use(settings.config.couchName);
 module.exports = function(app, validate){
   
   app.post('/coordel', function(req, res){
-    console.log("POST", req.body);
+    //console.log("POST", req.body);
   });
   
   app.post('/coordel/:id', function(req, res){
@@ -40,9 +40,9 @@ module.exports = function(app, validate){
    * @api validated
    */
   app.put('/coordel/:id', function(req, res){
-    console.log("PUT coordel/:id", req.body);
+    //console.log("PUT coordel/:id", req.body);
     couch.save(req.body, function(err, putRes){
-      console.log("PUT RESPONSE", putRes, err);
+      //console.log("PUT RESPONSE", putRes, err);
       if (err){
         console.log(logId, "Error putting to couch: " + JSON.stringify(err) + " Doc: " + JSON.stringify(req.body));
         res.json({error: err});
@@ -166,7 +166,7 @@ module.exports = function(app, validate){
   });
 
   app.get('/coordel/:id', function(req, res){
-    console.log('GET ID', req.params.id);
+    //console.log('GET ID', req.params.id);
     couch.get(req.params.id, function(err, obj){
       if (err){
         

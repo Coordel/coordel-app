@@ -47,15 +47,18 @@ you will probably want to include these two files.
 @import 'turbo-done.css';
 @import 'project-info.css';
 @import 'support.css';
+@import 'preferences.css';
 
 /*FEEDBACK tab should hide when loading*/
 .loading #fdbk_tab, .login #fdbk_tab{
   display: none;
 }
 
+/*
 a#fdbk_tab {
   top: 50% !important;
 }
+*/
 
 ul {
   list-style-type: none;
@@ -311,6 +314,13 @@ hr {
 }
 .c-color-green{
   color: #97D700;
+}
+
+.dnd {
+  color: #DA291C;
+  font-size: 12px;
+  line-height: 30px;
+  font-weight: bold;
 }
 
 .file-loading{

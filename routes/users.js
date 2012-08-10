@@ -2,7 +2,8 @@ var User        = require('./../models/user'),
     Invite      = require('./../models/invite'),
     gravatar    = require('gravatar'),
     config      = require('konphyg')(__dirname + './../config'),
-    settings    = config('settings');
+    settings    = config('settings'),
+    App         = require('./../models/userApp');
 
 module.exports = function(app, validate){
   
@@ -16,9 +17,23 @@ module.exports = function(app, validate){
     }
   });
   
+  app.del('/login/:id', function(req, res){
+    var login = req.params.id;
+    //console.log("in delete", login);
+    User.get(login, function(err, user){
+      console.log("user", user);
+      App.get(login.appId, function(err, userApp){
+        console.log('userApp', userApp);
+      });
+      
+    });
+    
+    
+  });
+  
   app.get('/reset', function(req, res){
     //res.render('login', {auth: req.session.user});
-    res.render('users/reset');
+    res.render('users/reset', {layout: 'users/layout'});
   });
   
   app.get('/gravatar', function(req, res){
@@ -30,10 +45,12 @@ module.exports = function(app, validate){
     res.json({url:url});
   
   });
-
+  
+  /*
   app.get('/invite', function(req, res){
-    res.render('users/invite');
+    res.render('users/invite', {layout:'users/layout'});
   });
+  */
 
   app.get('/invite/:id', function(req, res){
     //this is the link that is sent in the invitation email
@@ -50,7 +67,7 @@ module.exports = function(app, validate){
             email: user.email
           };
           req.session.invite = invite;
-          res.render('users/redeemInvite', {firstName: user.firstName, layout: 'users/layout'});
+          res.render('users/redeemInvite', {firstName: user.firstName, email: user.email, layout: 'users/layout'});
         });
       }
     });
@@ -83,6 +100,28 @@ module.exports = function(app, validate){
      });
      
    });
+   
+  
+  app.get('/user', function(req, res){
+    var login = req.query.login;
+    //console.log("got login", login);
+     User.get(login, function(err, user){
+        //console.log('userApp', user);
+      });
+  });
+  
+  app.get('/removePerson', function(req, res){
+    var user = req.query.user,
+        person = req.query.person;
+        
+    //console.log("remove person", user, person);
+    
+    /*
+    App.remPerson({userAppId: from, personAppId: user}, function(err, reply){
+      console.log(reply);
+    });
+    */
+  });
 
   app.post('/password', function(req, res){
     //this updates the user password. 

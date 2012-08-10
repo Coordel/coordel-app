@@ -109,7 +109,7 @@ define([
         
         //wire up the declineTask button
         dojo.connect(this.declineTask, "onClick", this, function(){
-          console.log("declineTask clicked");
+          //console.log("declineTask clicked");
           dojo.publish("coordel/taskAction", [{action: "decline", task: this.task, validate: true, cssClass: "warning-button"}]);
         });
         

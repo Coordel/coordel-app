@@ -36,8 +36,10 @@ define(
             entryId: e.id,
             type: e.type,
             isBlocked: e.isBlocked,
+            isIssue: e.isIssue,
             isTaskInvite: e.isTaskInvite,
             isProjectInvite: e.isProjectInvite,
+            isFollowInvite: e.isFollowInvite,
             listFocus: this.listFocus
           }).placeAt(this.dayEntries);
         }, this);

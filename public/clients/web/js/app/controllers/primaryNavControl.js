@@ -143,7 +143,7 @@ define(['dojo',
     handleProjectNotify: function(args){
       
       if (this.activeTab === "projects"){
-        console.log("handleProjectNotify primaryNavControl", args);
+        //console.log("handleProjectNotify primaryNavControl", args);
         this.activateProjects();
       }
     },
@@ -172,6 +172,8 @@ define(['dojo',
         task = args.task;
         id = args.id;
       } 
+      
+      //console.log("focus", args);
     
       this.currentArgs.focus  = focus;
       this.currentArgs.name = name;
@@ -183,6 +185,8 @@ define(['dojo',
       //console.debug("setting primary controller", focus, name, task, id);
     
       if (name === "project"){
+        
+        
       
         this.activateProjects();
         //create a projectControl
@@ -198,8 +202,9 @@ define(['dojo',
           dojo.unsubscribe(pControl.projViewChangeHandler);
         }
         pControl.init(db.projectStore.store.get(id));
+      
         this.primaryController = pControl;
-
+        
         //console.debug("created projectControl", this.primaryController);
       } else if (name === "contact"){
         
@@ -222,9 +227,7 @@ define(['dojo',
           dojo.unsubscribe(c.showRightColumnHandler);
         }
         //console.debug("init taskDetails control:  focus ", focus);
-      
-        //if this is a contact request, we need to use the contact store so the task doesn't 
-        //pollute the userTask store
+  
         var t;
         if (focus === "contact"){
           t = db.contactStore.taskStore.get(id);
@@ -268,6 +271,19 @@ define(['dojo',
       this.tabFocus = id;
       dojo.addClass(id, "active");
       dojo.removeClass(id, "inactive");
+      //console.log("open tab", id);
+      switch (id){
+        case "projectsTab":
+        document.title = "Coordel > " + coordel.projects;
+        break;
+        case "contactsTab":
+        document.title = "Coordel > " + coordel.contacts;
+        break;
+        case "storeTab":
+        document.title = "Coordel > " + coordel.store;
+        break; 
+      }
+      
     },
     
     _closeTabs: function(){
@@ -282,7 +298,7 @@ define(['dojo',
     },
   
     activateProjects: function(){ 
-      console.log("activate Projects");
+      //console.log("activate Projects");
       this._closeTabs();
       this._openTab("projectsTab");
       this.showProjectList();
@@ -316,8 +332,12 @@ define(['dojo',
     setCounts: function(){
       
       var goToCurrent = false;
+      
+      var curFocus = db.focus;
     
-      //console.debug("updating primary box counts");
+      console.debug("updating primary box counts", curFocus);
+      
+      db.focus = "task";
   
       var cur = db.taskStore.memory.query({db: db, focus: "current"}),
           inv = db.taskStore.memory.query({db: db, focus: "task-invited"}),
@@ -344,6 +364,8 @@ define(['dojo',
       setCount("privateCount", priv.length);
       setCount("delegatedCount", del.length);
       setCount("projectInvitedCount", projInv);
+      
+      db.focus = curFocus;
     
       if (this.primaryBoxes){
         var options = {};
@@ -395,7 +417,7 @@ define(['dojo',
     },
   
     showProjectList: function(){
-      console.debug("primaryNavControl.showProjectList called");
+      //console.debug("primaryNavControl.showProjectList called");
 
       var self = this;
       
@@ -566,7 +588,7 @@ define(['dojo',
     
     showStore: function(){
       var self = this;
-      console.log("show empty", self.navFocus);
+      //console.log("show empty", self.navFocus);
       
       var empty = new etl({
         emptyClass: self.navFocus, 

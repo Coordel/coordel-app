@@ -17,7 +17,22 @@ module.exports = function(app, validate){
       if (err) {
         res.redirect('/logout');
       } else {
+        //console.log("userApp", app);
         res.json(app);
+      }
+    });
+  });
+  
+  app.post('/app', function(req, res){
+    var body = req.body;
+    //console.log("body", body);
+    var a = new App(body);
+    //updates a submitted app
+    a.update(function(err, app){
+      if (err) {
+        res.json({err: err});
+      } else {
+        res.json({success: true});
       }
     });
   });

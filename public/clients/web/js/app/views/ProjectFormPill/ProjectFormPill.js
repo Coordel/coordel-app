@@ -47,6 +47,7 @@ define(
         //the value will be the id used to create the actual display value of the pill based on
         //the taskFormField this is for except for deliverable which will be the deliverable itself
         
+        
         //console.debug("showing the pill", value);
         dojo.addClass(this.image, "hidden");
         if (this.imageClass){
@@ -71,16 +72,21 @@ define(
           this.displayValue.innerHTML = this.source;
           break;
           case "people":
-          //console.log("setting pill for people", value);
+          console.log("setting pill for people", value, contact);
           if (value === "pending"){
             this.value = contact.email;
             this.source = contact.firstName + " " + contact.lastName;
             this.displayValue.innerHTML = this.source;
           } else {
             //console.log("db", db);
-            this.source = db.contactFullName(value);
-            //console.log("self source", this.source, this.displayValue.innerHTML);
-            this.displayValue.innerHTML = this.source;
+            var self = this;
+            var c = db.contactStore.store.get(value); 
+            dojo.when(c, function(contact){
+              console.log("contact", contact);
+              self.source = db.contactFullName(value);
+              console.log("self source", self.source, self.displayValue.innerHTML);
+              self.displayValue.innerHTML = self.source;
+            });
           }
           break;
           case "assignment":

@@ -6,9 +6,10 @@ define([
   "dijit/_Widget", 
   "dijit/_Templated",
   "app/views/TaskForm/TaskForm",
+  "app/models/CoordelStore",
   "dijit/form/Button",
   "dijit/form/DropDownButton",
-  "dijit/TooltipDialog"], function(dojo, dijit, coordel, html, w, t, TaskForm) {
+  "dijit/TooltipDialog"], function(dojo, dijit, coordel, html, w, t, TaskForm, db) {
   dojo.declare(
     "app.views.TurboWizard", 
     [w, t], 
@@ -37,6 +38,13 @@ define([
           dojo.addClass(this.somedayContain, "hidden");
           dojo.addClass(this.archiveContain, "hidden");
         }
+        
+        //if this isn't a private task, then need to hide someday and archive because a user shouldn't 
+        //be able to delete or change a Coord's task to archive or someday.
+        if (this.task.project !== db.myPrivate()){
+          dojo.addClass(this.noContain, "hidden");
+        }
+        
         
         dojo.connect(this.deferDropDown, "onClick", this, function(){
           //NOTE: when you don't do this, after you've clicked defer once, then you get the error

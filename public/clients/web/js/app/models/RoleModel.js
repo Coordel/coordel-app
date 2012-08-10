@@ -46,7 +46,7 @@ define("app/models/RoleModel",
   			    if (resRole.error){
   			      if (resRole.code === 404){
   			        //if the role didn't exist, the error will have a 404 code, need to create a new role
-  			        console.log("didn't find role in updateResponsibilities, adding one");
+  			        //console.log("didn't find role in updateResponsibilities, adding one");
        			    r = {};
       			    r.isNew = true;
       			    r._id = roleid;
@@ -64,7 +64,7 @@ define("app/models/RoleModel",
        						substatus: task.substatus
        					});		
 
-         				console.log("Adding role", r);
+         				//console.log("Adding role", r);
          				self.add(r);
   			      }
   			      
@@ -116,7 +116,7 @@ define("app/models/RoleModel",
       					});		
       				}
 
-        			console.log("Updating role", r);
+        			//console.log("Updating role", r);
         			self.update(r);
   			    }
   			  }

@@ -62,8 +62,17 @@ define(
           
         }
         
+        if (this.body.project && this.body.task){
+          //console.log("show the coord and task blocker");
+          dojo.removeClass(this.changes, "hidden");
+          var coord = coordel.task + ": " + this.body.task + " | Coord: " + this.body.project;
+          var c = new Label({
+            value: coord
+          }).placeAt(self.changesContainer);
+        }
+        
         if (this.body.raiseIssue){
-          console.log("show the issue and solution");
+          //console.log("show the issue and solution");
           dojo.removeClass(this.raiseIssue, "hidden");
           var i = new Label({
             value: this.body.raiseIssue.issue

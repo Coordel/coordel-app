@@ -4,9 +4,10 @@
   ],
   "name": "coordel-app",
   "author": "Coordel <support@coordel.com>",
-  "version": "0.1.0-54",
+  "version": "0.1.0-77",
   "scripts": {
-    "start": "./app.js"
+    "start": "./app.js",
+    "test": "make test"
   },
   "dependencies": {
     "express": "2.5.x",
@@ -14,7 +15,6 @@
     "connect-redis": "1.2.x",
     "ejs": "0.6.x",
     "password-hash": "1.1.x",
-    "redis": "0.7.x",
     "cradle": "0.6.x",
     "follow": "0.7.x",
     "i18n": "0.3.x",
@@ -30,9 +30,14 @@
     "request": "2.9.x",
     "konphyg": "1.0.5"
   },
-  "analyze": true,
+  "analyze": false,
   "subdomain": "coordel-app",
   "engines": {
     "node": "v0.6.x"
+  },
+  "bundledDependencies": ["redis"],
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
   }
 }

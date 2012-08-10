@@ -91,6 +91,6 @@ var config = require('konphyg')(__dirname + './../config'),
 
 
 
-module.exports.update = function() {
-	update_views(DB_NAME, '_design/coordel', fields);
+module.exports.update = function(fn) {
+  update_views(DB_NAME, '_design/coordel', fields);
 };

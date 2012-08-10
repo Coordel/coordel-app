@@ -78,6 +78,9 @@ define([
         
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
           layout.showLayout(project);
+          
+
+          
           self._showQuickEntry();
     	    var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
           //check if we should show the right column
@@ -157,7 +160,7 @@ define([
       
       setRightColumn: function(showColumn){
       
-  		  console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
+  		  //console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
   		  
   		  
 
@@ -414,7 +417,7 @@ define([
         
         self._checkEmpty();
         
-        document.title = "Coordel > " + this.project.name;
+        document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
         
       },
       

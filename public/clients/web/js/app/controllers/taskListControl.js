@@ -68,7 +68,7 @@ define(["dojo",
       //show the quick entry
       this._showQuickEntry();
       
-	    //console.log("focus in tasklist control",  txt[focus]);
+	    //console.log("focus in tasklist control",  focus);
 	    //set the title
       document.title = "Coordel > " + txt[focus];
 	    
@@ -392,6 +392,7 @@ define(["dojo",
       
       //set the title
       document.title = "Coordel > " + txt.turbo.label + " > " + txt[this.focus];
+     
 
     },
     
@@ -537,7 +538,7 @@ define(["dojo",
         } else {
           this.showProjectLabel = true;
           
-          //console.debug("focus", focus);
+          //console.debug("focus", focus, this.showProjectLabel);
           
           //query for the tasks in focus
           this.taskList = db.taskStore.memory.query({db: db, focus: focus, filters: []}, {sort:this.sortOptions.sortKeys});

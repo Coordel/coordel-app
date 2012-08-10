@@ -1,57 +1,278 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<!--   ***************         USERS   LAYOUT        *************************               -->
-  	<title>Coordel</title>
-  	<meta charset="utf-8">
-		<link rel="stylesheet" href="/css/main.css">
-		<link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
-		<script type="text/javascript">
+	  <title>Coordel</title>
+	  <link rel="shortcut icon" href="/images/favicon.gif">
+		<!-- use the "coordel" theme -->
+  	<link rel="stylesheet" href="/clients/web/0.0.1/css/app.css" media="screen">
+  	<link rel="stylesheet" href="/css/corp/style.css" media="screen" >
+  	<link rel="stylesheet" href="/css/corp/button.css" media="screen">
+  	<link rel="stylesheet" href="/css/corp/tooltip.css" media="screen">
+  	<link rel="stylesheet" href="/css/users.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+    
+    <!-- load loggly -->
+    <script type="text/JavaScript">
+      var scr = document.createElement("script");
+      var host = (("https:" == document.location.protocol) ? "https://d3eyf2cx8mbems.cloudfront.net" : "http://d3eyf2cx8mbems.cloudfront.net");
+      scr.type = "text/javascript";
+      scr.src = host + "/js/loggly-0.1.0.js";
+      document.documentElement.firstChild.appendChild(scr);
+    </script>
+    <script type="text/javascript">
+      window.onload=function(){ 
+        var key = "a9ca9bbc-d314-4a31-9223-d0a59e37a52e";
+        var host = (("https:" == document.location.protocol) ? "https://logs.loggly.com" : "http://logs.loggly.com");
+        castor = new loggly({ url: host+'/inputs/'+key+'?rt=1', level: 'log'});
+        castor.log("url="+window.location.href + " browser=" + castor.user_agent + " height=" + castor.browser_size.height);
+      };
+    </script>
+    
+    
 
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-29334212-1']);
-		  _gaq.push(['_trackPageview']);
+  	<!-- load dojo and provide config via data attribute -->
+  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true"></script>
+  	<script>
+  	
+  	    require({
+            baseUrl: "/js/",
+            packages: [
+                { name: "dojo", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/" },
+                { name: "dijit", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit/" },
+                
+                { name: "corp", location: "corp" }
+            ]
+        }, [ "corp/main" ]);
+  	    
+  			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
+  	    require(["dojo", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dojo, cookie, corp){
+  	      
+  	      corp.setBackground();
+  	      
+  	      //if the current location is the registration page, then we need to hide the join us button
+  	      /*
+  	      if (window.location.pathname === "/register" || window.location.pathname === "/reset"){
+  	        
+  	        dojo.removeClass(dojo.byId("tagLine"), "hidden");
+  	        dojo.addClass(dojo.byId("joinUs"), "hidden");
+  	        dojo.addClass(dojo.byId("joinUsUpper"), "hidden");
+  	        
+  	      }
+  	      */
+  	      //connect.publish("/foo/bar/baz", [{ some:"object data" }]);
+  	      
+  	    });
+  	</script>
+  	
+  
+  	
+  	<!-- load google analytics -->
+  	<script type="text/javascript">
 
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
+  	  var _gaq = _gaq || [];
+  	  _gaq.push(['_setAccount', 'UA-29334212-1']);
+  	  _gaq.push(['_trackPageview']);
 
-		</script>
-		<!-- load Dojo -->
-		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" type="text/javascript"></script>
-		<script>
-	    dojo.ready(function(){
-	      require(["dojo", "dojo/has", "dojo/_base/sniff"], function(dojo,has){
-						
-						if (!has("webkit")){
-							dojo.removeClass("browser-warning","hidden");
-						}
-				
-				});        
-	    });
-		</script>
+  	  (function() {
+  	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  	  })();
+
+  	</script>
 	</head>
-	<body class="login">
-		<div class="signin">
-			<fieldset class="signin-wrap large-shadow ui-corner-all">
-				<%- body %>
-			</fieldset>
-			<div class="links">
-				<a href="/register">Join Us</a>
-				<a href="/login">Sign In</a>
-				<!--
-				<a href="/?p=getstarted">Get Started</a>
-				<a href="/?p=manual">User Manual</a>
-				<a href="/?p=faq">FAQ</a>
-	
-				<a href="/logout">Log Out</a>
-			-->
-			</div>
-			<div id="browser-warning" class="warning hidden">
-				Sorry, Coordel is not optimized for your browser. Chrome or Safari on Windows or Mac will have Coordel working for you like a charm.
-			</div>
-		</div>
-	</body>
+	<body id="top" class="coordel corp-login">
+    <div id="layout_wrapper_outer">
+      <div id="layout_wrapper">
+  	    <div id="layout_top">
+  	      <div>
+  		      <div id="login-button">
+      			  <div class="corp-button" data-dojo-type="dijit.form.DropDownButton" showLabel="true" iconClass="field-icon field-icon-user">
+          		    <span>Login</span><!-- Text for the button -->
+          		    <!-- The dialog portion -->
+          		    <div class="corp-tooltip" style="width:260px" data-dojo-type="dijit.TooltipDialog" id="ttDialog">
+          		      <script type="dojo/method" data-dojo-event="onOpen" data-dojo-args="evt">
+          		        var email = dojo.cookie("email"),
+                          pass = dojo.cookie("pass");
+                      if (email && pass){
+                        dijit.byId("email").set("value", email);
+                        dijit.byId("pass").set("value", pass);
+                        dijit.byId("remember").set("checked", true);
+                        dijit.byId("login").set("disabled", false);
+                        
+                      }
+          		      </script>
+          		      <div id="loginForm">
+          		        <form action="/login" method="post">
+            		        <strong><label for="email" style="display:inline-block;width:100px;">Email:</label></strong>
+            		        <div data-dojo-type="dijit.form.TextBox" name="email" id="email">
+            		          <script type="dojo/method" data-dojo-event="onKeyUp" data-dojo-args="evt">
+                            // Check if we can enable the submit button
+                            var email = dijit.byId("email").get("value").trim(),
+                                pass = this.get("value").trim();
+                              
+                            if (email.length > 0 && pass.length > 5){
+                              dijit.byId("login").set("disabled", false);
+                            }
+                            
+                          </script>
+            		        </div>
+            		        <br />
+            		        <strong><label for="pass" style="display:inline-block;width:100px;">Password:</label></strong>
+            		        <div data-dojo-type="dijit.form.TextBox" type="password" name="password" id="pass">
+            		          <script type="dojo/method" data-dojo-event="onKeyUp" data-dojo-args="evt">
+                            // Check if we can enable the submit button
+                            var email = dijit.byId("email").get("value").trim(),
+                                pass = this.get("value").trim();
+                              
+                            if (email.length > 0 && pass.length > 5){
+                              dijit.byId("login").set("disabled", false);
+                            }
+                            
+                          </script>
+          		          
+            		        </div>
+          		        
+            		        <div class='c-margin-t'>
+            		          <div class="c-float-r"><a href="/reset">Forgot Password</a></div>
+            		          <span data-dojo-type="dijit.form.CheckBox" id="remember"></span>
+            		          <strong><label for="remember" style="display:inline-block;width:100px;">Remember Me</label></strong>
+            		        </div>
+            		        <div class="c-margin-t">
+            		        	<button id="login" class="c-float-r" disabled data-dojo-type="dijit.form.Button" type="submit">Login
+            		        	  <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+                              // if the remember me is checked set the cookie
+                              castor.info("buttonClick=login, location=home");
+                              require(["corp/main", "dojo/_base/connect" ], function(corp, connect){
+                                if (dijit.byId("remember").get("checked")){
+                                  dojo.cookie("email", dijit.byId("email").get("value").trim(), {expires: 14});
+                                  dojo.cookie("pass", dijit.byId("pass").get("value").trim(), {expires: 14});
+                                }
+                              });
+                            
+                            </script>
+            		        	</button>
+            		        </div>
+            		      </form>
+            		    </div>
+          		      <div class="c-margin-t">
+          		        	<button id="joinUsUpper" class="corp-contrast c-float-l hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us
+          		        	  <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+                            // Do something:
+                            castor.info("buttonClick=joinUs");
+                            window.location.href = "/register";
+                          </script>
+                        </button>
+          						</div>
+          					<div class="clear">
+          			
+          		    </div>
+            		</div>
+      		    </div>
+      		  </div>
+  		    <div id="site_title">
+  		    </div>
+  	    </div>
+  	    <div id="layout_body_outer">
+  	      <div id="layout_body">
+  	        <div id="navigation">
+
+        			<div id="nav1">
+
+        				 <ul>
+                  	<li id="nav-home"><a href="/">Home</a></li>
+                  	<!--<li id="nav-about"><a href="/?p=about">About</a></li>
+                  	<li id="nav-pricing"><a href="/?p=pricing">Pricing</a></li>-->
+                  	<li id="nav-business"><a href="/?p=business">Your Coordel Business</a></li>
+                  	<li id="nav-tour"><a href="/?p=tour">Features</a></li>
+                  </ul>
+
+        				<div class="clearer">&nbsp;</div>
+
+        			</div>
+        		</div>
+  		      <div id="main">
+
+  		        <div class="left" id="content_outer">
+  		          <div id="content">
+
+                  <%- body %>
+                  <div class="clearer"></div>
+    				    </div>
+  		        </div>
+  		        <div class="right" id="content_sidebar">
+  		          <div id="sidebar">
+
+        					<div class="box">
+
+        						<div class="box_title">Case Studies</div>
+
+        						<div class="box_content">
+        							<ul>
+        								<li><a>Independent Contractor</a></li>
+        								<li><a>Employed Full Time</a></li>
+        								<li><a>Spare Time Expert</a></li>
+        								<li><a>Consultant</a></li>
+        							</ul>
+        						</div>
+
+        					</div>
+
+        					<div class="box">
+
+        						<div class="box_title">Current Opportunities</div>
+
+        						<div class="box_content">
+        							<ul>
+        								<li><a>User Interface Design and Usability</a></li>
+        								<li><a>Continuous Deployment Platform</a></li>
+        								<li><a >Coordel API</a></li>
+        								<li><a>Coordel Web Clients</a> </li>
+        								<li><a>Payments Integrations</a></li>
+        							</ul>
+        						</div>
+
+        					</div>
+
+
+
+
+        				</div>
+  		        </div>
+  				    
+  			      <div class="clearer">&nbsp;</div>
+  		      </div>
+  			    <div id="dashboard" class="splash">
+  				    <div id="dashboard_inner">
+  					    <button id="joinUs" class="c-float-r corp-contrast hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us Free for 30 Days
+  					      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+                    // Do something:
+                    castor.info("buttonClick=joinUs");
+                    window.location.href = "/register";
+                  </script>
+  					    </button>
+  					    <div id="tagLine" class="right">
+          				<div class="right handwritten" style="font-weight: bold;font-size:24px;color: #456">Coordel = <span><a href="productivity.html" class="secondary">Productivity</a></span><span> + </span> <span><a href="opportunity" class="secondary">Opportunity</a></span></div>
+          			</div>
+  		        	<button id="tour" class="c-float-l corp-dark" data-dojo-type="dijit.form.Button" type="submit">Take the Tour
+  					      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+                    // Do something:
+                    castor.info("buttonClick=takeTour, location=home");
+                    window.location.href = "/?p=tour";
+                  </script>
+                </button>
+  					    <div class="clearer"></div>
+  				    </div>
+  			    </div>
+  	      </div>
+  	    </div>
+  	    <div id="footer" class="splash">
+  		    <div class="left">
+  			    &copy; 2012 <a href="http://www.coordel.com">coordel.com</a> - do what you love
+  		    </div>
+  		    <div class="clearer">&nbsp;</div>
+  	    </div>
+      </div>
+    </div>
+  </body>
 </html>

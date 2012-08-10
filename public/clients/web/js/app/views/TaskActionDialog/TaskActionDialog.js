@@ -89,7 +89,7 @@ define([
     },
     
     save: function(){
-      //console.debug("save called in TaskActionDialog", this.action, this.task);
+      console.debug("save called in TaskActionDialog", this.action, this.task);
       var t = db.getTaskModel(this.task, true),
           task = this.task,
           message = "";

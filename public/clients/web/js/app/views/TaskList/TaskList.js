@@ -78,7 +78,7 @@ define(
         }
           
         if (self.taskList.length > 0){
-          //console.debug("list has tasks");
+          
           self.taskList.forEach(function(task){
             var item;
             
@@ -90,6 +90,7 @@ define(
                 showProjectLabel: self.showProjectLabel
               });
             } else {
+              
               item = new Task({
                 focus: self.listFocus,
                 task: task,
@@ -112,7 +113,7 @@ define(
          
         //need to watch and see if there is a change to this list
         self.observeHandler = self.taskList.observe(function(task, removedFrom, insertedInto){
-          //console.debug("TaskList observed", task, removedFrom, insertedInto, self.listFocus);
+          console.debug("TaskList observed", task, removedFrom, insertedInto, self.listFocus);
           
           //was this a delete
           if (removedFrom > -1){

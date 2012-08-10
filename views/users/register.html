@@ -1,9 +1,5 @@
-<div class="c-float-l register-form">
-	
+<div class="c-float-l register-form" style="width: 23em;padding-right: 2em">
 	<form action="/register" method="post">
-		<div style="padding-bottom: 2em">
-			<a class="no-decoration" href='http://www.coordel.com'><img src="/css/images/loginForm/whiteLogo.png"></a>
-		</div>
 		<ul>
 			<li>
   			<label for="regFirstName">First Name</label>
@@ -37,23 +33,28 @@
 			</li>
 		</ul>
 		<div>
-  		<input type="submit" class="submit-button c-margin-b c-float-r" value="Join Coordel">
-			<div class="clear"></div>
+			<button class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Join Us
+	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+          // Do something:
+          castor.info("buttonClick=joinUs, location=register");
+        </script>
+      </button>
 		</div>
 	</form>
 	<%if ('undefined' !== typeof errors && errors.length){%>
-	<div class="feedback c-color-error c-text-center c-padding-large-t">
+  <div class="clear c-padding"></div>
+	<div class="feedback error c-color-error c-text-center c-padding-large-t">
 		<% for (var key in errors) {%>
-			<span class="error"><%=errors[key]%>.</span>
+			<span><%=errors[key]%>.</span>
 		<%}%>
-		<span>Please try again.
+		<span> Please try again.</span>
 	</div>
 	<%}%>
 </div>
-<div class="c-float-l alt-signup">
+<div class="c-float-r alt-form" style="width: 13em; margin-left: 1em">
 	<div class="handwritten">Save time by using your Facebook or LinkedIn account to join Coordel</div> 
-	<div>
-		<p class="c-text-center c-padding-large"><a href="/auth/facebook"><img src="css/images/providers/signup-facebook.png" title="Login in with Facebook"></a></p>
-		<p class="c-text-center c-padding-large"><a href="/auth/linkedin"><img src="css/images/providers/signup-linkedin.png" title="Login in with LinkedIn"></a></p>
+	<div class="c-padding-large-t">
+		<p class="c-text-center c-padding-large"><a href="/auth/facebook" class="signin-facebook"></a></p>
+		<p class="c-text-center c-padding-large"><a href="/auth/linkedin" class="signin-linkedin"></a></p>
 	</div>
 </div>

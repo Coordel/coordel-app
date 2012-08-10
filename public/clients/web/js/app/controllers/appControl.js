@@ -20,10 +20,12 @@ define(['dojo',
         "app/views/PersonForm/PersonForm",
         "app/views/Dialog/Dialog",
         "app/views/Tutorial/Tutorial",
+        "app/views/Preferences/Preferences",
         "app/views/TaskForm/TaskForm",
         "app/widgets/ContainerPane",
-        "app/views/OpportunityAction/OpportunityAction"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, TaskForm, ContainerPane, OpportunityAction) {
+        "app/views/OpportunityAction/OpportunityAction",
+        "dojo/cookie"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -63,8 +65,15 @@ define(['dojo',
 	      var alerts = db.getAlerts(app.username);
 	      dojo.when(alerts, function(res){
 	        app.currentAlerts = res;
+	        
+	        //set dnd 
+          if (db.appStore.app().dndActive){
+            dojo.publish("coordel/doNotDisturb", [{isActive: true, app:db.appStore.app()}]); 
+          }
+          
 	        //update the notification count
           dojo.publish("coordel/updateNotificationCount", [{currentAlerts: app.currentAlerts}]);
+        
 	      });
 	    });
 	  },
@@ -96,7 +105,7 @@ define(['dojo',
 	
 	  doLogout: function(){
 	    //console.debug("doLogout called");
-	    window.location = "/logout";
+	    window.location = "/";
 	  },
 	  
 	  showApp: function() {
@@ -104,17 +113,22 @@ define(['dojo',
 	    
 	    var socket = io.connect(window.location.host);
 	    
-	    //console.log("showing app", this.username);
+	    console.log("showing app", this.username);
 		  
 			//register for socketio events
 			socket.on("changes:" + this.username.toString(), function (change) {
-		    console.log("SOCKET CHANGE", change);
+		    //console.log("SOCKET CHANGE", change);
 		    app.handleChange(change);
 		  });
 		  
 		  socket.on("alerts:" + this.username.toString(), function(alert){
 		    console.log("SOCKET ALERT", alert);
 		    app.handleAlert(alert);
+		  });
+		  
+		  socket.on("contacts:" + this.username.toString(), function(contact){
+		    console.log("SOCKET CONTACT", contact);
+		    app.handleContact(contact);
 		  });
 	    
 	    this.initSounds();
@@ -147,26 +161,54 @@ define(['dojo',
 	  	//listen for alerts clear
 	  	this.handlers.push(dojo.subscribe("coordel/clearAlerts", this, "handleClearAlerts"));
 	  	
-	  	//listten for support actions
+	  	//listen for support actions
 	  	this.handlers.push(dojo.subscribe("coordel/support", this, "handleSupport"));
 	  	
+	  	//listen for dnd actions
+	  	this.handlers.push(dojo.subscribe("coordel/doNotDisturb", this, "handleDoNotDisturb"));
+	  	
+	  	//listen for app updates
+	  	this.handlers.push(dojo.subscribe("coordel/appUpdate", this, "handleAppUpdate"));
+	  	
   		dojo.removeClass(document.body, "loading login");
-		  //console.debug("database has loaded, in the deferred function",resp);
+		  //console.debug("database has loaded, getting ready to show layout");
 		      
 		  //do main layout
       layout.showLayout();
-      
+
+      //console.debug("database has loaded, getting ready show right header");
       //show the right header
 		  var rightHead = dijit.byId("mainLayoutHeaderRight"); 
       rightHead.addChild(new rh({
         userFullName: db.fullName()
       }));
+      
+      //console.debug("database has loaded, showed right header");
 		      
       //init the primary nav controller 
       app.navController = pNavControl.init(ac.username);
       
       //console.log("after primary nav control init");
-      
+      var bg = dojo.cookie("bg");
+
+    	if (!bg){
+    		bg = 0;
+    	}
+
+    	if (bg <= 0){
+    		bg = 1;
+    	}
+
+    	dojo.addClass(dojo.byId("outerLayout"), "bg"+bg.toString());
+
+    	bg = parseInt(bg,10) + 1;
+    	
+    	if (bg > 10){
+    		bg = 1;
+    	}
+    	
+    	dojo.cookie("bg", bg);
+    	//console.log(dojo.cookie("bg"));
 	  },
 	  
 	  _timeUpdate: function(){
@@ -186,7 +228,15 @@ define(['dojo',
 
 	  doTaskAction: function(args){
 	    
+	    console.log("args", args);
+	    
 	    if (args.action === "reuse") {
+	      return;
+	    }
+	    
+	    if (args.action === "accept"){
+	      var t = db.getTaskModel(args.task, true);
+	      t.accept(args.task);
 	      return;
 	    }
 	    //the TaskActionMenu sends the action to do and the task this function 
@@ -285,7 +335,7 @@ define(['dojo',
     },
     
     doOpportunityAction: function(args){
-      console.log("appControl should do opportunity action", args);
+      //console.log("appControl should do opportunity action", args);
       var css = "highlight-button",
 	        d,
 	        proj;
@@ -314,7 +364,7 @@ define(['dojo',
 	    });
 
       dojo.connect(opp, "onValidate", function(isValid){
-	      console.debug("opportunityAction got onValidate", isValid);
+	      //console.debug("opportunityAction got onValidate", isValid);
 	      d.validate(isValid);
 	    });
 
@@ -428,6 +478,17 @@ define(['dojo',
 	    }
 	  },
 	  
+	  handleAppUpdate: function(args){
+	    var a = args.app;
+	    var self = this;
+	    //console.log("app for dnd update", a);
+	    dojo.when(db.appStore.post(a), function(){
+	      db.appStore._app = a;
+	      dojo.publish("coordel/updateNotificationCount", [{currentAlerts: self.currentAlerts}]);
+        //console.log("app updated", a);
+      });
+	  },
+	  
 	  handleSupport: function(args){
 	    var title = "",
 	        template = "support/quickStart.html",
@@ -446,7 +507,7 @@ define(['dojo',
 	      break;
 	      
 	      case "showEmailIntegration":
-	      title = "Email Integration";
+	      title = "E-mail Integration";
 	      template = "support/emailIntegration.html";
 	      //console.log("show email integration");
 	      break;
@@ -460,6 +521,15 @@ define(['dojo',
   	        d.destroy();
   	      }
   	    });
+	    } else if (args === "preferences"){
+	      d = new vDialog({
+  	      title: coordel.preferences,
+  	      content: new Preferences(),
+  	      onCancel: function(){
+  	        d.destroy();
+  	      }
+  	    });
+	      
 	    } else {
 	      d = new vDialog({
   	      title: title,
@@ -475,6 +545,39 @@ define(['dojo',
 	    d.show();
 	  },
 	  
+	  handleDoNotDisturb: function(args){
+	    
+	    var a = db.appStore.app();
+	    var self = this;
+	    if (args.isActive){
+	      //this means that the do no disturb has been activated
+        a = args.app;
+        a.dndActive = true;
+
+        dojo.create("div", {
+          id: "dndIndicator",
+          "class": "dnd c-float-r",
+          innerHTML: coordel.doNotDisturb
+        }, "leftNavHeader", "first");
+
+	    } else {
+	      delete a.dndActive;
+	      dojo.destroy("dndIndicator");
+	    }
+	    
+	    if (a.vips && a.vips.length === 0){
+        delete a.vips;
+      }
+
+	    //console.log("app for dnd update", a);
+	    dojo.when(db.appStore.post(a), function(){
+	      db.appStore._app = a;
+	      //update the notification count
+        dojo.publish("coordel/updateNotificationCount", [{currentAlerts: self.currentAlerts}]);
+        //console.log("dnd updated", a);
+      });
+	  
+	  },
 	  
 	  _showProjectForm: function(){
 	    //console.debug("create a project");
@@ -570,14 +673,37 @@ define(['dojo',
 	    d.show();
 	  },
 	  
+	  handleContact: function(contact){
+	    //should refresh the contact store with the contact
+	    console.log("handle the contact");
+	    db.contactStore.store.notify(contact);
+	  },
+	  
 	  handleAlert: function(alert){
-	    this.currentAlerts.unshift(alert);
 	    
-	    //update the notification count
-      dojo.publish("coordel/updateNotificationCount", [{currentAlerts: this.currentAlerts}]);
-      
-      //play the sound
-      dojo.publish("coordel/playSound", ["ding"]);
+	    var a = db.appStore.app();
+	    var self = this;
+	    
+	    self.currentAlerts.unshift(alert);
+	    
+      if (!a.dndActive){
+  	    //update the notification count
+        dojo.publish("coordel/updateNotificationCount", [{currentAlerts: this.currentAlerts}]);
+        //play the sound
+        dojo.publish("coordel/playSound", ["ding"]);
+	    } else {
+	      if (a.vips && a.vips.length > 0){
+	        dojo.forEach(a.vips, function(vip){
+	          console.log("alert in handle alert", alert);
+	          if (alert.actor.id === vip){
+	            //update the notification count
+              dojo.publish("coordel/updateNotificationCount", [{currentAlerts: self.currentAlerts}]);
+              //play the sound
+              dojo.publish("coordel/playSound", ["ding"]);
+	          }
+	        });
+	      }
+	    }
 	  },
 	  
 	  handleClearAlerts: function(){
@@ -590,7 +716,7 @@ define(['dojo',
 	  
 	  handleChange: function(resp){
 	    
-	    console.log("appControl handleChanges called", resp);
+	    //console.log("appControl handleChanges called", resp);
 	  
   	  var notifications = [];
   		//resp.results.map(function(r){
@@ -640,7 +766,7 @@ define(['dojo',
   				      projects = db.projects(false),
   				      assignStatus = "";
   				      
-  				  console.debug("projects in change test", projects);
+  				  //console.debug("projects in change test", projects);
   				  
   				  //need to check if this is new because it may have been saved several times before it 
   				  //got to this user so its isNew property might be false
@@ -663,7 +789,7 @@ define(['dojo',
   					//console.debug("STATUS:", chg.status, chg.substatus);
   					if (isNew && chg.creator !== app.username && chg.updater !== app.username && chg.status !== "ARCHIVE" && chg.status !== "TRASH" && !chg._deleted){
   					  //this is a new project that I didn't create so add
-  					  console.debug("Notify Project ADD", chg._id, chg._rev);
+  					  //console.debug("Notify Project ADD", chg._id, chg._rev);
   					  if (chg.substatus === "OPPORTUNITY"){
   					    db.projectStore.oppStore.notify(chg);
   					  } else {
@@ -672,7 +798,7 @@ define(['dojo',
   					  
   					} else if (assignStatus === "DECLINED" || chg.substatus === "DELETED" || chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   					  //this project was deleted
-  					  console.debug("Notify Project DELETE",chg._id, chg._rev);
+  					  //console.debug("Notify Project DELETE",chg._id, chg._rev);
   					  db.projectStore.store.notify(null, chg._id);
   					  
   					} else {
@@ -690,11 +816,11 @@ define(['dojo',
   				case "role":
   				  if (chg.isNew && chg.creator !== app.username && chg.updater !== app.username  && chg.status !== "TRASH" && chg.status !== "ARCHIVE" && !chg._deleted){
   				    //this is a new role that I didn't create
-  				    console.debug("Notify Role ADD", chg);
+  				    //console.debug("Notify Role ADD", chg);
   				    db.roleStore.store.notify(chg);
   				  } else if (chg.status === "ARCHIVE" || chg.status === "TRASH" || chg._deleted) {
   				    //role was deleted
-  				    console.debug("Notify Role DELETE");
+  				    //console.debug("Notify Role DELETE");
   				    db.roleStore.store.notify(null, chg._id);
   				  } else {
   				    //this was an update
@@ -705,23 +831,23 @@ define(['dojo',
   				  //if the role belongs to the current project, then need to update the project store;
   				  
   				  if (chg.project === db.projectStore.currentProject){
-  				    console.debug("Current Project Role", chg, app.username);
+  				    //console.debug("Current Project Role", chg, app.username);
   				    if (chg.isNew && chg.creator !== app.username && chg.status !== "TRASH" && !chg._deleted){
-  				      console.debug("Notify Project Role ADD", chg);
+  				      //console.debug("Notify Project Role ADD", chg);
   				      //this is a new task and I didn't create it so add 
   				      db.projectStore.roleStore.notify(chg);
   				      
   				    } else if (chg.status === "TRASH" || chg._deleted){
-  				      console.debug("Notify Project Role DELETE", chg);
+  				      //console.debug("Notify Project Role DELETE", chg);
   				      db.projectStore.roleStore.notify(null, chg._id);
   				      
   				    } else {
   				      //this is an update
-  				      console.debug("Notify Project Role UPDATE", chg);
+  				      //console.debug("Notify Project Role UPDATE", chg);
   				      db.projectStore.roleStore.notify(chg, chg._id);
   				    }
   				  } else {
-  				    console.log("Role Project Not Current", chg);
+  				    //console.log("Role Project Not Current", chg);
   				  }
   				  
   				  
@@ -732,19 +858,31 @@ define(['dojo',
   				  //taskStore - incoming change to one of my tasks
   				  //console.debug("STATUS: ", chg.status);
   				  
-  				  if (chg.username === app.username || 
+  				  if (chg.username === app.username ||
+  				        //if I'm the delegator then I need to know what happens to this task
+  				        (chg.delegator && chg.delegator !== chg.responsible && chg.delegator === app.username) ||
+  				        //if I'm the responsible then I need to know what happens to this task
+  				        (chg.responsible === app.username)
+  				        /*
+  				        //if I'm responsible and this task is delegated, then i need to be notified
+  				        (chg.responsible === app.username && chg.substatus === "DELEGATED") ||
+  				        //if I'm responsible and this task is accepted, then i need to be notified
+  				        (chg.responsible === app.username && chg.substatus === "ACCEPTED") ||
   				        //if I'm responsible and this task is submitted, then i need to be notified
   				        (chg.responsible === app.username && chg.substatus === "DONE") ||
-  				        //if I'm responsible or delegator and this task is declined, then i need to be notified
+  				        //if I'm responsible and this task is cancelled, then i need to be notified
+  				        (chg.responsible === app.username && chg.substatus === "CANCELLED") ||
+  				        //if I'm responsible and this task is declined, then i need to be notified
   				        (chg.responsible === app.username && chg.substatus === "DECLINED") ||
-  				        (chg.delegator && chg.delegator === app.username && chg.substatus === "DECLINED") ||
   				        //if I'm responsible and this task is an issue, then I need to be notified
   				        (chg.responsible === app.username && chg.substatus === "ISSUE") ||
-  				        //a user has proposed a change to a task I delegated or i'm responsible
-  				        (chg.responsible === app.username && chg.substatus === "PROPOSED") ||
-  				        (chg.delegator && chg.delegator === app.username && chg.substatus === "PROPOSED")
+  				        //a user has proposed a change to a task and i'm responsible
+  				        (chg.responsible === app.username && chg.substatus === "PROPOSED")
+  				        */
   				        
   				        ){
+  				          
+  				    
   				    if (chg.isNew && chg.creator !== app.username && chg.status !== "TRASH" && chg.status !== "ARCHIVE" && !chg._deleted){
   				      //this is a new task that I didn't create so add 
   				      db.taskStore.store.notify(chg);
@@ -768,7 +906,7 @@ define(['dojo',
   	        //there's no way to tell if the store needs updated except to check the existing 
   	        //blockers. if it was chosen before, it will be in this store
   			    if (dojo.indexOf(db.getBlockerArray(), chg._id) > -1){
-				      console.debug("Notify Blockers UPDATE");
+				      console.debug("Notify Blockers UPDATE", chg);
 				      db.taskStore.blockStore.notify(chg, chg._id);
 				    }
   			
@@ -776,14 +914,14 @@ define(['dojo',
   				  //projectStore - if the currentProject is is the project of this task
   				  //update taskStore with the incoming task
   				  if (chg.project === db.projectStore.currentProject){
-  				    console.debug("Current Project Task", chg, app.username);
+  				    //console.debug("Current Project Task", chg, app.username);
   				    if (chg.isNew && chg.creator !== app.username && chg.status !== "TRASH" && !chg._deleted){
-  				      console.debug("Notify Project Task ADD", chg);
+  				      //console.debug("Notify Project Task ADD", chg);
   				      //this is a new task and I didn't create it so add 
   				      db.projectStore.taskStore.notify(chg);
   				      
   				    } else if (chg.status === "TRASH" || chg._deleted){
-  				      console.debug("Notify Project Task DELETE", chg);
+  				      //console.debug("Notify Project Task DELETE", chg);
   				      db.projectStore.taskStore.notify(null, chg._id);
   				      
   				    } else {
@@ -792,13 +930,13 @@ define(['dojo',
   				      db.projectStore.taskStore.notify(chg, chg._id);
   				    }
   				  } else {
-  				    console.log("Task Project Not Current", chg);
+  				    //console.log("Task Project Not Current", chg);
   				  }
   				  
   				  dojo.publish("coordel/taskNotify", [{task: chg}]);
   					break;
   				case "message":
-  				  console.log("message", chg.updater ,app.username, db.focus);
+  				  //console.log("message", chg.updater ,app.username, db.focus);
   			
   				  //a message notify the stream store
   				  //if i sent it, it's an update, if I didn't send it , it's an add
@@ -811,11 +949,11 @@ define(['dojo',
   				        db.streamStore.taskStore.notify(chg);
   				    }
   				    db.streamStore.store.notify(chg);
-  				    console.log("Notify Message ADD", chg);
+  				    //console.log("Notify Message ADD", chg);
   				    dojo.publish("coordel/streamNotify", [{message: chg}]);
   				  } else {
   				    
-  				    console.log("Notify Message UPDATE");
+  				    //console.log("Notify Message UPDATE");
   				    if (db.focus === "project" && db.projectStore.streamStore && chg.project === db.projectStore.currentProject){
   				      //db.projectStore.streamStore.notify(chg, chg._id);
   				    }

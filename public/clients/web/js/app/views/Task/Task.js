@@ -194,7 +194,7 @@ define(
         var username = db.username(),
             t = db.getTaskModel(this.task, true);
             
-        if (this.task.username !== username){
+        if ((this.task.username !== username && !t.isSubmitted()) || (this.task.responsible !==username && t.isSubmitted())){
           
           //console.log("removing mine");
           //if I don't own this task, then it shouldn't have a link to go to task details;
@@ -228,7 +228,7 @@ define(
         }
         
         //if this is current, delegated or invite, the user needs to see metainfo added to the task (Issue, Cleared, etc)
-        if (this.focus === "current" || this.focus==="delegated" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
+        if (this.focus === "current" || this.focus==="blocked" || this.focus==="delegated" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
           this._setMetaInfo();
         }
         
@@ -251,10 +251,17 @@ define(
         if (t.isBlocked()){
           this.taskCheckbox.set("disabled", true);
           
-          //if a task is blocked because it's paused, add paused meta info so the user knows
-          if (t.isPaused()){
-            dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.paused + " : ");
-          }
+          
+        }
+        
+        //if a task is blocked because it's paused, add paused meta info so the user knows
+        if (t.isPaused()){
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.paused + " : ");
+        }
+        
+        //if this is submitted and i'm not the responsible, checkbox is disabled
+        if (t.isSubmitted() && t.projResponsible() !== username){
+          this.taskCheckbox.set("disabled", true);
         }
         
         //if this is deferred, set defered date as task metainfo
@@ -408,7 +415,7 @@ define(
         //wire up the task name so clicking it goes to details if I'm the user of the task
         dojo.connect(this.showDetails, "onclick", this, function(){
           //console.debug("focus in Task", this.task.username);
-          if (this.task.username === db.username()){
+          if ((this.task.username === db.username() && !t.isSubmitted()) || (this.task.responsible === db.username() && t.isSubmitted())){
              //if this is a projectInvite, navigate to the project
             if (this.isProjectInvite){
               dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: this.focus, id: this.task.project}]);
@@ -472,7 +479,7 @@ define(
         //wire up the actions menu button
         dojo.connect(this.chooseAction ,"onClick", this, function(){
           
-          //console.debug("chooseAction clicked");
+          console.debug("chooseAction clicked");
           //set up the menu for the actions button
           
           var menu = new ActionsMenu({
@@ -527,14 +534,14 @@ define(
        //wire up the accept button
        dojo.connect(this.acceptTask, "onclick", this, function(){
           //console.debug("acepting task", this.task);
-          t.accept(this.task);
-          //dojo.publish("coordel/removeTask", [this.task]);
+          //t.accept(this.task);
+          dojo.publish("coordel/taskAction", [{action: "accept", task: this.task}]);
         });
         
        //wire up the decline button
        dojo.connect(this.declineTask, "onclick", this, function(){
          //console.debug("removing task", this.task);
-         t.decline(this.task);
+          dojo.publish("coordel/taskAction", [{action: "decline", task: this.task, validate: true, cssClass: "warning-button"}]);
          //dojo.publish("coordel/removeTask", [this.task]);
        });
        
@@ -695,7 +702,7 @@ define(
           
           //don't need to show from if this is me or if it's a project invite
           if (!t.hasDelegator() && resp !== u || t.hasDelegator() && del !== u){
-            text = coordel.metainfo.invite + " " + con + " : ";
+            text = coordel.taskDetails.by + " " + con + " : ";
           }
           
           if (!t.isProposed() && !t.isAgreed() && !t.isAmended()){
@@ -705,15 +712,21 @@ define(
           }
     
         } else {
-          //if there is a delegator then everyone needs to see who did the delegation
-          if (t.hasDelegator()){
+          //if there is a delegator then everyone needs to see who did the delegation in the project view
+          if (t.hasDelegator() && t.delegator !== t.responsible && db.focus === "project"){
             del = t.delegator;
+            con = db.contactFullName(del);
+            dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.taskDetails.by + " " + con + " : ");
+          }
+          //if it's not an invite but it's a task in myDelegated then show who delegated it
+          if (t.isMyDelegated && t.responsible !== db.username()){
+            del = t.responsible;
             con = db.contactFullName(del);
             dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.taskDetails.by + " " + con + " : ");
           }
           
         }
-        
+
         //project invites
         if (this.isProjectInvite){
           text = "";
@@ -799,6 +812,13 @@ define(
           
         }
         
+        //delegated
+        if (t.hasDelegator() && t.delegator !== t.responsible && t.delegator !== db.username() && db.focus !== "project"){
+          del = t.delegator;
+          con = db.contactFullName(del);
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.taskDetails.by + " " + con + " : ");
+        }
+        
         //issue
         if (t.isIssue()){
        
@@ -813,9 +833,12 @@ define(
         
         //submitted for approval
         if (t.isSubmitted()){
-        
+          
           //console.debug("it's submitted");
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-active").addContent(coordel.metainfo.submitted + " : ");
+          var subUser = t.username;
+          con = db.contactFullName(subUser);
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.taskDetails.from + " " + con + " : ");
         }
         
         //returned
@@ -849,6 +872,7 @@ define(
           }
         }  
         
+        //console.log("show project label", self.showProjectLabel);
         //show project name
         if (self.showProjectLabel){
           var p = t.p.project;

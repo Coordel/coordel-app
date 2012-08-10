@@ -27,6 +27,8 @@ define(
       
       setSelectionHandler: null,
       
+      currentArgs: {},
+      
       postCreate: function(){
         this.inherited(arguments);
    
@@ -57,7 +59,7 @@ define(
             
           }
   	      //dojo.addClass(con.contactContainer, "active selected");
-  	      //this.onClick();
+  	      this.onClick();
   	    });
   	    
   	    self.setSelection();
@@ -70,6 +72,7 @@ define(
       
       onClick: function(){
         //called when contact is clicked
+        //console.log("clicked");
       },
       
       onChange: function(object){

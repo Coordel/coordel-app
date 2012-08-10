@@ -48,7 +48,7 @@ define("app/models/ProjectStatus",
             }
           });
         }
-        //console.log("isInvitedFollow", project, username, isNew, test);
+        //console.log("isInvitedFollow", project, username, test);
         return test;
       },
       
@@ -194,7 +194,7 @@ define("app/models/ProjectStatus",
         return test;
       },
       
-      isPaused: function(project, username){
+      isPaused: function(project){
         //returns all projects that have been paused by the project responsible
         //if it's ACTIVE PAUSED and i have an assignment in the project, it's paused
         var isPaused = false;

@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.34",
+  version: "0.1.52",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -8,16 +8,35 @@ module.exports = {
         if (doc.docType === "user"){
         	//emit the contact
       		emit(
-      			[doc.email], doc
+      			[doc.email.toLowerCase()], doc
       		);
       		if (doc.altEmails && doc.altEmails.length > 0){
       		  //emit the contact
       		  doc.altEmails.forEach(function(email){
       		    emit(
-          			[email], doc
+          			[email.toLowerCase()], doc
           		);
       		  });
       		}
+        }
+      }
+    },
+    
+    userPreferences: {
+      map: function(doc){
+        if (doc.docType === "user"){
+          //emit the user's email as doc 0 because we need to be able to get by userid
+          //and might need to have access the the user info
+          emit(
+            [doc.app, 0], doc
+          );
+        }
+        
+        if (doc.docType === "preferences"){
+          //emit the preferences doc for this user
+          emit(
+            [doc.user, 1], doc
+          );
         }
       }
     },
@@ -114,9 +133,7 @@ module.exports = {
       			//the user has indicated they are done with the task, have flagged an issue, or declined a task
       			//so if there is a delegator they get it back otherwise, the responsible now needs to take action
       			user = doc.responsible;
-      			if (doc.delegator && doc.delegator !== ""){
-      			  user = doc.delegator;
-      			}
+      			
 
       		}
 
@@ -130,18 +147,14 @@ module.exports = {
 
       		  //A user can't delegate the task to someone else until they have accepted
       		  user = doc.responsible;
-      		  if (doc.delegator && doc.delegator !==""){
-      		    user = doc.delegator;
-      		  }
+      		  
       		}
 
       		if (doc.status === "PENDING"){
       		  //when a responsible creates a task as part of a project, it gets the pending status 
       		  //when the user sends the project, then the task status is updated to CURRENT
       		  user = doc.responsible;
-      		  if (doc.delegator && doc.delegator !==""){
-      		    user = doc.delegator;
-      		  }
+      		  
       		}
 
       		//emit the task
@@ -585,15 +598,6 @@ module.exports = {
       			&& doc.status !== "SOMEDAY"
       			&& doc.substatus !== "TRASH"
       			&& doc.substatus !== "ARCHIVE"){
-
-      		if (doc.coordinates){
-      		  doc.coordinates.forEach(function(coord){
-              emit(
-          			[coord],
-          			{"_id": doc._id}
-          		);
-            });
-      		}
       		
       		if (doc.blocking){
       		  doc.blocking.forEach(function(block){
@@ -779,14 +783,22 @@ module.exports = {
     
     userContacts: {
       map: function(doc){
-        //this emits all the contacts in a users app. contacts are added to the app as people are added to
-        //projects in which the user participates. This allows the contact list to grow as the user 
-        //works on more and more projects
-        if (doc.docType === "user"){
-          doc.contacts.forEach(function(contact){
-            emit([doc.username],{"_id": contact});
-          });	
+        
+        
+        //this emits all the contacts for a user by iterating projects and emitting all users for everone
+        //in the project
+        if (doc.docType === "project"){
+          doc.users.forEach(function(user){
+            doc.users.forEach(function(contact){
+              if (user !== contact){
+                emit([user, contact], null);
+              } 
+            });
+          });
         }
+      },
+      reduce: function(keys, values, rereduce){
+         return null;
       }
     },
     
@@ -1066,9 +1078,7 @@ module.exports = {
       			//the user has indicated they are done with the task, have flagged an issue, or declined a task
       			//so if there is a delegator they get it back otherwise, the responsible now needs to take action
       			user = doc.responsible;
-      			if (doc.delegator && doc.delegator !== ""){
-      			  user = doc.delegator;
-      			}
+      			
 
       		}
 
@@ -1082,18 +1092,14 @@ module.exports = {
 
       		  //A user can't delegate the task to someone else until they have accepted
       		  user = doc.responsible;
-      		  if (doc.delegator && doc.delegator !==""){
-      		    user = doc.delegator;
-      		  }
+      		  
       		}
 
       		if (doc.status === "PENDING"){
       		  //when a responsible creates a task as part of a project, it gets the pending status 
       		  //when the user sends the project, then the task status is updated to CURRENT
       		  user = doc.responsible;
-      		  if (doc.delegator && doc.delegator !==""){
-      		    user = doc.delegator;
-      		  }
+      		  
       		}
 
       		//emit the task

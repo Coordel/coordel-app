@@ -7,7 +7,7 @@ define(
   function(dojo,coordel, w, t, html) {
   
   dojo.declare(
-    "app.widgets.LabeledCheckbox", 
+    "app.views.LabeledCheckbox", 
     [w, t], 
     {
       widgetsInTemplate: true,
@@ -40,5 +40,5 @@ define(
       }
       
   });
-  return app.widgets.LabeledCheckbox;     
+  return app.views.LabeledCheckbox;     
 });

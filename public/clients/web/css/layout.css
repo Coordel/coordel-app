@@ -134,8 +134,43 @@ h3 {
 #outerLayout {
   width:100%; 
   height: 100%;
-  background: #000 url(images/mainCenter-wood3-bg.png);
+  background: #000 url(images/wood/2.jpg);
+  /*background: #000 url(images/mainCenter-wood3-bg.png);*/
 }
+
+#outerLayout.bg1 {
+  background:  #373737 url('images/wood/1.jpg');
+}
+#outerLayout.bg2 {
+  background:  #373737 url('images/wood/2.jpg');
+}
+#outerLayout.bg3 {
+  background:  #373737 url('images/wood/3.jpg');
+}
+#outerLayout.bg4 {
+  background:  #373737 url('images/wood/4.jpg');
+}
+#outerLayout.bg5 {
+  background:  #373737 url('images/wood/5.jpg');
+}
+#outerLayout.bg6 {
+  background:  #373737 url('images/wood/6.jpg');
+}
+#outerLayout.bg7 {
+  background:  #373737 url('images/wood/7.jpg');
+}
+#outerLayout.bg8 {
+  background:  #373737 url('images/wood/8.jpg');
+}
+#outerLayout.bg9 {
+  background:  #373737 url('images/wood/9.jpg');
+}
+#outerLayout.bg10 {
+  background:  #373737 url('images/wood/10.jpg');
+}
+
+
+
 
 #centerLayout{ 
   padding: 0px;

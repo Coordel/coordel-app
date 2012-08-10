@@ -15,11 +15,11 @@ var App         = require('./userApp'),
 redis.auth(redisOpts.auth);
 
 var User = exports = module.exports = function User(args){
-  data.id = args.email;
+  data.id = args.email.toLowerCase();
   data.appId = args.appId;
   data.firstName = args.firstName;
   data.lastName = args.lastName;
-  data.email = args.email;
+  data.email = args.email.toLowerCase();
   data.password = args.password;
   data.invited = args.invited || 0;
 };
@@ -44,8 +44,36 @@ User.prototype.update = function(fn){
   });
 };
 
+exports.remove = function(id, fn){
+  var key = 'coordel-users';
+  var multi = redis.multi();
+  multi.srem(key, 'user:'+id);
+  multi.exec(function(err, reply){
+    if (err) return fn(err, false);
+    return fn(null, reply);
+  });
+};
+
 User.prototype.destroy = function(fn){
   exports.destroy(data.id, fn);
+};
+
+
+
+exports.emailAlert = function(id, alert, fn){
+  //use the id to get the userpreferences from couch
+  
+  //send the email with the user prefs and alert
+  
+  Email.send({
+    to: alert.to.email.toLowerCase(),
+    from: alert.from.email.toLowerCase(),
+    subject: alert.subject,
+    template: template,
+    data: data
+    }, function(err, res){
+      console.log("ERROR SENDING EMAIL", err);
+  });
 };
 
 exports.register = function(userData, fn){
@@ -71,7 +99,7 @@ exports.register = function(userData, fn){
           var app = new App({
             id : userData.appId,
             user: objIds.user,
-            email: userData.email,
+            email: userData.email.toLowerCase(),
             firstName : userData.firstName,
             lastName : userData.lastName,
             myDelegatedProject : objIds.delegatedProject,
@@ -83,7 +111,7 @@ exports.register = function(userData, fn){
             if (err){
               fn(err, false);
             } else {
-              User.get(userData.email, function(err, registered){
+              User.get(userData.email.toLowerCase(), function(err, registered){
                 if (err){
                   fn(err, false);
                 } else {
@@ -122,7 +150,7 @@ exports.invite = function(inviteData, fn){
   inviteData.password = password;     
   
   //check if the user exists
-  this.get(inviteData.to.email, function(err, user){
+  this.get(inviteData.to.email.toLowerCase(), function(err, user){
     if (!err && user){
       if (user.invited){
         fn(inviteData.to.firstName + ' ' + inviteData.to.lastName + ' already invited to Coordel', false);
@@ -135,7 +163,7 @@ exports.invite = function(inviteData, fn){
       } else {
         //register the user
         self.register({
-          email: inviteData.to.email,
+          email: inviteData.to.email.toLowerCase(),
           firstName: inviteData.to.firstName,
           lastName: inviteData.to.lastName,
           password: password,
@@ -151,7 +179,7 @@ exports.invite = function(inviteData, fn){
               } else {
                 var i = new Invite({
                   id: inviteid,
-                  to: inviteData.to.email,
+                  to: inviteData.to.email.toLowerCase(),
                   from: inviteData.from.appId
                 });
                 i.add(function(err, reply){
@@ -202,8 +230,8 @@ exports.invite = function(inviteData, fn){
                     //send the user an email with the link
                     console.log("SEND EMAIL", url);
                     Email.send({
-                      to: inviteData.to.email,
-                      from: inviteData.from.email,
+                      to: inviteData.to.email.toLowerCase(),
+                      from: inviteData.from.email.toLowerCase(),
                       subject: inviteData.subject,
                       template: template,
                       data: data
@@ -222,22 +250,6 @@ exports.invite = function(inviteData, fn){
 };
 
 exports.get = function(id, fn){
-  
-  
-    /*
-    var key = 'coordelapp:1:people';
-    var multi = redis.multi();
-    multi.srem(key, 2);
-    multi.exec(function(err, reply){
-      //if (err) return fn(err, false);
-      //return fn(null, reply);
-      console.log("user removed");
-    });
-    */
-  
-  
-  
-  
   //this defaults to getting a coordel user which uses email as the id. use specific functions otherwise
   _getUser({authGroup: 'coordel-users', id: id}, function(err, user){
     if (err) return fn(err, false);
@@ -249,11 +261,11 @@ function _save(user, fn){
   if (user.id && user.appId && user.email && user.password){
     //console.log('adding user to redis store in _save', user);
     var multi = redis.multi(),
-        key = 'user:' + user.email;
+        key = 'user:' + user.email.toLowerCase();
         
     multi.hset(key, 'id', user.id);
     multi.hset(key, 'appId', user.appId);
-    multi.hset(key, 'email', user.email);
+    multi.hset(key, 'email', user.email.toLowerCase());
     multi.hset(key, 'password', user.password);
     multi.hset(key, 'invited', user.invited);
     if (user.firstName) multi.hset(key, 'firstName', user.firstName);
@@ -325,7 +337,7 @@ exports.getFacebookUser = function(userData, fn){
     id: userData.id,
     first: userData.first_name,
     last: userData.last_name,
-    email: userData.email
+    email: userData.email.toLowerCase()
   };
   
   //this is facebook, so load the user from facebook
@@ -366,7 +378,7 @@ exports.getGoogleUser = function(userData, fn){
     id: userData.id,
     first: userData.firstName,
     last: userData.lastName,
-    email: userData.email
+    email: userData.email.toLowerCase()
   };
   
 

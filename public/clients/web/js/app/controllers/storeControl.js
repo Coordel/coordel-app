@@ -9,6 +9,7 @@ define([
   return {
       focus: "store",
       observeHandlers: [],
+      coordel: coordel,
       init: function(){
     
         var self = this;

@@ -36,7 +36,7 @@ module.exports = function(app, validate){
   app.del('/alerts/',  function(req, res){
     var username = req.query.username;
     
-    console.log("removing alerts for", username);
+    //console.log("removing alerts for", username);
     
     Alert.deleteUserAlerts(username, function(err, alerts){
       if (err){

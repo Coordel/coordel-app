@@ -30,10 +30,14 @@ define(
       
       var app = this.app;
       
+      //console.log("app in dnd", app, app.vips);
+      
       //if vips doesn't exist, create it;
       if (!app.vips){
         app.vips = [];
       }
+      
+      
       
       var cons = db.contacts();
       
@@ -49,7 +53,7 @@ define(
       
       //add the contacts two to a row
 	    cons.forEach(function(con){
-	      if (con._id !== db.username()){
+	      if (con.id !== db.username()){
 	        con = this._prepareContact(con);
   	      row.addChild(con);
   	      count += 1;
@@ -80,21 +84,22 @@ define(
     },
     
     onConfirm: function(){
-      //console.debug("confirming in dndDialog", this.saveApp, this.app);
-      if (this.saveApp){
-        var app = this.app;
-        db.appStore.store.put(app, {id: app._id, username: db.username()});
-      }
+      dojo.publish("coordel/doNotDisturb", [{isActive: true, app:this.app}]);
     },
     
     _prepareContact: function(con){
       
       var app = this.app,
           cssString = "vip-contact";
+          
+      var selected = dojo.some(app.vips, function(id){
+        //console.log("testing some", id, con.id);
+        return(id === con.id);
+      });
       
-      if (dojo.some(app.vips, function(id){
-        return(id === con._id);
-      })){
+      //console.log("selected", selected);
+      
+      if (selected){
         //console.debug("contact was already selected");
         cssString = "vip-contact selected";
       }
@@ -108,7 +113,7 @@ define(
       
       //handle clicking of contact
       dojo.connect(val, "onClick", this, function(){
-        console.debug("contact clicked");
+        //console.debug("contact clicked");
         
         if (!dojo.hasClass(val.domNode, "selected")){
           //it wasn't selected so we need to see if this contact is in the vip list
@@ -116,13 +121,13 @@ define(
           
           if (app.vips.length === 0){
             //console.debug("no vips, push it");
-            app.vips.push(con._id);
+            app.vips.push(con.id);
             this.saveApp = true;
           } else if (!dojo.some(app.vips, function(id){
-            return (id === con._id);
+            return (id === con.id);
           })){
             //console.debug("contact not in vips yet, push it");
-            app.vips.push(con._id);
+            app.vips.push(con.id);
             this.saveApp = true;
           }
           
@@ -131,7 +136,7 @@ define(
           //it was selected so we need to remove this contact from the vip list
           var delKey = -1;
           dojo.forEach(app.vips, function(id, key){
-            if (id === con._id){
+            if (id === con.id){
               delKey = key;
             }
           });

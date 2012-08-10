@@ -109,7 +109,7 @@ define(
   		},
       
       showDeliverables: function(){
-        //console.debug("showing deliverables", this.task.workspace);
+        console.debug("showing deliverables", this.task.workspace);
         //this gets all the deliverables that aren't blocked and shows them
         var task = this.task,
             //dels = new ContainerPane().placeAt(this.deliverables),
@@ -149,6 +149,7 @@ define(
 		    
 		    //set the total and blocked counts if there are blocked deliverables
 		    if (blocked > 0){
+		      dojo.removeClass(this.workspaceHeader, "hidden");
 		      this.totalCount.innerHTML = total;
 		      this.blockedCount.innerHTML = blocked;
 		    } else {
@@ -177,6 +178,12 @@ define(
         this.task.hasSaveDone = true;
         
         var t = db.getTaskModel(this.task, true);
+        
+        this.task = t.addActivity({
+    			verb: "SAVE",
+    			target: {id:t.p.project._id, name: t.p.project.name, type: "PROJECT"},
+    			icon: t.icon.save
+    		}, this.task);
         
         t.update(this.task);
         

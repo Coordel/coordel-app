@@ -14,6 +14,7 @@ define({
 	  date: "Date",
 	  time: "Time",
 	  add: "Add",
+	  store: "Store",
 	  blueprint: "Blueprint",
 	  blueprintInstructions: "Choose a Blueprint and then click Apply Blueprint",
 	  applyBlueprint: "Apply Blueprint",
@@ -53,9 +54,12 @@ define({
 		"blocked": "Blocked",
 		"delegated": "Delegated",
 		"myPrivate": "Private",
+		"project-invited": "Coord Invitations",
+		"task-invited": "Task Invitations",
 		"opportunites": "Opportunities",
 		"submitted": "For Approval",
 		"cancelled": "Cancelled",
+		"vips": "VIPs",
 		"active": "Active",
 		"pending": "Pending",
 		pendingParticipation: "Pending Participation",
@@ -73,6 +77,7 @@ define({
 		"doNotDisturb": "Do Not Disturb",
 		"doNotDisturbOff": "Cancel Do Not Disturb",
 		"doNotDisturbConfirmText": "Notifications will be stopped while Activated. Select VIPs not affected by Do Not Disturb.",
+		"vipsConfirmText": "Select VIPs. Select VIPS not affected by Do Not Disturb",
 		"showRightColumn": "Show Right Column",
 		"hideRightColumn": "Hide Right Column",
 		"reply": "Reply",
@@ -99,7 +104,8 @@ define({
 	  support: "Support",
 	  quickStart: "Quick Start Guide",
 	  tutorial: "Tutorial",
-	  emailIntegration: "Email Integration",
+	  emailIntegration: "E-mail Integration",
+	  emailUpdates: "E-mail Updates",
 	  logout: "Logout",
 	  deadlineCalendar: "Deadline Calendar",
 	  duration: "Duration",
@@ -107,6 +113,10 @@ define({
 	  hrs: "hrs",
 	  days: "days",
 	  weeks: "weeks",
+	  userPreferences: {
+	    emailUpdateTitle: "E-mail Updates",
+	    emailUpdateText: "I want Coordel to send me e-mail updates"
+	  },
 	  changes: {
 	    removed: "Removed",
 	    changed: "Changed",
@@ -230,7 +240,7 @@ define({
 		  reassign: "Reassign",
 		  markDone: "Mark Done",
 		  ackDone: "Feedback",
-		  store: "Network",
+		  store: "Store",
 		  reassignLeft: "Task reassigned to Responsible because Person left Coord",
 		  cancelProject: "Responsible cancelled Coord",
 		  markDoneProject: "Responsible marked Coord done",
@@ -581,7 +591,7 @@ define({
 		  "headerTitle": "Full Stream",
 		  "showStream": "Show Stream",
 		  "showTaskStream": "Show Task Stream",
-		  "showNotifications": "Show Notifications",
+		  "showNotifications": "Show Alerts",
 		  "showAlerts": "Show Alerts",
 		  "clearAlerts": "Clear Alerts",
 		  "filterStream": "Filter Stream",
@@ -593,6 +603,10 @@ define({
   		"contactStream": "Person Stream",
   		"backToFull": "Back to Full Stream",
   		"verbs": {
+  		  "save": {
+  		    "verb": "saved",
+  		    "preposition": "in"
+  		  },
   		  "archive": {
   		    "verb":"archived",
   		    "preposition": "in"

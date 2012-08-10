@@ -17,6 +17,7 @@ define(["dojo",
             currentContact: null,
             init: function(username){
               //console.debug("initializing contacts");
+              
               this.username = username;
               var self = this;
               var def = new dojo.Deferred();
@@ -28,6 +29,7 @@ define(["dojo",
               });
             	return def;
             },
+          
             addContact: function(appId){
               var def = new dojo.Deferred(),
                   self = this;
@@ -40,10 +42,13 @@ define(["dojo",
               });
               
               post.then(function(response){
-                //console.log("added contact to user", response);
-                var query = self.store.get(appId);
-                //var query = self._loadContacts(self.username);
-                dojo.when(query, def.callback());
+                console.log("added contact to user", response);
+                //var query = self.store.get(appId);
+                var query = self._loadContacts(self.username);
+                dojo.when(query, function(res){
+                  console.log("contacts", res);
+                  def.callback();
+                });
               });
               return def;
             },
