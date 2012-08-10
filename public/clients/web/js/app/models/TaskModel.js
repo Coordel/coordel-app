@@ -699,6 +699,7 @@ define("app/models/TaskModel",
     		  && !t.isBlocked()
     		  && !t.isPaused()
     		  && !t.isIssue()
+    		  && !t.isProjectDelegated()
     		  //&& !t.isCleared()
     		  //&& !t.isReturned()
     			&& !t.isDone()
