@@ -563,6 +563,10 @@ define({
 		    "durationInstructions": "To calculate blocker deadlines, indicate the time required to complete this Task."
 		  }
 		},
+		"deliverableMessages": {
+		  "blocked": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because already blocking this one</span>",
+		  "circular": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because this is the last unblocked deliverable. At least one deliverable can't block.</span>"
+		},
 		"deliverableSettings": {
 		  "name": "Deliverable Name",
 	    "instructions": "Instructions",

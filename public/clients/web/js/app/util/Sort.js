@@ -2,6 +2,7 @@ define(["dojo"], function(dojo) {
 	return {
 	  
   	sort: function(results, options){
+  	  console.log("results incoming", results);
   	  results.sort(function(a, b){
 				for(var sort, i=0; sort = options.sort[i]; i++){
 					var aValue = a[sort.attribute];
@@ -12,40 +13,57 @@ define(["dojo"], function(dojo) {
 				}
 				return 0;
 			});
+			console.log("sort results");
 			return results;
   	},
   	
   	//this function sorts by execution order
-  	sortByBlocked: function(taskList){
-  		var resList = [],
-  			noBlocker = [],
-  			visitMap = {};
+    byBlocking: function(list, args){
 
-  		//get the actions that don't have prereqs
-  		dojo.forEach(taskList, function(key, task) {
-  			if (task.coordinates.length === 0){
-  				noBlocker.push(task);
-  			}
-  		});
+      var resList = [],
+    		noBlocker = [],
+    		visitMap = {};
 
-  		//now compute the dependencies
-  		dojo.forEach(noBlocker, function(key, task) {
-  			visit (task);
-  		});
+    	//options default to task configuration
+    	var options = {
+    	  id: "_id",
+    	  attribute: "coordinates"
+    	};
 
-  		function visit(task){
-  			if (!visitMap[task._id]){
-  				visitMap[task._id] = true;
+    	options = dojo.mixin(options, args);
 
-  				dojo.forEach(taskList, function(key, t) {
-  					if (t.coordinates.length > 0){
-  					 	visit(t);	
-  					}
-  				});	
-  				resList.unshift(task);
-  			}
-  		}
-  		return resList;
-  	}
+    	//get the tasks that don't have coordinates
+    	list.forEach(function(item) {
+    		if (!item[options.attribute] || item[options.attribute].length === 0){
+    			noBlocker.push(item);
+    		}
+    	});
+
+    	//now compute the dependencies
+    	noBlocker.forEach(function(item) {
+    	  //console.log("no blocker", item.name);
+    		visit (item);
+    	});
+
+    	function visit(item){
+    	  console.log("visit", item.name);
+    		if (!visitMap[item[options.id]]){
+    			visitMap[item[options.id]] = true;
+
+    			list.forEach(function(l) {
+
+    				if (l[options.attribute] && l[options.attribute].length > 0 && dojo.indexOf(l[options.attribute], item.id) > -1 ){
+    				  //console.log("item.id = l.blocker", _.indexOf(l[options.attribute], item.id));
+    				  //console.log("blocker",l.name,l.id, l[options.attribute], l[options.attribute].length);
+    				 	visit(l);	
+    				}
+    			});	
+    			console.log("adding " + item.name + " to resList");
+    			resList.unshift(item);
+    		}
+    	}
+    	console.log("res list", resList);
+    	return resList;
+    }
 	};
 });

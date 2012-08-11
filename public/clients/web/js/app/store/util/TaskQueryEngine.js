@@ -139,7 +139,7 @@ app.store.util.TaskQueryEngine = function(query, options){
     		  return false;
     		}
     		*/
-  			return t.isCurrent() && !pStatus.isDeferred(t.p.project) && !pStatus.isPending(t.p.project, t.username) && applyFilter(task);
+  			return t.isCurrent() && !pStatus.isPaused(t.p.project) && !pStatus.isDeferred(t.p.project) && !pStatus.isPending(t.p.project, t.username) && applyFilter(task);
   		};
   		break;
   		//this gets all the current tasks across the project

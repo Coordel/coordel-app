@@ -5,9 +5,10 @@ define(
     "text!./templates/deliverableSettings.html",
     "app/models/DeliverableModel",
     "app/views/DeliverableFieldSettings/DeliverableFieldSettings",
-    "app/views/LabeledCheckbox/LabeledCheckbox"
+    "app/views/LabeledCheckbox/LabeledCheckbox",
+    "app/views/Label/Label"
     ], 
-  function(dojo,coordel, w, t, html, DeliverableModel, DeliverableFieldSettings, CheckBox) {
+  function(dojo,coordel, w, t, html, DeliverableModel, DeliverableFieldSettings, CheckBox, Label) {
   
   dojo.declare(
     "app.views.DeliverableSettings", 
@@ -302,11 +303,29 @@ define(
           p.destroyDescendants();
         }
         
+        
+        
         //add this task's current deliverables if there are any
         if (this.task.workspace && this.task.workspace.length > 0){
+          //there has to be one field that doesn't have a blocker to make sure there is a start point
+          //to start
+          var count = 0;
+          var canStart = false;
+          var hasDisabled = false;
+          dojo.forEach(this.task.workspace, function(del){
+            console.log("del name", del.name, count);
+            if (del.id !== self.deliverable.id && (!del.blockers || del.blockers.length === 0)){
+              count += 1;
+            }
+          });
+          if (count === 0){
+            canStart = true;
+          }
           dojo.forEach(this.task.workspace, function(del){
             //don't add this field as a blocker
             //console.debug("testing del and me", del.id, self.deliverable.id);
+            
+            
             if (del.id !== self.deliverable.id){
               //console.debug("wasn't me disabled currently false", del.name, del.blockers);
               var isDisabled = false;
@@ -316,12 +335,21 @@ define(
                   //console.debug("testing disabled", b, self.deliverable.id);
                   return b === self.deliverable.id;
                 });
+                if (isDisabled){
+                  hasDisabled = true;
+                }
                 //console.debug("isDisabled", isDisabled);
+              }
+              
+              var name = del.name;
+              
+              if (isDisabled){
+                name = name + "<sup class='c-color-active'>*</sup>";
               }
                 
               var check = new CheckBox({
                 value: del.id,
-                label: del.name,
+                label: name,
                 checked: function(){
                   isChecked = false;
                   //if the current deliverable has this deliverable as a blocker, need to show it selected
@@ -370,6 +398,12 @@ define(
               });
               //console.debug("should show this deliverable", del);
               check.checkbox.set("disabled", isDisabled);
+              if (isDisabled){
+                hasDisabled = true;
+              }
+              if (canStart){
+                check.checkbox.set("disabled", true);
+              }
               self.blockersPane.addChild(check);
                 
             } else {
@@ -378,10 +412,22 @@ define(
             
           });
           
+          if (hasDisabled && !canStart){
+            this.blockersPane.addChild(new Label({value: coordel.deliverableMessages.blocked, "class": "c-margin-t"}));
+          }
+
+          console.log("canStart", canStart);
+          if (canStart){
+            this.blockersPane.addChild(new Label({value: coordel.deliverableMessages.circular, "class": "c-margin-t"}));
+          }
+          
+          
         }
         
         //show the blockers pane
         this.settingsStack.selectChild(this.blockersPane);
+        
+        
         
         //update the header
         dojo.removeClass(this.detailsMenu, "c-color-highlight");

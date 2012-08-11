@@ -3,6 +3,7 @@ REPORTER = spec
 test: 
 	mocha \
 		--reporter $(REPORTER) \
-		test/*.js
+		test/sort.js
+
 		
 .PHONY: test

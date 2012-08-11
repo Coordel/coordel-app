@@ -200,6 +200,7 @@ define("app/models/ProjectStatus",
         var isPaused = false;
         if (project.status === "ACTIVE" && project.substatus === "PAUSED"){
           isPaused = true;
+          console.log("Project is PAUSED");
           /*
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username){

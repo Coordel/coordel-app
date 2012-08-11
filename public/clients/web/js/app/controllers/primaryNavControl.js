@@ -335,7 +335,7 @@ define(['dojo',
       
       var curFocus = db.focus;
     
-      console.debug("updating primary box counts", curFocus);
+      //console.debug("updating primary box counts", curFocus);
       
       db.focus = "task";
   

@@ -639,11 +639,10 @@ define("app/models/TaskModel",
     	      test = false;
     	      
     	  //tasks that are delegated by the project responsible
-    	  if (t.status === "CURRENT" && t.substatus === "ACCEPTED" && t.responsible === username && t.username !== username && this.db.focus !== "project"){
-    	    console.log("task delegated by project responsible", t.responsible, t.username, t);
+    	  if (t.status === "CURRENT" && (t.substatus === "DELEGATED" || t.substatus === "ACCEPTED") && t.responsible === username && t.username !== username && this.db.focus !== "project"){
+    	    //console.log("task delegated by project responsible", t.responsible, t.username, t);
     	    test = true;
     	  }
-    	      
     	  
     	  return test;
     	  

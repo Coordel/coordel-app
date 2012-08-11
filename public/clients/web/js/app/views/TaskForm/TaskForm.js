@@ -31,11 +31,13 @@ define(
     "app/views/TaskFormAttachments/TaskFormAttachments",
     "app/util/dateFormat",
     "dijit/Menu",
+    "app/util/Sort",
     "app/widgets/ContainerPane",
     "app/views/DeadlineDropDown/DeadlineDropDown",
     "app/views/ReuseDropDown/ReuseDropDown"
+  
     ], 
-  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format, Menu) {
+  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format, Menu, Sort) {
   
   dojo.declare(
     "app.views.TaskForm", 
@@ -931,13 +933,19 @@ define(
           break;
           case "deliverables":
           var dcont = this.taskFormDeliverablesValue;
-          var deliverables = this.task.workspace;
+          
+          //var deliverables = this.task.workspace;
+          
+          if (self.task.workspace && self.task.workspace.length > 0){
+            self.task.workspace = Sort.byBlocking(self.task.workspace, {id: "id", attribute:"blockers"});
+          }
+          
           var dfs = this.taskFormDeliverables;
           //console.debug("should create pills for", this.task.workspace);
           if (dcont.hasChildren()){
             dcont.destroyDescendants();
           }
-          dojo.forEach(deliverables, function(del){
+          dojo.forEach(this.task.workspace, function(del){
             var pdel = new TaskFormPill({
               taskFormField: "deliverables"
             });
@@ -952,32 +960,24 @@ define(
             dojo.connect(pdel.removeValue, "onclick", function(){
               var removeId = pdel.value;
               
-              //first delete the correct pill and remove the deliverable
-              var dKey;
-              dojo.forEach(deliverables, function(d, key){
-                //console.debug("deliverable in remove pill", d);
-                if (removeId === d.id){
-                  //console.debug("removing pill");
-                  //capture which deliverable to remove because deleting it here 
-                  //caused an error
-                  dKey = key;
-                }
+              //first delete the correct pill and then remove the deliverable
+              //console.log("deliverables before filter", self.task.workspace);
+              self.task.workspace = dojo.filter(self.task.workspace, function(d){
+                console.log("d.id", d.id, "removeId", removeId, (d.id !== removeId));
+                return (d.id !== removeId);
               });
-
+              //console.log("deliverables after filter", self.task.workspace);
+              
               //then make sure that the one removed isn't a blocker in any of the remaining
-              dojo.forEach(deliverables, function(d, key){
+              dojo.forEach(self.task.workspace, function(d, key){
                 //make sure what we're deleting doesn't block another deliverable in this task
                 if (d.blockers && d.blockers.length > 0){
-                  dojo.forEach(d.blockers, function(b, key2){
-                    if (removeId === b){
-                      //console.debug("removing blocker from other deliverable");
-                      d.blockers.splice(key2,1);
-                    }
+                  
+                  d.blockers = dojo.filter(d.blockers, function(b){
+                    return (b !== removeId);
                   });
                 }
               });
-              //now delete the deliverable
-              deliverables.splice(dKey,1);
               
               //now if there aren't any deliverables left in the workspace, clear it too
               if (self.task.workspace && self.task.workspace.length === 0){
