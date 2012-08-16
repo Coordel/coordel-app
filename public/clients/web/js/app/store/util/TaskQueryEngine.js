@@ -1,6 +1,7 @@
 define("app/store/util/TaskQueryEngine", 
   ["dojo", 
-  "app/models/ProjectStatus"], function(dojo, pStatus) {
+  "app/models/ProjectStatus",
+  "app/util/Sort"], function(dojo, pStatus, Sort) {
 
 dojo.getObject("app.store.util", true);
 app.store.util.TaskQueryEngine = function(query, options){
@@ -50,6 +51,13 @@ app.store.util.TaskQueryEngine = function(query, options){
   	  query = function(task){
   	    return true;
   	  };
+  	  break;
+  	  case "active":
+  	  query = function(task){
+  	    var t = db.getTaskModel(task, true);
+    	  return !t.isDone() && !t.isCancelled() && applyFilter(task);
+  	  };
+  	  break;
   	  case "calendar":
   	  query = function(task){
   	    var t = db.getTaskModel(task, true);
@@ -261,14 +269,7 @@ app.store.util.TaskQueryEngine = function(query, options){
     		  //this allows setting project deadlines to keep people informed when
     		  //tasks are due when there isn't a specific deadline set for the task
     		  //this makes sure that that deadline can move with the project
-    		  var dead = t.getDeadline();
-    		  if (dead === ""){
-    		    //the only tasks that don't have deadlines are those that are in the private project or
-    		    //in the delegated project and get deadline returns "" for them. set it to 100 years in 
-    		    //the future so it comes last in any sorted list
-    		    dead = "2100-01-01";
-    		  }
-    		  task.contextDeadline = dead;
+    		  task.contextDeadline = t.getDeadline();
     		  //console.debug("contextDeadline", dead, task.deadline, task.name, task._id);
     		});
     		
@@ -289,6 +290,13 @@ app.store.util.TaskQueryEngine = function(query, options){
 				return 0;
 			});
 		}
+		/*
+		//if do the order sort if required
+		if (options && options.order){
+		  results = Sort.byBlocking(results);
+		}
+		*/
+		
 		// now we paginate
 		if(options && (options.start || options.count)){
 			var total = results.length;

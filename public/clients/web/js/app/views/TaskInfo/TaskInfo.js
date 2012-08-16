@@ -46,7 +46,7 @@ define(
       postCreate: function(){
         this.inherited(arguments);
         var self = this;
-        console.log("TaskInfo isTurbo", this.isTurbo);
+        //console.log("TaskInfo isTurbo", this.isTurbo);
         if (this.isTurbo){
           dojo.removeClass(this.turboTimer, "hidden");
           self.interval = setInterval(dojo.hitch(self, self.doCountdown), 1000);

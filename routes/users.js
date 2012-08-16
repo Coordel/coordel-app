@@ -21,9 +21,9 @@ module.exports = function(app, validate){
     var login = req.params.id;
     //console.log("in delete", login);
     User.get(login, function(err, user){
-      console.log("user", user);
+      //console.log("user", user);
       App.get(login.appId, function(err, userApp){
-        console.log('userApp', userApp);
+        //console.log('userApp', userApp);
       });
       
     });

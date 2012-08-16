@@ -2,7 +2,7 @@ define(["dojo"], function(dojo) {
 	return {
 	  
   	sort: function(results, options){
-  	  console.log("results incoming", results);
+  	  //console.log("results incoming", results);
   	  results.sort(function(a, b){
 				for(var sort, i=0; sort = options.sort[i]; i++){
 					var aValue = a[sort.attribute];
@@ -13,12 +13,14 @@ define(["dojo"], function(dojo) {
 				}
 				return 0;
 			});
-			console.log("sort results");
+			//console.log("sort results");
 			return results;
   	},
   	
-  	//this function sorts by execution order
+  	//this function sorts by execution order sort first by other criteria before submitting
     byBlocking: function(list, args){
+      
+      //console.log("list of tasks to sort", list, args);
 
       var resList = [],
     		noBlocker = [],
@@ -35,7 +37,8 @@ define(["dojo"], function(dojo) {
     	//get the tasks that don't have coordinates
     	list.forEach(function(item) {
     		if (!item[options.attribute] || item[options.attribute].length === 0){
-    			noBlocker.push(item);
+    		  //unshift used instead of push to maintain sort order of submitted list
+    			noBlocker.unshift(item);
     		}
     	});
 
@@ -46,23 +49,23 @@ define(["dojo"], function(dojo) {
     	});
 
     	function visit(item){
-    	  console.log("visit", item.name);
+    	  //console.log("visit", item.name);
     		if (!visitMap[item[options.id]]){
     			visitMap[item[options.id]] = true;
 
     			list.forEach(function(l) {
 
-    				if (l[options.attribute] && l[options.attribute].length > 0 && dojo.indexOf(l[options.attribute], item.id) > -1 ){
-    				  //console.log("item.id = l.blocker", _.indexOf(l[options.attribute], item.id));
+    				if (l[options.attribute] && l[options.attribute].length > 0 && dojo.indexOf(l[options.attribute], item[options.id]) > -1 ){
+    				  //console.log("item.id = l.blocker", dojo.indexOf(l[options.attribute], item.id));
     				  //console.log("blocker",l.name,l.id, l[options.attribute], l[options.attribute].length);
     				 	visit(l);	
     				}
     			});	
-    			console.log("adding " + item.name + " to resList");
+    			//console.log("adding " + item.name + " to resList");
     			resList.unshift(item);
     		}
     	}
-    	console.log("res list", resList);
+    	//console.log("res list", resList);
     	return resList;
     }
 	};

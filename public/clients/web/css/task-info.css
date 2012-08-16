@@ -1,3 +1,7 @@
+.task-info-dialog {
+  max-height: 600px;
+}
+
 .task-info {
   font-size: 10px;
   color: #5c5c5c;

@@ -2,11 +2,11 @@
   "version": "",
   "config": {
     "redisOptions": {
-      "host": "dev.coordel.com",
-      "port": 6379,
+      "host": "herring.redistogo.com",
+      "port": 9121,
       "db": "redis-dev",
       "expressSessionPrefix": "sessions",
-      "auth": "password"
+      "auth": "4f76ad5b5c91a1fe1cdd2de070b61da7"
     },
     "couchOptions":{
       "host": "localhost",

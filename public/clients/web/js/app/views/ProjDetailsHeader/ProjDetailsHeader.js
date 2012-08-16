@@ -150,12 +150,21 @@ define([
           dojo.publish("coordel/projViewChange", [{view: "tasks"}]);
           dojo.addClass(this.showTasks, "selected");
           dojo.removeClass(this.showDeliverables, "selected");
+          dojo.removeClass(this.showOrder, "selected");
         });
         
         dojo.connect(this.showDeliverables, "onclick", this, function(){
           dojo.publish("coordel/projViewChange", [{view: "deliverables"}]);
           dojo.removeClass(this.showTasks, "selected");
+          dojo.removeClass(this.showOrder, "selected");
           dojo.addClass(this.showDeliverables, "selected");
+        });
+        
+        dojo.connect(this.showOrder, "onclick", this, function(){
+          dojo.publish("coordel/projViewChange", [{view: "order"}]);
+          dojo.removeClass(this.showTasks, "selected");
+          dojo.removeClass(this.showDeliverables, "selected");
+          dojo.addClass(this.showOrder, "selected");
         });
         
         dojo.connect(this.projBackToFocus, "onClick", this, function(){

@@ -111,8 +111,16 @@ define(["dojo",
             	var query = blocking.query(queryArgs);
             	
             	dojo.when(query, function(res){
+            	  var map = {};
+            	  var toReturn = [];
+            	  dojo.forEach(res, function(b){
+            	    if (!map[b._id]){
+            	      map[b._id] = true;
+            	      toReturn.push(b);
+            	    }
+            	  });
             	  //console.log("blocking", res);
-            	  def.callback(res);
+            	  def.callback(toReturn);
             	});
             	
             	//console.debug("returning getBlocking");
@@ -133,7 +141,7 @@ define(["dojo",
             	var query = blocking.query(queryArgs);
             	
             	dojo.when(query, function(res){
-            	  //console.log("blocking", res);
+            	  console.log("blocking", res);
             	  def.callback(res);
             	});
             	

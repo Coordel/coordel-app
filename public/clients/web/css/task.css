@@ -86,6 +86,24 @@ border-bottom: 1px solid #a3aab1;
   opacity: 0.4;
 }
 
+.tasklist-item .meta-turbo{
+  display:inline-block;
+  float: right;
+  margin: 0 4px;
+  background: url(images/icons/meta-turbo.png) center center no-repeat;
+  opacity: 0.4;
+}
+
+.blocked-task {
+	background: url(images/icons/blocked-task.png) no-repeat center center;
+	height: 16px;
+	width: 16px;
+  margin-top: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+
 
 
 .task-actions-holder {
@@ -252,6 +270,10 @@ border-bottom: 1px solid #a3aab1;
   /* disabled */
 
   background-position: -100px;
+}
+
+.coordel .tasklist-item.block-glow .dijitCheckBoxDisabled{
+  background-image: url('images/checkboxStates-blocked.png');
 }
 .coordel .tasklist-item .dijitCheckBoxCheckedDisabled {
   /* disabled but checked */

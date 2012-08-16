@@ -599,7 +599,7 @@ define(["dojo",
               var def = new dojo.Deferred();
               store.get(id).then(
                 function(doc){
-                  //console.log("get the object in get");
+                  console.log("get the object in get");
                   def.resolve(doc);
                 },
                 function(err){

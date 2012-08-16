@@ -250,8 +250,7 @@ define(
         //if this is blocked, checkboxes are disabled
         if (t.isBlocked()){
           this.taskCheckbox.set("disabled", true);
-          
-          
+          dojo.addClass(this.domNode, 'block-glow');
         }
         
         //if a task is blocked because it's paused, add paused meta info so the user knows
@@ -878,8 +877,17 @@ define(
           var p = t.p.project;
               
           dojo.when(p, function(project){
-            if (!project.isMyDelegated && !project.isMyPrivate){
-              //console.log("show project name", t);
+            console.log("current project", db.projectStore.currentProject);
+            console.log("task project", t.project);
+            console.log("focus", self.focus);
+            var show = false;
+            if (!project.isMyDelegated && !project.isMyPrivate && self.focus !== "extended" && self.focus !== "project"){
+              show = true;
+            } else if (self.focus === "extended" && t.project !== db.projectStore.currentProject){
+              show = true;
+            }
+            
+            if (show){
               dojo.removeClass(self.metaProjectInfo, "hidden");
               self.metaProjectInfo.innerHTML = project.name + " : ";
             }

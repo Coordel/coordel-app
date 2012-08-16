@@ -151,8 +151,12 @@ define("app/models/TaskModel",
           }
     
         } else if (!t.hasDeadline() && (t.isPrivate() || t.isDelegated())) {
-          deadline = "";
+          //the only tasks that don't have deadlines are those that are in the private project or
+  		    //in the delegated project and get deadline returns "" for them. set it to 200 years in 
+  		    //the future so it comes last in any sorted list
+  		    deadline = "2200-01-01";
         }
+        
         //console.log("deadline to return", deadline);
         return deadline;
       },

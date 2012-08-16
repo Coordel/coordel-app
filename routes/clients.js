@@ -12,7 +12,7 @@ module.exports = function(app, validate){
     User.get(req.session.auth.userId, function(err, user){
       if (err) res.redirect('/logout');
       req.session.auth.appId = user.appId;
-      console.log("user.appId", req.session.auth.appId);
+      //console.log("user.appId", req.session.auth.appId);
       //need to validate that the users contacts are up to date
       App.updateContacts(user.appId, function(err, reply){
         //console.log("USER SESSION", req.session);

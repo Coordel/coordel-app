@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.52",
+  version: "0.1.65",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -37,6 +37,44 @@ module.exports = {
           emit(
             [doc.user, 1], doc
           );
+        }
+      }
+    },
+    
+    userLicenses: {
+      map: function(doc){
+        if (doc.docType === "license"){
+         
+          emit(
+            [doc.username, doc.type], doc
+          );
+         
+        }
+      }
+    },
+    
+    paymentLicenses: {
+      map: function(doc){
+        if (doc.docType === "license" && doc.paymentid){
+         
+          emit(
+            [doc.paymentid], doc
+          );
+         
+        }
+      }
+    },
+    
+    userLicenseAllocations: {
+      map: function(doc){
+        if (doc.docType === "license"){
+          if (doc.allocation && doc.allocation > 0){
+            doc.allocation.forEach(function(a){
+              emit(
+                [a.user], doc
+              );
+            });
+          }
         }
       }
     },
@@ -491,6 +529,24 @@ module.exports = {
       }
     },
     
+    projectBlocking: {
+      map: function (doc){
+
+      	if (doc.docType == "task"){
+
+      	  if (doc.blocking){
+      	    doc.blocking.forEach(function(id){
+        			emit(
+        				[doc.project],
+        				{
+        				  "_id": id
+        			});
+        		});
+      	  }
+      	}
+      }
+    },
+    
     /******************************* ROLES *****************************************************/
     roles: {
       map: function(doc){
@@ -602,8 +658,8 @@ module.exports = {
       		if (doc.blocking){
       		  doc.blocking.forEach(function(block){
       		    emit(
-          			[block],
-          			{"_id": doc._id}
+          			[doc._id, block],
+          			{"_id": block}
           		);
       		  });
       		}
@@ -626,7 +682,7 @@ module.exports = {
       		if (doc.coordinates){
       		  doc.coordinates.forEach(function(coord){
               emit(
-          			[doc._id],
+          			[doc._id, coord],
           			{"_id": coord}
           		);
             });
@@ -1165,7 +1221,7 @@ module.exports = {
     allTasks: {
       map: function (doc){
         if (doc.docType === "task"){
-          emit(["1"], doc);
+          emit(["1", doc.name, doc._id], doc);
         }
       }
     },

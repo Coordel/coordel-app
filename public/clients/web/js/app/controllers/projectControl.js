@@ -18,7 +18,8 @@ define([
   "app/views/ProjectForm/ProjectForm",
   "app/views/ConfirmDialog/ConfirmDialog",
   "app/views/ProjectDeliverable/ProjectDeliverable",
-  "app/views/QuickEntry/QuickEntry"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable, QuickEntry) {
+  "app/views/QuickEntry/QuickEntry",
+  "app/util/Sort"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable, QuickEntry, Sort) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -265,6 +266,9 @@ define([
           case "deliverables":
             this.showDeliverables();
             break;
+          case "order":
+            this.showOrder();
+            break;
         }
       },
       
@@ -300,6 +304,56 @@ define([
           
         }
       
+      },
+      
+      showOrder: function(){
+        var self = this;
+        var store = db.projectStore;
+        var cont = dijit.byId("projTasksMain");
+        if (cont.hasChildren()){
+          cont.destroyDescendants();
+        }
+        
+        var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
+
+        //get the tasks with usual status
+        var ext = db.projectStore.loadExtendedTasks(self.project._id);
+        
+        dojo.when(ext, function(tasks){
+          
+          if (tasks.length === 0){
+            this.emptyGroup = new Empty({
+              emptyTitle: coordel.empty.projectDeliverablesTitle,
+              emptyDescription: coordel.empty.projectDeliverablesText,
+              imageCss: "project-order"
+            });
+            cont.addChild(this.emptyGroup);
+          } else {
+            //sort the tasks by deadline
+            //need to first make sure the contextDeadline is set
+            dojo.forEach(tasks, function(task){
+              var t = db.getTaskModel(task, true);
+              task.contextDeadline = t.getDeadline();
+            });
+            tasks = Sort.sort(tasks, {sort:[{attribute: "contextDeadline"}]});
+            tasks = Sort.byBlocking(tasks);
+            console.log("sorted tasks", tasks);
+            
+            //console.debug("_addGroup tasks", header, tasks, self.focus );
+            //this function add
+            var group = new tlg({
+              header: "Extended Tasks",
+              tasks: tasks,
+              focus: "project",
+              db: db,
+              showProjectLabel: true
+            });
+
+            cont.addChild(group);
+         
+          }
+        });
+
       },
       
       _showQuickEntry: function(){

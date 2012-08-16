@@ -60,6 +60,7 @@ define(['dojo',
 	    
 	    def.then(function(res){
 	      console.log("DATABASE LOADED: ", res, db.appStore.username);
+	      //db.projectStore.loadExtendedTasks("3c0b0b22b121ab3c3ae522593cbfab6a");
 	      app.username = db.appStore.username;
 	      app.showApp();
 	      var alerts = db.getAlerts(app.username);
