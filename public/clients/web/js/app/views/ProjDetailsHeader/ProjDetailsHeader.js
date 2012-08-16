@@ -104,9 +104,6 @@ define([
           dojo.style(this.showView.domNode, {"margin-right": "0"});
         }
         
-        
-        
-        
         //handle button clicks
         //edit the project
         dojo.connect(this.editProject, "onClick", this, function(){
@@ -148,23 +145,17 @@ define([
         //views
         dojo.connect(this.showTasks, "onclick", this, function(){
           dojo.publish("coordel/projViewChange", [{view: "tasks"}]);
-          dojo.addClass(this.showTasks, "selected");
-          dojo.removeClass(this.showDeliverables, "selected");
-          dojo.removeClass(this.showOrder, "selected");
+          this.setView("tasks");
         });
         
         dojo.connect(this.showDeliverables, "onclick", this, function(){
           dojo.publish("coordel/projViewChange", [{view: "deliverables"}]);
-          dojo.removeClass(this.showTasks, "selected");
-          dojo.removeClass(this.showOrder, "selected");
-          dojo.addClass(this.showDeliverables, "selected");
+          this.setView("deliverables");
         });
         
         dojo.connect(this.showOrder, "onclick", this, function(){
           dojo.publish("coordel/projViewChange", [{view: "order"}]);
-          dojo.removeClass(this.showTasks, "selected");
-          dojo.removeClass(this.showDeliverables, "selected");
-          dojo.addClass(this.showOrder, "selected");
+          this.setView("order");
         });
         
         dojo.connect(this.projBackToFocus, "onClick", this, function(){
@@ -172,6 +163,27 @@ define([
         });
         
 
+      },
+      
+      setView: function(view){
+        console.log("view", view);
+        switch (view) {
+          case "tasks":
+          dojo.addClass(this.showTasks, "selected");
+          dojo.removeClass(this.showDeliverables, "selected");
+          dojo.removeClass(this.showOrder, "selected");
+          break;
+          case "deliverables":
+          dojo.removeClass(this.showTasks, "selected");
+          dojo.removeClass(this.showOrder, "selected");
+          dojo.addClass(this.showDeliverables, "selected");
+          break;
+          case "order":
+          dojo.removeClass(this.showTasks, "selected");
+          dojo.removeClass(this.showDeliverables, "selected");
+          dojo.addClass(this.showOrder, "selected");
+          break;
+        }
       }
   });
   return app.views.ProjDetailsHeader;    

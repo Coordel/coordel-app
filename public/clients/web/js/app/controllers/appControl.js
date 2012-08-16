@@ -769,6 +769,9 @@ define(['dojo',
   				      
   				  //console.debug("projects in change test", projects);
   				  
+  				  console.log("project change id", chg._id);
+  				  console.log("current project", db.projectStore.currentProject);
+  				  
   				  //need to check if this is new because it may have been saved several times before it 
   				  //got to this user so its isNew property might be false
   				  dojo.forEach(projects, function(proj){

@@ -19,7 +19,8 @@ define([
   "app/views/ConfirmDialog/ConfirmDialog",
   "app/views/ProjectDeliverable/ProjectDeliverable",
   "app/views/QuickEntry/QuickEntry",
-  "app/util/Sort"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable, QuickEntry, Sort) {
+  "app/util/Sort",
+   "app/views/ProjDetailsHeader/ProjDetailsHeader"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable, QuickEntry, Sort,pdh) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -28,6 +29,8 @@ define([
       focus: "project",
       
       tabFocus: "streamTab",
+      
+      view: "tasks",
       
       observeHandlers: [],
       
@@ -43,6 +46,9 @@ define([
         db.focus = this.focus;
         this.project = project;
         var self = this;
+        
+ 
+        
         
         if (this.showRightColumnHandler){
           dojo.unsubscribe(this.showRightColumnHandler);
@@ -80,13 +86,25 @@ define([
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
           layout.showLayout(project);
           
-
+          var headContain = dijit.byId("mainLayoutHeaderCenter");
+          //add the header control
+          if (headContain.hasChildren()){
+            headContain.destroyDescendants();
+          }
           
+          self.head = new pdh({project: project});
+          
+          headContain.addChild(self.head);
+          
+          self.head.setView(self.view);
+
           self._showQuickEntry();
     	    var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
           //check if we should show the right column
     	    self.setRightColumn(showColumn);
-          self.showTasks();
+    	    
+    	    
+          self.setView(self.view);
         
           //handle click of the people and roles tabs
           self.connections.push(dojo.connect(dojo.byId("projInfoTab"), "onclick", this, function(evt){
@@ -112,7 +130,7 @@ define([
           
           //handle click of sendProjMessageButton
           self.connections.push(dojo.connect(dijit.byId("projSendMessageButton"), "onClick", this, function(){
-            console.log("project send message button clicked");
+            //console.log("project send message button clicked");
 
             var node = dijit.byId("projMessageText");
             var message = node.get("value");
@@ -147,7 +165,7 @@ define([
       _loadProject: function(){
         var self = this;
         
-        console.log("in _loadProject", self.project._id);
+        //console.log("in _loadProject", self.project._id);
         var def = new dojo.Deferred();
         var defList = new dojo.DeferredList([
            db.projectStore.loadProject(self.project._id),
@@ -259,7 +277,11 @@ define([
       },
       
       handleViewChange: function(args){
-        switch (args.view){
+        this.setView(args.view);
+      },
+      
+      setView: function(view){
+        switch (view){
           case "tasks":
             this.showTasks();
             break;
@@ -279,6 +301,8 @@ define([
         if (cont.hasChildren()){
           cont.destroyDescendants();
         }
+        
+        this.view = "deliverables";
         
         var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
 
@@ -310,9 +334,12 @@ define([
         var self = this;
         var store = db.projectStore;
         var cont = dijit.byId("projTasksMain");
+        this.view = "order";
         if (cont.hasChildren()){
           cont.destroyDescendants();
         }
+        
+        
         
         var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
 
@@ -337,12 +364,12 @@ define([
             });
             tasks = Sort.sort(tasks, {sort:[{attribute: "contextDeadline"}]});
             tasks = Sort.byBlocking(tasks);
-            console.log("sorted tasks", tasks);
+            //console.log("sorted tasks", tasks);
             
             //console.debug("_addGroup tasks", header, tasks, self.focus );
             //this function add
             var group = new tlg({
-              header: "Extended Tasks",
+              header: "Execution Order",
               tasks: tasks,
               focus: "project",
               db: db,
@@ -388,7 +415,7 @@ define([
         var store = db.projectStore;
         var self = this;
         var showEmpty = true;
-        
+        this.view = "tasks";
         //console.log("showing tasks in project control");
         
         //make sure to delete any groups that are there and clear the empty group
@@ -568,7 +595,7 @@ define([
       
       showRoles: function(){
         
-        console.log("showRoles");
+        //console.log("showRoles");
   
         //first get the container
         var cont = dijit.byId("projDetailsRoles"),
@@ -602,9 +629,9 @@ define([
           }
         }, this);
         
-        console.debug("responsible", own);
-        console.debug("participants", part);
-        console.debug("followers", follow);
+        //console.debug("responsible", own);
+        //console.debug("participants", part);
+        //console.debug("followers", follow);
         
         //add the responsible
         cont.addChild(new Assign({

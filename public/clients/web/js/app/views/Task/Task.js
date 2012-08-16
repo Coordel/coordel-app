@@ -478,7 +478,7 @@ define(
         //wire up the actions menu button
         dojo.connect(this.chooseAction ,"onClick", this, function(){
           
-          console.debug("chooseAction clicked");
+          //console.debug("chooseAction clicked");
           //set up the menu for the actions button
           
           var menu = new ActionsMenu({
@@ -595,7 +595,7 @@ define(
       
       doTaskAction: function(args){
         if (args.action === "reuse" && args.task._id === this.task._id){
-          console.log("show the form");
+          //console.log("show the form");
           var form = new TaskForm({isNew: false, task: args.task});
           var cont = this.blueprintFormContainer;
           if (cont.hasChildren()){
@@ -877,9 +877,7 @@ define(
           var p = t.p.project;
               
           dojo.when(p, function(project){
-            console.log("current project", db.projectStore.currentProject);
-            console.log("task project", t.project);
-            console.log("focus", self.focus);
+  
             var show = false;
             if (!project.isMyDelegated && !project.isMyPrivate && self.focus !== "extended" && self.focus !== "project"){
               show = true;
