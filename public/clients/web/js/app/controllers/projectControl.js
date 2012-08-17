@@ -158,7 +158,7 @@ define([
         
         this.projectNotifyHandler = dojo.subscribe("coordel/projectNotify", this, "handleProjectNotify");
         
-        //this.taskNotifyHandler = dojo.subscribe("coordel/taskNotify", this, "handleTaskNotify");
+        this.taskNotifyHandler = dojo.subscribe("coordel/taskNotify", this, "handleTaskNotify");
         
       },
       
@@ -250,27 +250,36 @@ define([
       },
       
       handleTaskNotify: function(args){
-        console.log("handleTaskNotify", args);
+        //console.log("handleTaskNotify", args);
         var self = this;
         if (self.project._id === args.task.project){
-          if (self.tabFocus === "rolesTab"){
-            self.showRoles();
+          //since we aren't observing the ordered view since it changes 
+          //need to redraw if something happens
+          if (self.view === "order"){
+            self.showOrder();
           }
         }
       },
       
       handleProjectNotify: function(args){
-        console.log("handleProjectNotify", args);
+        //console.log("handleProjectNotify", args);
         if (this.project._id === args.project._id){
           this.project = args.project;
+          //if we are in the show extended view, refresh it in case there is something we need to know
+    	    if (this.view === "order"){
+    	      this.showOrder();
+    	    }
         }
+        
         var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
         //check if we should show the right column
   	    this.setRightColumn(showColumn);
+  	    
+  	    
       },
       
       handleStreamNotify: function(args){
-        console.log("stream notify", args);
+        //console.log("stream notify", args);
         if (args.message.project === this.project._id){
           this.showStream();
         }
@@ -369,7 +378,7 @@ define([
             //console.debug("_addGroup tasks", header, tasks, self.focus );
             //this function add
             var group = new tlg({
-              header: "Execution Order",
+              header: coordel.executionOrder,
               tasks: tasks,
               focus: "project",
               db: db,
@@ -394,6 +403,10 @@ define([
             args.entry.project = self.project._id;
             var t = db.getTaskModel(args.entry, true);
             t.add(args.entry);
+            
+            if (self.view === "order"){
+              self.showOrder();
+            }
             
             //dijit.byId("projTasksBorderContainer").resize();
           },

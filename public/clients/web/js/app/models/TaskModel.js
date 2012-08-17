@@ -1293,9 +1293,14 @@ define("app/models/TaskModel",
         var qBlocking = db.taskStore.getBlocking(task._id);
         
         dojo.when(qBlocking, function(blocking){
+        
+      
           console.log("got blocking for task", task.name, blocking);
+
           if (task.coordinates && task.coordinates.length > 0){
             console.log("task has coordinates entry");
+            //since this task has blockers (coordinates) then we need to make sure that all of the blockers
+            //have blocking entries
             var query;
             //if (task.coordinates.length > 0){
               //console.log("has more than 0 coordinates");
@@ -1304,7 +1309,7 @@ define("app/models/TaskModel",
               //make a blocking entry for each
               query = db.taskStore.getBlockers(task._id);
               dojo.when(query, function(blockers){
-  
+                  
                 //iterate over the existing blocking tasks to make sure they are still blocked
                 //if not remove them
                 dojo.forEach(blocking, function(item){
@@ -1328,14 +1333,18 @@ define("app/models/TaskModel",
                 });
                 
                 //iterate over the existing blockers to make sure there are blocking entries
+                //and that all username,delegator,responsible are following the project
                 dojo.forEach(blockers, function(item){
                   if (!item.blocking){
                     item.blocking = [];
                   }
-                  console.log("testing if this has the blocking item", item.blocking, task._id);
+                            
+                  console.log("testing if this has the blocking item", item.blocking, task._id, task.name);
+                  //the item is what is blocking this task. make sure item.blocking has this task._id
                   if (dojo.indexOf(item.blocking, task._id) === -1){
                     console.log(task.name + " is now blocked, making blocking entry: ", item.name);
                     item.blocking.push(task._id);
+                    
                     var t = db.getTaskModel(item, true);
 
                     item = t.addActivity({
@@ -1374,6 +1383,8 @@ define("app/models/TaskModel",
             //}
           }
         });
+        
+        
         
   
         /*

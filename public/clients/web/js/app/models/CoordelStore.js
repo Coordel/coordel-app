@@ -736,7 +736,6 @@ define(["dojo",
               if (isObject){
                 obj = task;
               } else {
-                //console.debug("getTaskModel is loading the task");
                 if (focus === "task"){
                   obj = db.taskStore.store.get(task);
                 } else if (focus === "project") {

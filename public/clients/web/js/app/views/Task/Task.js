@@ -172,6 +172,31 @@ define(
         }
       },
       
+      handleBlock: function(args){
+        var list = args.list;
+        var self = this;
+        dojo.forEach(list, function(id){
+          //console.log("task", self.task._id, "id", id);
+          if (self.task._id === id){
+            if (args.show){
+              //console.debug("show block: ", self.task.name);
+              if (self.domNode){
+                 dojo.addClass(self.domNode, "block");
+              }
+
+            } else {
+              //console.debug("hide glow: ", self.task.name);
+              if (self.domNode){
+                dojo.removeClass(self.domNode, "block");
+              }
+
+            }
+
+          }
+        });
+        
+      },
+      
       handleTurboDone: function(args){
         if (this.task._id === args.id){
           if (args.isDone){
@@ -217,6 +242,9 @@ define(
         
         //handle making this task glow
         this.subHandlers.push(dojo.subscribe("coordel/glow", this, "handleGlow"));
+        
+        //handle making this task glow
+        this.subHandlers.push(dojo.subscribe("coordel/block", this, "handleBlock"));
         
         //handle showing and hiding the turbo done icon
         this.subHandlers.push(dojo.subscribe("coordel/turboDone", this, "handleTurboDone"));
@@ -285,17 +313,6 @@ define(
     
         }
         
-        /*commented out because the task user is added in _setMetaInfo
-        //if this is delegated, who was delegated the task as metainfo
-        if (t.isDelegated() && this.focus !== "contact"){
-          //console.debug("it's delegated");
-          var con = db.contactFullName(t.username);
-          
-          //if this is my task, then I need to see who it's from
-          
-          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(con  + " : ");
-        }
-        */
         
         //hide the delete button. it only shows on delegated and private tasks
         dojo.query(".delete", this.domNode).addClass("hidden");
@@ -400,6 +417,8 @@ define(
           dojo.query(".delete", this.domNode).addClass("hidden");
           dojo.query(".stream", this.domNode).addClass("task-actions-corner-left");
         }
+        
+        
         
         //wire up the task checkbox so clicking it submits to approve if not project responsible
         //or approves if project responsible. There won't be a message when checking the box
@@ -515,8 +534,6 @@ define(
           var proj = db.projectStore.store.get(t.project);
           
           dojo.publish("coordel/projectAction", [{action: "participate", project: proj, validate: false}]);
-          
-          //proj.participate(db.username(), proj.project);
      
         });
 
@@ -561,17 +578,8 @@ define(
         
        });
         
-        //wire up the stream button
-        /*
-        dojo.connect(this.showStream, "onclick", this, function(){
-          //console.debug("removing task", this.task);
-          dojo.publish("coordel/showTaskStream", [{name:"task", id: this.task._id}]);
-          
-        });
-        */
         
         //wire up the info button
-        
         dojo.connect(this.showInfo, "onclick", this, function(){
           //console.debug("task in showInfo", this.task);
           var i;
@@ -588,6 +596,19 @@ define(
           }
           cont.addChild(i);
           this.infoDialog.show();
+        });
+        
+        //wire up the info button so that if this is blocking it publishes to show what's blocking it
+        dojo.connect(this.showInfo, "onmouseover", this, function(){
+          if (t.blocking && t.blocking.length){
+            dojo.publish("coordel/block", [{list: t.blocking, show: true}]);
+          }
+        });
+        
+        dojo.connect(this.showInfo, "onmouseout", this, function(){
+          if (t.blocking && t.blocking.length){
+            dojo.publish("coordel/block", [{list: t.blocking, show: false}]);
+          }
         });
         
         
@@ -879,10 +900,11 @@ define(
           dojo.when(p, function(project){
   
             var show = false;
-            if (!project.isMyDelegated && !project.isMyPrivate && self.focus !== "extended" && self.focus !== "project"){
+            if (!project.isMyDelegated && !project.isMyPrivate && self.focus !== "project"){
               show = true;
-            } else if (self.focus === "extended" && t.project !== db.projectStore.currentProject){
+            } else if (self.focus === "project" && t.project !== db.projectStore.currentProject){
               show = true;
+              dojo.removeClass(self.linkIcon,"hidden");
             }
             
             if (show){

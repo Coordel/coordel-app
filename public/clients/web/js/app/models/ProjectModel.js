@@ -175,6 +175,7 @@ define("app/models/ProjectModel",
     		var has = (dojo.indexOf(project.users, username) > -1);
         
         if (!has){
+          console.log("didn't have user in project");
           project.users.push(username);
 
       		if (!project.assignments){
@@ -343,6 +344,8 @@ define("app/models/ProjectModel",
   	        hasUser = true;
   	      }
   	    });
+  	    
+  	    
   	    
   	    if (!hasUser){
   	      //if this is my delegated project, the project invitation process is skipped and the

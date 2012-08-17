@@ -134,6 +134,18 @@ define("app/models/ProjectStatus",
         return isDef;
       },
       
+      
+      _inProject: function(project, username){
+        //this is here to make sure that only a users projects show up in the list
+        //the stores might have other projects from links
+        var valid = false;
+        valid = dojo.some(project.users, function(u){
+          return u === username;
+        });
+        return valid;
+      },
+    
+      
       isActive: function(project, username){
         
         if (project === undefined || project.name === undefined){
@@ -194,20 +206,21 @@ define("app/models/ProjectStatus",
         return test;
       },
       
-      isPaused: function(project){
+      isPaused: function(project, username){
         //returns all projects that have been paused by the project responsible
         //if it's ACTIVE PAUSED and i have an assignment in the project, it's paused
         var isPaused = false;
         if (project.status === "ACTIVE" && project.substatus === "PAUSED"){
-          isPaused = true;
-          console.log("Project is PAUSED");
-          /*
+          
+          //console.log("Project is PAUSED");
+          
+          
           dojo.forEach(project.assignments, function(assign){
             if (username === assign.username){
               isPaused = true;
             }
           });
-          */
+        
         }
         return isPaused;
       },

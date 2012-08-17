@@ -52,7 +52,7 @@ define(["dojo",
             },
             
             loadExtendedTasks: function(project){
-              console.log("project", project);
+              //console.log("project", project);
               //use this function to get the project tasks in execution order
               //we need to load the tasks and blockers
               //if the blockers are blocked, we need to keep loading until we find an unblocked task
@@ -87,10 +87,10 @@ define(["dojo",
               
                 if (unblocked.length) {
                   //all is good, there is an unblocked task in the blockers and it's in this project
-                  console.log("there were unblocked tasks in this project, return the tasks");
+                  //console.log("there were unblocked tasks in this project, return the tasks");
                   defBlockReady.callback([]);
                 } else {
-                  console.log("there were no unblocked tasks in this project, extend");
+                  //console.log("there were no unblocked tasks in this project, extend");
                   var blockerMap = {}; //this map will list the loaded blockers that have already been tested
                   var extra = []; //this array will hold the extra tasks needed to get to an unblocked task
                   var foundUnblocked = false; //this is a flag to let us know if an unblocked task has been found
@@ -117,35 +117,35 @@ define(["dojo",
                     //so, if this task hasn't already been visited, let's give it a look
                     if (!blockerMap[item._id]){
 
-                      console.log("visit", item.name, item._id);
+                      //console.log("visit", item.name, item._id);
                   	  blockerMap[item._id] = true;
 
                       //if this one has blockers load them
                       if (item.coordinates && item.coordinates.length > 0){
-                        console.log(item.name + "had blockers");
+                        //console.log(item.name + "had blockers");
 
                         //load the blocker
                         dojo.when(self.getTaskBlockers(item._id), function(get){
 
                           dojo.forEach(get, function(g){
-                            console.log("visit this one (g) " + g.name + " for " + item.name);
+                            //console.log("visit this one (g) " + g.name + " for " + item.name);
                             //visit any of this task's blockers to see if they have blockers
                             visitFuncs.push(visit(g)); 
                           });
                           if (visitFuncs.length){
-                            console.log("waiting for visited blockers " + item.name);
+                            //console.log("waiting for visited blockers " + item.name);
                             //since there were blockers we need to test them before this visit is over
                             var visitList = new dojo.DeferredList(visitFuncs);
                             dojo.when(visitList, function(res){
-                              console.log("done waiting for visited blockers" + item.name);
-                              console.log("adding " + item.name + " to extra list");
+                              //console.log("done waiting for visited blockers" + item.name);
+                              //console.log("adding " + item.name + " to extra list");
                               //no blockers so good to add this item to the extra list
                               extra.unshift(item);
                               //now we're sure we're done with the original item
                               visitDef.callback();
                             });
                           } else {
-                            console.log("adding " + item.name + " to extra list");
+                            //console.log("adding " + item.name + " to extra list");
                             //no blockers so good to add this item to the extra list
                             extra.unshift(item);
                             //no visits to handle, so we're done
@@ -155,10 +155,10 @@ define(["dojo",
 
                       } else {
                         
-                        console.log("had unblocked");
+                        //console.log("had unblocked");
                         foundUnblocked = true;
 
-                        console.log("adding " + item.name + " to extra list");
+                        //console.log("adding " + item.name + " to extra list");
                         //no blockers so good to add this item to the extra list
                         extra.unshift(item);
 
@@ -179,7 +179,7 @@ define(["dojo",
                   //handle all the visits from the original blockers
                   var defFuncs = new dojo.DeferredList(funcs);
                   defFuncs.then(function(funcsRes){
-                    console.log("blocker functions done", funcsRes);
+                    //console.log("blocker functions done", funcsRes);
                     //since we're done with any originals and recursive blockers, send back any
                     //extras that we've found (extras are tasks that aren't in this project and that
                     //allow the order of execution to be determined)
@@ -193,7 +193,7 @@ define(["dojo",
                   if (res.length){
                     extTasks = extTasks.concat(res);
                   }
-                  console.log("projectStore extended tasks", extTasks);
+                  //console.log("projectStore extended tasks", extTasks);
 
                   //return them
                   def.callback(extTasks);

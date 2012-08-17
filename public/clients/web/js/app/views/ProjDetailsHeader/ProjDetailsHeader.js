@@ -166,7 +166,7 @@ define([
       },
       
       setView: function(view){
-        console.log("view", view);
+        //console.log("view", view);
         switch (view) {
           case "tasks":
           dojo.addClass(this.showTasks, "selected");
