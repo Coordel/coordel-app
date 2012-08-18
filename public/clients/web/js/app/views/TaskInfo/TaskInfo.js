@@ -173,26 +173,40 @@ define(
         if (t.isDone() || t.isCancelled()){
           dojo.addClass(self.infoDeadline, "hidden");
         } else {
-          //use the getDeadline for a task
-          var dead = t.getDeadline();
-          if (dead === ""){
-            //this was a private project so set it to none
-            dojo.addClass(self.infoDeadline, "hidden");
-          } else {
-            console.log("there was a deadline", dead);
-            var showTime = false,
-                test = dead.split("T");
-            if(test.length > 1){
-              showTime = true;
-              console.log("showTime is true");
+          
+        
+          
+      
+          t.getContextDeadline().then(function(dead){
+           
+            if (dead === "" || dead === "2200-01-01"){
+              //this was a private project so set it to none
+              dojo.addClass(self.infoDeadline, "hidden");
+            } else {
+              
+              var showTime = false,
+                  test = dead.split("T");
+              if(test.length > 1){
+                showTime = true;
+                console.log("showTime is true");
+              }
+              self.deadline.set("value" , dt.deadline(dead, showTime));
+              t.isOverdue().then(function(overdue){
+                if (overdue){
+                  console.log("it's overdue");
+                  dojo.addClass(self.infoDeadline, "c-color-error");
+                }
+              });
             }
-            self.deadline.set("value" , dt.deadline(dead, showTime));
-          }
+          });
+          
 
-          if (t.isOverdue()){
-            dojo.addClass(self.deadline.domNode, "c-color-error");
-          }
+         
         }
+        
+        //duration
+        //if the task has blockers, then show any duration the user has set
+        
         
         
         //delegator

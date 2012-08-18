@@ -217,7 +217,8 @@ define(
         this.inherited(arguments);
         
         var username = db.username(),
-            t = db.getTaskModel(this.task, true);
+            t = db.getTaskModel(this.task, true),
+            self = this;
             
         if ((this.task.username !== username && !t.isSubmitted()) || (this.task.responsible !==username && t.isSubmitted())){
           
@@ -261,8 +262,10 @@ define(
         }
         
         //set the deadline. not all tasks will have deadlines, so project deadline will default if there is one
-        //except for delegated and private projects (unless a deadline is set on the task)
+        //except for delegated and private projects (unless a deadline is set on the task
         this._setDeadline();
+        
+        
         
         if (t.isPending()){
           //disable the checkbox
@@ -914,95 +917,88 @@ define(
           });
           
         }
+        
       },
       
       _setDeadline: function(){
-        
-        //console.debug("in _setDeadline", this);
+
         var t = db.getTaskModel(this.task, true);
 
         var has = t.hasDeadline(),
             pdead = t.projDeadline(),
+            contextDeadline = this.task.contextDeadline,
             deadline = "",  //if no project deadline, it's blank (this will be the case with delegated and private tasks)
             past = false, //if it does have a deadline, then need to make sure that it gets colored active
             today = false,
             showTime = false,
-            now = new Date();
-   
-        //has deadline
-        //console.debug("_setDeadline", has, pdead, this);
+            now = new Date(),
+            self = this; 
+
         //don't update the deadline for done and cancelled tasks
         if (t.isDone() || t.isCancelled()){
           return;
         }
-    
-        //check if this has a deadline
-        if (has){
+        
+        
+        
+        
+        if (contextDeadline){
+          console.log("had contextDeadline", t.name, contextDeadline);
+          set();
+        } else {
           
-          var test = t.deadline.split("T");
+          t.getContextDeadline().then(function(dead){
+            console.log("derived contextDeadline", t.name, dead);
+            contextDeadline = dead;
+            set();
+          });
           
-          if (test.length>1){
-            showTime = true;
+        }
+        
+        
+        function set(){
+          console.log("in set", contextDeadline, t.name);
+          //the getDeadline function returns 2200-01-01 when derived
+          if (contextDeadline === "2200-01-01"){
+            contextDeadline = "";
+          } else {
+            var test = contextDeadline.split("T");
+
+            if (test.length>1){
+              showTime = true;
+            }
           }
-          
+
+
+
           //check if this deadline has passed?
-          var c = dojo.date.compare(stamp.fromISOString(t.deadline), now, "date"); 
+          var c = dojo.date.compare(stamp.fromISOString(contextDeadline), now, "date"); 
           if (showTime){
-            c = dojo.date.compare(stamp.fromISOString(t.deadline), now, "datetime");
+            c = dojo.date.compare(stamp.fromISOString(contextDeadline), now, "datetime");
           }
-          
+
           if ( c < 0){
             past = true;
           } else if (c === 0){
             today = true;
           }
-          
-          deadline = dt.deadline(t.deadline, showTime);
-          
-          //has deadline
-          if (past) {
-            // deadline past so add error color
-            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-error").empty().addContent(deadline);
-          } else if(today) {
-            //deadline today and set explicitly so set color normal
-            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").empty().addContent(deadline);
-          } else {
-            //deadline not past but deadline set explicitly so set color active
-            dojo.query(".meta-deadline", this.domNode).removeClass("hidden").empty().addContent(deadline);
-          }
-          return;
-          
-        } else {
 
-          //console.debug("project deadline", pdead);
-          // if not, get the project deadline
-          if (pdead && pdead !== ""){
-            var co = dojo.date.compare(stamp.fromISOString(pdead), now, "date");
-            
-            if ( co < 0){
-              past = true;
-            } else if (co === 0){
-              today = true;
+          deadline = dt.deadline(contextDeadline, showTime);
+
+          if (deadline.length > 0){
+            if (past) {
+              //project deadline is past, so set error color
+              dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass("c-color-error").empty().addContent(deadline);
+            } else if (today){
+              //project deadline today, but not explicit deadline so set label color
+              dojo.query(".meta-deadline", self.domNode).removeClass("hidden").empty().addContent(deadline);
             }
-        
-            deadline = dt.deadline(pdead);
-        
-            if (deadline.length > 0){
-              if (past) {
-                //project deadline is past, so set error color
-                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-error").empty().addContent(deadline);
-              } else if (today){
-                //project deadline today, but not explicit deadline so set label color
-                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").empty().addContent(deadline);
-              }
-              else {
-                //project deadline not past, but not explicit deadline so don't set active color
-                dojo.query(".meta-deadline", this.domNode).removeClass("hidden").addClass("c-color-disabled").empty().addContent(deadline);
-              }
+            else {
+              //project deadline not past, but not explicit deadline so don't set active color
+              dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass("c-color-disabled").empty().addContent(deadline);
             }
           }
-          return;
-        } 
+        }
         
       },
       

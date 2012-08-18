@@ -15,8 +15,9 @@ define(["dojo",
         "app/models/RoleStore",
         "i18n!app/nls/coordel",
         "app/util/dateFormat",
-        "dojo/date/stamp"
-        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, rModel, tModel, dm, cStore, sStore,rStore, coordel, dtFormat, stamp) {
+        "dojo/date/stamp",
+        "app/util/Sort"
+        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, rModel, tModel, dm, cStore, sStore,rStore, coordel, dtFormat, stamp, Sort) {
       
         var uuidCache = [];
         var CoordelStore = {
@@ -214,6 +215,57 @@ define(["dojo",
                 });
               }
               return uuidCache.shift();
+            },
+            
+            getExtendedTasks: function(project){
+              var def = new dojo.Deferred();
+              var db = this;
+              //get the the extended tasks from the project store
+              var ext = this.projectStore.loadExtendedTasks(project);
+              dojo.when(ext, function(tasks){
+                if (tasks.length === 0){
+                  def.callback([]);
+                } else {
+                  /*
+                  //sort the tasks by deadline
+                  //need to first make sure the contextDeadline is set
+                  var deadFuncs = [];
+                  var toReturn = [];
+                  
+                  function setContextDeadline(task){
+                    var deadDef = new dojo.Deferred();
+                    var t = db.getTaskModel(task, true);
+                    var tDead = t.getDeadline();
+                    dojo.when(tDead, function(d){
+                      task.contextDeadline = d;
+                      //console.log("context deadline", d, task.name, task.contextDeadline);
+                      deadDef.callback(task);
+                    });
+                    return deadDef;
+                  }
+                  
+                  dojo.forEach(tasks, function(task){
+                    deadFuncs.push(setContextDeadline(task));
+                  });
+                  
+                  var deadList = new dojo.DeferredList(deadFuncs);
+                  dojo.when(deadList, function(res){
+                    //console.log("deadList res", res);
+                    dojo.forEach(res, function(r){
+                      //console.log(r[1].name, r[1].contextDeadline);
+                      toReturn.push(r[1]);
+                    });
+                    toReturn = Sort.sort(toReturn, {sort:[{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}]});
+                    toReturn = Sort.byBlocking(toReturn);
+                    def.callback(toReturn);
+                  });
+                  */
+                  tasks = Sort.sort(tasks, {sort:[{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}]});
+                  tasks = Sort.byBlocking(tasks);
+                  def.callback(tasks);
+                }
+              });
+              return def;
             },
             
             getAlerts: function(){
@@ -599,11 +651,11 @@ define(["dojo",
               var def = new dojo.Deferred();
               store.get(id).then(
                 function(doc){
-                  console.log("get the object in get");
+                  //console.log("get the object in get");
                   def.resolve(doc);
                 },
                 function(err){
-                  console.log("got an error in get", err);
+                  //console.log("got an error in get", err);
                   def.reject(err);
                 });
               
@@ -623,7 +675,7 @@ define(["dojo",
                   def.resolve(doc);
                 },
                 function(err){
-                  console.log("got an error in get", err);
+                  //console.log("got an error in get", err);
                   def.reject(err);
                 });
               
@@ -732,15 +784,22 @@ define(["dojo",
               var focus = this.focus,
                   db = this,
                   obj; 
-                  
+              
+           
               if (isObject){
                 obj = task;
               } else {
-                if (focus === "task"){
+                //console.log("getTaskModel", task);
+                obj = db.taskStore.store.get(task);
+                /*
+                if (focus === "task" ){
+                  console.log("task to get in getTaskModel", task.name, task.project, db.projectStore.currentProject);
                   obj = db.taskStore.store.get(task);
                 } else if (focus === "project") {
+                  console.log("task to get in getTaskModel", task.name, task.project, db.projectStore.currentProject);
                   obj = db.projectStore.taskStore.get(task);
                 }
+                */
               }
               
               
@@ -779,12 +838,16 @@ define(["dojo",
               //in that case, need to get an array of all the blockers in memory and test if
               //it's one of them. this function returns that array;
               
+              //console.log("get blocker focus", this.focus, this.projectStore.currentProject);
+              
               var blocks = this.taskStore.blockMemory.query(),
                   arr = [];
                   
               dojo.forEach(blocks, function(block){
                 arr.push(block._id);
               });
+              
+              //console.log("blocker array called", arr);
               
               return arr;
             },
@@ -852,6 +915,19 @@ define(["dojo",
                 }
               }, {sort:[{attribute:"name", descending: false}]});
             
+            },
+            
+            taskFormProjects: function(){
+              //use this function to get the user's project that are not cancelled, not done,
+              //not the private, not the delegated
+              var list = this.projectStore.memory.query(function(project){
+                
+                  return (!project.isMyPrivate && !project.isMyDelegated && 
+                        project.status === "ACTIVE" && project.substatus !== "CANCELLED");
+                
+              }, {sort:[{attribute:"name", descending: false}]});
+              
+              return list;
             },
             
             getUserProjects: function(){

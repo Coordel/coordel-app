@@ -159,9 +159,9 @@ define(
           self.taskFormAttachments.set("rev", self.task._rev);
           self.taskFormAttachments.setData();
         }
-        self._setFilteringSelect(self.taskFormProject, db.projects());
+        self._setFilteringSelect(self.taskFormProject, db.taskFormProjects());
         self._setFilteringSelect(self.taskFormDelegate, db.contacts(), true);
-        self._setFilteringSelect(self.taskFormBlockers, db.projects());
+        self._setFilteringSelect(self.taskFormBlockers, db.taskFormProjects());
         self._setFilteringSelect(self.taskFormDeliverables, db.templates("deliverable"));
         
         //make the datetextbox dropdown on focus rather than waiting to a click

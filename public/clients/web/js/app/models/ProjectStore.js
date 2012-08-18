@@ -193,7 +193,6 @@ define(["dojo",
                   if (res.length){
                     extTasks = extTasks.concat(res);
                   }
-                  //console.log("projectStore extended tasks", extTasks);
 
                   //return them
                   def.callback(extTasks);
@@ -485,6 +484,7 @@ define(["dojo",
             	return def;
             	
             },
+             
             _loadStream: function(project){
               //console.log("loadProjectStream called", project);
               var query = {

@@ -32,6 +32,9 @@ define([
       
       view: "tasks",
       
+      extendedMap: {},//we use this to track if extended has been loaded for this project yet
+      
+      
       observeHandlers: [],
       
       connections: [],
@@ -46,6 +49,7 @@ define([
         db.focus = this.focus;
         this.project = project;
         var self = this;
+        
         
  
         
@@ -81,9 +85,50 @@ define([
           });
           this.connections = [];
         }
+        
+        
+        
+        
      
         
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
+          
+          //when first starting up, userTasks and projectTasks might not have extended tasks
+          //so the deadlines won't calculate correctly (NEED TO FIX DEADLINES) so this is a
+          //way to make sure they're there. it just loads them once into the blocking tasks
+          /*
+          if (!self.extendedMap[self.project._id]){
+            self.extendedMap[self.project._id]=true;
+            dojo.when(db.projectStore.loadExtendedTasks(self.project._id), function(res){
+
+              var blocking = db.taskStore.blockingMemory.query();
+
+              var map = {};
+
+              dojo.forEach(blocking, function(b){
+                map[b._id] = true;
+              });
+
+              var toAdd = dojo.filter(res, function(r){
+                return !map[r._id];
+              });
+
+              dojo.forEach(toAdd, function(r){
+
+                try{
+                  db.taskStore.blockingMemory.add(r);
+                } catch(err){
+                  db.taskStore.blockingMemory.get(r._id);
+                  console.log("error", r);
+                }
+
+              });
+
+            });
+          }
+          
+          */
+        
           layout.showLayout(project);
           
           var headContain = dijit.byId("mainLayoutHeaderCenter");
@@ -350,10 +395,10 @@ define([
         
         
         
-        var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
+        //var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
 
         //get the tasks with usual status
-        var ext = db.projectStore.loadExtendedTasks(self.project._id);
+        var ext = db.getExtendedTasks(self.project._id);
         
         dojo.when(ext, function(tasks){
           
@@ -366,14 +411,6 @@ define([
             cont.addChild(this.emptyGroup);
           } else {
             //sort the tasks by deadline
-            //need to first make sure the contextDeadline is set
-            dojo.forEach(tasks, function(task){
-              var t = db.getTaskModel(task, true);
-              task.contextDeadline = t.getDeadline();
-            });
-            tasks = Sort.sort(tasks, {sort:[{attribute: "contextDeadline"}]});
-            tasks = Sort.byBlocking(tasks);
-            //console.log("sorted tasks", tasks);
             
             //console.debug("_addGroup tasks", header, tasks, self.focus );
             //this function add
@@ -455,6 +492,8 @@ define([
         var def = store.taskMemory.query({db: db, focus: "deferred"}, {sort: sort});
         var bl = store.taskMemory.query({db: db, focus: "blocked"}, {sort: sort});
         var un = store.taskMemory.query({db:db, focus: "unassigned"}, {sort: sort});
+        
+        
         
         //console.log("current tasks", cur);
         

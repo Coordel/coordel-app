@@ -769,8 +769,8 @@ define(['dojo',
   				      
   				  //console.debug("projects in change test", projects);
   				  
-  				  console.log("project change id", chg._id);
-  				  console.log("current project", db.projectStore.currentProject);
+  				  //console.log("project change id", chg._id);
+  				  //console.log("current project", db.projectStore.currentProject);
   				  
   				  //need to check if this is new because it may have been saved several times before it 
   				  //got to this user so its isNew property might be false
@@ -890,18 +890,18 @@ define(['dojo',
   				    if (chg.isNew && chg.creator !== app.username && chg.status !== "TRASH" && chg.status !== "ARCHIVE" && !chg._deleted){
   				      //this is a new task that I didn't create so add 
   				      db.taskStore.store.notify(chg);
-  				      console.log("Notify Task ADD", chg);
+  				      //console.log("Notify Task ADD", chg.name);
   				      
   				    } else if (chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   				      //this task was deleted
   				      db.taskStore.store.notify(null, chg._id);
-  				      console.log("Notify Task DELETE", chg);
+  				      //console.log("Notify Task DELETE", chg);
   				      
   				    } else {
   				      //this is an update
   				      db.taskStore.store.notify(chg, chg._id);
   				  
-  				      console.log("Notify Task UPDATE", chg);
+  				      //console.log("Notify Task UPDATE", chg.name);
   				    }
   				    
   				  }
@@ -910,7 +910,7 @@ define(['dojo',
   	        //there's no way to tell if the store needs updated except to check the existing 
   	        //blockers. if it was chosen before, it will be in this store
   			    if (dojo.indexOf(db.getBlockerArray(), chg._id) > -1){
-				      console.debug("Notify Blockers UPDATE", chg);
+				      //console.debug("Notify Blockers UPDATE", chg.name);
 				      db.taskStore.blockStore.notify(chg, chg._id);
 				    }
   			
@@ -936,7 +936,7 @@ define(['dojo',
   				  } else {
   				    //console.log("Task Project Not Current", chg);
   				  }
-  				  
+  				  //console.log("taskNotify", chg.name);
   				  dojo.publish("coordel/taskNotify", [{task: chg}]);
   					break;
   				case "message":

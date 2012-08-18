@@ -189,7 +189,7 @@ define("app/models/ProjectModel",
       		});
       		
       		
-      		console.log("username in invite", username, p.db.contactFullName(username), this.db.contactFullName(username));
+      		//console.log("username in invite", username, p.db.contactFullName(username), this.db.contactFullName(username));
       		//NOTE: this is here because sometimes the contact isn't created yet and won't be because it's new
       		//so we need to make sure undefined doesn't get sent into the function
       		var name = p.db.contactFullName(username);
@@ -336,7 +336,7 @@ define("app/models/ProjectModel",
             status = "INVITE",
   	        hasUser = false;
   	        
-  	    console.debug("updating project assignments", p, task.username);
+  	    //console.debug("updating project assignments", p, task.username);
   	    //make sure this task's user is part of the project
       
   	    dojo.forEach(p.users, function(user){
@@ -409,7 +409,7 @@ define("app/models/ProjectModel",
   	    //console.log("after updateResponsibilities in projectModel");
       	//save project if an assignment was added or updated for a follower or responsible
       	if (doUpdate){
-      	  console.debug("saving project, assignment was added or updated", p, task.username);
+      	  //console.debug("saving project, assignment was added or updated", p, task.username);
       	  dojo.when(self.update(p), function(){
       	    //console.log("updated project", p, task);
       	    def.callback(task);

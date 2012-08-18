@@ -132,19 +132,22 @@ define(
           var t = db.getTaskModel(task, true);
           //console.log("isInvitedNew", pStatus.isInvitedNew(t.p.project, task.username));
           //if the project is invited new, then don't show the task yet
-          if (!pStatus.isInvitedNew(t.p.project, task.username)){
-            entries.push({
-              id: task._id,
-              type: "task",
-              name: task.name,
-              project: t.p.project.name,
-              deadline: t.getDeadline(),
-              isTaskInvite: t.isTaskInvite(),
-              isProjectInvite: false,
-              isBlocked: t.isBlocked(),
-              isIssue: t.isIssue()
-            });
-          }
+          t.getContextDeadline().then(function(dead){
+            if (!pStatus.isInvitedNew(t.p.project, task.username)){
+              entries.push({
+                id: task._id,
+                type: "task",
+                name: task.name,
+                project: t.p.project.name,
+                deadline: dead,
+                isTaskInvite: t.isTaskInvite(),
+                isProjectInvite: false,
+                isBlocked: t.isBlocked(),
+                isIssue: t.isIssue()
+              });
+            }
+          });
+          
         });
 
         var projects = db.projectStore.memory.query("calendar", {sort: [{attribute:"deadline", descending:false}]});

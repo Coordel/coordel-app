@@ -269,8 +269,10 @@ app.store.util.TaskQueryEngine = function(query, options){
     		  //this allows setting project deadlines to keep people informed when
     		  //tasks are due when there isn't a specific deadline set for the task
     		  //this makes sure that that deadline can move with the project
-    		  task.contextDeadline = t.getDeadline();
-    		  //console.debug("contextDeadline", dead, task.deadline, task.name, task._id);
+    		  t.getContextDeadline().then(function(dead){
+    		    task.contextDeadline = dead;
+    		  });
+    		  //console.debug("contextDeadline",task.name, task.contextDeadline);
     		});
     		
 		  }

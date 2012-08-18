@@ -54,11 +54,11 @@ define(
           return r.substatus !== "CANCELLED" && r.substatus !== "TRASH";
         });
         
-        //console.debug("responsibilities", resps);
+        console.debug("responsibilities", resps);
         
         if (resps && resps.length > 0){
           dojo.forEach(resps, function(r){
-
+            control.log("setResps", r.task);
             var t = db.projectStore.taskStore.get(r.task);
 
             var resp = new R({

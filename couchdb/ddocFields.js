@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.65",
+  version: "0.1.66",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -339,6 +339,23 @@ module.exports = {
       			  emit([doc._id, assign.username], {"_id": assign.role});
       			}	
       		});
+      	}
+      }
+    },
+    
+    projectBlocking: {
+      map: function (doc){
+
+      	if (doc.docType == "task"){
+
+      	  if (doc.blocking){
+      	    doc.blocking.forEach(function(id){
+        			emit(
+          			[doc.project, toDateArray(new Date(doc.updated))], 
+          			{"_id": id}
+          		);
+        		});
+      	  }
       	}
       }
     },

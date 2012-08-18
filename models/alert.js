@@ -128,9 +128,12 @@ exports.getChangeAlertMap = function(change){
 	//users get the tasks when they own them and they are blocking
 	if (doc.docType === "task" && doc.blocking && doc.blocking.length > 0){
 	  doc.blocking.forEach(function(id){ 
-	    if (!map[id]) map[id] = true;
+	    if (!map[doc.username]) map[doc.username] = true;
 	    console.log("notify blocking");
 	  });
+	  if (doc.delegator && doc.delegator !== doc.responsible){
+	     if (!map[doc.delegator]) map[doc.delegator] = true;
+	  }
 	}
 	
 	//responsible and delegator get notified of changes to tasks

@@ -141,7 +141,7 @@ define(["dojo",
             	var query = blocking.query(queryArgs);
             	
             	dojo.when(query, function(res){
-            	  console.log("blocking", res);
+            	  //console.log("blocking", res);
             	  def.callback(res);
             	});
             	
