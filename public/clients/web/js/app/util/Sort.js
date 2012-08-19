@@ -4,7 +4,7 @@ define(["dojo"], function(dojo) {
   	sort: function(results, options){
   	  //console.log("results incoming", results);
   	  results.sort(function(a, b){
-  	    console.log("a", a.name, a.contextDeadline, "b", b.name, b.contextDeadline);
+  	    //console.log("a", a.name, a.contextDeadline, "b", b.name, b.contextDeadline);
 				for(var sort, i=0; sort = options.sort[i]; i++){
 					var aValue = a[sort.attribute];
 					var bValue = b[sort.attribute];

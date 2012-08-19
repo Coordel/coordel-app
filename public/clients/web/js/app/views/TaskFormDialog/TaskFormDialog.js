@@ -29,6 +29,8 @@ define([
       postCreate: function(){
         this.inherited(arguments);
         
+        
+        
         this.show();
       },
       
@@ -39,6 +41,8 @@ define([
           this._showDialog();
         }
       },
+      
+      
       
       _showTooltip: function(){
         
@@ -52,6 +56,7 @@ define([
           content: new TaskForm()
            
         }).placeAt(this.contentNode);
+      
         
         this.dialog.show();
         

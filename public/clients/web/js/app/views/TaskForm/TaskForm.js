@@ -32,12 +32,13 @@ define(
     "app/util/dateFormat",
     "dijit/Menu",
     "app/util/Sort",
+    "app/views/Label/Label",
     "app/widgets/ContainerPane",
     "app/views/DeadlineDropDown/DeadlineDropDown",
     "app/views/ReuseDropDown/ReuseDropDown"
   
     ], 
-  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format, Menu, Sort) {
+  function(dojo,dijit,pm,coordel,db, w, t, html,htmlTip, htmlInstructions, htmlNone, tip, tipd, drop, tb, CheckBox, cb,fs, ta, dtb, dtl,ws,btn, stamp, ContentPane, TaskFormSelect, TaskFormAdd, TaskFormPill, DeliverableSettings,TaskFormAttachments, format, Menu, Sort, Label) {
   
   dojo.declare(
     "app.views.TaskForm", 
@@ -372,6 +373,49 @@ define(
             def.then(function(){
               var all = store.taskMemory.query({db: db}),
                   showDuration = false; //track whether we should show duration or not
+                  
+                  
+            
+              //deal with keeping the coord from getting into a cycle
+              //there has to be at least one task in a project that isn't blocked by other tasks
+              //in the project...otherwise, there project will have a cycle
+              var count = 0;
+              var hasCycle = false;
+              var hasDisabled = false;
+              
+              //first get an array of all task ids in this project
+              var taskList = [];
+              dojo.forEach(all, function(task){
+                taskList.push(task._id);
+              });
+              //console.log("taskList", taskList);
+              
+              //now detect any not blocking
+              var notBlocking = [];
+              dojo.forEach(all, function(task){
+                if (task._id !== current._id){
+                  //console.log("task name", task.name, task.coordinates);
+                  if (!task.coordinates || task.coordinates.length === 0){
+                    notBlocking.push(task);
+                  } else {
+                    dojo.forEach(task.coordinates, function(id){
+                      //console.log("test", dojo.indexOf(taskList, id), id);
+                      if (dojo.indexOf(taskList, id) === -1){
+                        notBlocking.push(task);
+                      }
+                    });
+                  }
+                }
+                
+                
+              });
+              
+              if (notBlocking.length === 0){
+                //console.log("count was 0");
+                hasCycle = true;
+              }
+              
+              //console.log("count", notBlocking.length, "hasCycle", hasCycle);
               
               //console.log("there is a duration", current.duration);
               if (current.duration){
@@ -455,27 +499,47 @@ define(
                 //disable the checkbox if this task is in the list
                 //console.log("testing if current = task", current._id, task._id);
                 if (current._id === task._id){
-                  //console.log("should disable", task._id);
+                  //console.log("should disable", task.name);
                   check.checkbox.set("disabled", true);
+                 
                 }
+                
+                if (hasCycle){
+                  //console.log("has a cycle, can't start if selected");
+                  check.checkbox.set("disabled", true);
+                  check.label.innerHTML =  task.name + "<sup class='c-color-active'>*</sup>";
+                }
+                
                 
                 //disable the checkbox if this projectTask has current as a blocker
                 //to avoid causing a circular reference 
                 if (task.coordinates && task.coordinates.length > 0){
                   dojo.forEach(task.coordinates, function(id){
                     if (current._id === id){
+                      hasDisabled = true;
+                      //console.log("disabling checkbox", task.name);
                       check.checkbox.set("disabled", true);
+                      check.label.innerHTML =  task.name + "<sup class='c-color-active'>*</sup>";
                     }
                   });
                   
                 }
                 
                 cp.addChild(check);
-                
+              
                 //if there were ticked checkboxes, then show the duration
                 if (showDuration) dojo.removeClass(dur, "hidden");
   
               });
+              
+              if (hasDisabled && !hasCycle){
+               new Label({value: coordel.blockerMessages.blocked, "class": "c-margin-t"}).placeAt(cp);
+              }
+
+              console.log("canStart", hasCycle);
+              if (hasCycle){
+                new Label({value: coordel.blockerMessages.circular, "class": "c-margin-t"}).placeAt(cp);
+              }
            
             });
             

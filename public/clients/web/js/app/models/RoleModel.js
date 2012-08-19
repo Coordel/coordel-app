@@ -27,7 +27,7 @@ define("app/models/RoleModel",
       },
       
       updateResponsibilities: function(roleid, task, isMyPrivate){
-        console.debug("updating responsibilities", roleid, task);
+        //console.debug("updating responsibilities", roleid, task);
         
         //when a task is added or updated, the project's assignments track what's happening
     	  //role responsibilities (tasks) are also created, and the status of the responsibility(task) is tracked in the role
@@ -56,7 +56,7 @@ define("app/models/RoleModel",
       			    r.responsibilities = [];
 
          				//add a new responsibility to the role (username, task, status)
-       					console.debug("adding a new responsibility to role " + r._id);
+       					//console.debug("adding a new responsibility to role " + r._id);
        					r.responsibilities.push({
        						username: task.username,
        						task: task._id,
@@ -70,7 +70,7 @@ define("app/models/RoleModel",
   			      
   			    } else {
   			      //found an existing role, update it
-  			      console.debug("loaded role in updateResponsibilities", resRole);
+  			      //console.debug("loaded role in updateResponsibilities", resRole);
   	          r = resRole;
   	          r.isNew = false;
   	          //set the username of the role to the task because it might be that this 
@@ -84,7 +84,7 @@ define("app/models/RoleModel",
         				  deleteKey = false;
         			dojo.forEach(r.responsibilities, function(resp, key) {
       					if (resp.task === task._id){
-      					  console.debug("had the responsibility, updating status: ", resp.task, task.status);
+      					  //console.debug("had the responsibility, updating status: ", resp.task, task.status);
         					hasResp = true;
       					  if(task.status === "TRASH" && isMyPrivate){
       					    //since this is a private project, delete the responsibility
@@ -104,7 +104,7 @@ define("app/models/RoleModel",
         			//if the responsibiity doesn't exist
       				if (!hasResp){
       					//add a new responsibility to the role (username, task, status)
-      					console.debug("adding a new responsibility to role " + r._id);
+      					//console.debug("adding a new responsibility to role " + r._id);
       					if (!r.responsibilities){
       					  r.responsibilities = [];
       					}

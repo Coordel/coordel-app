@@ -113,7 +113,7 @@ define(
          
         //need to watch and see if there is a change to this list
         self.observeHandler = self.taskList.observe(function(task, removedFrom, insertedInto){
-          console.debug("TaskList observed", task, removedFrom, insertedInto, self.listFocus);
+          //console.debug("TaskList observed", task, removedFrom, insertedInto, self.listFocus);
           
           //was this a delete
           if (removedFrom > -1){

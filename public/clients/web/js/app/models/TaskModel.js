@@ -2312,8 +2312,9 @@ define("app/models/TaskModel",
     	      var def = new dojo.Deferred();
     	      var mod = db.get(task);
     	      dojo.when(mod, function(t){
+    	        console.log("t after get", t);
     	        var blocker = db.getTaskModel(t, true);
-    	        blocker = coordel.task + ": "  + t.task.name + " | " + coordel.project + ": " + t.p.project.name;
+    	        blocker = coordel.task + ": "  + blocker.name + " | " + coordel.project + ": " + blocker.p.project.name;
     	        def.callback(blocker);
     	      });
     	      return def;
