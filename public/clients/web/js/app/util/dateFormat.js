@@ -170,6 +170,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
         
         if (showTime){
           compare = dojo.date.compare(d, now, "datetime");
+          //console.log("compare in util.deadline", compare);
         }
             
         //console.debug ("deadline in dateFormat", date, d);
@@ -227,7 +228,7 @@ define(["dojo", "dojo/date/locale", "i18n!app/nls/coordel", "dojo/date/stamp"], 
         
         } else if (compare === 0){
           //deadline is today
-          //console.debug("the deadline is today");
+          //console.debug("the deadline is today", showTime);
           if (showTime){
             hrs = dojo.date.difference(now,d,"hour");
             mins = dojo.date.difference(now,d,"minute");

@@ -277,7 +277,6 @@ app.store.util.TaskQueryEngine = function(query, options){
     		
 		  }
  
-
 		  //console.debug("executing the query, options.sort ", options.sort);
 			results.sort(function(a, b){
 			  

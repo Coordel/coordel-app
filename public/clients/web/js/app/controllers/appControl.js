@@ -131,12 +131,14 @@ define(['dojo',
 		    console.log("SOCKET CONTACT", contact);
 		    app.handleContact(contact);
 		  });
+		  
+		  var self = this;
 	    
 	    this.initSounds();
 	    
 	    this.resetHandlers();
 	    
-	    this.interval = setInterval(dojo.hitch(this, this._timeUpdate), 60000);
+	    this.interval = setInterval(dojo.hitch(self, self._timeUpdate), 60000);
 	    
 	  	//listen for logout
 	  	this.handlers.push(dojo.subscribe("coordel/logout", this, "doLogout"));

@@ -260,7 +260,13 @@ define(["dojo",
                     def.callback(toReturn);
                   });
                   */
-                  tasks = Sort.sort(tasks, {sort:[{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}]});
+                  dojo.forEach(tasks, function(task){
+                    var t = db.getTaskModel(task,true);
+                    t.getContextDeadline().then(function(dead){
+                      task.contextDeadline = dead;
+                    });
+                  });
+                  tasks = Sort.sort(tasks, {sort:[{attribute: "contextDeadline"}]});
                   tasks = Sort.byBlocking(tasks);
                   def.callback(tasks);
                 }

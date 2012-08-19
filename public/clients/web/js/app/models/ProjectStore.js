@@ -140,14 +140,14 @@ define(["dojo",
                               //console.log("done waiting for visited blockers" + item.name);
                               //console.log("adding " + item.name + " to extra list");
                               //no blockers so good to add this item to the extra list
-                              extra.unshift(item);
+                              extra.push(item);
                               //now we're sure we're done with the original item
                               visitDef.callback();
                             });
                           } else {
                             //console.log("adding " + item.name + " to extra list");
                             //no blockers so good to add this item to the extra list
-                            extra.unshift(item);
+                            extra.push(item);
                             //no visits to handle, so we're done
                             visitDef.callback();
                           }
@@ -160,7 +160,7 @@ define(["dojo",
 
                         //console.log("adding " + item.name + " to extra list");
                         //no blockers so good to add this item to the extra list
-                        extra.unshift(item);
+                        extra.push(item);
 
                         //and we're done with this visit
                         visitDef.callback();

@@ -931,7 +931,6 @@ define(
             past = false, //if it does have a deadline, then need to make sure that it gets colored active
             today = false,
             showTime = false,
-            now = new Date(),
             self = this; 
 
         //don't update the deadline for done and cancelled tasks
@@ -957,6 +956,7 @@ define(
         
         
         function set(){
+          var now = new Date();
           //console.log("in set", contextDeadline, t.name);
           //the getDeadline function returns 2200-01-01 when derived
           if (contextDeadline === "2200-01-01"){
@@ -976,11 +976,14 @@ define(
           if (showTime){
             c = dojo.date.compare(stamp.fromISOString(contextDeadline), now, "datetime");
           }
+          
+          //console.log("c", c, "now", now, "contextDeadline", contextDeadline, "task", self.task.name);
 
           if ( c < 0){
             past = true;
           } else if (c === 0){
             today = true;
+            showTime = true;
           }
 
           deadline = dt.deadline(contextDeadline, showTime);
@@ -990,12 +993,34 @@ define(
               //project deadline is past, so set error color
               dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass("c-color-error").empty().addContent(deadline);
             } else if (today){
-              //project deadline today, but not explicit deadline so set label color
-              dojo.query(".meta-deadline", self.domNode).removeClass("hidden").empty().addContent(deadline);
+              
+              var timeTest = dojo.date.compare(stamp.fromISOString(contextDeadline), now, "datetime");
+              var className = "";
+              
+              if (timeTest < 0){
+                className = "c-color-error";
+              }
+              
+              if (!has){
+                if (!timeTest < 0){
+                  className = "c-color-diabled";
+                }
+                //project deadline today, but not explicit deadline so set label color
+                dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass(className).empty().addContent(deadline);
+              } else {
+                //project deadline today, but not explicit deadline so set label color
+                dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass(className).empty().addContent(deadline);
+              }
+              
             }
             else {
-              //project deadline not past, but not explicit deadline so don't set active color
-              dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass("c-color-disabled").empty().addContent(deadline);
+              //deadline not past
+              if (!has){
+                //not explicit deadline so disable active color
+                dojo.query(".meta-deadline", self.domNode).removeClass("hidden").addClass("c-color-disabled").empty().addContent(deadline);
+              } else {
+                 dojo.query(".meta-deadline", self.domNode).removeClass("hidden").empty().addContent(deadline);
+              }
             }
           }
         }

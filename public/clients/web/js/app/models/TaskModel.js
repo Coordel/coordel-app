@@ -191,70 +191,6 @@ define("app/models/TaskModel",
             //console.debug("new Date", newDate.toString(), stamp.toISOString(test));
             deadline = stamp.toISOString(newDate);
           }
-          //console.log("deadline before blocking test", deadline, t.name);
-          /*
-          if (t.hasBlocking()){
-            var derived = deadline,
-                now = new Date();
-            //need to load the blocking and see when their deadlines are;
-            //console.log("t.task.blocking", t.task.name, t.task.blocking, t.task, deadline);
-            
-            dojo.forEach(t.task.blocking, function(id){
-              var block = db.taskStore.blockingStore.get(id);
-              //console.log("blocking task: ", block.name);
-              var b = db.getTaskModel(block, true);
-              //console.log("blocking deadline: ", deadline, derived, b.getDeadline(), b.getDeadline()< derived);
-              //var comp = dojo.date.compare(dojo.date.stamp.fromISOString(b.getDeadline()),dojo.date.stamp.fromISOString(derived));
-              //console.log("comp", comp);
-              //console.log("testing blocking task", b.task.name, b.task.duration);
-              //need to test if this blocker's duration is greater than other durations
-              var dur = block.duration,
-                  testDiff = 0;
-              
-              if (dur && parseInt(dur.number, 10) > 0){
-                
-                //console.log("block duration", block.name, dur);
-                
-                switch (dur.unit){
-                  case "m":
-                  testDiff = dojo.date.difference(now, dojo.date.add(now, "minute", dur.number), "minute");
-                  break;
-                  case "h":
-                  testDiff = dojo.date.difference(now, dojo.date.add(now, "hour", dur.number), "minute");
-                  break;
-                  case "d":
-                  testDiff = dojo.date.difference(now, dojo.date.add(now, "day", dur.number), "minute");
-                  break;
-                  case "w":
-                  testDiff = dojo.date.difference(now, dojo.date.add(now, "week", dur.number), "minute");
-                  break;
-                }
-                
-                //console.log("derived before add", block.name, derived, -testDiff);
-                //subtract the duration required by the blocking task
-                var diffDate = dojo.date.add(dojo.date.stamp.fromISOString(derived), "minute", -testDiff);
-
-                derived = dojo.date.stamp.toISOString(diffDate);
-                //console.log("derived after add", block.name, derived);
-                
-                var blockedDeadline = b.getDeadline();
-                dojo.when(blockedDeadline,function(bd){
-                  //console.log("blockedDeadline", bd, b.name);
-                  //console.log("deadline derived test", dojo.date.compare(dojo.date.stamp.fromISOString(blockedDeadline), dojo.date.stamp.fromISOString(derived)));
-                  if (dojo.date.compare(dojo.date.stamp.fromISOString(bd), dojo.date.stamp.fromISOString(derived)) < 0){
-
-                    derived = bd;
-                    //console.log("Sooner: ", block.name, blockedDeadline, derived, deadline);
-                  }
-                });
-
-              }
-              
-            });
-            //console.log("derived", derived, t.name);
-            deadline = derived;
-          } 
-          */
     
         } else if (!t.hasDeadline() && (t.isPrivate() || t.isDelegated())) {
           //the only tasks that don't have deadlines are those that are in the private project or
@@ -1949,7 +1885,7 @@ define("app/models/TaskModel",
     	  if (!task.calendar){
     	    task.calendar = {};
     	  }
-    	      
+    	  t.version();
     	  task.calendar.start = date;
     	  task = t.addActivity({
     			verb: "DEFER",
