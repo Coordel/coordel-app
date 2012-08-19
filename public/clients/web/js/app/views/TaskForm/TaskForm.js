@@ -263,6 +263,13 @@ define(
         });
         
         //deliverables
+        dojo.connect(this.taskFormDeliverables, "onBlur", this, function(args){
+          //console.log("blur deliverables");
+          var ctl = this.taskFormDeliverables;
+          ctl.reset();
+          ctl.forceClose();
+        });
+        
         dojo.connect(this.taskFormDeliverables, "onChange", this, function(deliverableId){
           var del = this.taskFormDeliverables;
           //console.debug("taskFormDeliverables ONCHANGE", del._status, deliverableId);
@@ -332,6 +339,13 @@ define(
         });
         
         //blockers
+        dojo.connect(this.taskFormBlockers, "onBlur", this, function(args){
+          //console.log("blur blockers");
+          var ctl = this.taskFormBlockers;
+          ctl.reset();
+          ctl.forceClose();
+        });
+        
         dojo.connect(this.taskFormBlockers, "onChange", this, function(args){
           
           var block = self.taskFormBlockers;
@@ -373,9 +387,7 @@ define(
             def.then(function(){
               var all = store.taskMemory.query({db: db}),
                   showDuration = false; //track whether we should show duration or not
-                  
-                  
-            
+
               //deal with keeping the coord from getting into a cycle
               //there has to be at least one task in a project that isn't blocked by other tasks
               //in the project...otherwise, there project will have a cycle
@@ -406,8 +418,6 @@ define(
                     });
                   }
                 }
-                
-                
               });
               
               if (notBlocking.length === 0){
@@ -536,7 +546,7 @@ define(
                new Label({value: coordel.blockerMessages.blocked, "class": "c-margin-t"}).placeAt(cp);
               }
 
-              console.log("canStart", hasCycle);
+              //console.log("canStart", hasCycle);
               if (hasCycle){
                 new Label({value: coordel.blockerMessages.circular, "class": "c-margin-t"}).placeAt(cp);
               }
