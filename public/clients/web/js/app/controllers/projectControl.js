@@ -17,10 +17,10 @@ define([
   "app/models/ProjectStatus",
   "app/views/ProjectForm/ProjectForm",
   "app/views/ConfirmDialog/ConfirmDialog",
-  "app/views/ProjectDeliverable/ProjectDeliverable",
+  "app/views/DeliverableList/DeliverableList",
   "app/views/QuickEntry/QuickEntry",
   "app/util/Sort",
-   "app/views/ProjDetailsHeader/ProjDetailsHeader"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,ProjectDeliverable, QuickEntry, Sort,pdh) {
+   "app/views/ProjDetailsHeader/ProjDetailsHeader"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,DeliverableList, QuickEntry, Sort,pdh) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -92,42 +92,6 @@ define([
      
         
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
-          
-          //when first starting up, userTasks and projectTasks might not have extended tasks
-          //so the deadlines won't calculate correctly (NEED TO FIX DEADLINES) so this is a
-          //way to make sure they're there. it just loads them once into the blocking tasks
-          /*
-          if (!self.extendedMap[self.project._id]){
-            self.extendedMap[self.project._id]=true;
-            dojo.when(db.projectStore.loadExtendedTasks(self.project._id), function(res){
-
-              var blocking = db.taskStore.blockingMemory.query();
-
-              var map = {};
-
-              dojo.forEach(blocking, function(b){
-                map[b._id] = true;
-              });
-
-              var toAdd = dojo.filter(res, function(r){
-                return !map[r._id];
-              });
-
-              dojo.forEach(toAdd, function(r){
-
-                try{
-                  db.taskStore.blockingMemory.add(r);
-                } catch(err){
-                  db.taskStore.blockingMemory.get(r._id);
-                  console.log("error", r);
-                }
-
-              });
-
-            });
-          }
-          
-          */
         
           layout.showLayout(project);
           
@@ -372,15 +336,22 @@ define([
           cont.addChild(this.emptyGroup);
         } else {
           //console.log(" tasks with deliverables", tasks);
-          
+          var d = new DeliverableList({
+            tasks: tasks,
+            header: coordel.deliverables
+          });
+          cont.addChild(d);
+          /*
           dojo.forEach(tasks, function(task){
             var d = new ProjectDeliverable({
               task: task
             });
             cont.addChild(d);
           });
-          
+          */
         }
+        
+        document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
       
       },
       
@@ -403,11 +374,10 @@ define([
         dojo.when(ext, function(tasks){
           
           if (tasks.length === 0){
-            this.emptyGroup = new Empty({
-              emptyTitle: coordel.empty.projectDeliverablesTitle,
-              emptyDescription: coordel.empty.projectDeliverablesText,
-              imageCss: "project-order"
-            });
+             this.emptyGroup = new Empty({
+                emptyTitle: coordel.empty.projectOrderTitle,
+                emptyDescription: coordel.empty.projectOrderText
+              });
             cont.addChild(this.emptyGroup);
           } else {
             //sort the tasks by deadline
@@ -426,6 +396,8 @@ define([
          
           }
         });
+        
+        document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
 
       },
       

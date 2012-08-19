@@ -943,12 +943,12 @@ define(
         
         
         if (contextDeadline){
-          console.log("had contextDeadline", t.name, contextDeadline);
+          //console.log("had contextDeadline", t.name, contextDeadline);
           set();
         } else {
           
           t.getContextDeadline().then(function(dead){
-            console.log("derived contextDeadline", t.name, dead);
+            //console.log("derived contextDeadline", t.name, dead);
             contextDeadline = dead;
             set();
           });
@@ -957,7 +957,7 @@ define(
         
         
         function set(){
-          console.log("in set", contextDeadline, t.name);
+          //console.log("in set", contextDeadline, t.name);
           //the getDeadline function returns 2200-01-01 when derived
           if (contextDeadline === "2200-01-01"){
             contextDeadline = "";

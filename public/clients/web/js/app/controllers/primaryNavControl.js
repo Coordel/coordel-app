@@ -187,8 +187,9 @@ define(['dojo',
       if (name === "project"){
         
         
+        
       
-        this.activateProjects();
+        
         //create a projectControl
         //console.debug("setting projectControl with project id", id);
         this.primaryController = null;
@@ -204,6 +205,8 @@ define(['dojo',
         pControl.init(db.projectStore.store.get(id));
       
         this.primaryController = pControl;
+        
+        this.activateProjects();
         
         //console.debug("created projectControl", this.primaryController);
       } else if (name === "contact"){

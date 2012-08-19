@@ -63,7 +63,7 @@ define(
       },
       
       setSelection: function(selection){
-        console.debug("in setSelection in PrimaryBoxes", selection);
+        //console.debug("in setSelection in PrimaryBoxes", selection);
      
         this.currentBox = selection;
         dojo.publish("coordel/primaryNavSelect", [{focus:selection, name: "", id:"", setSelection: true}]);

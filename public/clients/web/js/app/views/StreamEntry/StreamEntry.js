@@ -34,7 +34,7 @@ define(
         //if the user clicks the project link, show the project 
         var pLink = dojo.connect(this.projectLink, "onclick", this, function(){
   	      console.debug("showProject", this.project);
-  	      dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus:"project", id: this.project}]);
+  	      
   	    });
   	    
   	    //if the user clicks the user link, show the contact

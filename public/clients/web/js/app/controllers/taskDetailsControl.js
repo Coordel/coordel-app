@@ -53,7 +53,9 @@ define([
 		rightFocus: "todo", //can be note or stream as well
 		
 		init: function(focus, task, isTurbo) {
-		  console.log("init isTurbo", isTurbo);
+		  //console.log("init isTurbo", isTurbo);
+		  
+
 		  
 		  if (!task.todos){
 		    task.todos = [];
@@ -104,7 +106,7 @@ define([
 		  
 		  //load the task stream
 		  dojo.when(db.streamStore.loadTaskStream(this.task._id), function(res){
-		    console.log("got stream", res);
+		    //console.log("got stream", res);
 		    self.updateRight();
 		  });
 		  
@@ -189,7 +191,7 @@ define([
 		},
 	
 	  handleStreamNotify: function(args){
-      console.log("stream notify", args);
+      //console.log("stream notify", args);
       if (args.message.task === this.task._id){
         this.showStream();
       }
@@ -586,12 +588,12 @@ define([
 		  
       if (node.hasChildren()){
         node.destroyDescendants();
-        console.log("destroyed descendants", node);
+        //console.log("destroyed descendants", node);
       }
       
       var stream = db.streamStore.taskMemory.query(null, {sort:[{attribute: "time", descending: true}]});
   
-      console.debug("stream in taskDetailsControl", stream);
+      //console.debug("stream in taskDetailsControl", stream);
       
       node.addChild(new Stream({
         stream: stream

@@ -117,7 +117,7 @@ define("app/models/TaskModel",
 
               //console.log("deadline derived test", dojo.date.compare(dojo.date.stamp.fromISOString(deadline), dojo.date.stamp.fromISOString(derived)));
               if (dojo.date.compare(dojo.date.stamp.fromISOString(derived), dojo.date.stamp.fromISOString(deadline)) < 0){
-                console.log("Sooner: ", block.name, deadline, derived);
+                //console.log("Sooner: ", block.name, deadline, derived);
                 def.callback(derived);
                 
               }
@@ -344,7 +344,7 @@ define("app/models/TaskModel",
           //console.log("overdue deadline", deadline);
           if (deadline === "" || deadline === "2200-01-01"){
             //this was a task in the private project with no deadline
-            console.log("not overdue");
+            //console.log("not overdue");
             return false;
           } else {
             var comp = dojo.date.compare(now, stamp.fromISOString(deadline));
@@ -353,7 +353,7 @@ define("app/models/TaskModel",
               
               isPast = true;
             }
-            console.log("overdue", isPast);
+            //console.log("overdue", isPast);
             return isPast;
           }
         });
@@ -1168,7 +1168,7 @@ define("app/models/TaskModel",
         
         //need to make sure the update to the project happens before the task is added
         def.then(function(taskResp){
-          console.debug("adding task with status", taskResp.name, taskResp, taskResp.status);
+          //console.debug("adding task with status", taskResp.name, taskResp, taskResp.status);
           //db.taskStore.store.add(taskResp, {username: username});
           var save;
           switch(db.focus){
@@ -1381,7 +1381,7 @@ define("app/models/TaskModel",
           //use the appropriate store based on the focus of the db
           
           var save;
-          console.log("updating task", task.name);
+          //console.log("updating task", task.name);
           switch(db.focus){
             case "project":
             //console.log("do projectStore.store.put", updatedTask);

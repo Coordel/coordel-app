@@ -372,7 +372,7 @@ define({
 		  opportunitiesTitle: "No Opportunities",
 		  opportunitiesText: "Track all Tasks available in Public Opportunity Coords here. To Publish an Opportunity, create a new Coord and then click Publish Opportunity rather than Activate.",
 		  projectTasksTitle: "No Coord Tasks",
-		  projectTasksText: "Track all Tasks in this Coord here",
+		  projectTasksText: "Track all Tasks in this Coord by Status here",
 		  projectOrderTitle: "No Coord Tasks",
 		  projectOrderText: "See order of execution of Tasks in this Coord here",
 		  turboTitle: "Turbo Complete",

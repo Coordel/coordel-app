@@ -163,8 +163,17 @@ define(
           }
         }
         
+        if (!t.p.project.purpose){
+          dojo.addClass(self.infoProjectPurpose, "hidden");
+        } else if (t.p.project.purpose && t.p.project.purpose.trim().length === 0){
+          dojo.addClass(self.infoProjectPurpose, "hidden");
+        } else {
+          self.projectPurpose.set("value", t.p.project.purpose);
+        }
+        
         if (hideProject){
           dojo.addClass(self.infoProjectDeadline, "hidden");
+          dojo.addClass(self.infoProjectPurpose, "hidden");
           dojo.addClass(self.infoProjectResponsible, "hidden");
         }
         
@@ -188,12 +197,12 @@ define(
                   test = dead.split("T");
               if(test.length > 1){
                 showTime = true;
-                console.log("showTime is true");
+                //console.log("showTime is true");
               }
               self.deadline.set("value" , dt.deadline(dead, showTime));
               t.isOverdue().then(function(overdue){
                 if (overdue){
-                  console.log("it's overdue");
+                  //console.log("it's overdue");
                   dojo.addClass(self.infoDeadline, "c-color-error");
                 }
               });

@@ -159,6 +159,7 @@ define([
         });
         
         dojo.connect(this.projBackToFocus, "onClick", this, function(){
+          console.log ("backToFocus", this.project, this.focus);
           dojo.publish("coordel/primaryNavSelect", [{focus:"project-invited", name: "", id:"", setSelection: true}]);
         });
         

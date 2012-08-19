@@ -47,7 +47,7 @@ define(
         });
         
         this.date.watch("value", function(prop, oldVal, newVal){
-          console.debug("task deadline date changed", prop, oldVal, newVal);
+          //console.debug("task deadline date changed", prop, oldVal, newVal);
           //self.set("deadline", newVal);
           if (newVal){
             self.onChange(self._getDeadline());
@@ -60,7 +60,7 @@ define(
         });
         
         this.time.watch("value", function(prop, oldVal, newVal){
-          console.debug("task deadline time changed", prop, oldVal, newVal);
+          //console.debug("task deadline time changed", prop, oldVal, newVal);
           //self.set("deadline", newVal);
           if (newVal){
             

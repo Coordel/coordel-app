@@ -174,7 +174,7 @@ define(
         
         self.setSelection();
         
-        this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
+        self.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
 
       },
       
@@ -200,12 +200,30 @@ define(
         
       },
       
+      /*
+      _clearSelection: function(selection, doSet){
+        
+        //console.debug("clearing selection", selection);
+        if (this.domNode){
+          var boxes = dojo.query("ul.primary-boxes li", this.domNode);
+          boxes.removeClass("selected active");
+          //it might be that selection is cleared without a click of one of the primary boxes
+          //this makes sure that selection is set to what was clicked if it doesn't match
+          if (doSet){
+            dojo.addClass(selection, "active selected");
+          }
+        }
+    
+      },
+      */
+      
       clearSelection: function(args){
         var self = this;
-    
+
           //console.debug("in clear project selection", args, self.project._id, self.domNode);
 
           if (self.domNode){
+            self.currentArgs = args;
             dojo.removeClass(self.domNode, "active selected");
           }
       
@@ -214,7 +232,15 @@ define(
       
       setSelection: function(){
         var self = this;
-        if (self.currentArgs.focus === "project" && self.currentArgs.id === self.project._id){
+        if (self.domNode && self.currentArgs.focus === "project" && self.currentArgs.id === self.project._id){
+          /*
+          console.log("setting project selection", self.currentArgs, self.project._id);
+          dojo.addClass(self.domNode, "active selected");
+          console.log("project should be active", self.project._id, self.currentArgs);
+          */
+        }
+        
+        if (self.domNode && self.currentArgs.id == self.project._id){
           //console.log("setting project selection", self.currentArgs, self.project._id);
           dojo.addClass(self.domNode, "active selected");
           //console.log("project should be active", self.project._id, self.currentArgs);

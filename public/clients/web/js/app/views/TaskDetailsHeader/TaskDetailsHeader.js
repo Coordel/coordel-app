@@ -103,7 +103,7 @@ define([
         
         //wire up the acceptTask button
         dojo.connect(this.acceptTask, "onClick", this, function(){
-          console.log("acceptTask clicked");
+          //console.log("acceptTask clicked");
           this.goBackToFocus();
           dojo.publish("coordel/taskAction", [{action: "accept", task: this.task}]);
         });
@@ -208,11 +208,14 @@ define([
             name,
             focus;
             
+        //console.log("backToFocus", this.focus, this.task.project);
+            
         if (this.focus === "project"){
         
           id = this.task.project;
           name = "project";
           focus = "";
+          
         } else if (this.focus === "contact"){
 
             id = this.task.username;
