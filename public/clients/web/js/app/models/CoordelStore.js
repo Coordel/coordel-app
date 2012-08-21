@@ -945,7 +945,7 @@ define(["dojo",
             },
             
             contacts: function(){
-              var contacts = this.contactStore.memory.query(null, {sort:[{attribute:"last", descending: false},{attribute:"first", descending: false}]});
+              var contacts = this.contactStore.memory.query(null, {sort:[{attribute:"lastName", descending: false},{attribute:"firstName", descending: false}]});
               //console.debug("contacts", this.contactStore.memory);
               return contacts;
             },

@@ -390,7 +390,7 @@ define(['dojo',
 	        d,
 	        proj;
 	        
-	    //console.log("project action args", args);
+	    console.log("project action args", args);
 	    
 	    if (args.action === "reuse"){
 	      //need to show the project form with blueprint titles
@@ -421,6 +421,8 @@ define(['dojo',
   	    d.show();
 	      
 	    } else {
+	      
+	      console.log("showing project action");
 	      //show a project action
 	      if (args.cssClass){
   	      css = args.cssClass;
@@ -443,9 +445,9 @@ define(['dojo',
   	        d.destroy();
   	      }
   	    });
-
+        
         dojo.connect(proj, "onValidate", function(isValid){
-  	      //console.debug("app control got onValidate", isValid);
+  	      console.debug("app control got onValidate", isValid);
   	      d.validate(isValid);
   	    });
 

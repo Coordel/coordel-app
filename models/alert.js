@@ -87,7 +87,8 @@ exports.deleteUserAlerts = function(username, fn){
 exports.getChangeAlertMap = function(change){
   var map = {},
       doc = change;
-
+  
+ 
 	if (doc.docType == "project"){
 	  //if the project substatus isn't PENDING, then only the responsible gets the project
 	  if (!doc.substatus || doc.substatus !== "PENDING"){
@@ -217,7 +218,7 @@ exports.getChangeAlertMap = function(change){
 	if (doc.docType == "prerequisite"){
 	   if (!map[doc.username]) map[doc.username] = true;
 	}
-	
+	console.log("MAP", map);
 	return map;
 
 };

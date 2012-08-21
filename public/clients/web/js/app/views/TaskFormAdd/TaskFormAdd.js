@@ -3,6 +3,7 @@ define(
   "dijit",
   "dijit/form/TextBox",
   "dijit/form/Textarea",
+
   "i18n!app/nls/coordel",
   "text!app/views/TaskFormAdd/templates/addProject.html",
   "text!app/views/TaskFormAdd/templates/addDeliverable.html",

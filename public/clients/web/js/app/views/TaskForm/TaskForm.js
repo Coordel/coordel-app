@@ -429,13 +429,9 @@ define(
               
               //console.log("there is a duration", current.duration);
               if (current.duration){
-                //console.log("durNumber, durChoices", durNumber, durChoices);
+                console.log("durNumber, durChoices", durNumber, durChoices);
                 durNumber.set("value", current.duration.number);
-                dojo.forEach(dijit.findWidgets(durChoices), function(choice){
-                  if (choice.value === current.duration.unit){
-                    choice.set("checked", true);
-                  }
-                });
+                durChoices.set("value", current.duration.unit);
               }
               
               dojo.forEach(all, function(task){
@@ -468,6 +464,9 @@ define(
                       if (!current.coordinates){
                         current.coordinates = [];
                       }
+                      if (!current.coordinates.length){
+                        delete current.duration;
+                      }
                       //add this value if it doesn't already exist
                       var doAdd = true;
                       var taskId = check.get("value");
@@ -491,13 +490,9 @@ define(
                     }
                     if (!current.coordinates || (current.coordinates && current.coordinates.length === 0)){
                       if (current.duration){
-                        //console.log("resetting current duration");
+                        console.log("resetting current duration");
                         durNumber.set("value", 0);
-                        dojo.forEach(dijit.findWidgets(durChoices), function(choice){
-                          if (choice.value === "m"){
-                            choice.set("checked", true);
-                          }
-                        });
+                        durChoices.set("value", "m");
                         current.duration = false;
                       }
                       //console.log("deleted current duration", current);
@@ -666,7 +661,7 @@ define(
         
         //blockers
         dojo.connect(this.taskFormBlockers, "onAddOption", this, function(duration){
-          //console.debug("adding blockers", duration);
+          console.debug("adding blockers", duration);
           
           self.task.duration = duration;
           
@@ -1135,6 +1130,12 @@ define(
                       p.destroy();
                     }
                   });
+                  console.log("blockers", blockers);
+                  if (blockers && blockers.length === 0){
+                    console.log("deleting duration");
+                    delete self.task.duration;
+                    console.log("self task duration", self.task.duration);
+                  }
                 });
                 
                 p.showPill(id, db);
@@ -1146,6 +1147,9 @@ define(
             if (cont.hasChildren()){
               cont.destroyDescendants();
             }
+            
+            console.log("should reset duration");
+            self.task.duration = false;
           }
         }
       },

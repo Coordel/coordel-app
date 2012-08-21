@@ -144,6 +144,75 @@ module.exports = function(app, validate){
   app.get('/coordel/all', function(req, res){
     
   });
+  
+  app.get('/coordel/contactTasks', function(req, res){
+    
+    var user = req.query.username;
+    var contact = req.query.contact;
+    
+    //we need to get the user/contact projects
+    //console.log('queryString params', req.query, opts);
+    couch.view('coordel/userContactProjects', {startkey: [user, contact], endkey:[user,contact,{}]}, function(err, resView){
+      var projects = [],
+          tasks = [],
+          toReturn;
+   
+      if (err){
+        toReturn = {rows: [], error: err};
+      } else if (!resView){
+        toReturn = {rows: [], error: "unexpected error"};
+      } else {
+        if (resView.rows & resView.rows.length > 0){
+          resView.rows.forEach(function(row){
+            //console.log("IN FOR EACH ROWS", row);
+            projects.push(row);
+          });
+        } else if (resView && resView.length > 0){
+          resView.forEach(function(row){
+            //console.log("IN FOR EACH", row);
+            projects.push(row);
+          });
+        }
+      }
+      
+      //load the contact tasks and filter them
+      couch.view('coordel/contactTasks', {startkey: [contact], endkey:[contact,{}], include_docs: true}, function(err, resTasks){
+        
+        if (err){
+          toReturn = {rows: [], error: err};
+        } else if (!resView){
+          toReturn = {rows: [], error: "unexpected error"};
+        } else {
+          if (resTasks.rows & resTasks.rows.length){
+            resTasks.rows.forEach(function(row){
+              //console.log("IN FOR EACH ROWS", row);
+              if (projects.indexOf(row.project) > -1){
+                tasks.push(row);
+              }
+              
+            });
+          } else if (resTasks && resTasks.length){
+            resTasks.forEach(function(row){
+              //console.log("IN FOR EACH", row);
+              if (projects.indexOf(row.project) > -1){
+                tasks.push(row);
+              }
+            });
+         }
+       }
+        toReturn = {rows: tasks};
+        res.json(tasks);
+      });
+      
+    });
+    
+    
+    
+    
+    
+    //filter the contact tasks for only those with projects in common
+    
+  });
    
   app.get('/coordel/uuids', function(req, res){
     //console.log("UUIDS", req.query.count);

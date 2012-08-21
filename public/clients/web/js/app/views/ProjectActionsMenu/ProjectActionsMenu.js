@@ -117,6 +117,7 @@ define([
       });
       
       //publish opportunity for pending project
+      
       dojo.connect(this.publish, "onclick", this, function(){
         //console.log("cancel clicked");
         dojo.publish("coordel/projectAction", [{action: "publish", project: this.project, validate: true}]);

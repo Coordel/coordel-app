@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.66",
+  version: "0.1.74",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -850,6 +850,24 @@ module.exports = {
         			});
         		});
       	  }
+      	}
+      }
+    },
+    
+    userContactProjects: {
+      map: function(doc) {
+
+      	if (doc.docType === "project"){
+      	 
+      	  doc.users.forEach(function(username){
+      	    var test = {};
+      	    doc.users.forEach(function(contact){
+      	      if (username !== contact && !test[doc._id] && !doc.isMyPrivate) {
+      	        test[doc._id] = true;
+      	        emit([username, contact, doc._id], doc._id);
+      	      }
+      	    });
+      	  });
       	}
       }
     },

@@ -61,7 +61,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   	  case "calendar":
   	  query = function(task){
   	    var t = db.getTaskModel(task, true);
-  	    return t.isActive() && t.getDeadline() !== "" && applyFilter(task);
+  	    return t.isActive() && t.getDeadline() !== "" && t.getDeadline() !== "2200-01-01" && applyFilter(task);
   	  };
   	  break;
   	  case "task-invited":
@@ -138,9 +138,10 @@ app.store.util.TaskQueryEngine = function(query, options){
   		
   		//this gets the current list for a user
   	  case "current":
+  	  
   		query = function(task){
   		  var t = db.getTaskModel(task, true);
-  		  
+  		  //console.log("testing current", task.name, t, t.isCurrent());
   		  //if i've delegated this task in a project, then it won't be current for me
   		  /*
     		if (t.hasDelegator() && t.delegator === db.username()){
@@ -160,6 +161,14 @@ app.store.util.TaskQueryEngine = function(query, options){
   			return (t.isCurrent() || (t.isCleared() && !t.isDeferred()) || (t.isDelegated() && !t.isInvite() && !t.isProjectInvite()) || t.isIssue() || t.isSubmitted() || (t.isReturned() && !t.isDeferred())) && !t.isUnassigned() && applyFilter(task);
   		};
   		break;
+  		case "contactCurrent":
+  		query = function(task){
+  		  
+  			var t = db.getTaskModel(task, true);
+  			//console.log("testing contactCurrent", t.isCurrent(), t.isProjectDelegated());
+  			return ((t.isCurrent() && !t.isContactDeferred()) || (t.isCleared() && !t.isContactDeferred()) || (t.isProjectDelegated() && !t.isContactDeferred() && !t.isBlocked() && !t.isInvite() && !t.isProjectInvite()) || t.isIssue() || t.isSubmitted() || (t.isReturned() && !t.isContactDeferred())) && !t.isUnassigned() && applyFilter(task);
+  		};
+  		break;
   		case "blocked":
       query = function(task){
         var t = db.getTaskModel(task, true);
@@ -170,7 +179,16 @@ app.store.util.TaskQueryEngine = function(query, options){
   		query = function(task){
   			var t = db.getTaskModel(task, true);
   			task.contextStarts = t.getStarts();
+  			//console.log("testing deferred", t.isDeferred());
   			return t.isDeferred() && !t.isProjectInvite() && applyFilter(task);
+  		};
+  		break;
+  		case "contactDeferred": 
+  		query = function(task){
+  			var t = db.getTaskModel(task, true);
+  			task.contextStarts = t.getStarts();
+  			//console.log("testing contact deferred", t.isContactDeferred());
+  			return t.isContactDeferred() && !t.isProjectInvite() && applyFilter(task);
   		};
   		break;
   		case "delegated":

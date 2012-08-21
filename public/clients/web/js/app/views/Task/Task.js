@@ -278,10 +278,15 @@ define(
           this.taskCheckbox.set("disabled", true);
         }
         
+        //if this is blocked or blocking, then use the alternate colored checkboxes
+        if (t.hasBlocking() && !t.isDone() && !t.isCancelled()){
+          dojo.addClass(this.domNode, 'blocking');
+        }
+        
         //if this is blocked, checkboxes are disabled
         if (t.isBlocked()){
           this.taskCheckbox.set("disabled", true);
-          dojo.addClass(this.domNode, 'block-glow');
+          dojo.addClass(this.domNode, 'blocked');
         }
         
         //if a task is blocked because it's paused, add paused meta info so the user knows
@@ -295,7 +300,7 @@ define(
         }
         
         //if this is deferred, set defered date as task metainfo
-        if (t.isDeferred()){
+        if (t.isDeferred() || t.isContactDeferred()){
           
           
           //when a task is deferred, it might also need to show that it was cleared as an issue
@@ -603,13 +608,13 @@ define(
         
         //wire up the info button so that if this is blocking it publishes to show what's blocking it
         dojo.connect(this.showInfo, "onmouseover", this, function(){
-          if (t.blocking && t.blocking.length){
+          if (t.hasBlocking()){
             dojo.publish("coordel/block", [{list: t.blocking, show: true}]);
           }
         });
         
         dojo.connect(this.showInfo, "onmouseout", this, function(){
-          if (t.blocking && t.blocking.length){
+          if (t.hasBlocking()){
             dojo.publish("coordel/block", [{list: t.blocking, show: false}]);
           }
         });
@@ -858,7 +863,7 @@ define(
         if (t.isSubmitted()){
           
           //console.debug("it's submitted");
-          dojo.query(".meta-info", this.domNode).removeClass("hidden").addClass("c-color-active").addContent(coordel.metainfo.submitted + " : ");
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.submitted + " : ");
           var subUser = t.username;
           con = db.contactFullName(subUser);
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.taskDetails.from + " " + con + " : ");

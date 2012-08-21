@@ -57,10 +57,9 @@ define(
             username,
             last = false,
             hasEntries = false;
-            
-        
-            
+   
         //console.debug("showStream stream.length:",  stream.length);
+      
               
         self.showProject = (db.streamStore.currentContext === "userStream" || db.streamStore.currentContext === "userMessages");
         

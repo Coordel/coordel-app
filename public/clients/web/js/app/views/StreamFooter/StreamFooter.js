@@ -56,6 +56,12 @@ define(
           this._refresh();
         }  
         
+        //NOTE: decided it was dumb to not be able to reply in all cases
+        this.allowOptions = true;
+        if (project.isMyPrivate){
+          this.allowOptions = false;
+        }
+        
         if (this.allowOptions){
           this.replyObj = new reply({
               project: project

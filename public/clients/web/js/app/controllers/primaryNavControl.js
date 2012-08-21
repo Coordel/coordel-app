@@ -581,10 +581,13 @@ define(['dojo',
 
       dojo.forEach(cons, function(con){
         //console.log("creating contact", con);
-        cont.addChild(new c({
-          contact: con, 
-          doNavigation: true,
-          currentArgs: self.currentArgs}));
+        if (con.id !== db.username()){
+          cont.addChild(new c({
+            contact: con, 
+            doNavigation: true,
+            currentArgs: self.currentArgs}));
+        }
+        
       });
       
     },

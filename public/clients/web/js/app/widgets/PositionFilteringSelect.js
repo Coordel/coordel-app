@@ -130,12 +130,9 @@ dojo.declare(
       var duration = {};
       
       duration.number = this.altDropDown.durNumber.get("value");
+      duration.unit = this.altDropDown.durationChoices.get("value");
       
-      dojo.forEach(dijit.findWidgets(this.altDropDown.durationChoices), function(choice){
-        if (choice.checked){
-          duration.unit = choice.value;
-        }
-      });
+      console.log("adding duration", duration);
       
       this.onAddOption(duration);
     },

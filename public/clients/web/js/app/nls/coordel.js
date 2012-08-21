@@ -116,6 +116,8 @@ define({
 	  hrs: "hrs",
 	  days: "days",
 	  weeks: "weeks",
+	  minutes: "minutes",
+	  hours: "hours",
 	  userPreferences: {
 	    emailUpdateTitle: "E-mail Updates",
 	    emailUpdateText: "I want Coordel to send me e-mail updates"

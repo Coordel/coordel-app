@@ -251,6 +251,18 @@ border-bottom: 1px solid #a3aab1;
   margin-top: -2px;
   padding: 0;
 }
+.coordel .tasklist-item.blocked .dijitCheckBox {
+  background-image: url('images/checkboxStates-blocked.png');
+  /* checkbox sprite image */
+}
+.coordel .tasklist-item.blocking .dijitCheckBox {
+  background-image: url('images/checkboxStates-blocking.png');
+  /* checkbox sprite image */
+}
+.coordel .tasklist-item.blocking.blocked .dijitCheckBox {
+  background-image: url('images/checkboxStates-block.png');
+  /* checkbox sprite image */
+}
 .coordel .tasklist-item .dijitCheckBox, .coordel .dijitToggleButton .dijitCheckBoxIcon {
   /* unchecked */
   background-position: -20px;
@@ -266,9 +278,7 @@ border-bottom: 1px solid #a3aab1;
   background-position: -100px;
 }
 
-.coordel .tasklist-item.block-glow .dijitCheckBoxDisabled{
-  background-image: url('images/checkboxStates-blocked.png');
-}
+
 .coordel .tasklist-item .dijitCheckBoxCheckedDisabled {
   /* disabled but checked */
 

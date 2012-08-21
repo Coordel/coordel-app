@@ -38,9 +38,8 @@ define(["dojo",
       grpProject: false,
       grpUsername: false,
       showChecklist: false,
-      sortKeys:[{attribute: "contextDeadline", descending: false}]
-    },  //sort order defaults to sorting by name, checklist off 
-       //(options: by = name(s), project(g), priority(s), deadline(g), status(g), username(g))
+      sortKeys:[{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}]
+    },  
     init: function(focus, isTurbo){
       //console.debug("init taskListControl focus", focus);
       var tlc = this;
@@ -824,13 +823,14 @@ define(["dojo",
     
       var stream = db.streamStore.memory.query("all", {sort: [{attribute: "time", descending: true}]});
       //var stream = db.streamStore.loadUserStream();
-
+      
+      
       dojo.when(stream, function(resp){
         //console.debug("stream", resp.length);
         self._updateStream(resp);
 
         var handler = resp.observe(function(entry, removedFrom, insertedInto){
-          //console.debug("stream observed, entry: ", entry, "removedFrom: ", removedFrom, "insertedInto: ", insertedInto);
+          console.debug("stream observed, entry: ", entry, "removedFrom: ", removedFrom, "insertedInto: ", insertedInto);
           if (insertedInto > -1){
             handler.cancel();
             self.showStream();

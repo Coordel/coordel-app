@@ -59,38 +59,18 @@ define(["dojo",
               this.store = new cache(this.remote, this.memory);
             	return this.store.query({appId: username});
             },
-            _loadTasks: function(contact, userProjects){
-              this.taskMemory = new mem({
-                idProperty: "_id",
-                queryEngine: tqe});
-              this.taskRemote = new couch({
-                target: this.db, 
-                idProperty: "_id"
-              });
-              //this.remote = new obs(this.remote);
-              this.taskStore = new cache(this.taskRemote, this.taskMemory);
+            _loadTasks: function(contact){
+              this.taskMemory = new mem({idProperty: "_id", queryEngine: tqe});
+              this.taskRemote = new json({target:"/coordel/contactTasks", idProperty: "_id"});
               this.taskMemory = new obs(this.taskMemory);
-              
+              this.taskStore = new cache(this.taskRemote, this.taskMemory);
+
               var queryArgs = {
-                view: "coordel/userTasks",
-            		startkey: [contact],
-            		endkey: [contact,{}],
-            		include_docs: true
-            	};
-            	
-            	return this.taskStore.query(queryArgs);
-              
-            },
-            loadContactTasks: function(contact, userProjects){
-              //the userProjecs is an array of project ids of the the logged on user
-              //only tasks that are in that list should be returned
-              
-              //NOTE: this is obviously insecure on the client side so must be moved client side.
-              //it works for purpose of the initial product
-              
-              //console.debug("loading contact tasks for contact", contact);
-              this.currentContact = contact;
-              return this._loadTasks(contact, userProjects);
+              	contact: contact,
+              	username: this.username
+              };
+
+              return this.taskStore.query(queryArgs);
             }
         };
         

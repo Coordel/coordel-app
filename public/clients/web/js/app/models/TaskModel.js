@@ -88,10 +88,16 @@ define("app/models/TaskModel",
             //need to test if this blocker's duration is greater than other durations
             var dur = block.duration,
                 testDiff = 0;
+                
+            if (dur){
+               dur.number = parseInt(dur.number,10);
+            }
+   
+            if (dur && dur.number > 0){
 
-            if (dur && parseInt(dur.number, 10) > 0){
-
-              //console.log("block duration", block.name, dur);
+              //console.log("block duration", block.name, dur.unit, dur.number);
+              
+              
 
               switch (dur.unit){
                 case "m":
@@ -140,9 +146,11 @@ define("app/models/TaskModel",
         var defList = new dojo.DeferredList(funcs);
         dojo.when(defList, function(res){
           var test = res[0][1];
-          
+          //console.log("testing derived", res[0][1]);
           dojo.forEach(res, function(item){
+            //console.log("test values", item[1], test);
             if (item[1]< test){
+              //console.log("updated");
               test = item[1];
             }
           });
@@ -173,11 +181,17 @@ define("app/models/TaskModel",
       getDeadline: function(){
         
         var t = this,
-            deadline = t.deadline,
+            deadline = "",
             db = this.db;
+            
+        if (t.deadline){
+          deadline = t.deadline;
+        }
         
             
         if (!t.hasDeadline() && !t.isPrivate() && !t.isDelegated()){
+          
+          //console.log("no deadline, not private, not delegated", t.name);
           
           deadline = t.projDeadline();
           //it might be that a project doesn't have a deadline set for some reason
@@ -190,15 +204,21 @@ define("app/models/TaskModel",
             var newDate = new Date(test.getFullYear(), test.getMonth(), test.getDate(), 23, 59, 59);
             //console.debug("new Date", newDate.toString(), stamp.toISOString(test));
             deadline = stamp.toISOString(newDate);
+          } else {
+            //deadline was ""
+            deadline = "2200-01-01";
           }
     
         } else if (!t.hasDeadline() && (t.isPrivate() || t.isDelegated())) {
+          //console.log("no deadline, private or delegated", t.name);
           //the only tasks that don't have deadlines are those that are in the private project or
   		    //in the delegated project and get deadline returns "" for them. set it to 200 years in 
   		    //the future so it comes last in any sorted list
   		    //console.log("deadline defaulted to 2200-01-01");
   		    deadline = "2200-01-01";
         } 
+        
+        //console.log("deadline", deadline, t.name);
        
         return deadline;
       },
@@ -786,6 +806,36 @@ define("app/models/TaskModel",
     		return isDeferred;	
     	},
     	
+    	isContactDeferred: function(){
+    		//hasDeferDate() checks if there is a deferDate
+    		//this function checks if it's still deferred now
+    		var t = this,
+    			  isDeferred = false;
+    			  
+        //if the task is unassigned, it should only show as unassigned
+  		  if (t.isUnassigned()){
+  		    return false;
+  		  }	
+
+  		  //the assumption is that once a task gets going, it's not deferred any more
+    		if (t.hasDeferDate()
+    		  && !t.isSubmitted()
+    		  && !t.isBlocked()
+    		  && !t.isPaused()
+    		  && !t.isIssue()
+    		  //&& !t.isCleared()
+    		  //&& !t.isReturned()
+    			&& !t.isDone()
+    			&& !t.isCancelled()
+    			&& !t.isInvite()
+    			&& stamp.toISOString(new Date()) < t.calendar.start){
+    				isDeferred = true;
+    				//console.log(t.task.name + " is DEFERRED");
+    		}
+    	  
+    		return isDeferred;	
+    	},
+    	
     	hasDeferDate: function(){
     		//this function just checks if a defer date exists
     		//isDeferred() determines if the task is deferred over time
@@ -1334,7 +1384,7 @@ define("app/models/TaskModel",
           }
           
           dojo.when(save, function(args){
-            //console.log("updating blocking", updatedTask);
+            console.log("updating blocking", updatedTask);
             t.updateBlocking(updatedTask);
 
             dojo.publish("coordel/setPrimaryBoxCounts");
@@ -1345,33 +1395,86 @@ define("app/models/TaskModel",
       },
       
       updateBlocking: function(task){
-        /*
-         var t = this,
+        
+        var t = this,
       			  db = this.db,
               p = this.p,
               changes = [],
-      	      latest = task.versions.latest,
+      	      latest = {}, 
       	      hasChange = false,
       	      recap;
+      	
+      	var tModel = db.getTaskModel(task, true);     
+        var body = {
+          project: tModel.p.project.name,
+          task: task.name
+        };
+        
+        if(task.versions && task.versions.latest){
+          latest = task.versions.latest;
+        }
         
         if (task.coordinates){
+          
+          console.log("coordinates", task.coordinates, latest);
+          
     	    function getBlocker(task){
     	      var def = new dojo.Deferred();
     	      var mod = db.get(task);
     	      dojo.when(mod, function(t){
     	        
-    	        def.callback(db.getTaskModel(t,true));
+    	        def.callback(t);
     	      });
     	      return def;
     	    }
     	    
-    	    if (!latest.coordinates){
+    	    function addBlocking(item){
+    	      
+    	      console.log("adding blocking entry for", item.name, task.name);
+    
+    	      if (!item.blocking){
+    	        item.blocking = [];
+    	      }
+    	      if (dojo.indexOf(item.blocking, task._id) === -1){
+    	        item.blocking.push(task._id);
+            
+              var t = db.getTaskModel(item, true);
+
+              item = t.addActivity({
+          			verb: "ADD-BLOCKING",
+          			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+          			icon: t.icon.addBlocking,
+          			body: dojo.toJson(body)
+          		}, item);
+              t.update(item);
+            }
+    	    }
+    	    
+    	    function removeBlocking(item){
+    	      console.log("removing blocking entry for", item.name, task.name);
+            if (item.blocking && dojo.indexOf(item.blocking, task._id) > -1){
+              item.blocking = dojo.filter(item.blocking, function(id){
+                return id !== task._id;
+              });
+              var t = db.getTaskModel(item, true);
+              item = t.addActivity({
+          			verb: "REMOVE-BLOCKING",
+          			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
+          			icon: t.icon.removeBlocking,
+          			body: dojo.toJson(body)
+          		}, item);
+              t.update(item);
+            }
+    	    }
+    	    
+    	    if (latest && !latest.coordinates){
     	      //all of these were added
     	      hasChange = true;
     	      dojo.forEach(task.coordinates, function(b){
     	        var blocker = getBlocker(b);
     	        dojo.when(blocker, function(bl){
-    	          console.log("make blocking entry for", bl.task.name);
+    	          //console.log("make blocking entry for", bl.task.name);
+    	          addBlocking(bl);
     	        });
     	      });
     	    } else {
@@ -1396,7 +1499,8 @@ define("app/models/TaskModel",
     	          //console.log("blocker removed");
       	        var blocker = getBlocker(b);
       	        dojo.when(blocker, function(bl){
-      	          console.log("remove previous blocking entry for", bl.task.name);
+      	          //console.log("remove previous blocking entry for", bl.task.name);
+      	          removeBlocking(bl);
       	        });
     	        });
     	      }
@@ -1417,28 +1521,31 @@ define("app/models/TaskModel",
     	          //console.log("blocker added");
       	        var blocker = getBlocker(b);
       	        dojo.when(blocker, function(bl){
-      	          console.log("add additional blocking entry for ", bl.task.name);
+      	          //console.log("add additional blocking entry for ", bl.task.name);
+      	          addBlocking(bl);
       	        });
     	        });
     	      }
     	    }
     	  
     	  } else {
-    	    if (latest.coordinates){
+    	    console.log("no coordinates", task);
+    	    if (latest && latest.coordinates){
     	      //all of these were removed
     	      hasChange = true;
     	      dojo.forEach(latest.coordinates, function(b){
     	        //console.log("blocker removed");
     	        var blocker = getBlocker(b);
     	        dojo.when(blocker, function(bl){
-    	          console.log("remove previous blocking entries for ", bl.task.name);
+    	          ///console.log("remove previous blocking entries for ", bl.task.name);
+    	          removeBlocking(bl);
     	        });
     	      });
     	      
     	    }
     	  }
         
-        */
+      
         
         /*
         //this function keeps blocking tasks in sync with this one.

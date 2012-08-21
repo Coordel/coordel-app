@@ -51,7 +51,7 @@ define([
         var self = this;
         
         
- 
+        //console.debug("init projectControl focus", focus);
         
         
         if (this.showRightColumnHandler){
@@ -360,7 +360,7 @@ define([
         var store = db.projectStore;
         var cont = dijit.byId("projTasksMain");
         this.view = "order";
-        if (cont.hasChildren()){
+        if (cont && cont.hasChildren()){
           cont.destroyDescendants();
         }
         

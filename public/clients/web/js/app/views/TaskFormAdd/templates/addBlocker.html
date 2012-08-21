@@ -10,16 +10,15 @@
 				</div> 
 				<div class="c-padding">
 					<input dojoAttachPoint="durNumber" value="0" dojoType="dijit.form.TextBox" style="width: 30px"/>
-					<span dojoAttachPoint="durationChoices">
-						<label class="instructions">${coordel.mins}</label>
-						<input checked="checked" value="m" dojoType="dijit.form.RadioButton" name="blockedDuration"/>
-						<label class="instructions">${coordel.hrs}</label>
-						<input value="h" dojoType="dijit.form.RadioButton" name="blockedDuration"/>
-						<label value="d" class="instructions">${coordel.days}</label>
-						<input dojoType="dijit.form.RadioButton" name="blockedDuration"/>
-						<label class="instructions">${coordel.weeks}</label>
-						<input value="w" dojoType="dijit.form.RadioButton" name="blockedDuration"/>
-					</span>
+					<select dojoAttachPoint="durationChoices" dojoType="dijit.form.Select">
+					  <option value="m">${coordel.minutes}</option>
+						<option value="h">${coordel.hours}</option>
+					
+						<option value="d" >${coordel.days}</option>
+						
+						<option value="w">${coordel.weeks}</option>
+						
+					</select>
 				</div>
 			</div>
 		</div>

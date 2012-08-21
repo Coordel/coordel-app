@@ -485,7 +485,7 @@ define("app/models/ProjectModel",
     		//dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: project._id}]);
     	},
     	
-    	publish: function(project, opportunity, message){
+    	publish: function(project, message){
     	  var p = this,
     	      db = this.db;
     	    
@@ -923,7 +923,7 @@ define("app/models/ProjectModel",
     	    project = this.db.projectStore.store.get(this._id);
     	  }
     	  
-    	  //console.debug("mark Done", project);
+    	  console.debug("mark Done", project);
     	  
     		project = this.addActivity({
     			verb: "COMPLETE",
@@ -942,6 +942,13 @@ define("app/models/ProjectModel",
     	    project.status = "ARCHIVE";
       		project.substatus = "DONE";
       		docs.push(project);
+      		
+      	  //if there aren't more than 2 users, then just mark it done
+      	  if (project.users.length < 3){
+      	    dojo.forEach(project.assignments, function(assign){
+      	      assign.ack = true;
+      	    });
+      	  }
       		
     	    //now deal with the tasks
     	    var tasks = store.taskMemory.query({db:db});
