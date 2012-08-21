@@ -3,7 +3,6 @@ define([
   "dojo/DeferredList",
   "dijit", 
   "app/layouts/projectLayout",
-  "app/views/ContactDetails/ContactDetails",
   "app/views/TaskListGroup/TaskListGroup",
   "app/views/StreamMessage/StreamMessage",
   "i18n!app/nls/coordel",
@@ -20,7 +19,7 @@ define([
   "app/views/DeliverableList/DeliverableList",
   "app/views/QuickEntry/QuickEntry",
   "app/util/Sort",
-   "app/views/ProjDetailsHeader/ProjDetailsHeader"], function(dojo, dl, dijit, layout, c, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,DeliverableList, QuickEntry, Sort,pdh) {
+   "app/views/ProjDetailsHeader/ProjDetailsHeader"], function(dojo, dl, dijit, layout, tlg, message, coordel, Stream, sModel, db, Info, Empty, Task, Assign, pStatus, ProjectForm, cDialog,DeliverableList, QuickEntry, Sort,pdh) {
   //return an object to define the "./newmodule" module.
   return {
       
@@ -653,9 +652,9 @@ define([
           }
         }, this);
         
-        //console.debug("responsible", own);
-        //console.debug("participants", part);
-        //console.debug("followers", follow);
+        console.debug("responsible", own);
+        console.debug("participants", part);
+        console.debug("followers", follow);
         
         //add the responsible
         cont.addChild(new Assign({

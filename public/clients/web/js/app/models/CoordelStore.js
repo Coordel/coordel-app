@@ -13,11 +13,12 @@ define(["dojo",
         "app/models/ContactStore",
         "app/models/StreamStore",
         "app/models/RoleStore",
+        "app/models/ProfileStore",
         "i18n!app/nls/coordel",
         "app/util/dateFormat",
         "dojo/date/stamp",
         "app/util/Sort"
-        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, rModel, tModel, dm, cStore, sStore,rStore, coordel, dtFormat, stamp, Sort) {
+        ], function(dojo, couch, mem, cache, obs, aStore, tStore, pStore, pModel, rModel, tModel, dm, cStore, sStore,rStore, profStore,coordel, dtFormat, stamp, Sort) {
       
         var uuidCache = [];
         var CoordelStore = {
@@ -35,6 +36,8 @@ define(["dojo",
             appStore: null,
             
             roleStore: null,
+            
+            profileStore: null, 
             
             headers: {Accept: "application/json", "Content-Type": "application/json"},
             
@@ -141,10 +144,13 @@ define(["dojo",
               self.streamStore = sStore;
               self.appStore = aStore;
               self.roleStore = rStore;
+              self.profileStore = profStore;
               
               var def = new dojo.Deferred();
               
               var a = aStore.init();
+              
+              
               
               a.then(function(app){
                 //console.debug("APP", app);
@@ -158,8 +164,9 @@ define(["dojo",
                   sStore.init(app.id),
                   rStore.init(app.id)
                   
-                  
                 ]);
+                
+                profStore.init(app.id);
 
                 list.then(function(resp){
     

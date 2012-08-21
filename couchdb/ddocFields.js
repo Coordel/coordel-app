@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.74",
+  version: "0.1.80",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -18,6 +18,18 @@ module.exports = {
           		);
       		  });
       		}
+        }
+      }
+    },
+    
+    userProfiles: {
+      map: function(doc){
+        if (doc.docType === "user"){
+          //emit the user's email as doc 0 because we need to be able to get by userid
+          //and might need to have access the the user info
+          emit(
+            [doc.app], doc
+          );
         }
       }
     },
@@ -758,6 +770,37 @@ module.exports = {
           doc.assignments.forEach(function(assign){
             if (assign.feedback && assign.feedback.length > 0){
               emit([assign.username, toISODateArray(doc.updated)], {name: doc.name, feedback: assign.feedback});
+          	}
+          });
+        }
+      }
+    },
+    
+    userFeedbackComments: {
+      map: function(doc){
+        function toISODateArray (date){
+      	  var dtString = date.split("T")[0];
+      	  dtString = dtString.split("-");
+      	  var tmString = date.split("T")[1];
+      	  tmString = tmString.split(".");
+      	  tmString = tmString[0].split(":");
+      	  return [
+      	    parseInt(dtString[0],10), 
+      	    parseInt(dtString[1],10), 
+      	    parseInt(dtString[2],10), 
+      	    parseInt(tmString[0],10), 
+      	    parseInt(tmString[1],10), 
+      	    parseInt(tmString[2],10)];
+      	}
+        
+        if (doc.docType === "project"){
+          doc.assignments.forEach(function(assign){
+            if (assign.feedback && assign.feedback.length){
+              assign.feedback.forEach(function(item){
+                if (item.comment){
+                  emit([assign.username, toISODateArray(doc.updated)], {project: doc._id, name: doc.name, from: item.from, score: item.score, comment: item.comment, created: item.created});
+                }
+              });
           	}
           });
         }

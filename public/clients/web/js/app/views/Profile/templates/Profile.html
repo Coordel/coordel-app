@@ -1,0 +1,35 @@
+<div dojoAttachPoint="contactContainer">
+	<div style="line-height: 32px" dojoAttachPoint="contactContainer">
+	  <div dojoAttachPoint="feedback" class="c-float-l c-text-center feedback" style="padding-bottom:2px">
+	    <span class="rating" dojoAttachPoint="feedbackRating"></span>
+	  </div>
+		<img dojoAttachPoint="userImage" src="/images/default_contact.png" class="ui-corner-all c-float-l hidden">
+		<span dojoAttachPoint="fullNameValue" class="contact-name"></span>
+	</div>
+	<div class="clear"></div>
+	<div class="contact-info ui-corner-all c-padding" style="background: color: #fff">
+		<ul>
+			<li dojoAttachPoint="email" class="email">
+				<ins class="c-float-l ui-icon-contact icon-email"></ins>
+				<a dojoAttachPoint="emailValue" class="no-image" href="mailto:${profile.profile.email}"></a>
+			</li>
+			<li dojoAttachPoint="skype" class="skype">
+				<ins class="c-float-l ui-icon-contact icon-skype"></ins>
+				<a dojoAttachPoint="skypeValue" href="skype:${profile.profile.skype}"></a>
+			</li>
+		
+			<li dojoAttachPoint="phone" class="phone">
+				<ins class="c-float-l ui-icon-contact icon-phone"></ins>
+				<span dojoAttachPoint="phoneValue"></span>
+			</li>
+		</ul>
+	</div>
+	<div class="clear"></div>
+	<div style="line-height: 32px">
+		<span class="contact-name">${coordel.positiveFeedback}</span>
+	</div>
+	<div class="clear"></div>
+	<div dojoAttachPoint="feedbackMessages" class="contact-info ui-corner-all c-padding">
+	
+	</div>
+</div>

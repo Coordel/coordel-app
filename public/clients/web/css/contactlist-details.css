@@ -5,14 +5,27 @@
 	
 }
 
-.contactlist-details a.contact-name {
+.contactlist-details .feedback {
+  height: 32px;
+  width: 32px;
+  background: url(images/icons/feedback.png) no-repeat center center;
+}
+
+.contactlist-details .feedback .rating {
+  color: #fff; 
+  font-size:16px; 
+  font-weight: bold;
+  text-shadow: rgba(0, 0, 0, 0.292969) 0px 1px 0px;
+}
+
+.contactlist-details .contact-name {
   margin-left: 8px;
   line-height: 32px;
   font-weight: bold;
   font-size: 12px;
 }
 
-.contactlist-details a {
+.contactlist-details a, .contactlist-details .fullname {
   line-height: 16px;
   color: #000;
   text-decoration: none;

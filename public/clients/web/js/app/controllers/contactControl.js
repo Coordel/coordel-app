@@ -7,7 +7,8 @@ define([
   "i18n!app/nls/coordel",
   "app/models/CoordelStore",
   "app/views/EmptyProject/EmptyProject",
-  "app/views/Task/Task"], function(dojo, dijit, layout, tlg, tl, coordel, db, Empty, Task) {
+  "app/views/Task/Task",
+  "app/views/Profile/Profile"], function(dojo, dijit, layout, tlg, tl, coordel, db, Empty, Task, Profile) {
   //return an object to define the "./newmodule" module.
   return {
       focus: "contact",
@@ -29,12 +30,43 @@ define([
         
         //load any tasks that this contact has
        
-          dojo.when(db.contactStore._loadTasks(contact), function(){
-            self.showTasks();
-          });
+        dojo.when(db.contactStore._loadTasks(contact), function(){
+          self.showTasks();
+        });
+        
+        var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
+        //check if we should show the right column
+  	    self.setRightColumn(showColumn);
+        
+        if (this.showRightColumnHandler){
+          dojo.unsubscribe(this.showRightColumnHandler);
+          this.showRightColumnHandler = null;
+        }
+        
+        this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "setRightColumn");
         
         //add profile to container
         document.title = "Coordel > " + coordel.contacts + " > " + db.contactFullName(this.contact);
+      },
+      
+      showContact: function(){
+        var contact = this.contact;
+        
+        var cont = dijit.byId("rightDetailsMain"),
+            profiles = db.profileStore;
+            
+        if (cont.hasChildren()){
+          cont.destroyDescendants();
+        }
+        
+        profiles.get(contact).then(function(profile){
+          console.log("got profile", profile);
+          var p = new Profile({
+            profile: profile
+          });
+          cont.addChild(p);
+        });
+        
       },
       
       showTasks: function(){
@@ -112,6 +144,22 @@ define([
         });
         cont.addChild(this.emptyGroup);
       } 
+    },
+    
+    setRightColumn: function(showColumn){
+      var col = dijit.byId("rightDetailsLayout");
+      if (col){
+        if (showColumn){
+          dojo.removeClass(col.domNode, "hidden");
+          this.showContact();
+          
+        } else {
+  
+          dojo.addClass(col.domNode, "hidden");
+       
+        }
+        dijit.byId("outerLayout").resize();
+      }
     },
 
     _addGroup: function(header, tasks){

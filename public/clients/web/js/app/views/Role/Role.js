@@ -58,7 +58,7 @@ define(
         
         if (resps && resps.length > 0){
           dojo.forEach(resps, function(r){
-            control.log("setResps", r.task);
+            console.log("setResps", r.task);
             var t = db.projectStore.taskStore.get(r.task);
 
             var resp = new R({

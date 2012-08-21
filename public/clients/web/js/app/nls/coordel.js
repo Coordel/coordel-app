@@ -15,6 +15,7 @@ define({
 	  time: "Time",
 	  add: "Add",
 	  store: "Store",
+	  positiveFeedback: "Positive Feedback",
 	  externalProject: "Task in another Coord",
 	  blueprint: "Blueprint",
 	  blueprintInstructions: "Choose a Blueprint and then click Apply Blueprint",

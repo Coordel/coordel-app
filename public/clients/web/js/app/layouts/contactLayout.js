@@ -52,7 +52,7 @@ define([
       
       //NOTE disabling profile for now. Need to enable it to show feedback, etc
       
-      /*
+      
       
       //right profile container
       var prContain = new bc({
@@ -72,7 +72,8 @@ define([
       //profile main
       var prMain = new cpane({
         region: "center",
-        style: "padding: 0"
+        style: "padding: 0",
+        id: "rightDetailsMain"
         
       }).placeAt(prContain);
       
@@ -84,7 +85,7 @@ define([
         "class": "rightFooter",
         content: "<div>&nbsp;</div>"
       }).placeAt(prContain);
-      */
+      
       details.startup();
       cont.resize();
     }

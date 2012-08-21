@@ -30,7 +30,7 @@ define(
        
         var c = this.contact;
         
-        //console.debug("contact", this.contact);
+        console.debug("contact", this.contact);
         
         //now set default to "" where the user hasn't provided the details value
         
