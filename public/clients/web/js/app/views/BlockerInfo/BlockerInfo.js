@@ -10,9 +10,10 @@ define(
     "app/views/BlockerHeader/BlockerHeader",
     "app/views/Deliverable/Factory",
     "app/views/EmptyDeliverable/EmptyDeliverable",
-    "i18n!app/nls/coordel"
+    "i18n!app/nls/coordel",
+    "app/views/TaskInfo/TaskInfo"
     ], 
-  function(dojo, w, t, html, db, TaskInfo, Dialog, cpane, BlockerHeader, Factory, Empty, coordel) {
+  function(dojo, w, t, html, db, TaskInfo, Dialog, cpane, BlockerHeader, Factory, Empty, coordel,ti) {
   
   dojo.declare(
     "app.views.BlockerInfo", 
@@ -78,9 +79,14 @@ define(
     		      } else {
     		        var nodeClass = "";
     		        
+    		        /*
     		        var empty = new Empty({
     		          emptyTitle: coordel.empty.noDeliverables
     		        });
+    		        */
+    		        
+    		        //since there aren't any deliverables, show the task info
+    		        var info = new ti({task:t.task, showName: false, isTurbo: false});
     		            
     		        if (t.isDone()){
     		          nodeClass = "done";
@@ -88,9 +94,15 @@ define(
     		          nodeClass = "cancelled";
     		        }
     		        
-    		        dojo.addClass(empty.domNode, nodeClass);
+    		        
+    		        dojo.addClass(info.domNode, nodeClass);
+    		        dojo.addClass(info.domNode, "c-padding-large");
   		          
+  		          /*
   		          self.containerNode.addChild(empty);
+  		          */
+  		          
+  		          self.containerNode.addChild(info);
   		          
     		      }
   		      });

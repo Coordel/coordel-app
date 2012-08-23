@@ -11,34 +11,19 @@
   	<link rel="stylesheet" href="/css/users.css" media="screen">
     <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
     
-    <!-- load loggly -->
-    <script type="text/JavaScript">
-      var scr = document.createElement("script");
-      var host = (("https:" == document.location.protocol) ? "https://d3eyf2cx8mbems.cloudfront.net" : "http://d3eyf2cx8mbems.cloudfront.net");
-      scr.type = "text/javascript";
-      scr.src = host + "/js/loggly-0.1.0.js";
-      document.documentElement.firstChild.appendChild(scr);
-    </script>
-    <script type="text/javascript">
-      window.onload=function(){ 
-        var key = "a9ca9bbc-d314-4a31-9223-d0a59e37a52e";
-        var host = (("https:" == document.location.protocol) ? "https://logs.loggly.com" : "http://logs.loggly.com");
-        castor = new loggly({ url: host+'/inputs/'+key+'?rt=1', level: 'log'});
-        castor.log("url="+window.location.href + " browser=" + castor.user_agent + " height=" + castor.browser_size.height);
-      };
-    </script>
+   
     
     
 
   	<!-- load dojo and provide config via data attribute -->
-  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true"></script>
   	<script>
   	
   	    require({
             baseUrl: "/js/",
             packages: [
-                { name: "dojo", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/" },
-                { name: "dijit", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit/" },
+                { name: "dojo", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/" },
+                { name: "dijit", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.8/dijit/" },
                 
                 { name: "corp", location: "corp" }
             ]
@@ -46,7 +31,7 @@
   	    
   			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
   	    require(["dojo", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dojo, cookie, corp){
-  	      
+  	      dojo.removeClass("bnLogin", "hidden");
   	      corp.setBackground();
   	
   	      
@@ -65,6 +50,23 @@
   	    });
   	</script>
   	
+  	 <!-- load loggly -->
+      <script type="text/JavaScript">
+        var scr = document.createElement("script");
+        var host = (("https:" == document.location.protocol) ? "https://d3eyf2cx8mbems.cloudfront.net" : "http://d3eyf2cx8mbems.cloudfront.net");
+        scr.type = "text/javascript";
+        scr.src = host + "/js/loggly-0.1.0.js";
+        document.documentElement.firstChild.appendChild(scr);
+      </script>
+      <script type="text/javascript">
+        window.onload=function(){ 
+          var key = "a9ca9bbc-d314-4a31-9223-d0a59e37a52e";
+          var host = (("https:" == document.location.protocol) ? "https://logs.loggly.com" : "http://logs.loggly.com");
+          castor = new loggly({ url: host+'/inputs/'+key+'?rt=1', level: 'log'});
+          castor.log("url="+window.location.href + " browser=" + castor.user_agent + " height=" + castor.browser_size.height);
+        };
+      </script>
+  	
   
   	
   	<!-- load google analytics -->
@@ -82,16 +84,16 @@
 
   	</script>
 	</head>
-	<body id="top" class="coordel corp-login">
+	<body id="top" class="coordel corp-login <%=background%>">
     <div id="layout_wrapper_outer">
       <div id="layout_wrapper">
   	    <div id="layout_top">
   	      <div>
   		      <div id="login-button">
-      			  <div class="corp-button" data-dojo-type="dijit.form.DropDownButton" showLabel="true" iconClass="field-icon field-icon-user">
+      			  <div id="bnLogin" class="corp-button hidden" data-dojo-type="dijit.form.DropDownButton" showLabel="true" iconClass="field-icon field-icon-user">
           		    <span>Login</span><!-- Text for the button -->
           		    <!-- The dialog portion -->
-          		    <div class="corp-tooltip" style="width:260px" data-dojo-type="dijit.TooltipDialog" id="ttDialog">
+          		    <div class="corp-tooltip" style="width:260px;visibility:hidden;" data-dojo-type="dijit.TooltipDialog" id="ttDialog">
           		      <script type="dojo/method" data-dojo-event="onOpen" data-dojo-args="evt">
           		        var email = dojo.cookie("email"),
                           pass = dojo.cookie("pass");
@@ -155,7 +157,7 @@
           		        </div>
           		      </form>
           		      <div class="c-margin-t">
-          		        	<button id="joinUsUpper" class="corp-contrast c-float-l hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us
+          		        	<button id="joinUsUpper" class="corp-contrast c-float-l" data-dojo-type="dijit.form.Button" type="submit">Join Us
           		        	  <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
                             // Do something:
                             castor.info("buttonClick=joinUs");

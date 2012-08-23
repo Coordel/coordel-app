@@ -4,7 +4,7 @@
   ],
   "name": "coordel-app",
   "author": "Coordel <support@coordel.com>",
-  "version": "0.1.0-77",
+  "version": "0.1.0-79",
   "scripts": {
     "start": "./app.js",
     "test": "make test"
@@ -35,7 +35,9 @@
   "engines": {
     "node": "v0.6.x"
   },
-  "bundledDependencies": ["redis"],
+  "bundledDependencies": [
+    "redis"
+  ],
   "devDependencies": {
     "mocha": "*",
     "should": "*"

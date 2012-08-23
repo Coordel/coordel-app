@@ -218,7 +218,7 @@ exports.getChangeAlertMap = function(change){
 	if (doc.docType == "prerequisite"){
 	   if (!map[doc.username]) map[doc.username] = true;
 	}
-	console.log("MAP", map);
+	//console.log("MAP", map);
 	return map;
 
 };

@@ -27,9 +27,9 @@
  */
 .corp-button .dijitButtonNode {
   /* rules for dijit.form.*Button widgets and arrow nodes on ComboBox, Spinner etc. */
-  -webkit-transition-property: #5090AE;
-  -moz-transition-property: #5090AE;
-  transition-property: #5090AE;
+  -webkit-transition-property: #00629b;
+  -moz-transition-property: #00629b;
+  transition-property: #00629b;
   -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
   transition-duration: 0.3s;
@@ -40,12 +40,12 @@
 .corp-button.dijitToggleButton .dijitButtonNode {
   /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
 
-  border: 1px solid #5090AE;
+  border: 1px solid #00629b;
  
   background-image: url("/clients/web/0.0.1/css/images/button_background.png");
   background-position: center top;
   background-repeat: repeat-x;
-  background-color: #5090AE;
+  background-color: #00629b;
   color: #eeeeee;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -64,12 +64,12 @@
 .corp-contrast.dijitToggleButton .dijitButtonNode {
 /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
 
-  border: 1px solid #D60;
+  border: 1px solid #DA291C;
 
   background-image: url("/clients/web/0.0.1/css/images/button_background.png");
   background-position: center top;
   background-repeat: repeat-x;
-  background-color: #D60;
+  background-color: #DA291C;
   color: #eeeeee;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -87,7 +87,7 @@
 .corp-contrast.dijitComboButton .dijitButtonNodeHover,
 .corp-contrast.dijitComboButton .dijitDownArrowButtonHover,
 .corp-contrast.dijitToggleButtonHover .dijitButtonNode {
-  background-color: #D60;
+  background-color: #DA291C;
   color: #ffffff;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
@@ -100,12 +100,12 @@
 .corp-dark.dijitToggleButton .dijitButtonNode {
 /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
 
-  border: 1px solid #00374E;
+  border: 1px solid #003C60;
 
   background-image: url("/clients/web/0.0.1/css/images/button_background.png");
   background-position: center top;
   background-repeat: repeat-x;
-  background-color: #00374E;
+  background-color: #003C60;
   color: #eeeeee;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -123,7 +123,7 @@
 .corp-dark.dijitComboButton .dijitButtonNodeHover,
 .corp-dark.dijitComboButton .dijitDownArrowButtonHover,
 .corp-dark.dijitToggleButtonHover .dijitButtonNode {
-  background-color: #00374E;
+  background-color: #003C60;
   color: #ffffff;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
@@ -178,7 +178,7 @@
 .corp-button.dijitComboButton .dijitButtonNodeHover,
 .corp-button.dijitComboButton .dijitDownArrowButtonHover,
 .corp-button.dijitToggleButtonHover .dijitButtonNode {
-  background-color: #5090AE;
+  background-color: #00629b;
   color: #ffffff;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
@@ -209,8 +209,8 @@
 .corp-button .dijitDropDownButtonDisabled .dijitButtonNode,
 .corp-button .dijitComboButtonDisabled .dijitButtonNode,
 .corp-button .dijitToggleButtonDisabled .dijitButtonNode {
-  background-color: #5090AE;
-  border: solid 1px #5090AE;
+  background-color: #00629b;
+  border: solid 1px #00629b;
   background-image: none;
   color: #ffffff;
   -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);

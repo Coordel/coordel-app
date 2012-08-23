@@ -21,19 +21,16 @@ define([
     var self = this;
     
     on(dom.byId("site_title"), "click", function(){
-  	  console.log("go home", window);
   	  window.location.href = "/";
   	});
   	
   	connect.subscribe("/corp/log", function(data){
-      console.log("i got", data);
       corp.log(data);
     });
     
     // This returned object becomes the defined value of this module
     var corp = {
       log: function(doc){
-        console.log("logging", doc);
         var xhrArgs = {
            url: "/admin/log",
            postData: doc,
@@ -89,8 +86,6 @@ define([
       	if (bg <= 0){
       		bg = 1;
       	}
-
-      	dojo.addClass("top", "bg"+bg.toString());
 
       	bg = parseInt(bg,10) + 1;
 

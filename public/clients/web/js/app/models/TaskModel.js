@@ -218,6 +218,10 @@ define("app/models/TaskModel",
   		    deadline = "2200-01-01";
         } 
         
+        if (t.isDone() || t.isCancelled()){
+          deadline = "2200-01-01";
+        }
+        
         //console.log("deadline", deadline, t.name);
        
         return deadline;

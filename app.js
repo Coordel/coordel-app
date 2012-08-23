@@ -34,6 +34,10 @@ var express     = require('express'),
 
 var auth = settings.auth;
 
+function getBackground(){
+  return "bg" + Math.floor((Math.random()*10)+1);
+}
+
 //set io log level
 io.set('log level', 1);
 
@@ -226,25 +230,31 @@ require('./routes/blueprints')(app, validate);//blueprint and share objects
 require('./routes/icons')(app, validate);//listing of all app icons
 require('./routes/alerts')(app, validate);//alert management
 
+
+
+
 //root 
 app.get('/', function(req, res){
+ 
   if (home){
     home = false;
+    console.log(req.cookies.bg);
     if (req.query.p){
+
       //this is a request for a page
-      res.render('corp/page/' + req.query.p, {layout: 'corp/page'});
+      res.render('corp/page/' + req.query.p, {layout: 'corp/page', background: "bg" + req.cookies.bg});
     } else {
       //show the home page
-      res.render('corp/home/content-a', {layout: 'corp/home', color: 'c-bg-purple'});
+      res.render('corp/home/content-a', {layout: 'corp/home', color: 'c-bg-purple', background: "bg" + req.cookies.bg});
     }
   } else {
     home = true;
     if (req.query.p){
       //this is a request for a page
-      res.render('corp/page/' + req.query.p, {layout: 'corp/page'});
+      res.render('corp/page/' + req.query.p, {layout: 'corp/page', background: "bg" + req.cookies.bg});
     } else {
       //show the alt home page
-      res.render('corp/home/content-b', {layout: 'corp/home', color: 'c-bg-green'});
+      res.render('corp/home/content-b', {layout: 'corp/home', color: 'c-bg-green', background: "bg" + req.cookies.bg});
     }
   }
 });

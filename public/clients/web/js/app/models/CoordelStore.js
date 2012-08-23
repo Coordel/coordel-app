@@ -437,7 +437,7 @@ define(["dojo",
                   bp.idMap[t._id]= id;
                   doc._id = id;
                   doc.isNew = true;
-                  if (template.blueprintAttachments[t._id]){
+                  if (template.blueprintAttachments && template.blueprintAttachments[t._id]){
                     doc = template.blueprintAttachments[t._id];
                     bp.idMap[t._id]= template.blueprintAttachments[t._id]._id;
                     doc.isNew = false;
@@ -462,7 +462,7 @@ define(["dojo",
                   bp.idMap[t._id]= id;
                   doc._id = id;
                   doc.isNew = true;
-                  if (template.blueprintAttachments[t._id]){
+                  if (template.blueprintAttachments && template.blueprintAttachments[t._id]){
                     doc = template.blueprintAttachments[t._id];
                     bp.idMap[t._id]= template.blueprintAttachments[t._id]._id;
                     doc.isNew = false;

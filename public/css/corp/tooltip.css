@@ -1,11 +1,11 @@
 .corp-tooltip .dijitTooltipContainer {
   /* the part with the text */
 
-  background-color: #5090AE;
+  background-color: #00629b;
   background-image: url("img/tooltipGradient.png");
   background-repeat: repeat-x;
   background-position: bottom;
-  border: 4px solid #5090AE;
+  border: 4px solid #00629b;
   padding: 6px 8px;
   border-radius: 4px;
   font-size: 1em;

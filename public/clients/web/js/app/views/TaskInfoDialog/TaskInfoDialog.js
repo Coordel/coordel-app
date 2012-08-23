@@ -27,14 +27,15 @@ define([
       
       postCreate: function(){
         this.inherited(arguments);
-        console.log("in post create taskInfoDialog");
+        //console.log("in post create taskInfoDialog");
         this._setTask();
       },
         
       _setTask: function(){
+        this._setBlocking();
         this._setInfo();
         this._setBlockers();
-        this._setBlocking();
+        
       },
       
       _setInfo: function(){
@@ -48,7 +49,6 @@ define([
       _setBlockers: function(){
         var t = db.getTaskModel(this.task, true);
         
-        console.l
         
         if (t.hasBlockers()){
           var blockers = this.task.coordinates;

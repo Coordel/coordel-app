@@ -132,7 +132,7 @@ app.store.util.TaskQueryEngine = function(query, options){
   		case "hasDeliverables":
   		query = function(task){
   		  var t = db.getTaskModel(task,true);
-  		  return t.hasDeliverables() && applyFilter(task);
+  		  return t.hasDeliverables() && !t.isCancelled() && applyFilter(task);
   		};
   		break;
   		

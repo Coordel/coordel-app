@@ -932,7 +932,7 @@ define(
         var has = t.hasDeadline(),
             pdead = t.projDeadline(),
             contextDeadline = this.task.contextDeadline,
-            deadline = "",  //if no project deadline, it's blank (this will be the case with delegated and private tasks)
+            deadline = "2200-01-01",  //if no project deadline, it's blank (this will be the case with delegated and private tasks)
             past = false, //if it does have a deadline, then need to make sure that it gets colored active
             today = false,
             showTime = false,
