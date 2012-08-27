@@ -235,10 +235,23 @@ require('./routes/alerts')(app, validate);//alert management
 
 //root 
 app.get('/', function(req, res){
+  
+  if (req.query.p){
+    var page = req.query.p;
+    
+    
+    //this is a request for a page
+    res.render('corp/page/' + page, {layout: 'corp/page', background: "bg" + req.cookies.bg});
  
+
+  } else {
+    res.render('corp/home', {layout: 'corp/home', color: 'c-bg-purple', background: "bg" + req.cookies.bg});
+  }
+  
+  /*
   if (home){
     home = false;
-    console.log(req.cookies.bg);
+
     if (req.query.p){
 
       //this is a request for a page
@@ -251,12 +264,15 @@ app.get('/', function(req, res){
     home = true;
     if (req.query.p){
       //this is a request for a page
+      console.log("page", req.query.p);
       res.render('corp/page/' + req.query.p, {layout: 'corp/page', background: "bg" + req.cookies.bg});
     } else {
+      console.log("page", req.query.p);
       //show the alt home page
       res.render('corp/home/content-b', {layout: 'corp/home', color: 'c-bg-green', background: "bg" + req.cookies.bg});
     }
   }
+  */
 });
 
 /* *********************************************** CHANGES AND ALERTS ****************************/

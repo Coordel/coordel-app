@@ -16,10 +16,12 @@ define(
       
       templateString: html,
       
+      widgetsInTemplate: true, 
+      
       postCreate: function(){
         this.inherited(arguments);
         var self = this;
-       
+     
       },
       
       

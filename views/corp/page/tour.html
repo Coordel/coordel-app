@@ -1,29 +1,51 @@
+
 <script>
   // Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
-  require(["corp/main"], function(corp){
+  require(["corp/main","dojo/request", "dojo/json", "dojo/dom-construct", "dojo/_base/array"], function(corp, request, json, node, array){
     corp.setCurrentPage("tour");
+    
+    request("/support/source.json").then(
+      function(text){
+        var steps = json.parse(text).features;
+        //console.log("steps", steps);
+        
+        var onRight = true;
+        
+        array.forEach(steps, function(step){
+          if (!step.isIntro){
+            addFeature(step);
+          }
+        });
+        
+        function addFeature(step){
+          var feature = node.create("div", {"class": "qs-content"}, "featureList");
+          
+          var header = node.create("h4", {}, feature);
+          node.create("a", {innerHTML: step.title,name: step.code, "class": "qs-link", href: "?p=feature&f="+step.code}, header);
+          node.create("h4", {innerHTML: step.headline, "class": "qs-headline"}, feature);
+          node.create("div", {style: {clear: "both"}}, feature);
+          if (onRight){
+            node.create("img", {src: step.image, style:{"float": "right", "margin-left":"6px"}, height: "140", width: "220"}, feature); 
+            onRight = false;
+          } else {
+            node.create("img", {src: step.image, style:{ "float": "left", "margin-right":"6px"}, height: "140", width: "220"}, feature);
+            onRight = true;
+          }
+          
+          node.create("div", {innerHTML: step.content}, feature);
+        }
+        
+      },
+      function(error){
+        console.log("Features not found");
+      }
+    );
   });
 </script>
-
-<h1>Get Your Party Started</h1>
 <div>
-	<p>Not quite sure how to tackle an assignment? Or do you know the beginning and the end but you are not quite sure what's in the middle? All you need is your talented team. Coordel allows you to plan and manage efforts ... that perhaps have yet to be predefined .</p><p>How's that for getting things done?</p>
+  <h1>Coordel Features</h1>
+  <div>See how Coordel creates opportunity in making you more productive. For more details about how Coordel works, check out the features section below.</div>
 </div>
-
-<h1>Tame the Work Beast</h1>
-<div>
-	<p>How much effort does it take to coordinate all your emails, calendars, to do lists, phone calls, ...?</p>
-	<p>Coordel is your go-to place to manage all the work you could and should be doing. It's complete control of your professional commitments in just one window.</p><p>How's that for efficiency?</p>
-</div>
-
-<h1>Deliver Better Results</h1>
-<div>
-	<p>Working with others too often involves miscommunications, misunderstandings, and lacking or wrong information. Coordel includes and coordinates all the information and communication you and your team need to deliver high quality results.</p> 
-	<p>How's that for teamwork?</p>
-</div>
-
-<h1>Re-use Success Stories</h1>
-<div>
-	<p>Remember that perfect collaborative effort, the one where the team had it all figured out? Coordel lets you do it all over again with one-click blueprinting of successful projects. </p><p>How's that for making your success stories work for you?</p>
-</div>
-			
+<br>
+<hr>
+<div id="featureList"></div>

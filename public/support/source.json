@@ -1,0 +1,159 @@
+{
+  "features": [
+    {
+      "order": 1,
+      "title": "Quick Start",
+      "headline": "Welcome to Coordel",
+      "content": "This Quick Start Wizard will get you familiar with some of Coordels's features. You can access it anytime from your preferences.",
+      "image": "support/features/images/welcome.png",
+      "isIntro": true,
+      "isSpotlight": true
+    },
+    {
+      "order": 2,
+      "title": "Smarter Tasks",
+      "headline": "Goodbye email, hello productivity",
+      "content": "Just click New Task button at any time to start creating, delegating, and organizing your tasks.",
+      "image": "support/features/images/task.png",
+      "isSpotlight": true,
+      "code": "task",
+      "movie": "http://www.youtube.com/embed/otK1ROFzf6s?rel=0"
+    },
+    {
+      "order": 3,
+      "title": "current tasks",
+      "headline": "Track work you can do right now",
+      "content": "What’s next? Your Coordel Current list automatically gathers the unblocked tasks you have agreed to, so you can easily decide on what to do next.",
+      "image": "support/features/images/current.png",
+      "isSpotlight": true,
+      "code": "current"
+    },
+    {
+      "order": 4,
+      "title": "deferred tasks",
+      "headline": "Track work you will start later",
+      "content": "Set the defer date of a task to when you intend to start work on it. Everyone involved will be notified. Forget e-mail that starts with “when do you think you will…”",
+       "image": "support/features/images/deferred.png",
+       "isSpotlight": true,
+       "code": "deferred"
+    },
+    {
+      "order": 5,
+      "title": "delegated tasks",
+      "headline": "Track your delegated work",
+      "content": "When you delegate some or much of your work, it’s easy to lose sight of who is doing what for you. Coordel provides effortless tracking of your delegated tasks in one overview.",
+      "image": "support/features/images/delegated.png",
+      "isSpotlight": true,
+      "code": "delegated"
+    },
+    {
+      "order": 6,
+      "title": "blocked tasks",
+      "headline": "Set it and forget it",
+      "content": "No more “Are you done yet?” Define the tasks that are blocking your work, and Coordel notifies you immediately when they are done and you can get started on your task.",
+      "image": "support/features/images/blocked.png",
+      "isSpotlight": true,
+      "code": "blocked"
+    },
+    {
+      "order": 7,
+      "title": "private tasks",
+      "headline": "Sometimes, it’s your business only",
+      "content": "Coordel is not just for teamwork. When you need to do something that doesn't involve someone else, drop it into your Private list.",
+      "image": "support/features/images/private.png",
+      "isSpotlight": true,
+      "code": "private"
+    },
+    {
+      "order": 8,
+      "title": "turbo wizard",
+      "headline": "Get your day started",
+      "content": "Do it, delegate it or defer it… Turbo your way through your to do list when you start your day. You are ready to roll in 1-2-3 easy steps.",
+      "image": "support/features/images/turbo.png",
+      "isSpotlight": true,
+      "code": "turbo"
+    },
+    {
+      "order": 9,
+      "title": "deadline calendar",
+      "headline": "Track all deadlines in one place",
+      "content": "Coordel automatically organizes all your tasks by deadline into one overview. The result: easy management of your to do list and transparent communication about deliverables.",
+      "image": "support/features/images/deadline.png",
+      "isSpotlight": true,
+      "code": "deadline"
+    },
+    {
+      "order": 10,
+      "title": "explicit invitations",
+      "headline": "Agree or decline new work requests",
+      "content": "In Coordel, you accept or decline new work. It’s the one-click solution to “I thought you were going to do that?”",
+      "image": "support/features/images/invite.png",
+      "isSpotlight": true,
+      "code": "invite"
+    },
+    {
+      "order": 11,
+      "title": "explict issue handling",
+      "headline": "Raise and Clear Issues in real time",
+      "content": "Coordel lets you raise an issue with a task that was assigned to you with just one click. Ownership transfers immediately to the Coord responsible to clear it. No miscommunication, no confusion.",
+      "image": "support/features/images/issue.png",
+      "isSpotlight": true,
+      "code": "issue"
+    },
+    {
+      "order": 12,
+      "title": "explicit completion",
+      "headline": "Submit & agree on completed tasks",
+      "content": "Rather than think you're done and find out later you're not, Coordel provides a built-in agreement process so everyone is clear on what has been completed.",
+      "image": "support/features/images/done.png",
+      "isSpotlight": true,
+      "code": "done"
+    },
+    {
+      "order": 13,
+      "title": "stream",
+      "headline": "Spend your time doing work, not writing about it",
+      "content": "Say goodbye to the time-consuming status e-mail. Take action and Coordel will immediately inform everyone involved.",
+       "image": "support/features/images/stream.png",
+       "isSpotlight": true,
+       "code": "stream"
+    },
+    {
+      "order": 14,
+      "title": "deliverables",
+      "headline": "Everything you need, where you expect it to be",
+      "content": "Rather than searching for the file or email, Coordel makes sure what you need to get your work done is right where you expect it to be.",
+      "image": "support/features/images/deliverable.png",
+      "isSpotlight": false,
+      "code": "deliverable"
+    },
+    {
+      "order": 15,
+      "title": "Task Workspace",
+      "headline": "Your work in one go-to place ",
+      "content": "How much time do you spend looking for that one e-mail or file? Coordel gives you one Workspace where you plan, execute and deliver your work. From the briefing to the deliverables, it’s all there, neatly organized in one overview.",
+      "image": "support/features/images/welcome.png",
+      "isSpotlight": false,
+      "code": "workspace"
+    },
+    {
+      "order": 16,
+      "title": "Blocked Deliverables",
+      "headline": "The 1-2-3 of getting your work done",
+      "content": "Sometimes, there are different steps to getting even a simple task done. Use Coordel to define the order in which a task will be executed. How’s that for efficient?",
+      "image": "support/features/images/deliverable.png",
+      "isSpotlight": false,
+      "code": "blockedDeliverable"
+    },
+    {
+      "order": 17,
+      "title": "feedback",
+      "headline": "What do you think?",
+      "content": "Forget formal evaluations. We’re talking about improving as a team, one job at a time. Coordel gives you the opportunity to share lessons learned when you’re done with the work, before moving on to the next one.",
+      "image": "support/features/images/welcome.png",
+      "isSpotlight": false,
+      "code": "feedback"
+    }
+    
+  ]
+}

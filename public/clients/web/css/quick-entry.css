@@ -24,7 +24,7 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
 }
 
 #taskListHeader .c-quick-entry, #projTasksListHeader .c-quick-entry {
-  line-height: 1.8em;
+  line-height: 3em;
 }
 
 .c-quick-entry.inactive{

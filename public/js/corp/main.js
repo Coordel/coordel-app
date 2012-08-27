@@ -51,6 +51,7 @@ define([
       },
    
       setCurrentPage: function(page){
+        
 
         switch(page){
          	case "home":
@@ -73,6 +74,18 @@ define([
       		break;
       		case "opportunity":
       		dojo.addClass(dom.byId("nav-opportunity"), "current");
+      		break;
+      		
+      		case "employed":
+      		dojo.addClass(dom.byId("nav-employed"), "current_page_item");
+      		break;
+      		
+      		case "consult":
+      		dojo.addClass(dom.byId("nav-consult"), "current_page_item");
+      		break;
+      		
+      		case "contract":
+      		dojo.addClass(dom.byId("nav-contract"), "current_page_item");
       		break;
       	}
       },

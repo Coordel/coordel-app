@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.80",
+  version: "0.1.87",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -807,6 +807,28 @@ module.exports = {
       }
     },
     
+    userDemoDocuments: {
+      map: function(doc){
+        
+        if (doc.isDemo){
+          
+          emit([doc.demoUsername], doc);
+      
+        }
+      }
+    },
+    
+    userDemos: {
+      map: function(doc){
+        
+        if (doc.docType === "demo"){
+          
+          emit([doc.username], doc);
+      
+        }
+      }
+    },
+    
     userFeedbackAvg: {
       map: function(doc) {
 
@@ -1263,7 +1285,12 @@ module.exports = {
       }
     },
     
+    /******************************* DEMO  ********************************************************/
+    
+    
+    
     /******************************* ADMIN ********************************************************/
+  
     
     allProjectFiles: {
       map: function (doc){

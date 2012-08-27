@@ -89,7 +89,7 @@ body {
 
 p {padding: 0.2em 0 1em;}
 
-h1 {font: normal 2em sans-serif;}
+h1 {font: normal 1.5em sans-serif;}
 h2 {font: normal 1.8em sans-serif;}
 h3 {font: normal 1.6em sans-serif;}
 h4 {font: normal 1.4em sans-serif;}
@@ -161,13 +161,12 @@ dd {
 
 a {color: #000000; text-decoration: none;}
 a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 
 a.secondary:hover {
 	color: #ADE7F6;
-	text-decoration: underline;
 }
 
 a.secondary.current {
@@ -430,10 +429,12 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
   background: #ffffff;
   min-height: 450px;
 }
-#sidebar ol, #sidebar ul {margin: 0 0 1.2em 1.6em;}
-#sidebar ul li {list-style: disc;}
+/*#sidebar ol, #sidebar ul {margin: 0 0 1.2em 1.6em;}*/
+#sidebar ul li {list-style: none; margin:0; }
+#sidebar ul li a{margin-left: 1.6em;}
 #sidebar ol li {list-style: decimal;}
-#sidebar li {padding: 2px 0;}
+#sidebar li {padding: 2px 0; }
+#sidebar li.current_page_item{background: #ffffff url(img/nav3.png) no-repeat center left;}
 
 .bullets ol, .bullets ul {margin: 0 0 1.2em 1.6em;}
 .bullets ul li {list-style: disc;}
@@ -441,7 +442,7 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 .bullets li {padding: 2px 0;}
 
 #content_outer {
-	border-top: 1px solid #FFF;
+	border-top: 1px solid #eee;
 	width: 629px;
 }
 
@@ -653,7 +654,10 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 	font: bold 1.3em sans-serif;
 	padding: 6px 10px;
 }
-.box_content {padding: 8px 0 8px;}
+.box_content {
+  padding: 8px 0 8px ;
+}
+
 .box li:first-child {border-top: none;}
 
 
@@ -686,6 +690,106 @@ div.comment_list {
 	background: #FFF;
 	border: 1px solid #DDD;
 	padding: 2px;
+}
+
+#cases td {
+  font-size: 12px;
+  padding: 16px;
+  border: 1px solid #C5C5C5;
+  line-height: 14px;
+  width: 20%;
+}
+
+#cases td div {
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+#cases thead {
+  background: #9DACB5;
+  color: #ffffff;
+}
+
+#cases .header {
+  text-align: center;
+  font-weight: bold;
+}
+
+
+.feature {
+  margin-top: 4px;
+}
+
+#feature-movie-container {
+  padding: 20px;
+  background:#000;
+}
+
+#cases h6 {
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.qs-content {
+  background: #ffffff;
+  min-height: 178px;
+  padding: 16px;
+  border-bottom: 1px solid #eaeaea;
+  color: #666666;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.qs-content:last-child{
+  border-bottom: 0px solid transparent;
+}
+
+.qs-content > h4 {
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.qs-link {
+  text-transform: capitalize;
+  font-size: 18px;
+  font-weight: bold;
+  color: #00629b;
+  cursor:pointer;
+}
+
+.qs-headline {
+  color: #333333;
+  font-style: italic;
+}
+
+#feature-title {
+  text-transform: capitalize;
+}
+
+#feature-headline {
+  color: #333333;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+#feature-image {
+  margin-left: 8px;
+}
+
+.feature > span {
+  color: #666666;
+  font-style: italic;
+}
+
+.feature > a {
+  color: #00629b;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.feature-link:hover {
+  color: #000000;
 }
 
 /* Single Line IE Fixes */

@@ -6,6 +6,8 @@ define({
 	  password: "Password",
 	  rememberMe: "Remember Me",
 	  by: "by",
+	  next: "Next",
+	  previous: "Previous",
 	  alerts: "Alerts",
 	  noDeadline: "No Deadline",
 	  quickAddTask: "Quick Add Task",
@@ -61,7 +63,7 @@ define({
 		"project-invited": "Coord Invitations",
 		"task-invited": "Task Invitations",
 		"opportunites": "Opportunities",
-		"submitted": "For Approval",
+		"submitted": "To Agree Done",
 		"cancelled": "Cancelled",
 		"vips": "VIPs",
 		"active": "Active",
@@ -106,8 +108,9 @@ define({
 	  options: "Options",
 	  preferences: "Preferences",
 	  support: "Support",
+	  
 	  quickStart: "Quick Start Guide",
-	  tutorial: "Tutorial",
+	  tutorial: "Feature Tutorial",
 	  emailIntegration: "E-mail Integration",
 	  emailUpdates: "E-mail Updates",
 	  logout: "Logout",
@@ -148,10 +151,12 @@ define({
 		  DELETED: "Deleted",
 		  DELEGATED: "Delegated",
 		  DONE: "Done",
-		  APPROVED: "Approved",
+		  APPROVED: "Agreed Done",
 		  FINISHED: "Finished",
 		  ISSUE: "Raised Issue",
-		  CLEARED: "Cleared Issue" 
+		  CLEARED: "Cleared Issue",
+		  SUBMITTED: "Proposed Done",
+		  RETURNED: "Returned"
 		  
 		},
 		turbo: {
@@ -281,9 +286,9 @@ define({
 		},
 		"taskActions": {
 		  "header": "Actions",
-		  "submit": "Submit for Approval",
+		  "submit": "Propose Done",
 		  "return": "Return",
-		  "approve": "Approve",
+		  "approve": "Agree Done",
 		  "reuse": "Blueprint",
 		  reuseDeliverables: "Blueprint Deliverables",
 		  "raiseIssue": "Raise Issue",
@@ -304,9 +309,9 @@ define({
 		  "showInfo": "Show Task Info",
 		  removeDeferDate: "Remove Defer Date",
 		  confirmText: {
-		    "submit": "This will Submit this Task to the Delegator or Coord Responsible for Approval",
+		    "submit": "This will submit this Task to the Delegator or Coord Responsible to agree that it is Done",
 		    "return": "This will return the Task to the person who submitted it",
-		    "approve": "This will mark the task Done",
+		    "approve": "This indicates that you agree that work is done and will mark the task Done",
 		    cancel: "This will permanently Cancel the Task",
 		    "delete": "This will permanently Delete the Task and it can't be recovered",
 		    "pause": "This will Pause the task. If the task had a Deadline, it will now move with time. If you pause the Task for a day, the Deadline will be one day later than it was originally.",
@@ -401,7 +406,7 @@ define({
 		  "blocked": "Blocked",
 		  "declined": "Declined",
 		  "cleared": "Issue Cleared",
-		  "submitted": "For Approval",
+		  "submitted": "To Agree Done",
 		  "returned": "Returned",
 		  "today": "Today",
 		  "starts": "Starts",
@@ -725,7 +730,7 @@ define({
   		    "preposition": "in"
   		  },
   		  "submit": {
-  		    "verb": "finished and submitted",
+  		    "verb": "proposed done",
   		    "preposition": "to"
   		  },
   		  "return": {
@@ -733,7 +738,7 @@ define({
   		    "preposition": "to"
   		  },
   		  "approve": {
-  		    "verb": "approved",
+  		    "verb": "agreed done",
   		    "preposition": "in"
   		  },
   		  "finish": {

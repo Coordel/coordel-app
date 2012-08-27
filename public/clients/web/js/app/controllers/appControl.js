@@ -24,8 +24,9 @@ define(['dojo',
         "app/views/TaskForm/TaskForm",
         "app/widgets/ContainerPane",
         "app/views/OpportunityAction/OpportunityAction",
-        "dojo/cookie"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie) {
+        "dojo/cookie",
+        "app/views/QuickStart/QuickStart"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie, QuickStart) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -228,7 +229,6 @@ define(['dojo',
 	    }
 	  },
 	  
-
 	  doTaskAction: function(args){
 	    
 	    console.log("args", args);
@@ -501,12 +501,12 @@ define(['dojo',
 	    
 	    switch (args){
 	      case "showQuickStart":
-	      title = "Welcome to Coordel!";
+	      title = "";
 	      //console.log("show quick start");
 	      break;
 	     
 	      case "showTutorial":
-	      title = "Tutorial";
+	      title = coordel.tutorial;
 	      template = "support/tutorial.html";
 	      //console.log("show tutorial");
 	      break;
@@ -538,7 +538,7 @@ define(['dojo',
 	    } else {
 	      d = new vDialog({
   	      title: title,
-  	      href: template,
+  	      content: new QuickStart(),
   	      onCancel: function(){
   	        d.destroy();
   	      }
