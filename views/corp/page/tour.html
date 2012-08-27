@@ -21,7 +21,7 @@
           var feature = node.create("div", {"class": "qs-content"}, "featureList");
           
           var header = node.create("h4", {}, feature);
-          node.create("a", {innerHTML: step.title,name: step.code, "class": "qs-link", href: "?p=feature&f="+step.code}, header);
+          node.create("a", {innerHTML: step.title,name: step.code, "class": "qs-link link-image", href: "?p=feature&f="+step.code}, header);
           node.create("h4", {innerHTML: step.headline, "class": "qs-headline"}, feature);
           node.create("div", {style: {clear: "both"}}, feature);
           if (onRight){

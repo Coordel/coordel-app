@@ -16,8 +16,7 @@
       "content": "Just click New Task button at any time to start creating, delegating, and organizing your tasks.",
       "image": "support/features/images/task.png",
       "isSpotlight": true,
-      "code": "task",
-      "movie": "http://www.youtube.com/embed/otK1ROFzf6s?rel=0"
+      "code": "task"
     },
     {
       "order": 3,
@@ -132,7 +131,7 @@
       "title": "Task Workspace",
       "headline": "Your work in one go-to place ",
       "content": "How much time do you spend looking for that one e-mail or file? Coordel gives you one Workspace where you plan, execute and deliver your work. From the briefing to the deliverables, it’s all there, neatly organized in one overview.",
-      "image": "support/features/images/welcome.png",
+      "image": "support/features/images/workspace.png",
       "isSpotlight": false,
       "code": "workspace"
     },
@@ -141,7 +140,7 @@
       "title": "Blocked Deliverables",
       "headline": "The 1-2-3 of getting your work done",
       "content": "Sometimes, there are different steps to getting even a simple task done. Use Coordel to define the order in which a task will be executed. How’s that for efficient?",
-      "image": "support/features/images/deliverable.png",
+      "image": "support/features/images/blockedDeliverable.png",
       "isSpotlight": false,
       "code": "blockedDeliverable"
     },
@@ -150,7 +149,7 @@
       "title": "feedback",
       "headline": "What do you think?",
       "content": "Forget formal evaluations. We’re talking about improving as a team, one job at a time. Coordel gives you the opportunity to share lessons learned when you’re done with the work, before moving on to the next one.",
-      "image": "support/features/images/welcome.png",
+      "image": "support/features/images/feedback.png",
       "isSpotlight": false,
       "code": "feedback"
     }

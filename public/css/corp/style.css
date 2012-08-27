@@ -87,17 +87,16 @@ body {
    Typography 
 ------------------------------------------------------------------- */
 
-p {padding: 0.2em 0 1em;}
+p {padding: 0.2em 0 1.3em;}
 
-h1 {font: normal 1.5em sans-serif;}
-h2 {font: normal 1.8em sans-serif;}
+h1 {font: bold 1.3em sans-serif; }
+h2 {font: bold 1.1em sans-serif; color: #003C60;}
 h3 {font: normal 1.6em sans-serif;}
 h4 {font: normal 1.4em sans-serif;}
 h5 {font: bold 1.2em sans-serif;}
 h6 {font: bold 1em sans-serif;}
 
 h1,h2,h3,h4,h5,h6 {
-	color: #000000;
 	margin-bottom: 0.3em;
 }
 
@@ -451,7 +450,7 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 	color: #000000;
 	padding: 16px;
 	
-	font-size: 1.3em;
+	font-size: 1.2em;
 }
 
 
@@ -719,6 +718,17 @@ div.comment_list {
 
 .feature {
   margin-top: 4px;
+}
+
+#feature a {
+  color: #00629b;
+}
+
+.link-image {
+ padding-right: 16px;
+ background: url(img/link-image2.png) center right no-repeat;
+ height: 16px;
+ width: 16px;
 }
 
 #feature-movie-container {
