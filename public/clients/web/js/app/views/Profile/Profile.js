@@ -101,7 +101,7 @@ define(
         
         //if there were messages, show the feedback messages
         if (!messages || !messages.length){
-          dojo.addClass(this.feedbackMessages, "hidden");
+          dojo.addClass(this.messagesContainer, "hidden");
         } else {
           
           dojo.forEach(dijit.findWidgets(this.feedbackMessages, function(w){

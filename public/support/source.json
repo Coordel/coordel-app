@@ -148,10 +148,46 @@
       "order": 17,
       "title": "feedback",
       "headline": "What do you think?",
-      "content": "Forget formal evaluations. We’re talking about improving as a team, one job at a time. Coordel gives you the opportunity to share lessons learned when you’re done with the work, before moving on to the next one.",
+      "content": "Forget formal evaluations. We’re talking about constant improvement, one job at a time. Coordel gives you the opportunity to share lessons learned when you’re done with the work, before moving on to the next one.",
       "image": "support/features/images/feedback.png",
       "isSpotlight": false,
       "code": "feedback"
+    },
+    {
+      "order": 18,
+      "title": "blueprints",
+      "headline": "Get it right & re-use",
+      "content": "Coordel helps you get the most out of your expertise. When you have captured a job well done in tasks or Coords, Coordel lets you blueprint and re-use them with just one click.",
+      "image": "support/features/images/blueprint.png",
+      "isSpotlight": false,
+      "code": "blueprint"
+    },
+    {
+      "order": 19,
+      "title": "alerts",
+      "headline": "Live updates",
+      "content": "With Coordel, you don’t miss a thing. When a task or Coord you are involved in changes, an audio and visual alert lets you know. Even when you’re not logged on, Coordel will track your alerts so they are waiting for you when you check in.",
+      "image": "support/features/images/alert.png",
+      "isSpotlight": false,
+      "code": "alert"
+    },
+    {
+      "order": 20,
+      "title": "Coords",
+      "headline": "Coordinate your work with others",
+      "content": "What's in a word? In the case of Coords, it is communication, agreements, productivity, transparency and accountability. Coords enable you to get work started, and completed, with one or more other people in just a few clicks. Don’t just take our word for it. <a style='color: #00629b' href='/register'>Try it</a>!",
+      "image": "support/features/images/coord.png",
+      "isSpotlight": false,
+      "code": "coord"
+    },
+    {
+      "order": 21,
+      "title": "People",
+      "headline": "Choose your own team",
+      "content": "Coordel is about letting you do the work you do best, with the people who complement you best. Coordel automatically keeps track of past and present team members and shows what they are doing and how well they do it.",
+      "image": "support/features/images/people.png",
+      "isSpotlight": false,
+      "code": "people"
     }
     
   ]

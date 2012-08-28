@@ -39,16 +39,18 @@
                 { name: "dojo", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/" },
                 { name: "dijit", location: "http://ajax.googleapis.com/ajax/libs/dojo/1.8/dijit/" },
                 
-                { name: "corp", location: "corp" }
+                { name: "corp", location: "corp" },
+                
+                { name: "app", location: "/clients/web/js/app"}
             ]
         }, [ "corp/main" ]);
   	    
   			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
-  	    require(["dojo", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dojo, cookie, corp){
-  	      dojo.removeClass("bnLogin", "hidden");
+  	    require(["dojo/dom-class", "dojo/cookie", "corp/main", "app/views/Project/Project", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dc, cookie, corp, project){
+  	      dc.remove("bnLogin", "hidden");
   	      corp.setBackground();
   	      
-  	      
+  	      console.log("app", app);
   	      
   	      //connect.publish("/foo/bar/baz", [{ some:"object data" }]);
   	      
@@ -204,7 +206,7 @@
   	    </div>
   	    <div id="footer" class="splash">
   		    <div class="left">
-  			    &copy; 2012 <a href="http://www.coordel.com">coordel.com</a> - do what you love
+  			    &copy; 2012 <a href="http://www.coordel.com">Coordel</a> - do what you love
   		    </div>
   		    <div class="clearer">&nbsp;</div>
   	    </div>
