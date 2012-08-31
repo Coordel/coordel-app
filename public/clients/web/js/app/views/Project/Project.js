@@ -220,7 +220,7 @@ define(
       clearSelection: function(args){
         var self = this;
 
-          console.debug("in clear project selection", args, self.project._id, self.domNode);
+          //console.debug("in clear project selection", args, self.project._id, self.domNode);
 
           if (self.domNode){
             self.currentArgs = args;
@@ -245,6 +245,8 @@ define(
           dojo.addClass(self.domNode, "active selected");
           //console.log("project should be active", self.project._id, self.currentArgs);
         }
+        
+        console.log("args", self.currentArgs, self.project.id);
       },
       
       destroy: function(args){

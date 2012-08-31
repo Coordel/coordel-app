@@ -72,7 +72,7 @@ define(
       
       _clearSelection: function(selection, doSet){
         
-        console.debug("clearing selection", selection);
+        //console.debug("clearing selection", selection);
         //if (selection !== "search"){
           if (this.domNode){
             var boxes = dojo.query("ul.primary-boxes li", this.domNode);

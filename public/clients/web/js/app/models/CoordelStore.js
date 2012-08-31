@@ -166,6 +166,7 @@ define(["dojo",
                   
                 ]);
                 
+                //console.log("app.id", app.id);
                 profStore.init(app.id);
 
                 list.then(function(resp){

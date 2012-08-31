@@ -45,6 +45,7 @@ define([
       emptyGroup: null,
       
       init: function(project){
+        console.log("project in project control", project);
         db.focus = this.focus;
         this.project = project;
         var self = this;
@@ -334,6 +335,7 @@ define([
           });
           cont.addChild(this.emptyGroup);
         } else {
+          tasks = Sort.byBlocking(tasks);
           //console.log(" tasks with deliverables", tasks);
           var d = new DeliverableList({
             tasks: tasks,

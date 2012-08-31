@@ -7,7 +7,8 @@ var config      = require('konphyg')(__dirname + './../config'),
     cn          = new cradle.Connection(),
     db          = cn.database(settings.config.couchName),
     templates   = require('./../templates'),
-    data        = {};
+    data        = {},
+    _           = require('underscore');
     
 //authenticate the redis client
 redis.auth(redisOpts.auth);
@@ -404,6 +405,11 @@ function getUserApps(appId, field, fn){
 
     multi.exec(function(err, apps){
       if (err) return fn(err, false);
+      
+      //need to make sure that there aren't any nulls
+      apps = _.filter(apps, function(a){
+        return a;
+      });
       return fn(null, apps);
     });
   });

@@ -19,8 +19,11 @@ define(['dojo',
   'dijit/TooltipDialog',
   'app/views/PrimaryFooter/PrimaryFooter',
   'app/views/ProjectGroup/ProjectGroup',
-  "i18n!app/nls/coordel",
-  "app/views/EmptyTaskList/EmptyTaskList"], function(dojo, dl, dijit, layout, ph, rh, add, pb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel, etl) {
+  'i18n!app/nls/coordel',
+  'app/views/EmptyTaskList/EmptyTaskList',
+  'app/views/QuickSearch/QuickSearch',
+  'app/util/Sort'
+  ], function(dojo, dl, dijit, layout, ph, rh, add, pb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel, etl, search, util) {
     
   return {
     activeTab: "projects",
@@ -84,6 +87,8 @@ define(['dojo',
       pnc.showPrimaryBoxes();
     
       pnc.showProjectList();
+      
+      pnc.showSearch();
     
       //pnc.showContactList();
     
@@ -204,19 +209,29 @@ define(['dojo',
         if (pControl.projViewChangeHandler){
           dojo.unsubscribe(pControl.projViewChangeHandler);
         }
-        pControl.init(db.projectStore.store.get(id));
+        
+        dojo.when(db.projectStore.store.get(id), function(proj){
+          pControl.init(proj);
+        });
+        
+        
       
         this.primaryController = pControl;
         
-        this.activateProjects();
-        
+        if (!this.isSearch){
+          this.activateProjects();
+        }
+
         //console.debug("created projectControl", this.primaryController);
       } else if (name === "contact"){
         
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
         
-        this.activateContacts();
+        if (!this.isSearch){
+          this.activateContacts();
+        }
+
         //create a contactControl
         this.primaryController = null;
         cControl.init(id);
@@ -302,6 +317,10 @@ define(['dojo',
       dojo.addClass("storeTab", "inactive");
       dojo.removeClass("storeTab", "active");
       
+      this.search.search.reset();
+      
+      this.isSearch = false;
+      
     },
   
     activateProjects: function(){ 
@@ -314,6 +333,9 @@ define(['dojo',
       //dijit.byId("otherListMain").back();
       dijit.byId("otherListMain").selectChild("otherListProjects");
       this.activeTab = "projects";
+      
+      this.search.search.set("placeHolder", coordel.searchProjects);
+      dojo.removeClass(this.search.domNode, "hidden");
     },
     
     
@@ -326,6 +348,8 @@ define(['dojo',
         //dijit.byId("otherListMain").forward();
         dijit.byId("otherListMain").selectChild("otherListContacts");
         this.activeTab = "contacts";
+        this.search.search.set("placeHolder", coordel.searchPeople);
+        dojo.removeClass(this.search.domNode, "hidden");
     },
 
     
@@ -334,7 +358,10 @@ define(['dojo',
       this._openTab("storeTab");
       this.showStore();
       dijit.byId("otherListMain").selectChild("otherListStore");
+      dojo.addClass(this.search.domNode, "hidden");
     },
+    
+    
   
     setCounts: function(){
       
@@ -422,36 +449,14 @@ define(['dojo',
         id: "leftnavPrimaryBoxes"
       }).placeAt(cont);
     },
+    
+    
   
     showProjectList: function(){
       //console.debug("primaryNavControl.showProjectList called");
 
       var self = this;
-      
-      /*
-      if (self.projObserveHandlers.length > 0){
-        dojo.forEach(self.projObserveHandlers, function(handle){
-          console.log("cancel handle");
-          handle.cancel();
-        });
-        self.projObserveHandlers = [];
-      }
-      */
-      
-      /*
-      var active = db.projectStore.memory.query("active", {sort:[{attribute: "name", descending: false}]});
-      
-      var handler = active.observe(function(proj, removedFrom, insertedInto){
-        console.log("user project changed", proj, removedFrom, insertedInto);
-        //dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: "project", id: proj._id}]);
-        self.activateProjects();
-      });
-      
-      
-      self.projObserveHandlers.push(handler);
-      */
-      
-      
+
       dijit.byId("otherListProjects").destroyDescendants();
     
       //get all the potential possible project groups
@@ -605,6 +610,76 @@ define(['dojo',
         emptyTitle: coordel.empty[self.navFocus+"Title"], 
         emptyDescription: coordel.empty[self.navFocus+"Text"]
       }).placeAt("storeMain");
+    },
+    
+    showSearch: function(){
+      
+      var self = this;
+      
+      dojo.forEach(dijit.findWidgets("otherListMenuBar"), function(item){
+        item.destroy();
+      });
+      
+      this.search = new search({
+     
+      }).placeAt("otherListMenuBar");
+      
+      this.search.search.set("placeHolder", coordel.searchProjects);
+      
+      dojo.connect(this.search, "onSearch", function(query){
+        self.showSearchResults(self.activeTab, query);
+      });
+    },
+    
+    showSearchResults: function(focus, query){
+      var self = this;
+      dijit.byId("otherListMain").selectChild("otherListSearch");
+      
+      console.log("dijits", dijit.byId("otherListSearch"));
+      
+      dijit.byId("otherListSearch").destroyDescendants();
+      
+      console.log("show search results", focus, query);
+      
+      this.isSearch = true;
+
+      switch (focus){
+        case "projects":
+        db.projectStore.search(query).then(function(results){
+          console.log("search results", results);
+          results = util.sort(results, {sort: [{attribute: "name"}]});
+          dojo.forEach(results, function(proj){
+            var obj =  new p({
+              project: proj,
+              currentArgs: self.currentArgs
+            }).placeAt("otherListSearch");
+            dojo.connect(obj.domNode, "onclick", function(){
+              console.log("set selection");
+              obj.setSelection();
+            });
+          });
+          
+          
+        });
+        break;
+        case "contacts":
+        db.contactStore.search(query).then(function(results){
+          console.log("search results", results);
+          dojo.forEach(results, function(con){
+            var cObj = new c({
+              contact: con,
+              doNavigation: true,
+              currentArgs: self.currentArgs
+            }).placeAt("otherListSearch");
+            dojo.connect(cObj.domNode, "onclick", function(){
+              console.log("set selection");
+              cObj.setSelection();
+            });
+          });
+          
+        });
+        break;
+      }
     }
   };
 });

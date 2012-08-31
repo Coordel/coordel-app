@@ -94,6 +94,8 @@ define({
 		"cancel": "Cancel",
 		"search": "Search",
 		"searchTasks": "Search Tasks",
+		"searchProjects": "Search Coords",
+		"searchPeople": "Search People",
 		"select": "Select",
 		"message": "Message",
 		"newTask": "New Task",

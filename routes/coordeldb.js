@@ -29,6 +29,7 @@ module.exports = function(app, validate){
   app.post('/search', function(req, res){
     
     var view = "taskSearch";
+
     if (req.body.type){
       switch (req.body.type){
         case "task":
@@ -39,8 +40,7 @@ module.exports = function(app, validate){
         break;
       }
     }
-    
-    var type = req.body.type;
+
     var username = req.body.username;
 
     var words = []; //holds the words after filtering (matches function in search view in couchdb)

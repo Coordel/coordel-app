@@ -500,6 +500,27 @@ define(["dojo",
               this.streamStore = new obsCache(this.streamRemote, this.streamMemory);
             	
             	return this.streamStore.query(query);
+            },
+            
+            search: function(query){
+
+              var post = dojo.xhrPost({
+                url: "/search",
+                handleAs: "json",
+                postData: "username="+this.username + "&search=" + query +"&type=project"
+              });
+              
+              var def = new dojo.Deferred();
+              
+              if(!query.trim().length){
+                def.callback([]);
+              } else {
+                post.then(function(res){
+                  def.callback(res.results);
+                });
+              }
+
+              return def;
             }
         };
         

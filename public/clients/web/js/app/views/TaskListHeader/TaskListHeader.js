@@ -38,6 +38,10 @@ define([
         //var s = new sort({focus:focus}).placeAt(this.domNode, "last");
         
         this.sortButton = new sort({focus: focus}).placeAt(this.buttonContainer, "last");
+        
+        dojo.connect(this.search, "onSearch", function(query){
+           dojo.publish("coordel/primaryNavSelect", [{focus: "search", setSelection: false, search: query}]);
+        });
 
       }
   });

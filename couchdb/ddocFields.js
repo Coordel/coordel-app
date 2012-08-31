@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.106",
+  version: "0.1.107",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -1288,7 +1288,7 @@ module.exports = {
     /******************************* SEARCH  ********************************************************/
     projectSearch: {
       map: function(doc){
-        if (doc.docType === "project"){
+        if (doc.docType === "project" && doc.status !== "TRASH" && doc.substatus !== "TRASH"){
           var stopwords_en = {"a":true, "an":true, "the":true};
           var name = "", purpose = "";
           if (doc.name){
@@ -1318,7 +1318,7 @@ module.exports = {
     
     taskSearch: {
       map: function(doc){
-        if (doc.docType === "task"){
+        if (doc.docType === "task" && doc.status !== "TRASH" && doc.substatus !== "TRASH"){
           var stopwords_en = {"a":true, "an":true, "the":true};
           var name = "", purpose = "";
           if (doc.name){

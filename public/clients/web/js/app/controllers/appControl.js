@@ -115,7 +115,7 @@ define(['dojo',
 	    
 	    var socket = io.connect(window.location.host);
 	    
-	    console.log("showing app", this.username);
+	    //console.log("showing app", this.username);
 		  
 			//register for socketio events
 			socket.on("changes:" + this.username.toString(), function (change) {

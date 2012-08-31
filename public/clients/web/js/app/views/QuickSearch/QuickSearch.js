@@ -22,20 +22,25 @@ define(
       
       postCreate: function(){
         this.inherited(arguments);
+        var self = this;
         
         //handle quick enter 
         dojo.connect(this.search, "onKeyUp", this, function(evt){
           //console.debug("key pressed", evt.which);
           if (evt.which === 13){
             //so the search
-            var val = this.search.get("value");
+            var val = this.search.get("value").trim();
             console.debug("search for this", val);
-            if (val.trim().length){
-               dojo.publish("coordel/primaryNavSelect", [{focus: "search", setSelection: false, search: val}]);
+            if (val.length){
+               self.onSearch(val);
             }
            
           }
         });
+        
+      },
+      
+      onSearch: function(query){
         
       },
       

@@ -71,6 +71,30 @@ define(["dojo",
               };
 
               return this.taskStore.query(queryArgs);
+            },
+            search: function(query){
+              
+              
+              
+              
+              var def = new dojo.Deferred();
+
+              if(!query.trim().length){
+                def.callback([]);
+              } else {
+                var list = this.memory.query();
+                dojo.when(list, function(){
+                  var matches = list.filter(function(c){
+                    var name = (c.firstName + " " + c.lastName).toLowerCase();
+                    return (name.indexOf(query)> -1);
+                  });
+                
+                  def.callback(matches);
+                });
+              }
+              
+              
+              return def;
             }
         };
         
