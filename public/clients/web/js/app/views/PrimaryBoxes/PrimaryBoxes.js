@@ -72,16 +72,19 @@ define(
       
       _clearSelection: function(selection, doSet){
         
-        //console.debug("clearing selection", selection);
-        if (this.domNode){
-          var boxes = dojo.query("ul.primary-boxes li", this.domNode);
-          boxes.removeClass("selected active");
-          //it might be that selection is cleared without a click of one of the primary boxes
-          //this makes sure that selection is set to what was clicked if it doesn't match
-          if (doSet){
-            dojo.addClass(selection, "active selected");
+        console.debug("clearing selection", selection);
+        //if (selection !== "search"){
+          if (this.domNode){
+            var boxes = dojo.query("ul.primary-boxes li", this.domNode);
+            boxes.removeClass("selected active");
+            //it might be that selection is cleared without a click of one of the primary boxes
+            //this makes sure that selection is set to what was clicked if it doesn't match
+            if (doSet && selection !=="search"){
+              dojo.addClass(selection, "active selected");
+            }
           }
-        }
+        //}
+        
     
       },
       

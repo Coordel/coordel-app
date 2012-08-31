@@ -148,6 +148,29 @@ define(["dojo",
             	//console.debug("returning getBlocking");
             	return def;
             
+            },
+            search: function(query){
+              
+              
+              
+              var post = dojo.xhrPost({
+                url: "/search",
+                handleAs: "json",
+                postData: "username="+this.username + "&search=" + query
+              });
+              
+              var def = new dojo.Deferred();
+              
+              if(!query.trim().length){
+                def.callback([]);
+              } else {
+                post.then(function(res){
+                  def.callback(res.results);
+                });
+              }
+              
+              
+              return def;
             }
 
         };

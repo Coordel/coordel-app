@@ -112,7 +112,6 @@ define([
 		  
 		  dojo.removeClass(dijit.byId("taskListDetailsTurbo").domNode, "hidden");
       dojo.addClass(dijit.byId("taskListDetailsFilter").domNode, "hidden");
-      dojo.removeClass(dijit.byId("taskListDetailsSearch").domNode, "hidden");
       
       //handle click of the tabs
       //checklist
@@ -222,7 +221,6 @@ define([
           dijit.byId("cnMain").selectChild("taskDetailsChecklist");
           dojo.removeClass(dijit.byId("taskListDetailsTurbo").domNode, "hidden");
           dojo.removeClass(dijit.byId("taskListDetailsSort").domNode, "hidden");
-          dojo.removeClass(dijit.byId("taskListDetailsSearch").domNode, "hidden");
           dijit.byId("rightDetailsLayout").resize();
   		    break;
 		    case "notesTab":
@@ -231,7 +229,6 @@ define([
           dojo.removeClass(tabId, "inactive");
           dojo.addClass(tabId, "active");
           dijit.byId("cnMain").selectChild("taskDetailsNotes");
-          dojo.removeClass(dijit.byId("taskListDetailsSearch").domNode, "hidden");
           dijit.byId("rightDetailsLayout").resize();
           dojo.style("taskListDetailsContainer", "background", "#e5e5e5");
           dojo.style("taskListDetailsContainer", "border-bottom", "1px solid transparent");
@@ -320,7 +317,6 @@ define([
 		  dojo.addClass(dijit.byId("taskListDetailsTurbo").domNode, "hidden");
       dojo.addClass(dijit.byId("taskListDetailsFilter").domNode, "hidden");
       dojo.addClass(dijit.byId("taskListDetailsSort").domNode, "hidden");
-      dojo.addClass(dijit.byId("taskListDetailsSearch").domNode, "hidden");
 		},
 
 		showInfo: function(){

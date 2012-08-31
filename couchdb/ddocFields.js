@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.87",
+  version: "0.1.106",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -1285,8 +1285,69 @@ module.exports = {
       }
     },
     
-    /******************************* DEMO  ********************************************************/
+    /******************************* SEARCH  ********************************************************/
+    projectSearch: {
+      map: function(doc){
+        if (doc.docType === "project"){
+          var stopwords_en = {"a":true, "an":true, "the":true};
+          var name = "", purpose = "";
+          if (doc.name){
+            name = doc.name;
+          }
+          
+          if (doc.purpose){
+            purpose = doc.purpose;
+          }
+          
+          var words  = ((name + purpose).toLowerCase().match(/\w+/g));
+          words.forEach(function(word){
+            word = word.replace(/^[_]+/,"");
+            if (!stopwords_en[word]){
+              if (word.length >= 3){
+                if (!word.match(/^\d+$/)){
+                  emit(word,
+                    {id:doc._id
+                  });
+                }
+              }
+            }
+          });
+        }
+      }
+    },
     
+    taskSearch: {
+      map: function(doc){
+        if (doc.docType === "task"){
+          var stopwords_en = {"a":true, "an":true, "the":true};
+          var name = "", purpose = "";
+          if (doc.name){
+            name = doc.name;
+          }
+          
+          if (doc.purpose){
+            purpose = doc.purpose;
+          }
+          
+          var words  = ((name + purpose).toLowerCase().match(/\w+/g));
+          words.forEach(function(word){
+            word = word.replace(/^[_]+/,"");
+            if (!stopwords_en[word]){
+              if (word.length >= 3){
+                if (!word.match(/^\d+$/)){
+                  emit(word,
+                    {id:doc._id
+                  });
+                }
+              }
+            }
+          }); 
+        }
+      }
+    },
+    
+
+      
     
     
     /******************************* ADMIN ********************************************************/

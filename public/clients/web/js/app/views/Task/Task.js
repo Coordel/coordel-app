@@ -224,8 +224,13 @@ define(
           
           //console.log("removing mine");
           //if I don't own this task, then it shouldn't have a link to go to task details;
-        
           dojo.removeClass(this.showDetails, "mine");
+         
+        }
+        
+        if (t.isDone() || t.isCancelled()){
+          //then it shouldn't have a link to go to task details
+           dojo.removeClass(this.showDetails, "mine");
         }
           
         if (this.task.inviteType){
@@ -257,7 +262,7 @@ define(
         }
         
         //if this is current, delegated or invite, the user needs to see metainfo added to the task (Issue, Cleared, etc)
-        if (this.focus === "current" || this.focus==="blocked" || this.focus==="delegated" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
+        if (this.focus === "search" || this.focus === "current" || this.focus==="blocked" || this.focus==="delegated" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
           this._setMetaInfo();
         }
         
@@ -441,6 +446,9 @@ define(
         //wire up the task name so clicking it goes to details if I'm the user of the task
         dojo.connect(this.showDetails, "onclick", this, function(){
           //console.debug("focus in Task", this.task.username);
+          if (t.isDone() || t.isCancelled()){
+            return;
+          }
           if ((this.task.username === db.username() && !t.isSubmitted()) || (this.task.responsible === db.username() && t.isSubmitted())){
              //if this is a projectInvite, navigate to the project
             if (this.isProjectInvite){
@@ -674,6 +682,13 @@ define(
         
         if (t.isSubmitted()){
           username = resp;
+        }
+        
+        //cancelled
+        if (t.isCancelled() &&  self.focus === "search"){
+       
+          //console.debug("issue");
+          dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.cancelled + " : ");
         }
         
         //if the username of the task isn't the logged on user, then show the name unless this is the

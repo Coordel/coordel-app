@@ -163,6 +163,7 @@ define(['dojo',
           name = "",
           task,
           id,
+          search,
           tab = this.activeTab,
           c;
     
@@ -171,6 +172,7 @@ define(['dojo',
         name = args.name;
         task = args.task;
         id = args.id;
+        search = args.search;
       } 
       
       //console.log("focus", args);
@@ -179,16 +181,16 @@ define(['dojo',
       this.currentArgs.name = name;
       this.currentArgs.task = task;
       this.currentArgs.id = id;
-    
+      if (search){
+        this.currentArgs.search = search;
+      }
+      
       this.navFocus = focus;
     
-      //console.debug("setting primary controller", focus, name, task, id);
+      console.debug("setting primary controller", focus, name, task, id);
     
       if (name === "project"){
         
-        
-        
-      
         
         //create a projectControl
         //console.debug("setting projectControl with project id", id);
@@ -259,6 +261,8 @@ define(['dojo',
         db.projectStore.currentProject = "";
       
         c = this.taskListControl;
+        
+        c.search = this.currentArgs.search;
         //console.debug("task list controller is", c, focus );
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);

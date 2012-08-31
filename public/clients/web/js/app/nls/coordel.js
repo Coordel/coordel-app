@@ -92,6 +92,8 @@ define({
 		"save": "Save",
 		"ok": "Ok",
 		"cancel": "Cancel",
+		"search": "Search",
+		"searchTasks": "Search Tasks",
 		"select": "Select",
 		"message": "Message",
 		"newTask": "New Task",
@@ -391,7 +393,9 @@ define({
 		  projectDeliverablesTitle: "No Coord Deliverables",
 		  projectDeliverablesText: "Track all Deliverables for this Coord here",
 		  storeTitle: "Coming Soon!",
-		  storeText: "Buy and sell your Coords, Tasks, and Deliverable Blueprints here."
+		  storeText: "Buy and sell your Coords, Tasks, and Deliverable Blueprints here.",
+		  searchTitle: "Search Results",
+		  searchText: "No tasks found for your query."
 		},
 		"metainfo" : {
 		  "follow": "Follow",
@@ -406,6 +410,7 @@ define({
 		  "blocked": "Blocked",
 		  "declined": "Declined",
 		  "cleared": "Issue Cleared",
+		  "cancelled": "Cancelled",
 		  "submitted": "To Agree Done",
 		  "returned": "Returned",
 		  "today": "Today",

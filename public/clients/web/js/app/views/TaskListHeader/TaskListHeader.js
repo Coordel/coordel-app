@@ -10,7 +10,8 @@ define([
   "dijit/_Container",
   "app/controllers/taskListControl",
   "app/models/TaskModel",
-  "app/models/CoordelStore"], function(dojo, dijit, bn, sort, coordel, html, w, t, c, tControl, tm,db) {
+  "app/models/CoordelStore",
+  "app/views/QuickSearch/QuickSearch"], function(dojo, dijit, bn, sort, coordel, html, w, t, c, tControl, tm,db) {
   dojo.declare(
     "app.views.TaskListHeader", 
     [w, t, c], 

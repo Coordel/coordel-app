@@ -3,9 +3,11 @@ define(
     "dijit/_Widget",
     "dijit/_Templated",
     "text!./templates/QuickSearch.html",
+    "i18n!app/nls/coordel",
     "dijit/form/TextBox"
+ 
     ], 
-  function(dojo, w, t, html) {
+  function(dojo, w, t, html, coordel) {
   
   dojo.declare(
     "app.views.QuickSearch", 
@@ -13,6 +15,8 @@ define(
     {
       
       templateString: html,
+      
+      coordel: coordel,
       
       widgetsInTemplate: true, 
       
@@ -24,8 +28,12 @@ define(
           //console.debug("key pressed", evt.which);
           if (evt.which === 13){
             //so the search
-            //console.debug("search for this", this.search.get("value"));
-            
+            var val = this.search.get("value");
+            console.debug("search for this", val);
+            if (val.trim().length){
+               dojo.publish("coordel/primaryNavSelect", [{focus: "search", setSelection: false, search: val}]);
+            }
+           
           }
         });
         

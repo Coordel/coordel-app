@@ -220,7 +220,7 @@ define(
       clearSelection: function(args){
         var self = this;
 
-          //console.debug("in clear project selection", args, self.project._id, self.domNode);
+          console.debug("in clear project selection", args, self.project._id, self.domNode);
 
           if (self.domNode){
             self.currentArgs = args;

@@ -3,7 +3,7 @@ var User = require('./../models/user');
 var Util = require('./../models/util');
 
 describe('Delegate', function(){
-
+  /*
   before(function(done){
     Util.flush(function(err){
       if (err) done(err);
@@ -43,5 +43,5 @@ describe('Delegate', function(){
    
           
   });
-  
+  */
 });

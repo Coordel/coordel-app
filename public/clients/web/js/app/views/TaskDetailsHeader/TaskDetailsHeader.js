@@ -38,6 +38,7 @@ define([
       
       postMixInProperties : function() {
         //set values for button labels and titles
+        console.log("this.focus", this.focus);
         this.backLabel = this.focus;
         if (this.focus === "project"){
           this.backLabel = coordel.project;
@@ -50,7 +51,6 @@ define([
         this.inherited(arguments);
         var tdh = this;
         //publish the button events
-        
         
         
         this.connections.push(dojo.connect(this.editTask, "onClick", this, function(){
@@ -226,6 +226,12 @@ define([
           id = "";
           name = "turbo";
           focus = "";
+        } else if (this.focus === "search"){
+          
+          id = "";
+          name = "";
+          focus = "search";
+          
         } else {
      
           id = this.task._id;
@@ -233,7 +239,7 @@ define([
           focus = this.focus;
         }
 
-        //console.debug("back publish parameters", "id: "+id, "name: "+name, "focus: "+focus);
+        console.debug("back publish parameters", "id: "+id, "name: "+name, "focus: "+focus);
         
         dojo.publish("coordel/primaryNavSelect", [{focus:focus, name: name, id:id, setSelection: true}]);
         

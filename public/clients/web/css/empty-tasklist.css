@@ -76,6 +76,10 @@ background-image:url(images/emptyList/store.png);
 background-image: url(images/emptyList/calendar.png);
 }
 
+.empty-tasklist.search .text {
+background-image: url(images/emptyList/search.png);
+}
+
 .empty-tasklist p {
 font-size: 12px;
 font-weight: normal;

@@ -225,7 +225,7 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
   width: 18em;
   margin-top: 1px;
   font-size: 10px;
-  
+  font-weight: bold;
 }
 
 .quick-search{

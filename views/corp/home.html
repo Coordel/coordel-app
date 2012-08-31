@@ -46,11 +46,10 @@
         }, [ "corp/main" ]);
   	    
   			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
-  	    require(["dojo/dom-class", "dojo/cookie", "corp/main", "app/views/Project/Project", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dc, cookie, corp, project){
+  	    require(["dojo/dom-class", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dc, cookie, corp){
   	      dc.remove("bnLogin", "hidden");
   	      corp.setBackground();
-  	      
-  	      console.log("app", app);
+
   	      
   	      //connect.publish("/foo/bar/baz", [{ some:"object data" }]);
   	      

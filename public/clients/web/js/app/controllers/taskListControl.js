@@ -17,8 +17,11 @@ define(["dojo",
         'app/views/Calendar/Calendar',
         'app/views/QuickEntry/QuickEntry',
         'app/views/OpportunityList/OpportunityList',
-        'dojo/date/locale',
-        'app/views/QuickSearch/QuickSearch'], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry, OpportunityList) {
+        'app/views/QuickSearch/QuickSearch',
+        "app/views/TaskAndChecklist/TaskAndChecklist",
+        'dojo/date/locale'
+        
+], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry, OpportunityList, QuickSearch, TaskCheck) {
   return {
     controllerName: "taskListControl",
     showProjectLabel: false,
@@ -492,6 +495,46 @@ define(["dojo",
           
         });
         
+      } else if (focus==="search"){
+      
+        console.log("need to do the search", this.search);
+        
+        //can't sort search results
+        self.header.sortButton.sortDropdown.set("disabled", true);
+        
+        db.taskStore.search(self.search).then(function(tasks){
+          console.log("tasks", tasks);
+          if (tasks.length){
+            
+            tasks.forEach(function(task){
+              var item;
+
+              //show either a task or taskandchecklist
+              if (self.showChecklist){
+                item = new TaskCheck({
+                  focus: "search",
+                  task: task,
+                  showProjectLabel: self.showProjectLabel
+                });
+              } else {
+
+                item = new t({
+                  focus: "search",
+                  task: task,
+                  showProjectLabel: self.showProjectLabel
+                });
+              }
+
+              cont.addChild(item);
+
+      	    });
+            
+          } else {
+            self.showEmptyTasks();
+          }
+        });
+      
+      
       } else {
         this._cancelObserveHandlers();
         //if this list should be grouped do it otherwise, just show a tasklist
@@ -765,7 +808,7 @@ define(["dojo",
       var self = this;
       self.isEmpty = true;
       var cont = dijit.byId("taskListMain");
-      //console.debug("showing empty", this.emptyGroup);
+      console.debug("showing empty", self.focus);
       //if (!this.emptyGroup){
       //  console.debug("empty group didin't exist yet", self);
       //console.log("focus in showEmptyTasks", self.focus);
