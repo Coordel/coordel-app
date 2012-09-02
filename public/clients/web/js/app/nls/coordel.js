@@ -24,6 +24,8 @@ define({
 	  applyBlueprint: "Apply Blueprint",
 	  executionOrder: "Execution Order",
 	  taskStatus: "Status",
+	  someday: "Someday",
+	  archive: "Archive",
 	  "noName": "No Name",
 		"focus": "Tasks",
 		"invitations": "Invitations",

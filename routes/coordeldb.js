@@ -92,7 +92,7 @@ module.exports = function(app, validate){
         list.forEach(function(word,doc){
         
           //we don't send back trash
-          console.log("doc status", doc.status, doc.substatus);
+          //console.log("doc status", doc.status, doc.substatus);
           if (doc.status !== "TRASH" && doc.substatus !== "TRASH"){
             //make sure this doc belongs to this user 
             if (doc.responsible === username || doc.delegator === username || doc.username === username){
@@ -101,10 +101,10 @@ module.exports = function(app, validate){
               }
               ids.push(doc._id);
             } else {
-              console.log("not a task that belongs to this username", doc.name);
+              //console.log("not a task that belongs to this username", doc.name);
             }
           } else {
-            console.log("trash", doc.name);
+            //console.log("trash", doc.name);
           }
         });
         map.push(ids);

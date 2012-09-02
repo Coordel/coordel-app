@@ -130,7 +130,7 @@ exports.getChangeAlertMap = function(change){
 	if (doc.docType === "task" && doc.blocking && doc.blocking.length > 0){
 	  doc.blocking.forEach(function(id){ 
 	    if (!map[doc.username]) map[doc.username] = true;
-	    console.log("notify blocking");
+	    //console.log("notify blocking");
 	  });
 	  if (doc.delegator && doc.delegator !== doc.responsible){
 	     if (!map[doc.delegator]) map[doc.delegator] = true;
@@ -148,7 +148,7 @@ exports.getChangeAlertMap = function(change){
   	    //need to alert the delegator if there is one
   	    if (doc.delegator){
   	      if (!map[doc.delegator]) map[doc.delegator] = true;
-  	      console.log("notify delegator");
+  	      //console.log("notify delegator");
   	    }
   	  } 
 	  } else {
@@ -158,7 +158,7 @@ exports.getChangeAlertMap = function(change){
 	    //need to alert the delegator if there is one
 	    if (doc.delegator){
 	      if (!map[doc.delegator]) map[doc.delegator] = true;
-	      console.log("notify delegator");
+	      //console.log("notify delegator");
 	    }
 	  }
 	}

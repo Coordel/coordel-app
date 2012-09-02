@@ -6,10 +6,11 @@ define([
   "dijit/_Widget", 
   "dijit/_Templated",
   "app/views/TaskInfo/TaskInfo",
+  "app/views/BlockerInfo/BlockerInfo",
   "dijit/TitlePane",
   "app/views/Dialog/Dialog",
   "app/models/CoordelStore",
-  "app/widgets/ContainerPane"], function(dojo, dijit, coordel, html, w, t, Info, tp, Dialog, db, cp) {
+  "app/widgets/ContainerPane"], function(dojo, dijit, coordel, html, w, t, Info,BlockerInfo, tp, Dialog, db, cp) {
   dojo.declare(
     "app.views.TaskInfoDialog", 
     [w, t], 

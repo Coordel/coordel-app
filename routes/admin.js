@@ -12,6 +12,14 @@ module.exports = function(app, validate){
     res.render('admin/page/index', {layout: 'admin/page'});
   });
   
+  app.get('/admin/people/:id', function(req, res){
+    console.log("get user apps", req.params.id);
+    UserApp.getPeople(req.params.id, function(err, apps){
+      console.log("user coordel-apps", apps);
+      res.render('admin/page/apps', {layout: 'admin/page', apps: apps});
+    });
+  });
+  
   app.get('/admin/users',  function(req,res){
     admin.getCoordelUsers(function(err, users){
       console.log("coordel-users", users);
@@ -41,8 +49,8 @@ module.exports = function(app, validate){
   });
   
   
-  app.get('/admin/cleanUser', function(req, res){
-    var id = req.query.id;
+  app.get('/admin/cleanUser/:id', function(req, res){
+    var id = req.params.id;
     var toRemove = [];
     var removed = {};
     
@@ -51,14 +59,16 @@ module.exports = function(app, validate){
       apps.forEach(function(app){
      
         UserApp.getPeople(app.id, function(err, people){
-          console.log("people", people);
+          //console.log("people", people);
           people.forEach(function(p){
-            console.log("p", p);
+            //console.log("p", p);
             if (p && p.id === id){
+              
               UserApp.remPerson({userAppId:app.id, personAppId:id}, function(err, reply){
                 if (err) console.log("error", err);
                 console.log("reply", reply);
               });
+              
               console.log("remove: " + p.user + " " + p.firstName + " " + p.lastName + " from " + app.firstName + " " + app.lastName);
               //NOTE: NEED TO REMOVE THE USERS FROM COUCH USING FUTON
             }

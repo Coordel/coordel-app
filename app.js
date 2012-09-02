@@ -236,16 +236,21 @@ require('./routes/alerts')(app, validate);//alert management
 //root 
 app.get('/', function(req, res){
   
+  var bg = req.cookies.bg;
+  
+  if (!bg){
+    bg = "1";
+  }
+  
   if (req.query.p){
     var page = req.query.p;
-    
-    
+
     //this is a request for a page
-    res.render('corp/page/' + page, {layout: 'corp/page', background: "bg" + req.cookies.bg});
+    res.render('corp/page/' + page, {layout: 'corp/page', background: "bg" + bg});
  
 
   } else {
-    res.render('corp/home', {layout: 'corp/home', color: 'c-bg-purple', background: "bg" + req.cookies.bg});
+    res.render('corp/home', {layout: 'corp/home', color: 'c-bg-purple', background: "bg" + bg});
   }
   
   /*

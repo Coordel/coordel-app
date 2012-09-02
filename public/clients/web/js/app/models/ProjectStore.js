@@ -7,7 +7,8 @@ define(["dojo",
         "app/store/util/TaskQueryEngine",
         "dojo/date",
         "dojo/date/stamp",
-        "app/models/ProjectStatus"], function(dojo, couch, mem, cache, obsCache, obs, tqe, date, stamp, pStatus) {
+        "app/models/ProjectStatus",
+        "app/util/Sort"], function(dojo, couch, mem, cache, obsCache, obs, tqe, date, stamp, pStatus, util) {
         //return an object to define the "./newmodule" module.
         var projStore = {
             db: "/" + djConfig.couchdb + "/",
@@ -516,7 +517,12 @@ define(["dojo",
                 def.callback([]);
               } else {
                 post.then(function(res){
-                  def.callback(res.results);
+                  //var results = util.sort(res.results, {sort: [{attribute:"name"}]});
+                  var results = [];
+                  if (res.results.length){
+                    results = util.sort(res.results, {sort:[{attribute:"name"}]});
+                  } 
+                  def.callback(results);
                 });
               }
 

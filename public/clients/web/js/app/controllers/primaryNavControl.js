@@ -192,7 +192,7 @@ define(['dojo',
       
       this.navFocus = focus;
     
-      console.debug("setting primary controller", focus, name, task, id);
+      //console.debug("setting primary controller", focus, name, task, id);
     
       if (name === "project"){
         
@@ -627,7 +627,9 @@ define(['dojo',
       this.search.search.set("placeHolder", coordel.searchProjects);
       
       dojo.connect(this.search, "onSearch", function(query){
+    
         self.showSearchResults(self.activeTab, query);
+ 
       });
     },
     

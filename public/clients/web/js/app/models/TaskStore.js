@@ -4,7 +4,8 @@ define(["dojo",
         "dojo/store/Cache",
         "app/store/ObservableCache",
         "dojo/store/Observable",
-        "app/store/util/TaskQueryEngine"], function(dojo, couch, mem, cache, obsCache, obs, tqe){
+        "app/store/util/TaskQueryEngine",
+        "app/util/Sort"], function(dojo, couch, mem, cache, obsCache, obs, tqe, util){
         //return an object to define the "./newmodule" module.
         var taskStore = {
             db: "/" + djConfig.couchdb + "/",
@@ -149,9 +150,42 @@ define(["dojo",
             	return def;
             
             },
+            getArchive: function(){
+              //the archive is loaded on demand
+              return this._getView({
+                view: "userArchiveTasks",
+                startkey: [this.username],
+                endkey: [this.username, {}]
+              });
+            },
+            getSomeday: function(){
+              //someday is loaded on demand
+              return this._getView({
+                view: "userSomedayTasks",
+                startkey: [this.username],
+                endkey: [this.username, {}]
+              });
+    
+            },
+            _getView: function(options){
+
+              var remote = new couch({
+                    target: this.db, 
+                    idProperty: "_id"
+                  });
+
+              var queryArgs = {
+                view: "coordel/" + options.view,
+            		startkey: options.startkey,
+            		endkey: options.endkey,
+            		include_docs: true
+            	};
+
+            	return remote.query(queryArgs);
+          
+            },
+            
             search: function(query){
-              
-              
               
               var post = dojo.xhrPost({
                 url: "/search",
@@ -165,7 +199,11 @@ define(["dojo",
                 def.callback([]);
               } else {
                 post.then(function(res){
-                  def.callback(res.results);
+                  var results = [];
+                  if (res.results.length){
+                    results = util.sort(res.results, {sort: [{attribute:"name"}]});
+                  } 
+                  def.callback(results);
                 });
               }
               

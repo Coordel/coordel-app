@@ -111,6 +111,9 @@ define(["dojo",
       //listen for sortChange
       this.subscribeHandlers.push(this.sortChangeHandler = dojo.subscribe("coordel/sortChange", this, "setSortOrder"));
       
+      //listen for viewChange
+      this.subscribeHandlers.push(this.viewChangeHandler = dojo.subscribe("coordel/taskViewChange", this, "setView"));
+    
       //listen for deleted Tasks private tasks will be deleted, others set to "TRASH" status
       this.subscribeHandlers.push(this.removeTaskHandler = dojo.subscribe("coordel/removeTask", this, "refreshList"));
       
@@ -238,6 +241,17 @@ define(["dojo",
       //console.debug("setSortOptions: ", this.focus, this.sortOptions);
       this.sortOptions = args;
       this.showTaskList(this.focus);
+    },
+    
+    setView: function(args){
+      /*
+      console.log("set view args", args);
+      dojo.forEach(dijit.byId(""), function(item){
+        item.destroy();
+      });
+      this.focus = args.view;
+      this.showTaskList(this.focus);
+      */
     },
     
     refreshList: function(args){
@@ -398,8 +412,41 @@ define(["dojo",
 
     },
     
+    _showTasks: function(tasks, focus){
+      var self = this;
+      var cont = dijit.byId("taskListMain");
+      
+      if (tasks.length){
+        
+        tasks.forEach(function(task){
+          var item;
+
+          //show either a task or taskandchecklist
+          if (self.showChecklist){
+            item = new TaskCheck({
+              focus: focus,
+              task: task,
+              showProjectLabel: self.showProjectLabel
+            });
+          } else {
+            item = new t({
+              focus: focus,
+              task: task,
+              showProjectLabel: self.showProjectLabel
+            });
+          }
+
+          cont.addChild(item);
+
+  	    });
+        
+      } else {
+        self.showEmptyTasks();
+      }
+    },
+    
     showTaskList: function(focus){
-      //console.debug("before add tasklist", focus);
+      console.debug("before add tasklist", focus);
       var cont = dijit.byId("taskListMain"),
           query,
           map,
@@ -408,6 +455,10 @@ define(["dojo",
       if (cont.hasChildren()){
         cont.destroyDescendants();
       }
+      
+      dojo.forEach(cont, function(item){
+        item.destroy();
+      });
       
       this.header.sortButton.sortDropdown.set("disabled", false);
       
@@ -498,45 +549,41 @@ define(["dojo",
       } else if (focus==="search"){
       
         console.log("need to do the search", this.search);
+        self._cancelObserveHandlers();
         
         //can't sort search results
         self.header.sortButton.sortDropdown.set("disabled", true);
         
         db.taskStore.search(self.search).then(function(tasks){
-          console.log("tasks", tasks);
-          if (tasks.length){
-            
-            tasks.forEach(function(task){
-              var item;
-
-              //show either a task or taskandchecklist
-              if (self.showChecklist){
-                item = new TaskCheck({
-                  focus: "search",
-                  task: task,
-                  showProjectLabel: self.showProjectLabel
-                });
-              } else {
-
-                item = new t({
-                  focus: "search",
-                  task: task,
-                  showProjectLabel: self.showProjectLabel
-                });
-              }
-
-              cont.addChild(item);
-
-      	    });
-            
-          } else {
-            self.showEmptyTasks();
-          }
+          self._showTasks(tasks, "search");
         });
       
       
+      } else if (focus === "someday") {
+        self._cancelObserveHandlers();
+        self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
+        db.taskStore.getSomeday().then(function(someday){
+        
+          console.log("someday tasks", someday);
+          self._showTasks(someday, "someday");
+        });
+        
+      } else if (focus === "archive"){
+         self._cancelObserveHandlers();
+         self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
+         db.taskStore.getArchive().then(function(archive){
+           console.log("archive tasks", archive);
+           self._showTasks(archive, "archive");
+         });
       } else {
         this._cancelObserveHandlers();
+        
+        console.log("showing tasks", focus);
+        dojo.addClass(dijit.byId("taskListViewButton").domNode, "hidden");
+        if (focus === "private"){
+          dojo.removeClass(dijit.byId("taskListViewButton").domNode, "hidden");
+        }
+        
         //if this list should be grouped do it otherwise, just show a tasklist
         //timeline
         if (this.sortOptions.grpTimeline){
@@ -580,49 +627,49 @@ define(["dojo",
         } else {
           this.showProjectLabel = true;
           
-          //console.debug("focus", focus, this.showProjectLabel);
-          
-          //query for the tasks in focus
           this.taskList = db.taskStore.memory.query({db: db, focus: focus, filters: []}, {sort:this.sortOptions.sortKeys});
           
           //console.log("taskList", this.taskList);
           
-          var list = new tl({
-  	        listFocus: focus,
-  	        taskList: this.taskList,
-  	        showChecklist: this.sortOptions.showChecklist,
-  	        showProjectLabel: this.showProjectLabel
-  	      });
-  	      
-          cont.addChild(list);
+          dojo.when(this.taskList, function(finalList){
+            var list = new tl({
+    	        listFocus: focus,
+    	        taskList: self.taskList,
+    	        showChecklist: self.sortOptions.showChecklist,
+    	        showProjectLabel: self.showProjectLabel
+    	      });
 
-  	      dojo.connect(list, "onInsert", this, function(task){
-  	        //when a task is observed added to this tl need to call _getNext if we're in turbo
-  	        //onNext is called when the action happens from the turbo control, but remove could
-  	        //come from another part of the application
-  	        //console.debug("in connect onInsert for tl");
-  	        //console.debug("updater on insert", task.updater);
-    	      if (this.isTurbo && this.turboWizard.currentTask._id === task._id && (focus === "current" || focus === "private") && task.updater === db.username()){
-    	        //console.debug("got an insert here's the task list", this.taskList);
-              this.turboWizard.next(this._getNext());
-    	      } else {
-    	        //some kind of task change happened, so we need to reset the glow
-    	        if (this.turboWizard && this.turboWizard.currentTask){
-    	          dojo.publish("coordel/glow", [{id: this.turboWizard.currentTask._id, isGlowing: true}]);
-    	        }
-    	      }
-  	      });
+            cont.addChild(list);
 
-  	      dojo.connect(list, "onRemove", this, function(task){
-  	        //when a task is observed removed to this tl need to call _getNext if we're in turbo
-  	        //onNext is called when the action happens from the turbo control, but remove could
-  	        //come from another part of the application
-  	        
-  	        //console.debug("updater on remove", task.updater);
-    	      if (this.isTurbo && this.turboWizard.currentTask._id === task._id && (focus === "current" || focus === "private") && task.updater === db.username()){
-              this.turboWizard.onNext();
-    	      }
-  	      });
+    	      dojo.connect(list, "onInsert", self, function(task){
+    	        //when a task is observed added to this tl need to call _getNext if we're in turbo
+    	        //onNext is called when the action happens from the turbo control, but remove could
+    	        //come from another part of the application
+    	        //console.debug("in connect onInsert for tl");
+    	        //console.debug("updater on insert", task.updater);
+      	      if (this.isTurbo && self.turboWizard.currentTask._id === task._id && (focus === "current" || focus === "private") && task.updater === db.username()){
+      	        //console.debug("got an insert here's the task list", this.taskList);
+                this.turboWizard.next(self._getNext());
+      	      } else {
+      	        //some kind of task change happened, so we need to reset the glow
+      	        if (this.turboWizard && self.turboWizard.currentTask){
+      	          dojo.publish("coordel/glow", [{id: self.turboWizard.currentTask._id, isGlowing: true}]);
+      	        }
+      	      }
+    	      });
+
+    	      dojo.connect(list, "onRemove", self, function(task){
+    	        //when a task is observed removed to this tl need to call _getNext if we're in turbo
+    	        //onNext is called when the action happens from the turbo control, but remove could
+    	        //come from another part of the application
+
+    	        //console.debug("updater on remove", task.updater);
+      	      if (self.isTurbo && self.turboWizard.currentTask._id === task._id && (focus === "current" || focus === "private") && task.updater === db.username()){
+                self.turboWizard.onNext();
+      	      }
+    	      });
+            
+          });
           
         }
       }
@@ -880,9 +927,6 @@ define(["dojo",
           }
         });
       });
-      
-      
-      
     },
     
     _updateStream: function(stream){

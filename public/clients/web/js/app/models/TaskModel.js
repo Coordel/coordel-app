@@ -73,14 +73,21 @@ define("app/models/TaskModel",
             
         function deriveDeadline(id){
           var def = new dojo.Deferred(),
-               now = new Date(),
-               derived = deadline;
+              now = new Date(),
+              derived = deadline;
                
-          //console.log("deriving deadline ", id);
+          //console.log("deriving deadline ", id, self.name);
 
           dojo.when(db.taskStore.blockingStore.get(id), function(block){
             //console.log("blocking task: ", block.name);
             var b = db.getTaskModel(block, true);
+            
+            //if the block deadline is sooner than the deadline, derived is the blocked deadline
+            //console.log("compare deadlines", self.name, b.name, deadline, b.getDeadline());
+            if (deadline > b.getDeadline()){
+              derived = b.getDeadline();
+            }
+            
             //console.log("blocking deadline: ", deadline, derived, b.getDeadline(), b.getDeadline()< derived);
             //var comp = dojo.date.compare(dojo.date.stamp.fromISOString(b.getDeadline()),dojo.date.stamp.fromISOString(derived));
             //console.log("comp", comp);
@@ -138,7 +145,7 @@ define("app/models/TaskModel",
         }
             
         //need to load the blocking and see when their deadlines are;
-        //console.log("t.task.blocking", t.task.name, t.task.blocking, t.task, deadline);
+        //console.log("t.task.blocking",blocking);
         var funcs = [];
         dojo.forEach(blocking, function(id){
           funcs.push(deriveDeadline(id));
@@ -146,11 +153,11 @@ define("app/models/TaskModel",
         var defList = new dojo.DeferredList(funcs);
         dojo.when(defList, function(res){
           var test = res[0][1];
-          //console.log("testing derived", res[0][1]);
+          //console.log("testing derived", res[0][1], res);
           dojo.forEach(res, function(item){
             //console.log("test values", item[1], test);
             if (item[1]< test){
-              //console.log("updated");
+              //console.log("updated", item[1]);
               test = item[1];
             }
           });
@@ -549,6 +556,7 @@ define("app/models/TaskModel",
   		
   		isBlocking: function(){
   		  //returns true if this task is blocking other tasks
+  		
   		  
   		},
   		
@@ -762,7 +770,7 @@ define("app/models/TaskModel",
     	
     	isCancelled: function(){
     	  var t = this;
-    	  return (t.status === "DONE" && t.substatus === "CANCELLED") || pStatus.isCancelled(t.p.project);
+    	  return (t.status === "DONE" && t.substatus === "CANCELLED") || pStatus.isCancelled(t.p.project, t.username);
     	},
     	
     	isPrivate: function(){
@@ -967,7 +975,7 @@ define("app/models/TaskModel",
     	},
     	isPaused: function(){
     	  var t = this;
-    	  return (t.status === "CURRENT" && t.substatus === "PAUSED") || pStatus.isPaused(t.p.project);
+    	  return (t.status === "CURRENT" && t.substatus === "PAUSED") || pStatus.isPaused(t.p.project, t.username);
     	},
     	isCleared: function(){
     	  var t = this;
@@ -1163,14 +1171,21 @@ define("app/models/TaskModel",
           var save;
           switch(db.focus){
             case "project":
-          
-            save = db.projectStore.taskStore.add(taskResp, {username: username});
+            if (taskResp.project === db.projectStore.currentProject){
+              save = db.projectStore.taskStore.add(taskResp, {username: username});
+            } else {
+              save = db.taskStore.store.add(taskResp, {username: username});
+            }
             break;
             case "task":
             save = db.taskStore.store.add(taskResp, {username: username});
             break;
             case "contact":
-            save = db.contactStore.taskStore.add(taskResp, {username: username});
+            if (taskResp.username === db.contactStore.currentContact){
+               save = db.contactStore.taskStore.add(taskResp, {username: username});
+            } else {
+              save = db.taskStore.store.add(taskResp, {username: username});
+            }
             break;
           }
           

@@ -246,7 +246,7 @@ define(
           //console.log("project should be active", self.project._id, self.currentArgs);
         }
         
-        console.log("args", self.currentArgs, self.project.id);
+        //console.log("args", self.currentArgs, self.project.id);
       },
       
       destroy: function(args){

@@ -82,7 +82,7 @@ define(["dojo",
               if(!query.trim().length){
                 def.callback([]);
               } else {
-                var list = this.memory.query();
+                var list = this.memory.query(null, {sort: [{attribute: "lastName"},{attribute: "firstName"}]});
                 dojo.when(list, function(){
                   var matches = list.filter(function(c){
                     var name = (c.firstName + " " + c.lastName).toLowerCase();

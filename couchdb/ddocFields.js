@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.107",
+  version: "0.1.108",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -1281,6 +1281,56 @@ module.exports = {
         			{"_id": doc._id}
         		);
       		}
+      	}
+      }
+    },
+    
+    userArchiveTasks: {
+      map: function(doc){
+        function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+      	
+      	if (doc.docType === "task" && doc.status === "ARCHIVE" && doc.substatus === ""){
+      	   emit(
+        			[doc.username, toDateArray(new Date(doc.updated))],
+        			{"_id": doc._id}
+        		);
+      	}
+      }
+    },
+    
+    userSomedayTasks: {
+      map: function(doc){
+        function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+      	
+      	if (doc.docType === "task" && doc.status === "SOMEDAY" && doc.substatus === ""){
+      	  emit(
+        			[doc.username, toDateArray(new Date(doc.updated))],
+        			{"_id": doc._id}
+        		);
       	}
       }
     },

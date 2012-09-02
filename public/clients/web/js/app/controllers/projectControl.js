@@ -45,7 +45,7 @@ define([
       emptyGroup: null,
       
       init: function(project){
-        console.log("project in project control", project);
+        //console.log("project in project control", project);
         db.focus = this.focus;
         this.project = project;
         var self = this;
