@@ -4,10 +4,89 @@
   padding:0;
 }
 
+.tutorial p {
+  margin-bottom: 8px;
+}
+
+.tutorial-content a {
+  color: #00629b;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+
+
 .tutorial-content {
   padding: 16px;
   background-color: #ffffff;
   width: 600px;
   min-height:400px;
   border-left: 1px solid #66727F;
+  max-height: 400px;
+  overflow: scroll;
+}
+
+.tutorial-feature-list {
+  text-transform: capitalize;
+  padding: 4px 0 0 0;
+  clear: left;
+  width: 199px;
+}
+
+.tutorial-feature {
+  cursor: pointer;
+  font-weight: bold;
+  color: #333333;
+  padding: 6px 8px;
+}
+
+.tutorial-feature a {
+  width:100%;
+}
+
+
+.tutorial-feature:hover{
+  color: #000000;
+}
+
+.tutorial-feature.active {
+	color: #00629b;
+	font-weight: bold;
+	text-shadow: rgba(0, 0, 0, 0.292969) 0px 1px 0px;
+}
+
+.bullets ol, .bullets ul {margin: 0 0 1.2em 1.6em;}
+.bullets ul li {list-style: disc;}
+.bullets ol li {list-style: decimal;}
+.bullets li {padding: 2px 0;}
+
+#feature-title {
+  text-transform: capitalize;
+}
+
+#feature-headline {
+  color: #333333;
+  font-style: italic;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+#feature-image {
+  margin-left: 8px;
+}
+
+.feature > span {
+  color: #666666;
+  font-style: italic;
+}
+
+.feature > a {
+  color: #00629b;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.feature-link:hover {
+  color: #000000;
 }

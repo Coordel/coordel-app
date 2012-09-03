@@ -5,10 +5,9 @@ define(
     "text!./templates/QuickStart.html",
     "dojo/cookie",
     "i18n!app/nls/coordel",
-    "text!/support/source.json",
     "dijit/form/Button"
     ], 
-  function(dojo, w, t, html, cookie, coordel, stepSource) {
+  function(dojo, w, t, html, cookie, coordel) {
   
   dojo.declare(
     "app.views.QuickStart", 
@@ -21,7 +20,7 @@ define(
       
       widgetsInTemplate: true,
       
-      steps: dojo.fromJson(stepSource).features,
+      steps: {},
       
       currentStep: 1,
       
@@ -31,16 +30,32 @@ define(
         this.inherited(arguments);
         var self = this;
         
-        self.steps = dojo.filter(self.steps, function(step){
-          return step.isSpotlight;
+        dojo.xhrGet({
+            url: "/support/source.json",
+            handleAs: "json",
+            load: function(stepSource) {
+              console.log("source", stepSource);
+              self.steps = stepSource.features;
+              
+              /* here, obj will already be a JS object deserialized from the JSON response */
+              self.steps = dojo.filter(self.steps, function(step){
+                return step.isSpotlight;
+              });
+
+              self.totalSteps = self.steps.length;
+
+              dojo.addClass(self.header, "bg" + cookie("bg"));
+
+              self.setStep();
+                
+                
+            },
+            error: function(err) {
+                /* this will execute if the response couldn't be converted to a JS object,
+                   or if the request was unsuccessful altogether. */
+            }
         });
-        
-        self.totalSteps = self.steps.length;
-        
-        dojo.addClass(self.header, "bg" + cookie("bg"));
-        
-        self.setStep();
-        
+
         dojo.connect(self.prevButton, "onClick",this, function(e){
           e.preventDefault();
           e.stopPropagation();

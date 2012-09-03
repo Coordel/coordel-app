@@ -7,13 +7,14 @@
       "content": "This Quick Start Wizard will get you familiar with some of Coordels's features. You can access it anytime from your preferences.",
       "image": "support/features/images/welcome.png",
       "isIntro": true,
-      "isSpotlight": true
+      "isSpotlight": true,
+      "code": "start"
     },
     {
       "order": 2,
       "title": "Smarter Tasks",
       "headline": "Goodbye email, hello productivity",
-      "content": "Do you rely on e-mail to get your teamwork started? Try Coordel tasks. Instead of free text that leaves room for miscommunication and confusion, Coordel gives you specific briefing instructions, deadlines and deliverables. With just a few clicks, everything you need to do your work is right there in front of you. How's that for efficient?",
+      "content": "Do you rely on e-mail to get your teamwork started? Try Coordel tasks. Instead of free text that leaves room for miscommunication and confusion, Tasks give specific instructions, deadlines and deliverables. With just a few clicks, everything you need to do your work is right there in front of you.",
       "image": "support/features/images/task.png",
       "isSpotlight": true,
       "code": "task"
