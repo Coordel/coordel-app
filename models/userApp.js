@@ -47,6 +47,12 @@ var App = exports = module.exports = function App(args){
     delete data.dndActive;
   }
   
+  if (args.showQuickStart){
+    data.showQuickStart = args.showQuickStart;
+  } else {
+    delete data.showQuickStart;
+  }
+  
   //console.log("in userapp", data);
 };
 
@@ -139,6 +145,12 @@ function _save(app, fn){
       multi.hset(key,'dndActive', data.dndActive);
     } else {
       multi.hdel(key,'dndActive');
+    }
+    
+    if (data.showQuickStart){
+      multi.hset(key,'showQuickStart', data.showQuickStart);
+    } else {
+      multi.hdel(key,'showQuickStart');
     }
 
     multi.sadd('coordel-apps', key);

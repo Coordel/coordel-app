@@ -60,7 +60,7 @@ define([
       
       if (this.action === "publish"){
         //make sure there is a message entered before enabling the save button
-        dojo.connect(this.budget, "onKeyUp", this, function(){ 
+        dojo.connect(this.actionText, "onKeyUp", this, function(){ 
           this.validate();
         });
       } else {
@@ -138,11 +138,13 @@ define([
         case "publish":
           
           //in order to publish an opportunity, the responsible had to give a budget and currency
+          //NOTE: disabled until better payment integration
+          /*
           var opp = {};
           opp.budget = this.budget.get("value");
           opp.currency = this.currency.get("value");
           project.opportunity = opp;
-          
+          */
           p.publish(project, message);
           //if we're activating the currently focused project, default back to current
           if (db.focus === "project" && db.projectStore.currentProject === project._id){
@@ -200,6 +202,9 @@ define([
       var isValid = false,
           v = this.actionText.get("value");
       
+      //console.log("actionText", v);
+      
+      /*
       if (this.action === "publish"){
         v = this.budget.get("value");
         if (v){
@@ -208,6 +213,7 @@ define([
           dojo.addClass(this.isRequired, "ready");
         }
       }
+      */
          
        
       //turn the required dot red

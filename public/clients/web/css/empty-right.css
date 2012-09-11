@@ -22,6 +22,11 @@
   
 }
 
+.empty-right.contact .text {
+  background-image:url(images/emptyList/contact.png);
+}
+
+
 .empty-right.stream .text {
   background-image:url(images/emptyList/stream.png);
   

@@ -17,7 +17,7 @@ define([
       emptyGroup: null,
       init: function(contact){
         
-        console.log("db", db);
+        //console.log("db", db);
         db.focus = "contact";
     
         this.contact = contact;
@@ -52,20 +52,25 @@ define([
       showContact: function(){
         var contact = this.contact;
         
+        ///console.log("showContact called", this.contact);
+        
         var cont = dijit.byId("rightDetailsMain"),
             profiles = db.profileStore;
-            
-        if (cont.hasChildren()){
-          cont.destroyDescendants();
+        
+        if (cont) {
+          if (cont.hasChildren()){
+            cont.destroyDescendants();
+          }
+
+          profiles.get(contact).then(function(profile){
+            //console.log("got profile", profile);
+            var p = new Profile({
+              profile: profile
+            });
+            cont.addChild(p);
+          });
         }
         
-        profiles.get(contact).then(function(profile){
-          console.log("got profile", profile);
-          var p = new Profile({
-            profile: profile
-          });
-          cont.addChild(p);
-        });
         
       },
       

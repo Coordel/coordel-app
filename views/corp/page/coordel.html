@@ -1,0 +1,34 @@
+<script>
+  // Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
+  require(["corp/main", "dojo/_base/array", "dojo/dom-class", "corp/widgets/Opportunity/Opportunity", "corp/db"], function(corp, array, dc, Opportunity, db){
+    corp.setCurrentPage("coordel");
+    
+    db.load("/coordel/view/coordelOpportunities",{ query: {descending: true},
+        handleAs: "json"
+      }).then(function(data){
+        //console.log("opportunities", data, data.rows);
+        if (data.rows && data.rows.length){
+          
+          array.forEach(data.rows, function(item){
+            var o = new Opportunity({project: item}).placeAt("coordelOpp-list");
+            o.startup();
+          });
+        } else {
+          //need to show empty;
+        }
+      });
+  });
+</script>
+<div>
+  Coordel works for you. By making you more productive and by offering you more opportunity. But that is not all. 
+</div>
+
+<div>
+Coordel Opportunities are <a class="c-color-active" href="/?p=feature&f=coord">Coords</a> that have been published by Coordel. Anyone who is a Coordel <a class="c-color-active" href="/register">member</a> can participate in Coordel Opportunities.
+</div>
+<br>
+<div>Click the binoculars to follow an Opportunity. Non-members will be invited to start a free 30 trial membership. Opportunities will appear in the <a class="c-color-active" href="/?p=feature&f=coord">Coord</a> list in the application.</div>
+<br>
+<div id="coordelOpp-list"></div>
+
+

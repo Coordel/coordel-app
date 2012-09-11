@@ -140,6 +140,7 @@ define(
               //happend to the project (project is object), so track that
               project = item.object;
               if (item.object.type !== "PROJECT"){
+               
                  //just in case something strange happens, just reset the project
                  project = {project: "", type: "", name: ""};
               }
@@ -155,17 +156,22 @@ define(
   		_getChild: function(item){
   		  var child;
   		  
+  		  var self = this;
+  		  
   		  if (item.object.type !== "NOTE" && item.object.type !== "COMMENT"){
   		    
-  		    item.allowOptions = this.showProject;
-  		    item.project = this._getProject(item);
+  		    item.allowOptions = self.showProject;
+  		    item.project = self._getProject(item);
   		    child = new Activity(item);
           
         } else {
+          
+          
+          
           var message = item.body,
               created = item.created;
               
-          child = new Message({message: message, created: created, project: this._getProject(item), allowOptions: this.showProject});
+          child = new Message({message: message, created: created, project: self._getProject(item), allowOptions: self.showProject});
         }
   		  
   		  return child;

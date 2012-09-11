@@ -25,8 +25,9 @@ define(['dojo',
         "app/widgets/ContainerPane",
         "app/views/OpportunityAction/OpportunityAction",
         "dojo/cookie",
-        "app/views/QuickStart/QuickStart"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie, QuickStart) {
+        "app/views/QuickStart/QuickStart",
+        "app/views/PersonalInfo/PersonalInfo"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie, QuickStart, PersonalInfo) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -139,6 +140,7 @@ define(['dojo',
 	    
 	    this.resetHandlers();
 	    
+	    //any time based values (i.e. timeago) use this hearbeat
 	    this.interval = setInterval(dojo.hitch(self, self._timeUpdate), 60000);
 	    
 	  	//listen for logout
@@ -338,7 +340,7 @@ define(['dojo',
     },
     
     doOpportunityAction: function(args){
-      //console.log("appControl should do opportunity action", args);
+      console.log("appControl should do opportunity action", args);
       var css = "highlight-button",
 	        d,
 	        proj;
@@ -385,7 +387,7 @@ define(['dojo',
     },
 	  
 	  doProjectAction: function(args){
-	    //console.debug("appControl should do project action", args);
+	   
 	    var css = "highlight-button",
 	        d,
 	        proj;
@@ -422,7 +424,7 @@ define(['dojo',
 	      
 	    } else {
 	      
-	      console.log("showing project action");
+	      console.log("showing project action", args.validate);
 	      //show a project action
 	      if (args.cssClass){
   	      css = args.cssClass;
@@ -472,7 +474,7 @@ define(['dojo',
 	    //console.debug("appControl should add an object", args);
 	    switch (args.object){
 	      case "project":
-	      this._showProjectForm();
+	      this._showProjectForm(args);
 	      break;
 	      case "task":
 	      this._showTaskForm(args);
@@ -514,7 +516,7 @@ define(['dojo',
 	      case "showEmailIntegration":
 	      title = "E-mail Integration";
 	      template = "support/emailIntegration.html";
-	      //console.log("show email integration");
+	      console.log("show email integration");
 	      break;
 	    }
 	    
@@ -535,7 +537,28 @@ define(['dojo',
   	      }
   	    });
 	      
-	    } else {
+	    } else if (args === "personalInfo"){
+	      var pers = new PersonalInfo();
+	      d = new cDialog({
+	        title: coordel.personalInfo,
+	        content: pers,
+	        style: {width: "500px"},
+	        onCancel: function(){
+	          d.destroy();
+	        }
+	      });
+	      
+	      dojo.connect(d, "onConfirm", pers, "save");
+	    } else if (args === "showEmailIntegration"){
+	      d = new vDialog({
+  	      title: title,
+  	      style: {width: "560px"},
+  	      href: template,
+  	      onCancel: function(){
+  	        d.destroy();
+  	      }
+  	    });
+	    }else {
 	      d = new vDialog({
   	      title: title,
   	      content: new QuickStart(),
@@ -584,7 +607,7 @@ define(['dojo',
 	  
 	  },
 	  
-	  _showProjectForm: function(){
+	  _showProjectForm: function(args){
 	    //console.debug("create a project");
 	    var id = db.uuid();
 	    //console.debug("create a project with this _id", id, "username", db.username());
@@ -624,6 +647,10 @@ define(['dojo',
 	    }); 
 	    
 	    d.show();
+	    
+	    if (args.template){
+	      proj._setTemplate(args.template);
+	    }
 	  },
 	  
 	  _showTaskForm: function(args){
@@ -721,7 +748,7 @@ define(['dojo',
 	  
 	  handleChange: function(resp){
 	    
-	    //console.log("appControl handleChanges called", resp);
+	    console.log("appControl handleChanges called", resp);
 	  
   	  var notifications = [];
   		//resp.results.map(function(r){
@@ -761,6 +788,9 @@ define(['dojo',
   					break;
   				case "template":
   				  db.appStore.templateStore.notify(chg, chg._id);
+  				  if (chg.isNew){
+  				    
+  				  }
   				  //console.log("templateStore notified", chg);
   				  break;
   				case "project":
@@ -784,8 +814,29 @@ define(['dojo',
   				    }
   				  });
   				  
-  				  //now get the status for the user
+  				  //make sure everyone in the project is in my contacts list
   				  
+  				 
+  				  var newContact = false;
+  				  
+  				  dojo.forEach(chg.users, function(id){
+  				    var list = db.contacts();
+              
+  				    var test = list.filter(function(item){
+  				      return item.id === id;
+  				    });
+  				    console.log("tested contact", id, test.length);
+  				    if (!test.length){
+  				      console.log("add new contact", id);
+  				      db.contactStore.addContact(id);
+  				    }
+  				  });
+  				    
+  				  
+  				  
+  				  
+  				  
+  				  //now get the status for the user
   				  dojo.forEach(chg.assignments, function(assign){
   				    if (assign.username === app.username){
   				      //console.debug("project status = ", assign.status);
@@ -797,24 +848,32 @@ define(['dojo',
   					//console.debug("STATUS:", chg.status, chg.substatus);
   					if (isNew && chg.creator !== app.username && chg.updater !== app.username && chg.status !== "ARCHIVE" && chg.status !== "TRASH" && !chg._deleted){
   					  //this is a new project that I didn't create so add
-  					  //console.debug("Notify Project ADD", chg._id, chg._rev);
+  					  console.debug("Notify Project ADD", chg._id, chg._rev);
   					  if (chg.substatus === "OPPORTUNITY"){
-  					    db.projectStore.oppStore.notify(chg);
+  					    if (db.isOpportunities){
+  					      db.projectStore.oppStore.notify(chg);
+  					      db.projectStore.store.notify(chg);
+  					    } else {
+  					      //need to see if this is a user of the project
+  					      db.projectStore.store.notify(chg);
+  					    }
+  					    
   					  } else {
   					    db.projectStore.store.notify(chg);
   					  }
   					  
   					} else if (assignStatus === "DECLINED" || chg.substatus === "DELETED" || chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   					  //this project was deleted
-  					  //console.debug("Notify Project DELETE",chg._id, chg._rev);
+  					  console.debug("Notify Project DELETE",chg._id, chg._rev);
   					  db.projectStore.store.notify(null, chg._id);
   					  
   					} else {
   					  //this is an update
-  					  //console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
+  					  console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
   					  
-  					  if (chg.substatus === "OPPORTUNITY"){
+  					  if (chg.substatus === "OPPORTUNITY" && db.projectStore.oppStore){
   					    db.projectStore.oppStore.notify(chg, chg._id);
+  					    db.projectStore.store.notify(chg, chg._id);
   					  } else {
   					    db.projectStore.store.notify(chg, chg._id);
   					  }
@@ -970,7 +1029,7 @@ define(['dojo',
   				      //db.streamStore.taskStore.notify(chg, chg._id);
   				    }
   				    
-  				    //db.streamStore.store.notify(chg, chg._id);
+  				    db.streamStore.store.notify(chg, chg._id);
   				    //I sent it, it's an update
   				    //db.streamStore.store.notify(chg, chg._id);
   				  }

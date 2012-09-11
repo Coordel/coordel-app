@@ -82,12 +82,12 @@ module.exports = function(app, validate){
       //delete the userApp
       
       UserApp.remove(id, function(err, reply){
-        console.log("removed the user app");
+        console.log("removed the user app", err, reply);
       });
       
       //delete the user
       App.remove(id, function(err, reply){
-        console.log("removed the user");
+        console.log("removed the user", err, reply);
       });
 
     });

@@ -13,6 +13,10 @@ ul.primary-boxes li {
 ul.primary-boxes li:last-child{
   border-bottom: 0px solid #eaeaea;
 }
+ul.primary-boxes li.shared-blueprints{
+  border-bottom: 1px solid #cccccc;
+}
+
 ul.primary-boxes li.active {
 	background: url(images/primaryNavActive-bg.png);
 	color: #fff;
@@ -68,6 +72,18 @@ li.private a {
 }
 li.opportunities a {
 	background: url(images/primaryBoxes/opportunities.png) no-repeat left center;
+}
+li.task-blueprints a {
+	background: url(images/icons/taskBlueprint.png) no-repeat left center;
+}
+li.project-blueprints a {
+	background: url(images/icons/projectBlueprint.png) no-repeat left center;
+}
+li.deliverable-blueprints a {
+	background: url(images/icons/deliverableBlueprint.png) no-repeat left center;
+}
+li.shared-blueprints a {
+	background: url(images/icons/sharedBlueprint.png) no-repeat left center;
 }
 
 

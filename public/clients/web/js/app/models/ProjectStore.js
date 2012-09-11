@@ -210,13 +210,13 @@ define(["dojo",
                   self = this;
                   
               
-              if (!project && !this.currentProject){
+              if (!project && !self.currentProject){
                 def.errback({error: "Invalid project id", reason: "missing"});
-              } else if (project && project === this.currentProject){
+              } else if (project && project === self.currentProject){
                 def.callback(self);
               } else {
                 if (!project){
-                  project = this.currentProject;
+                  project = self.currentProject;
                 }
                 //current project is the project that is currently cached. that way
                 //the app can inspect it and if a different project is needed, it can be loaded

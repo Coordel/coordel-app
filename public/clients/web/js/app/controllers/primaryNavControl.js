@@ -6,6 +6,7 @@ define(['dojo',
   'app/views/RightHeader/RightHeader',
   'app/views/AddTaskButton/AddTaskButton',
   'app/views/PrimaryBoxes/PrimaryBoxes',
+  'app/views/BlueprintBoxes/BlueprintBoxes',
   'app/views/Project/Project',
   'app/views/Contact/Contact',
   'app/views/TaskForm/TaskForm',
@@ -23,7 +24,7 @@ define(['dojo',
   'app/views/EmptyTaskList/EmptyTaskList',
   'app/views/QuickSearch/QuickSearch',
   'app/util/Sort'
-  ], function(dojo, dl, dijit, layout, ph, rh, add, pb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel, etl, search, util) {
+  ], function(dojo, dl, dijit, layout, ph, rh, add, pb,bpb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel, etl, search, util) {
     
   return {
     activeTab: "projects",
@@ -95,6 +96,8 @@ define(['dojo',
       pnc.setPrimaryController();
     
       pnc.setCounts();
+      
+      pnc.showQuickStart();
     
       //handle click of the projects and contacts tabs
       /*
@@ -116,8 +119,7 @@ define(['dojo',
       });
       
       dojo.connect(dojo.byId("storeTab"), "onclick",null, function(evt){
-        dojo.publish("coordel/primaryNavSelect", [{focus:"store", name: "store"}]);
-        pnc.activateStore();
+        pnc.activateBlueprints();
       });
     
       //listen for navSelection
@@ -158,10 +160,24 @@ define(['dojo',
       this.isTurbo = args.isTurbo;
       this.setPrimaryController(this.currentArgs);
     },
+    
+    showQuickStart: function(){
+      var a = db.appStore.app();
+      //console.log("app", a);
+      if (!a.showQuickStart){
+        a.showQuickStart = true;
+        dojo.publish("coordel/support", ["showQuickStart"]);
+        
+        dojo.when(db.appStore.post(a), function(){
+          db.appStore._app = a;
+          console.log("updated", a);
+        });
+      
+      } 
+    },
+    
   
     setPrimaryController: function(args){
-    
-      //console.debug("in primaryNavControl.setPrimaryView", this.currentArgs, args);
   
       //detect what was sent and then create a new controller and init() it.
       var focus = "current",
@@ -169,6 +185,7 @@ define(['dojo',
           task,
           id,
           search,
+          searchBlueprint,
           tab = this.activeTab,
           c;
     
@@ -178,6 +195,7 @@ define(['dojo',
         task = args.task;
         id = args.id;
         search = args.search;
+        searchBlueprint = args.searchBlueprint;
       } 
       
       //console.log("focus", args);
@@ -189,8 +207,15 @@ define(['dojo',
       if (search){
         this.currentArgs.search = search;
       }
+
+      this.currentArgs.searchBlueprint = searchBlueprint;
+
       
       this.navFocus = focus;
+      
+      
+      db.isOpportunities = (focus === "opportunities");
+      
     
       //console.debug("setting primary controller", focus, name, task, id);
     
@@ -224,6 +249,10 @@ define(['dojo',
 
         //console.debug("created projectControl", this.primaryController);
       } else if (name === "contact"){
+        
+        if (cControl.showRightColumnHandler){
+          dojo.unsubscribe(cControl.showRightColumnHandler);
+        }
         
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
@@ -272,12 +301,32 @@ define(['dojo',
         
       } else {
         
+        //shim in the search capability of the blueprints search should probably be elsewhere
+        if (this.currentArgs.focus === "task-blueprints"){
+          //console.log("success it's tasks");
+          this.search.search.reset();
+          this.search.search.set("placeHolder", coordel.searchTaskBlueprints);
+          dojo.removeClass(this.search.domNode, "hidden");
+        } else if (this.currentArgs.focus === "project-blueprints"){
+          //console.log("success it's projects");
+          this.search.search.reset();
+          this.search.search.set("placeHolder", coordel.searchProjectBlueprints);
+          dojo.removeClass(this.search.domNode, "hidden");
+        } else if (this.currentArgs.focus === "shared-blueprints"){
+          //console.log("success it's shared");
+          this.search.search.reset();
+          this.search.search.set("placeHolder", coordel.searchSharedBlueprints);
+          dojo.removeClass(this.search.domNode, "hidden");
+        }
+        
+        
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
       
         c = this.taskListControl;
         
         c.search = this.currentArgs.search;
+        c.searchBlueprint = this.currentArgs.searchBlueprint;
         //console.debug("task list controller is", c, focus );
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);
@@ -302,7 +351,7 @@ define(['dojo',
         document.title = "Coordel > " + coordel.contacts;
         break;
         case "storeTab":
-        document.title = "Coordel > " + coordel.store;
+        document.title = "Coordel > " + coordel.blueprints;
         break; 
       }
       
@@ -340,16 +389,16 @@ define(['dojo',
     
     
     activateContacts: function(){
-        this._closeTabs();
-        this._openTab("contactsTab");
-        this.showContactList();
-        //dojo.removeClass("rightOtherListTab", "inactive");
-        //dojo.addClass("leftOtherListTab", "inactive");
-        //dijit.byId("otherListMain").forward();
-        dijit.byId("otherListMain").selectChild("otherListContacts");
-        this.activeTab = "contacts";
-        this.search.search.set("placeHolder", coordel.searchPeople);
-        dojo.removeClass(this.search.domNode, "hidden");
+      this._closeTabs();
+      this._openTab("contactsTab");
+      this.showContactList();
+      //dojo.removeClass("rightOtherListTab", "inactive");
+      //dojo.addClass("leftOtherListTab", "inactive");
+      //dijit.byId("otherListMain").forward();
+      dijit.byId("otherListMain").selectChild("otherListContacts");
+      this.activeTab = "contacts";
+      this.search.search.set("placeHolder", coordel.searchPeople);
+      dojo.removeClass(this.search.domNode, "hidden");
     },
 
     
@@ -359,6 +408,22 @@ define(['dojo',
       this.showStore();
       dijit.byId("otherListMain").selectChild("otherListStore");
       dojo.addClass(this.search.domNode, "hidden");
+    },
+    
+    activateBlueprints: function(){
+      
+      this._closeTabs();
+      this._openTab("storeTab");
+      this.showBlueprints();
+      dijit.byId("otherListMain").selectChild("otherListBlueprints");
+      this.search.search.set("placeHolder", coordel.searchBlueprints);
+      dojo.addClass(this.search.domNode, "hidden");
+      var cont = dijit.byId("otherListBlueprints");
+      this.activeTab = "blueprints";
+      if (cont.hasChildren()){
+        cont.destroyDescendants();
+      }
+      var boxes = new bpb().placeAt("otherListBlueprints");
     },
     
     
@@ -590,7 +655,7 @@ define(['dojo',
 
       dojo.forEach(cons, function(con){
         //console.log("creating contact", con);
-        if (con.id !== db.username()){
+        if (!con.error && con.id !== db.username()){
           cont.addChild(new c({
             contact: con, 
             doNavigation: true,
@@ -612,6 +677,14 @@ define(['dojo',
       }).placeAt("storeMain");
     },
     
+    showBlueprints: function(){
+      var cont = dijit.byId("otherListBlueprints");
+      if (cont.hasChildren()){
+        cont.destroyDescendants();
+      }
+      var boxes = new bpb().placeAt("otherListBlueprints");
+    },
+    
     showSearch: function(){
       
       var self = this;
@@ -627,9 +700,26 @@ define(['dojo',
       this.search.search.set("placeHolder", coordel.searchProjects);
       
       dojo.connect(this.search, "onSearch", function(query){
-    
-        self.showSearchResults(self.activeTab, query);
- 
+        
+        //console.log("searching", query, self.activeTab, self.currentArgs);
+        
+        //this was initially designed to handle searching in the column under tabs, but for 
+        //blueprints it turns out that it makes more sense to show the results in the task list
+        var focus = self.currentArgs.focus;
+        if (focus === "task-blueprints"){
+          //console.log("show found task blueprints");
+          dojo.publish("coordel/primaryNavSelect", [{focus: "task-blueprints", setSelection: false, searchBlueprint: query}]);
+          
+        } else if (focus === "project-blueprints"){
+          //console.log("show found project blueprints");
+          dojo.publish("coordel/primaryNavSelect", [{focus: "project-blueprints", setSelection: false, searchBlueprint: query}]);
+        } else if (focus === "shared-blueprints"){
+          //console.log("show found shared blueprints");
+          dojo.publish("coordel/primaryNavSelect", [{focus: "shared-blueprints", setSelection: false, searchBlueprint: query}]);
+        } else {
+          self.showSearchResults(self.activeTab, query);
+        }
+
       });
     },
     
@@ -637,18 +727,18 @@ define(['dojo',
       var self = this;
       dijit.byId("otherListMain").selectChild("otherListSearch");
       
-      console.log("dijits", dijit.byId("otherListSearch"));
+      //console.log("dijits", dijit.byId("otherListSearch"));
       
       dijit.byId("otherListSearch").destroyDescendants();
       
-      console.log("show search results", focus, query);
+      //console.log("show search results", focus, query);
       
       this.isSearch = true;
 
       switch (focus){
         case "projects":
         db.projectStore.search(query).then(function(results){
-          console.log("search results", results);
+          //console.log("search results", results);
           results = util.sort(results, {sort: [{attribute: "name"}]});
           dojo.forEach(results, function(proj){
             var obj =  new p({
@@ -656,7 +746,7 @@ define(['dojo',
               currentArgs: self.currentArgs
             }).placeAt("otherListSearch");
             dojo.connect(obj.domNode, "onclick", function(){
-              console.log("set selection");
+              //console.log("set selection");
               obj.setSelection();
             });
           });
@@ -666,7 +756,7 @@ define(['dojo',
         break;
         case "contacts":
         db.contactStore.search(query).then(function(results){
-          console.log("search results", results);
+          //console.log("search results", results);
           dojo.forEach(results, function(con){
             var cObj = new c({
               contact: con,
@@ -674,7 +764,7 @@ define(['dojo',
               currentArgs: self.currentArgs
             }).placeAt("otherListSearch");
             dojo.connect(cObj.domNode, "onclick", function(){
-              console.log("set selection");
+              //console.log("set selection");
               cObj.setSelection();
             });
           });

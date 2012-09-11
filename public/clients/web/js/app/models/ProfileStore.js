@@ -66,7 +66,7 @@ define(["dojo",
             		reduce: true
             	};
             	funcs.push(this.store.query(qAvg).then(function(res){
-            	  console.log("avg", res);
+            	  //console.log("avg", res);
             	  if (res.length){
             	    toReturn.feedbackStats = res[0];
             	  } else {

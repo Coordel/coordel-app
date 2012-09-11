@@ -29,7 +29,6 @@ module.exports = function(app, validate){
   app.post('/search', function(req, res){
     
     var view = "taskSearch";
-
     if (req.body.type){
       switch (req.body.type){
         case "task":
@@ -38,8 +37,12 @@ module.exports = function(app, validate){
         case "project":
         view = "projectSearch";
         break;
+        case "template":
+        view = "templateSearch";
+        break;
       }
     }
+    
 
     var username = req.body.username;
 
@@ -67,7 +70,7 @@ module.exports = function(app, validate){
     
     //push the load word function for each of the words in the query  
     words.forEach(function(word){
-      //console.log("word", word);
+      console.log("word", word);
       funcs.push(loadWord(word));
     });
     
@@ -90,21 +93,33 @@ module.exports = function(app, validate){
         //array to hold the ids of the docs for this word 
         var ids = [];
         list.forEach(function(word,doc){
+          
+          console.log("view", view);
         
-          //we don't send back trash
-          //console.log("doc status", doc.status, doc.substatus);
-          if (doc.status !== "TRASH" && doc.substatus !== "TRASH"){
-            //make sure this doc belongs to this user 
-            if (doc.responsible === username || doc.delegator === username || doc.username === username){
+          //we don't send back trash for projects and tasks and we don't send back inactive templates
+          if(view === "taskSearch" || view === "projectSearch"){
+            //console.log("doc status", doc.status, doc.substatus);
+            if (doc.status !== "TRASH" && doc.substatus !== "TRASH"){
+              //make sure this doc belongs to this user 
+              if (doc.responsible === username || doc.delegator === username || doc.username === username){
+                if (!docs[doc._id]){
+                  docs[doc._id] = doc;
+                }
+                ids.push(doc._id);
+              }
+            } else {
+              //console.log("trash", doc.name);
+            }
+          } else if (view === "templateSearch"){
+            console.log("doc", doc);
+            if (doc.isActive){
+              
+              //don't need to verify if this is for this user
               if (!docs[doc._id]){
                 docs[doc._id] = doc;
               }
               ids.push(doc._id);
-            } else {
-              //console.log("not a task that belongs to this username", doc.name);
             }
-          } else {
-            //console.log("trash", doc.name);
           }
         });
         map.push(ids);

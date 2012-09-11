@@ -17,6 +17,60 @@
           }
         });
         
+        createFeatureTable();
+        
+        function createFeatureTable(){
+          
+          var div = node.create("div", null, "featureTable");
+          var table = node.create("table", null, div);
+          var tbody = node.create("tbody", null, table);
+          
+          var count=1;
+          var rowCount = 1;
+          groups = {};
+          row = "row"+rowCount.toString();
+          array.forEach(steps, function(step){
+            if (!step.isIntro){
+              if (!groups[row]){
+                groups[row] = [];
+              }
+              if (count < 5){
+                //console.log("count", count);
+                groups[row].push(step);
+                count += 1;
+              } else {
+                //console.log("out of count", count);
+                count = 2;
+                rowCount += 1;
+                row = "row"+rowCount.toString();
+                if (!groups[row]){
+                  groups[row] = [];
+                }
+                groups[row].push(step);
+              }
+            }  
+          });
+          
+          for (var key in groups) {
+            //console.log("group", groups[key]);
+            
+            var tr = node.create("tr", null, tbody);
+            
+          
+            array.forEach(groups[key], function(step){
+              //console.log("step", step);
+              
+              node.create("td", {
+                innerHTML: "<a href='#" + step.code + "'>" + step.title + "</a>"
+              }, tr);
+            
+            });
+          
+          }
+          //console.log("groups", groups);
+          
+        }
+        
         function addFeature(step){
           var feature = node.create("div", {"class": "qs-content"}, "featureList");
           
@@ -45,6 +99,10 @@
 <div>
   <h1>Coordel Features</h1>
   <div>See how Coordel creates opportunity in making you more productive. For more details about how Coordel works, check out the features section below.</div>
+  
+  <div id="featureTable"></div>
+  <br>
+  <div>Something missing? Head over to the Coordel Get Satisfaction <a class="c-color-active" href="https://getsatisfaction.com/coordel/ideas/popular" target="_blank">community</a> to see what others think and to add your own ideas.</div>
 </div>
 <br>
 <hr>

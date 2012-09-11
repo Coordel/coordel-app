@@ -30,7 +30,7 @@ define(
   
         var p = this.profile.profile;
         
-        console.debug("profile", this.profile);
+        //console.debug("profile", this.profile);
         
         //now set default to "" where the user hasn't provided the details value
         
@@ -64,6 +64,7 @@ define(
           dojo.addClass(this.email, "hidden");
         } else {
           this.emailValue.innerHTML = p.email;
+          this.emailValue.href = "mailto:"+ p.email;
         }
         
         if (p.phone === ""){
@@ -76,6 +77,7 @@ define(
           dojo.addClass(this.skype, "hidden");
         } else {
           this.skypeValue.innerHTML = p.skype;
+          this.skypeValue.href = "skype:" + p.skype;
         }
         
         var email = dojo.trim(p.email.toLowerCase()),

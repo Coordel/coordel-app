@@ -172,7 +172,7 @@ dojo.declare(
 	      });
 	      
 	      dojo.connect(this.altDropDown.addFieldValue, "onclick", this, function(){
-	        console.debug("add clicked in openAltDropDown");
+	        //console.debug("add clicked in openAltDropDown");
 	        this.onAdd(this.taskFormField);
 	        this.closeAltDropDown();
 	        this.openAltDropDown("add");

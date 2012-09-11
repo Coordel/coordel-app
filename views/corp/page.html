@@ -27,22 +27,12 @@
         }, [ "corp/main" ]);
   	    
   			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
-  	    require(["dojo", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dojo, cookie, corp){
-  	      dojo.removeClass("bnLogin", "hidden");
+  	    require(["dojo/dom-class", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dc, cookie, corp){
+  	      dc.remove("bnLogin", "hidden");
   	      corp.setBackground();
-  	
+  	      corp.setSpotlightSidebar();
+  	      corp.setOppSidebar();
   	      
-  	      //if the current location is the registration page, then we need to hide the join us button
-  	      /*
-  	      if (window.location.pathname === "/register" || window.location.pathname === "/reset"){
-  	        
-  	        dojo.removeClass(dojo.byId("tagLine"), "hidden");
-  	        dojo.addClass(dojo.byId("joinUs"), "hidden");
-  	        dojo.addClass(dojo.byId("joinUsUpper"), "hidden");
-  	        
-  	      }
-  	      */
-  	      //connect.publish("/foo/bar/baz", [{ some:"object data" }]);
   	      
   	    });
   	</script>
@@ -179,20 +169,36 @@
 
       				<ul>
               	<li id="nav-home"><a href="/">Home</a></li>
-              	<!--<li id="nav-about"><a href="/?p=about">About</a></li>
-              	<li id="nav-pricing"><a href="/?p=pricing">Pricing</a></li>-->
+              	
+              	<li id="nav-productivity"><a href="/?p=productivity">Productivity</a></li>
+              	<li id="nav-opportunity"><a href="/?p=opportunity">Opportunity</a></li>
+              	
+              	<li id="nav-pricing"><a href="/?p=pricing">Pricing</a></li>
               	<li id="nav-business"><a href="/?p=business">Your Coordel Business</a></li>
-              	<li id="nav-tour"><a href="/?p=tour">Features</a></li>
+              	<li id="nav-about"><a href="/?p=about">About</a></li>
               </ul>
 
 
       				<div class="clearer">&nbsp;</div>
 
       			</div>
+      			
+      			<div id="nav2">
+      			  <ul id="sub-nav-opportunity" class="hidden">
+              	<li id="nav-public"><a href="/?p=public">From the Community</a></li>
+              	<li id="nav-coordel"><a href="/?p=coordel">With Coordel</a></li>
+              </ul>
+              <ul id="sub-nav-productivity" class="hidden">
+                <li id="nav-tour"><a href="/?p=tour">Features</a></li>
+                <li id="nav-cases"><a href="/?p=cases">Case Studies</a></li>
+              </ul>
+      			</div>
 
       			<div id="altnav">
+      			  	
+      			  
               
-      				<h1 class="right handwritten hand-nav" style="font-weight: bold;font-size: 1.8em">Coordel = <span><a id="nav-productivity" class="secondary" style="float: none" href="/?p=productivity">Productivity</a></span><span> + </span> <span><a id="nav-opportunity" href="/?p=opportunity" class="secondary" style="float: none">Opportunity</a></span></h1>
+      				<h1 class="right handwritten hand-nav" style="font-weight: bold;font-size: 1.8em">Coordel = <span><a class="secondary" style="float: none" href="/?p=productivity">Productivity</a></span><span> + </span> <span><a  href="/?p=opportunity" class="secondary" style="float: none">Opportunity</a></span></h1>
       				
       				<div class="clearer"></div>
 
@@ -214,32 +220,38 @@
 
       					<div class="box">
 
+      						<div class="box_title">Productivity Spotlight</div>
+
+      						<div class="box_content">
+      							<ul id="spotlight" class="capitalize">
+      								
+      							</ul>
+      						</div>
+
+      					</div>
+      					<div class="box">
+
+      						<div class="box_title">Coordel Opportunities</div>
+
+      						<div class="box_content">
+      							<ul id="coordelOpps">
+      								
+      							</ul>
+      						</div>
+
+      					</div>
+                <div class="box">
+
       						<div class="box_title">Case Studies</div>
 
       						<div class="box_content">
       							<ul>
-      								<li id="nav-employed"><a href="/?p=employed">Employed Full Time</a></li>
-      								<li id="nav-contract"><a href="/?p=contract">Independent Contractor</a></li>
-      								<li id="nav-consult"><a href="/?p=consult">Consultant</a></li>
+      								<li id="nav-employed"><a href="/?p=employed">Full Time Employees</a></li>
+      								<li id="nav-contract"><a href="/?p=contract">Independent Contractors</a></li>
+      								<li id="nav-consult"><a href="/?p=consult">Consultants</a></li>
       							</ul>
       						</div>
       					</div>
-      					<div class="box">
-
-      						<div class="box_title">Current Opportunities</div>
-
-      						<div class="box_content">
-      							<ul>
-      								<li><a>User Interface Design and Usability</a></li>
-      								<li><a>Continuous Deployment Platform</a></li>
-      								<li><a >Coordel API</a></li>
-      								<li><a>Coordel Web Clients</a> </li>
-      								<li><a>Payments Integrations</a></li>
-      							</ul>
-      						</div>
-
-      					</div>
-
 
 
 
@@ -273,7 +285,7 @@
   	    </div>
   	    <div id="footer">
   		    <div class="left">
-  			    &copy; 2012 <a href="http://www.coordel.com">Coordel</a> - do what you love
+  			    &copy; 2012 <a href="/?p=about">Coordel</a> - do what you love
   		    </div>
   		    <div class="clearer">&nbsp;</div>
   	    </div>

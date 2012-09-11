@@ -51,11 +51,18 @@ define(
         //this.projectStatus starts with taskListControl that tests for project invites
         //it is passed to TaskListGroup and then into task
         if (this.task.docType === "project"){
+          
           //console.debug("this was a project task");
           //need to save the project for use when detecting status
           this.project = this.task;
-          //now turn the project into a project invite task
-          this.task = this._createInviteTask(this.task, this.projectStatus); 
+          
+          //project type tasks can be regular invitations or opportunity invitations
+          if (this.task.substatus === "OPPORTUNITY"){
+             this.task = this._createOpportunityTask(this.task);
+          } else {
+            //turn the project into a project invite task
+            this.task = this._createInviteTask(this.task, this.projectStatus);
+          }
           
           this.isProjectInvite = true;
 				}
@@ -63,6 +70,37 @@ define(
 				if (!this.task.name){
 				  this.task.name = "";
 				}
+        
+      },
+      
+      _createOpportunityTask: function(proj){
+        //since this is a potential opportunity for the person looking at it, need to make them the user
+        //so they can be provided the opportunity to follow
+        var username = db.username();
+        
+        //create the task here. the project created is used as the id, name as name
+        //inviteType is added with the value opportunity because in effect everyone seeing it is invited
+        //OPPORTUNITY is used as the substatus of the task
+        var task = {
+					_id: proj.created,
+					name: proj.name,
+					docType: "task",
+					inviteType: "opportunity",
+					hasMulti: false,
+					created: proj.created,
+					updated: proj.updated,
+					isNew: proj.isNew,
+					responsible: proj.responsible,
+					project: proj._id,
+					status: "PROJECT",
+					substatus: "OPPORTUNITY",
+					deadline: proj.deadline
+			  };
+			  
+			  this.role = "opportunity";
+			  
+			  return task;
+        
         
       },
       
@@ -228,6 +266,11 @@ define(
          
         }
         
+        //if it's an opportunity, it heeds to have the link
+        if (this.role === "opportunity"){
+          dojo.addClass(this.showDetails, "mine");
+        }
+        
         if (t.isDone() || t.isCancelled()){
           //then it shouldn't have a link to go to task details
            dojo.removeClass(this.showDetails, "mine");
@@ -330,15 +373,14 @@ define(
         //hide the delete button. it only shows on delegated and private tasks
         dojo.query(".delete", this.domNode).addClass("hidden");
         
-        // if the user isn't the project responsible or delegator of task or user of task
+        // unless this is an opportunity, if the user isn't the project responsible or delegator of task or user of task
         //only has the ability to view the stream and see the info
-        if (t.projResponsible() !== username && t.delegator !== username && t.username !== username){
+        if (!this.role === "opportunity" && t.projResponsible() !== username && t.delegator !== username && t.username !== username){
           dojo.query(".edit", this.domNode).addClass("hidden");
           dojo.query(".actions", this.domNode).addClass("hidden");
           dojo.query(".stream", this.domNode).addClass("task-actions-corner-left");
         }
         
-      
         if (t.isProjectInvite()){
           //you can't mark an invite done
           this.taskCheckbox.set("disabled", true);
@@ -366,12 +408,15 @@ define(
           dojo.query(".edit", this.domNode).addClass("hidden");
           dojo.query(".actions", this.domNode).addClass("task-actions-corner-left");
       
-          //hide the check box and show the project follow or participate icon
+          //hide the check box and show the project opportunity, follow or participate icon
           dojo.addClass(this.taskCheckbox.domNode, "hidden");
+          console.log("this role", this.role);
           if (this.role === "project"){
             dojo.removeClass(this.participateIcon, "hidden");
           } else if (this.role === "follower"){
             dojo.removeClass(this.followIcon, "hidden");
+          } else if (this.role === "opportunity"){
+            dojo.removeClass(this.opportunityIcon, "hidden");
           }
           
           if (pStatus.isInvitedNew(this.project, username)){
@@ -397,6 +442,11 @@ define(
             //show participate/decline and actions button
             dojo.removeClass(this.declineProject, "hidden");
             dojo.removeClass(this.acceptProject, "hidden");
+          } else if (pStatus.isOpportunity(this.project)){
+            //show and round follow button and hide the actions button
+            dojo.removeClass(this.followProject, "hidden");
+            dojo.addClass(this.followProject, "task-actions-corner-left");
+            dojo.query(".actions", this.domNode).addClass("hidden");
           }
         }
       
@@ -449,7 +499,7 @@ define(
           if (t.isDone() || t.isCancelled()){
             return;
           }
-          if ((this.task.username === db.username() && !t.isSubmitted()) || (this.task.responsible === db.username() && t.isSubmitted())){
+          if (this.role === "opportunity" || (this.task.username === db.username() && !t.isSubmitted()) || (this.task.responsible === db.username() && t.isSubmitted())){
              //if this is a projectInvite, navigate to the project
             if (this.isProjectInvite){
               dojo.publish("coordel/primaryNavSelect", [ {name: "project", focus: this.focus, id: this.task.project}]);
@@ -597,20 +647,21 @@ define(
         
         //wire up the info button
         dojo.connect(this.showInfo, "onclick", this, function(){
-          //console.debug("task in showInfo", this.task);
-          var i;
-          if (this.isProjectInvite){
-            i = new ProjectInfo({project: db.projectStore.store.get(this.task.project)});
-          } else {
-            i = new TaskInfoDialog({task: this.task});
-          }
-       
+          console.debug("task in showInfo", this.task);
           //console.debug("dialog", i);
           var cont = this.infoContainer;
           if (cont.hasChildren()){
             cont.destroyDescendants();
           }
-          cont.addChild(i);
+     
+          if (this.isProjectInvite){
+            db.get(this.task.project).then(function(item){
+              cont.addChild(new ProjectInfo({project:item}));
+            });
+          } else {
+            cont.addChild(new TaskInfoDialog({task: this.task}));
+          }
+  
           this.infoDialog.show();
         });
         
@@ -745,7 +796,7 @@ define(
           
           //don't need to show from if this is me or if it's a project invite
           if (!t.hasDelegator() && resp !== u || t.hasDelegator() && del !== u){
-            text = coordel.taskDetails.by + " " + con + " : ";
+            //text = coordel.taskDetails.by + " " + con + " : ";
           }
           
           if (!t.isProposed() && !t.isAgreed() && !t.isAmended()){

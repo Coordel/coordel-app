@@ -1,0 +1,29 @@
+<div dojoAttachPoint="domNode" class="c-ellipsis tasklist-item">
+
+	<span dojoAttachPoint="taskBlueprintIcon" class="ui-icon-task-blueprint hidden"></span>
+	<span dojoAttachPoint="projectBlueprintIcon" class="ui-icon-project hidden"></span>
+	<span dojoAttachPoint="deliverableBlueprintIcon" class="ui-icon-deliverable hidden"></span>
+	<a class="taskname" data-template-id="${template._id}">
+		<div dojoAttachPoint="metaInfo" class="meta-info hidden"></div>
+		${template.name}
+	</a>
+	
+	<div class="task-actions-holder">
+		<ul class="task-actions" dojoAttachPoint="taskActions">
+			
+			<li dojoAttachPoint="addBlueprint" class="add first"><a title="${coordel.blueprintDetails.add}"><ins></ins></a></li>
+			<li dojoAttachPoint="shareBlueprint" class="share"><a title="${coordel.blueprintDetails.share}"><ins></ins></a></li>
+			<li dojoAttachPoint="copyBlueprint" class="copy"><a title="${coordel.blueprintDetails.copy}"><ins></ins></a></li>
+			<li dojoAttachPoint="removeBlueprint" class="delete"><a title="${coordel.blueprintDetails.delete}"><ins></ins></a></li>
+			<li dojoAttachPoint="showInfo" class="info last">
+				<a title="${coordel.blueprintDetails.showInfo}"><ins></ins></a>
+				<div dojoAttachPoint="infoDialog" title="" dojoType="app.views.Dialog">
+			  	<div style="padding:0; width: 500px" class="tasklist-titlepane" dojoAttachPoint="infoContainer" dojoType="app.widgets.ContainerPane"></div>
+				</div>
+			</li>
+		</ul>
+	</div>
+  <div class="meta-deadline c-color-label" dojoAttachPoint="created"></div>
+  <div dojoAttachPoint="feedbackContainer" style="opacity: 1" class="c-float-r c-color-active c-font-large c-margin-large-r"></div>
+</div>
+

@@ -63,10 +63,12 @@ define(['dojo',
       var projects = new cpane({id: "otherListProjects", style:"padding:0"});
       var contacts = new cpane({id: "otherListContacts", style:"padding:0"});
       var store = new cpane({id: "otherListStore", style:"padding:0"});
+      var bp = new cpane({id: "otherListBlueprints", style:"padding:0"});
       var search = new cpane({id: "otherListSearch", style:"padding:0"});
       pcMain.addChild(projects);
       pcMain.addChild(contacts);
       pcMain.addChild(store);
+      pcMain.addChild(bp);
       pcMain.addChild(search);
       
       projects.startup();

@@ -19,9 +19,10 @@ define(["dojo",
         'app/views/OpportunityList/OpportunityList',
         'app/views/QuickSearch/QuickSearch',
         "app/views/TaskAndChecklist/TaskAndChecklist",
-        'dojo/date/locale'
+        'dojo/date/locale',
+        'app/views/Blueprint/Blueprint'
         
-], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry, OpportunityList, QuickSearch, TaskCheck) {
+], function(dojo, dijit, dialog, t, layout, tl, Stream, tlg, etl, sort, tlh, message, txt, g, db, Turbo, Calendar, QuickEntry, OpportunityList, QuickSearch, TaskCheck, locale, Blueprint) {
   return {
     controllerName: "taskListControl",
     showProjectLabel: false,
@@ -95,17 +96,17 @@ define(["dojo",
       //calendar
       dojo.connect(dojo.byId("calendarTab"), "onclick", this, function(evt){
         //console.debug("clicked calendar", evt.target);
-        if (dojo.hasClass(evt.target, "inactive")){
-          this.showCalendar();
-        } 
+        //if (dojo.hasClass(evt.target, "inactive")){
+        this.showCalendar();
+        //} 
       });
 
       //stream
       dojo.connect(dojo.byId("streamTab"), "onclick", this, function(evt){
         //console.debug("clicked stream", evt.target);
-        if (dojo.hasClass(evt.target, "inactive")){
-          this.showStream();
-        }
+        //if (dojo.hasClass(evt.target, "inactive")){
+        this.showStream();
+        //}
       });
           
       //listen for sortChange
@@ -445,8 +446,55 @@ define(["dojo",
       }
     },
     
+    _showBlueprints: function(templates, focus, observe){
+      var self = this;
+      var cont = dijit.byId("taskListMain");
+      
+      if (templates.length){
+        
+        templates.forEach(function(template){
+          var item = new Blueprint({
+            template: template,
+            focus: focus
+          });
+          cont.addChild(item);
+
+  	    });
+  	    
+  	    if (observe){
+  	      
+  	      var handler = templates.observe(function(template, removedFrom, insertedInto){
+            //console.debug("tasks observed in taskListControl", task, removedFrom, insertedInto, group.focus);
+
+            //was this a delete
+            if (removedFrom > -1){
+            
+              console.log("removed", template);
+              cont.removeChild(removedFrom);
+            }
+
+            if (insertedInto > -1){
+              console.log("inserted", template);
+            }
+
+            if (templates.length === 0){
+            
+              self._checkEmpty();
+            }
+
+          });
+
+          this.observeHandlers.push(handler);
+  	    
+  	    }
+        
+      } else {
+        self.showEmptyTasks();
+      }
+    },
+    
     showTaskList: function(focus){
-      console.debug("before add tasklist", focus);
+      //console.debug("before add tasklist", focus);
       var cont = dijit.byId("taskListMain"),
           query,
           map,
@@ -522,33 +570,29 @@ define(["dojo",
         def.then(function(opps){
           
           var latest = db.projectStore.oppMemory.query("latest");
-          if (latest.length >0){
-            var opp = new OpportunityList({projects:latest}).placeAt("taskListMain");
+          if (latest.length > 0){
+            //var opp = new OpportunityList({projects:latest}).placeAt("taskListMain");
+            
+            var list = new tl({
+    	        listFocus: focus,
+    	        taskList: latest,
+    	        showChecklist: self.sortOptions.showChecklist,
+    	        showProjectLabel: self.showProjectLabel
+    	      }).placeAt("taskListMain");
+            
+            
+            
+            
           } else {
             self.showEmptyTasks();
           }
           
-          latest.observe(function(project, removedFrom, insertedInto){
-            //console.debug("latest observed", project, removedFrom, insertedInto);
-
-            //was this a delete
-            if (removedFrom > -1){
-              //console.log("remove opportunity", removedFrom, project, opp);
-              opp.removeChild(removedFrom);
-            }
-
-            if (insertedInto > -1){
-             //console.log("add opportunity", insertedInto, project);
-             opp.addOpportunity(project);
-            }
-
-          });
           
         });
         
       } else if (focus==="search"){
       
-        console.log("need to do the search", this.search);
+        //console.log("need to do the search", this.search);
         self._cancelObserveHandlers();
         
         //can't sort search results
@@ -564,7 +608,7 @@ define(["dojo",
         self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
         db.taskStore.getSomeday().then(function(someday){
         
-          console.log("someday tasks", someday);
+          //console.log("someday tasks", someday);
           self._showTasks(someday, "someday");
         });
         
@@ -572,13 +616,60 @@ define(["dojo",
          self._cancelObserveHandlers();
          self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
          db.taskStore.getArchive().then(function(archive){
-           console.log("archive tasks", archive);
+           //console.log("archive tasks", archive);
            self._showTasks(archive, "archive");
          });
+      } else if (focus === "task-blueprints"){
+        self._cancelObserveHandlers();
+        self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
+        var filter = "tasks";
+        if (self.searchBlueprint){
+          console.log("search task blueprints", self.searchBlueprint);
+          dojo.when(db.appStore.searchTemplates(self.searchBlueprint, "tasks"), function(list){
+            self._showBlueprints(list, "task-blueprints");
+          });
+        } else {
+          dojo.when(db.templates("tasks"), function(list){
+            self._showBlueprints(list, "task-blueprints", true);
+          });
+        }
+        
+      } else if (focus === "project-blueprints"){
+        self._cancelObserveHandlers();
+        self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
+        if (self.searchBlueprint){
+          console.log("search project blueprints", self.searchBlueprint);
+          dojo.when(db.appStore.searchTemplates(self.searchBlueprint, "projects"), function(list){
+            self._showBlueprints(list, "project-blueprints");
+          });
+        } else {
+          dojo.when(db.templates("projects"), function(list){
+            self._showBlueprints(list, "project-blueprints", true);
+          });
+        }
+      } else if (focus === "deliverable-blueprints"){
+        self._cancelObserveHandlers();
+        dojo.when(db.templates("deliverables"), function(list){
+          self._showBlueprints(list, "deliverable-blueprints");
+        });
+      } else if (focus === "shared-blueprints"){
+        self._cancelObserveHandlers();
+        self.header.sortButton.sortDropdown.set("disabled", true); //disabled for now
+        if (self.searchBlueprint){
+          console.log("search shared blueprints", self.searchBlueprint);
+          dojo.when(db.appStore.searchSharedTemplates(self.searchBlueprint), function(list){
+            console.log("list of shared blueprints", list);
+            self._showBlueprints(list, "shared-blueprints");
+          });
+        } else {
+          dojo.when(db.templates("shared"), function(list){
+            self._showBlueprints(list, "shared-blueprints", true);
+          });
+        }
       } else {
         this._cancelObserveHandlers();
-        
-        console.log("showing tasks", focus);
+   
+        //console.log("showing tasks", focus);
         dojo.addClass(dijit.byId("taskListViewButton").domNode, "hidden");
         if (focus === "private"){
           dojo.removeClass(dijit.byId("taskListViewButton").domNode, "hidden");
@@ -606,6 +697,8 @@ define(["dojo",
               var gtime = db.taskStore.memory.query(query, {sort:this.sortOptions.sortKeys});
               this._addGroup(map[key].header, gtime, focus);
             }  
+            
+            self._checkEmpty();
           
         } else if (this.sortOptions.grpProject){
           this.showProjectLabel = false;
@@ -620,6 +713,9 @@ define(["dojo",
             this._addGroup(proj.name, gproj, focus);
           }, this);
           
+          
+          self._checkEmpty();
+        
           
         } else if (this.sortOptions.grpUsername){
           //add the contact map groups
@@ -793,6 +889,8 @@ define(["dojo",
       });
 
       cont.addChild(group);
+      
+      
 
       //need to watch and see if there is a change to this list
       var handler = group.tasks.observe(function(task, removedFrom, insertedInto){
@@ -855,7 +953,7 @@ define(["dojo",
       var self = this;
       self.isEmpty = true;
       var cont = dijit.byId("taskListMain");
-      console.debug("showing empty", self.focus);
+      //console.debug("showing empty", self.focus);
       //if (!this.emptyGroup){
       //  console.debug("empty group didin't exist yet", self);
       //console.log("focus in showEmptyTasks", self.focus);
@@ -863,6 +961,7 @@ define(["dojo",
         //we don't show empty because the option goes away
         dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
       } else {
+        
         this.emptyGroup = new etl({
           emptyClass: self.focus, 
           emptyTitle: txt.empty[self.focus+"Title"], 
@@ -920,7 +1019,7 @@ define(["dojo",
         self._updateStream(resp);
 
         var handler = resp.observe(function(entry, removedFrom, insertedInto){
-          console.debug("stream observed, entry: ", entry, "removedFrom: ", removedFrom, "insertedInto: ", insertedInto);
+          //console.debug("stream observed, entry: ", entry, "removedFrom: ", removedFrom, "insertedInto: ", insertedInto);
           if (insertedInto > -1){
             handler.cancel();
             self.showStream();

@@ -63,8 +63,19 @@ define(
         } else {
           //raise-issue and update will have json objects in them that need to be properly formatted
           if (this.verb === "UPDATE" || this.verb === "RAISE-ISSUE" || this.verb === "ADD-BLOCKING" || this.verb === "REMOVE-BLOCKING"){ 
+            
+            var newBody = "";
+            if (this.body){
+              //this is a fix from an old format for blocking
+              if (this.body.indexOf("Task:")> -1){
+                newBody = this.body;
+              } else {
+                newBody = dojo.fromJson(this.body);
+              }
+            }
+            
             var d = new Details({
-              body: dojo.fromJson(this.body)
+              body: newBody
             }).placeAt(this.detailsContainer);
             dojo.addClass(this.bodyContainer, "hidden");
             dojo.removeClass(this.detailsContainer, "hidden");

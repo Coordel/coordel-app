@@ -38,7 +38,8 @@ module.exports = [
        "name": "Checkbox List",
        "organization": "coordel.com",
        "isPublic": true,
-       "isDefault": true
+       "isDefault": true,
+       "created": "2010-01-01"
     },
     {
        "_id": "180efe932ec61ff0fec30a70af1e242b",
@@ -80,7 +81,8 @@ module.exports = [
        "name": "Dropdown List",
        "organization": "coordel.com",
        "isPublic": true,
-       "isDefault": true
+       "isDefault": true,
+       "created": "2010-01-01"
     },
     {
        "_id": "180efe932ec61ff0fec30a70af1e3609",
@@ -112,7 +114,8 @@ module.exports = [
        "name": "File",
        "organization": "coordel.com",
        "isPublic": true,
-       "isDefault": true
+       "isDefault": true,
+       "created": "2010-01-01"
     },
     {
        "_id": "180efe932ec61ff0fec30a70af1e4cea",
@@ -153,7 +156,8 @@ module.exports = [
        "name": "Radio List",
        "organization": "coordel.com",
        "isPublic": true,
-       "isDefault": true
+       "isDefault": true,
+       "created": "2010-01-01"
     },
     {
        "_id": "180efe932ec61ff0fec30a70af1d90c3",
@@ -182,9 +186,10 @@ module.exports = [
        "name": "Text Box",
        "organization": "coordel.com",
        "docType": "template",
-        "templateType": "deliverable",
-        "isPublic": true,
-        "isDefault": true
+       "templateType": "deliverable",
+       "isPublic": true,
+       "isDefault": true,
+       "created": "2010-01-01"
     },
     {
        "_id": "180efe932ec61ff0fec30a70af1e10c0",
@@ -210,7 +215,8 @@ module.exports = [
        "instructions": "Enter text",
        "name": "Textarea",
        "organization": "coordel.com",
-        "isPublic": true,
-        "isDefault": true
+       "isPublic": true,
+       "isDefault": true,
+       "created": "2010-01-01"
     }
   ];

@@ -24,7 +24,7 @@ define(
     
     postCreate: function(){
       this.inherited(arguments);
-      //console.debug("in vipsDialog");
+      console.debug("in vipsDialog");
       
       this.app = dojo.clone(db.appStore.app());
       
@@ -49,10 +49,15 @@ define(
         "class": "vip-contact-row"
       });
       
-      //add the contacts two to a row
-	    cons.forEach(function(con){
-	      if (con.id !== db.username()){
-	        con = this._prepareContact(con);
+      cons = cons.filter(function(con){
+        return con.id !== db.username();
+      });
+      
+      if (cons.length){
+        //add the contacts two to a row
+  	    cons.forEach(function(con){
+
+  	      con = this._prepareContact(con);
   	      row.addChild(con);
   	      count += 1;
           leftOver = true;
@@ -65,8 +70,13 @@ define(
             count = 0;
             leftOver = false;
   	      }
-	      }
-	    }, this);
+
+  	    }, this);
+      } else {
+        console.log("show the empty list");
+        dojo.removeClass(this.empty, "hidden");
+      }
+      
 	    
 	    //it might be that there weren't and even number of contacts so there could be a left over one in a row
 	    //if there is a leftover, add the final row

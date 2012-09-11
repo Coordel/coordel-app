@@ -87,6 +87,8 @@ exports.deleteUserAlerts = function(username, fn){
 exports.getChangeAlertMap = function(change){
   var map = {},
       doc = change;
+      
+  console.log("change", doc);
   
  
 	if (doc.docType == "project"){

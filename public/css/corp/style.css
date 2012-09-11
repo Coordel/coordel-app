@@ -11,6 +11,8 @@ This template is licensed under a Creative Commons Attribution 2.5 License:
 http://templates.arcsin.se/license/
 */
 
+@import 'opportunity.css';
+
 
 /* 
    Reset
@@ -49,6 +51,10 @@ body {
   font-family: 'Shadows Into Light', cursive;
   color: #000000;
   font-weight: bold;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 .bg1 {
@@ -408,7 +414,10 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 	padding: 0 8px;
 }
 #nav2 a:hover {color: #FFF;}
-#nav2 li.current_page_item a {color: #FFF;}
+#nav2 li.current_page_item a {
+  color: #ffffff;	
+  text-shadow: #000000 1px 1px;
+}
 
 #altnav {
   background: #00629b url('img/nav2.gif') repeat-x;
@@ -474,7 +483,7 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 	color: #555;
 	padding: 16px 12px;	
 }
-#sidebar a {color: #555;}
+#sidebar a {color: #003C60; font-weight: bold;;}
 #sidebar a:hover {color: #000;}
 
 /* Dashboard */
@@ -650,11 +659,12 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 	border: 1px solid #EAEAEA;
 	border-color: #EAEAEA #D5D5D5 #D5D5D5 #E5E5E5;
 	color: #333;
-	font: bold 1.3em sans-serif;
+	font: bold 1.2em sans-serif;
 	padding: 6px 10px;
 }
 .box_content {
   padding: 8px 0 8px ;
+  text-shadow: #ffffff 1px 1px;
 }
 
 .box li:first-child {border-top: none;}
@@ -715,13 +725,27 @@ div.comment_list {
   font-weight: bold;
 }
 
-
 .feature {
   margin-top: 4px;
 }
 
 #feature a {
   color: #00629b;
+}
+
+#featureTable table {
+  width: 597px;
+  margin-top: 16px;
+}
+
+#featureTable td {
+  padding: 2px;
+}
+
+#featureTable a {
+  color: #00629b;
+  padding: 2px 0;
+  text-transform: capitalize;
 }
 
 .link-image {
@@ -801,6 +825,42 @@ div.comment_list {
 .feature-link:hover {
   color: #000000;
 }
+
+.pricing-box {
+  border: 1px solid #9DACB5;
+  padding: 16px;
+  margin-right: 16px;
+}
+
+.pricing-box .price {
+  background: url('img/pricing.png') no-repeat center center;
+  width: 188px;
+  height: 143px;
+  text-indent: -9999px;
+}
+
+.pricing-box .price.storage {
+  background: url('img/pricing-storage.png') no-repeat center center;
+  width: 188px;
+  height: 120px;
+  text-indent: -9999px;
+}
+
+.pricing-features {
+  width: 355px;
+}
+
+.pricing-features h3 {
+  font-size: 1.2em;
+}
+
+.pricing-features li {
+  padding-left: 24px;
+  background: url('/images/favicon.gif') no-repeat left 2px;
+  line-height: 1.3em;
+}
+
+
 
 /* Single Line IE Fixes */
 * html #nav1, * html #nav2, * html #layout_body, * html #dashboard_inner, * html #footer {height: 0.01%; min-height: 0.01%;}

@@ -85,6 +85,7 @@ module.exports = function(app, validate){
      inv.from.email    = req.body.fromEmail;
      inv.data = req.body.data;
      inv.subject = req.body.subject;
+     inv.template = req.body.template;
 
      //this is where the invite is added
      //console.log("SEND INVITE", inv);

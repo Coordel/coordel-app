@@ -74,7 +74,7 @@ define([
         dojo.addClass(this.wizardTp.domNode, "hidden");
         
         //show done
-        dojo.addClass(this.turboDone, "hidden");
+        dojo.removeClass(this.turboDone, "hidden");
       },
       
       setTask: function(task){
@@ -130,6 +130,7 @@ define([
       
       
       next: function(args){
+        console.log("turbo next args", args);
         //args will be {hasTask: true/false, isEmpty: true/false, task: {}}
         //if the task is false, then the wizard ends otherwise set the task
         if (!args.hasTask){

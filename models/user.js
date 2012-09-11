@@ -127,6 +127,8 @@ exports.register = function(userData, fn){
 };
 
 exports.invite = function(inviteData, fn){
+  
+  console.log("invite data", inviteData);
       
   function rand(digits){
     return Math.floor(Math.random()* parseInt(digits+1, 10));
@@ -201,6 +203,9 @@ exports.invite = function(inviteData, fn){
                     
                     fn(null, registeredUser);
                     var template =  './lib/templates/invite.txt';
+                    if (inviteData.template){
+                      template = './lib/templates/' + inviteData.template;
+                    }
                     if (inviteData.data.docType === 'task'){
                       template = './lib/templates/taskInvite.txt';
                     }
@@ -225,10 +230,7 @@ exports.invite = function(inviteData, fn){
                       data.start = inviteData.data.calendar.start;
                     }
                     
-                    //create a url to place in the user invitation email based on the user and invite
-                    var url = 'http://dev.coordel.com:8080/invite/' + inviteid;
-                    //send the user an email with the link
-                    console.log("SEND EMAIL", url);
+                    
                     Email.send({
                       to: inviteData.to.email.toLowerCase(),
                       from: inviteData.from.email.toLowerCase(),

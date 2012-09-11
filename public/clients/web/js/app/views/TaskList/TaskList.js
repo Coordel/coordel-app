@@ -146,6 +146,7 @@ define(
             if (self.listFocus === "project-invited" || self.listFocus === "task-invited"){
               dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
             } else {
+             
               self.showingEmpty = true;
               //console.debug("self.listFocus in TaskList", self.listFocus);
               self.addChild(new Empty({emptyClass: self.listFocus, emptyTitle: coordel.empty[self.listFocus+"Title"], emptyDescription: coordel.empty[self.listFocus+"Text"]}));

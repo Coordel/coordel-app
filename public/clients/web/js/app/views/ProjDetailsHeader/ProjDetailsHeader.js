@@ -20,7 +20,19 @@ define([
       
       coordel: coordel,
       
-      backLabel: coordel['project-invited'],
+      backFocus: 'project-invited',
+      
+      backLabel: "",
+      
+      postMixInProperties: function(){
+        this.inherited(arguments);
+        
+        if(db.isOpportunities){
+          this.backFocus = 'opportunities';
+        }
+        
+        this.backLabel = coordel[this.backFocus];
+      },
       
       postCreate: function(){
         this.inherited(arguments);
@@ -85,6 +97,13 @@ define([
           
           dojo.style(this.showView.domNode, {"margin-right": "0"});
               
+        } else if (pStatus.isOpportunity(this.project)) {
+          
+          dojo.removeClass(this.follow.domNode, "hidden");
+          dojo.addClass(this.chooseAction.domNode, "hidden");
+          dojo.style(this.showView.domNode, {"margin-right": "0"});
+          dojo.removeClass(this.projBackToFocus.domNode, "hidden");
+          
         } else {
           //need to get rid of the margin on the view button if none of the other buttons are showing
           //and this user isn't responsible (send and done are hidden)
@@ -160,7 +179,7 @@ define([
         
         dojo.connect(this.projBackToFocus, "onClick", this, function(){
           console.log ("backToFocus", this.project, this.focus);
-          dojo.publish("coordel/primaryNavSelect", [{focus:"project-invited", name: "", id:"", setSelection: true}]);
+          dojo.publish("coordel/primaryNavSelect", [{focus:this.backFocus, name: "", id:"", setSelection: true}]);
         });
         
 

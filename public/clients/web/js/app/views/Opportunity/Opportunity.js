@@ -67,13 +67,13 @@ define(
   	    });
   	  
   	    dojo.connect(this.showProjectMenu.dropDown, "onOpen", this, function(){
-  	      console.log("onOpen");
+  	      //console.log("onOpen");
   	      this.menuOpen = true;
   	      dojo.addClass(this.actionsMenu, "opaque");
   	    });
   	    
   	    dojo.connect(this.showProjectMenu.dropDown, "onClose", this, function(){
-    	    console.log("onClose");
+    	    //console.log("onClose");
     	    dojo.addClass(this.actionsMenu, "hidden");
     	    dojo.removeClass(this.actionsMenu, "opaque");
     	    this.menuOpen = false;

@@ -148,7 +148,7 @@ define(
     		for (var key in files){
     		  var file = dojo.create("a", {
       		  title: key,
-      		  href: db.db + project._id + "/" + key,
+      		  href: db.db + "files/" + project._id + "/" + key,
       		  style: "font-size: 10px;display:block",
       		  "class": "attachment c-ellipsis",
       		  target: "_blank",

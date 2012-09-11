@@ -2,6 +2,8 @@
   require(["corp/main","dojo/request", "dojo/io-query", "dojo/dom", "dojo/json", "dojo/_base/array", "dojo/dom-class"], function(corp, request, io, dom, json, array, dc){
     //corp.setCurrentPage("tour");
     
+    corp.setCurrentPage("feature");
+    
     var feature = io.queryToObject(location.href).f;
   
     request("/support/features/"+ feature + ".html").then(
@@ -43,4 +45,5 @@
     );
   });
 </script>
+
 <div id="feature"></div>

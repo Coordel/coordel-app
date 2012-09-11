@@ -20,7 +20,7 @@ define([
         layout.showLayout();
         
         //add profile to container
-        document.title = "Coordel > " + coordel.store;
+        document.title = "Coordel > " + coordel.blueprints;
       }
   };
 });

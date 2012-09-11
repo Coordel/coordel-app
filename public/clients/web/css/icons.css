@@ -180,6 +180,18 @@
   background-position: center -2px;
 }
 
+.ui-icon-deliverable {
+
+  height: 18px;
+  width: 20px;
+  background-image: url(images/icons/deliverable.png);
+  background-repeat: no-repeat;
+  display:inline-block;
+  vertical-align: middle;
+  background-position: center -2px;
+}
+
+
 .ui-icon-participate {
 
   height: 18px;
@@ -198,6 +210,27 @@
   background-image: url(images/icons/follow.png);
   background-repeat: no-repeat;
   display:inline-block;
+  vertical-align: middle;
+  background-position: center -2px;
+}
+
+.ui-icon-opportunity {
+  height: 18px;
+  width: 20px;
+  background-image: url(images/icons/opportunity.png);
+  background-repeat: no-repeat;
+  display:inline-block;
+  vertical-align: middle;
+  background-position: center -2px;
+}
+
+.ui-icon-task-blueprint {
+  height: 16px;
+  width: 16px;
+  background-image: url(images/icons/blueprintTask.png);
+  background-repeat: no-repeat;
+  display:inline-block;
+  opacity: .7;
   vertical-align: middle;
   background-position: center -2px;
 }

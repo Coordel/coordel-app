@@ -196,6 +196,10 @@ define("app/models/ProjectStatus",
         return isLatest;
       },
       
+      isOpportunity: function(project){
+        return (project.status === "ACTIVE" && project.substatus === "OPPORTUNITY");
+      },
+      
       isPending: function(project, username){
         //returns all projects to responsible that have been created but not sent by the responsible
         //if i'm responsible and its ACTIVE PENDING it's pending

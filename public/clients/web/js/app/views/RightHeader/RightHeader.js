@@ -113,6 +113,11 @@ define(
           dojo.publish("coordel/support", ["preferences"]);
         });
         
+         dojo.connect(this.optPersonalInfo, "onclick", this, function(){
+            this.coordelUserPreferences.closeDropDown();
+            dojo.publish("coordel/support", ["personalInfo"]);
+          });
+        
         dojo.connect(this.showNotifications, "onClick", this, function(){
           dojo.forEach(dijit.findWidgets(this.alertsContainer), function(child){
             child.destroyRecursive();
@@ -167,6 +172,11 @@ define(
           d.show();
         });
         
+        dojo.connect(this.blueprints, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          console.log("show blueprints");
+        });
+        
         dojo.connect(this.refresh, "onclick", this, function(){
           //do not disturb is off, click this to activate
           this.coordelUserPreferences.closeDropDown();
@@ -189,6 +199,7 @@ define(
       },
       
       handleShowRightColumn: function(args){
+        //console.log("handle showRightColumn", args);
         if (args){
           dojo.removeClass(dijit.byId("hideRightColumn").domNode, "hidden");
           dojo.addClass(dijit.byId("showRightColumn").domNode, "hidden");

@@ -1,0 +1,22 @@
+<div class="c-padding-large">
+  <div class="desc" style="margin-top: 8px">
+    <span dojoAttachPoint="withEveryone" dojoType="dijit.form.RadioButton" checked="true" name="target" value="0"></span>
+    <span class="name c-margin-r">${coordel.everyone}</span>
+    <span dojoAttachPoint="withContact" dojoType="dijit.form.RadioButton" name="target" value="1">Contact</span>
+    <span class="name">${coordel.contact}</span>
+  </div>
+  <br>
+  <div dojoAttachPoint="contactContainer" class="hidden">
+		<div class="desc">
+			<span class="name">${coordel.blueprintDetails.selectContact}</span>
+		</div>
+		<div>
+			<input dojoAttachPoint="contact" dojoType="dijit.form.FilteringSelect" class="text" tabindex="1"/>
+		</div>
+		<div>
+			<div class="instructions c-padding" tabindex="2">
+				${coordel.blueprintDetails.contactInstructions}
+			</div>
+		</div>
+  </div>
+</div>

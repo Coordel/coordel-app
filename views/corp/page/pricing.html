@@ -5,6 +5,73 @@
   });
 </script>
 
-<h1>Pricing</h1>
-	
-<p>All about Coordel Pricing...</p>
+<style>
+  .layout {
+  	width:600px;
+  	margin:0 auto;
+  }
+
+  .layout-content {
+  	float:left;
+  	width:350px;
+  }
+
+  .layout-sidebar {
+  	float:left;
+  	width:200px;
+  }
+
+</style>
+
+<div>
+  <h2>Simple Pricing</h2>
+  <p>
+  For just $10 dollars a month, Coordel is all yours to work with. You can cancel your subscription at any time.
+  </p>
+</div>
+<div class="layout">
+  
+  <div class="pricing-box layout-sidebar">
+		<div class="price">
+      10 per month
+    </div>
+    
+    <div class="price storage">
+      1 per gig per month
+    </div>
+	</div>
+  
+	<div class="layout-content">
+		<div class="pricing-features c-float-l">
+      <h2>No limits</h2>
+      <ul>
+       
+        <li>Create as many Coords and tasks as you need to accomplish your goals.</li> 
+        <li>Invite as many people as required to get your work done. People you invite will always have a free version of the application available to them.</li>
+      </ul>
+      <h2>No Advertising - No Tricks</h2>
+      <ul>
+        <li>Coordel will never advertise to you or the people you invite to coordinate with you.</li>
+        <li>Coordel will never sell anyone's data to a third party...including yours!</li> 
+      </ul>
+      
+      <div class="c-margin-large-b">
+      <button id="joinUsPricing"class="corp-dark" data-dojo-type="dijit.form.Button" type="submit">Start your 30 Day Trial Now
+	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+          // Do something:
+          castor.info("buttonClick=joinUs");
+          window.location.href = "/register";
+        </script>
+	    </button>
+	    </div>
+	    <hr>
+	    <h2>About Coordel pricing and membership</h2>
+      <ul>
+        <li>You only pay for storage you use...and, there will only be one charge for a stored file and the storage fee will be shared by the participants in the Coord.</li>
+        <li>When you need to work with someone, don't hesitate. The first time anyone is invited to Coordel, they get the full-featured version free for 30 days. After 30 days, they keep a fully functional version to complete they work they started with you, even if they choose not to become a Coordel member.
+      </ul>
+    </div>
+	</div>
+
+</div>
+<div class="clear"></div>

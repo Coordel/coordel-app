@@ -30,7 +30,7 @@
     
 
   	<!-- load dojo and provide config via data attribute -->
-  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true, isDebug: true"></script>
   	<script>
   	
   	    require({
@@ -48,11 +48,7 @@
   			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
   	    require(["dojo/dom-class", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dc, cookie, corp){
   	      dc.remove("bnLogin", "hidden");
-  	      corp.setBackground();
 
-  	      
-  	      //connect.publish("/foo/bar/baz", [{ some:"object data" }]);
-  	      
   	    });
   	</script>
   	
@@ -170,7 +166,7 @@
   				    <div id="content" class="splash">
   					    <h1 class="handwritten" style="font-weight: bold;text-align: center; font-size: 3.3em;">Goodbye e-mail! Hello productivity.</h1>	
 
-  					    <h1 style="font-weight: normal;padding: 0 40px; margin-top: 20px; font-size: 1.5em;text-align:center;margin-left: 4em;width: 23em">Coordel is a network dedicated to making you more productive so you can seize the opportunity to do the things you love to do</h1>
+  					    <h1 style="font-weight: normal;padding: 0 40px; padding-top: 20px; font-size: 1.5em;text-align:center;width: 23em;margin: 0 auto;">Coordel is a network dedicated to making you more productive so you can seize the opportunity to do the things you love to do</h1>
 
   					    <div style="text-align: center; font-size: 1.9em; margin-top: 70px">Find out more about how...</div>
   					    <div id="splash-buttons-outer">
@@ -205,7 +201,7 @@
   	    </div>
   	    <div id="footer" class="splash">
   		    <div class="left">
-  			    &copy; 2012 <a href="http://www.coordel.com">Coordel</a> - do what you love
+  			    &copy; 2012 <a href="/?p=about">Coordel</a> - do what you love
   		    </div>
   		    <div class="clearer">&nbsp;</div>
   	    </div>

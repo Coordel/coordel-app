@@ -50,6 +50,10 @@ define(
             });
         }
         
+        self.email.innerHTML = email;
+        self.firstName.innerHTML = self.contact.firstName;
+        self.lastName.innerHTML = self.contact.lastName;
+        
         dojo.connect(self.domNode, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);
           if (this.doNavigation){

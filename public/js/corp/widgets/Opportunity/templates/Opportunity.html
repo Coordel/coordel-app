@@ -1,0 +1,45 @@
+<div>
+  <div class="opp-left">
+    <img data-dojo-attach-point="avatar" width="32" height="32" src="" class="ui-corner-all c-float-l c-margin-large-r">
+  </div>
+  <div class="opp-content">
+    <div>
+      <div data-dojo-attach-point="oppName" class="c-bold c-ellipsis"></div>
+    </div>
+    <div data-dojo-attach-point="oppPurpose" class="opp-purpose" title="Purpose"></div>
+    <div class="opp-deadline">Deadline <span data-dojo-attach-point="oppDeadline"></span></div>
+    <div class="opp-users">People <span data-dojo-attach-point="oppUsers"></span></div>
+    <div data-dojo-attach-point="oppAttachments" class="opp-attachments">
+      	<span>Attachments</span>
+				<div data-dojo-attach-point="attachments"></div>
+    </div>
+    <div class="c-float-r clear"><em class="hidden" data-dojo-attach-point="oppResponse">Here is the response from the save</em></div>
+  </div>
+  <div class="opp-right">
+
+    <div data-dojo-type="dijit/form/DropDownButton"
+        data-dojo-attach-point="follow" showLabel="false" tooltip="" title="" iconClass="follow-icon" class="opp-follow hidden"  >
+        
+        <div style="width:260px;visibility: hidden;" data-dojo-attach-point="oppDialog" data-dojo-type="dijit.TooltipDialog">
+		      
+		
+		        <strong><label class="follow-label">Name:</label></strong>
+		        <div data-dojo-attach-point="name" type="text" promptMessage="Enter your full name" invalidMessage="Full name is required" required="true" data-dojo-type="dijit.form.ValidationTextBox" name="name">
+		        </div>
+		        <br />
+		        <strong><label class="follow-label">Email:</label></strong>
+		        <div data-dojo-attach-point="email" promptMessage="Enter your email address" invalidMessage="Not a valid e-mail address" required="true" data-dojo-type="dijit.form.ValidationTextBox" regExp="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$" name="email">
+		        </div>
+		        
+		      
+		        <div class="c-margin-t">
+		        	<button data-dojo-attach-point="bnFollow" disabled class="c-float-r corp-dark" data-dojo-type="dijit.form.Button">Follow</button>
+		        	<div class="opp-promise">Your data belongs to you, period</div>
+		        	<div class="clear"></div>
+		        </div>
+		
+        </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>

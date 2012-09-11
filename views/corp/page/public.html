@@ -1,0 +1,37 @@
+<script>
+  // Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
+  require(["corp/main", "dojo/_base/array", "dojo/dom-class", "corp/widgets/Opportunity/Opportunity", "corp/db"], function(corp, array, dc, Opportunity, db){
+    corp.setCurrentPage("public");
+    
+    db.load("/coordel/view/opportunities",{ query: {limit: 50, descending: true},
+        handleAs: "json"
+      }).then(function(data){
+        //console.log("opportunities", data, data.rows);
+        if (data.rows && data.rows.length){
+          
+          if (data.rows.length === 50){
+            dc.remove(dom.byId("count-notice"), "hidden");
+          }
+          
+          array.forEach(data.rows, function(item){
+            var o = new Opportunity({project: item}).placeAt("opp-list");
+            o.startup();
+          });
+        } else {
+          //need to show empty;
+        }
+      });
+  });
+</script>
+
+<div>
+Community Opportunities are <a class="c-color-active" href="/?p=feature&f=coord">Coords</a> that have been published by other Coordel members. Anyone who is a Coordel <a class="c-color-active" href="/register">member</a> can participate in Community Opportunities.
+</div>
+<br>
+<div>Click the binoculars to follow an Opportunity. Non-members will be invited to start a free 30 trial membership. Opportunities will appear in the <a class="c-color-active" href="/?p=feature&f=coord">Coord</a> list in the application.</div>
+<br>
+<div id="opp-list"></div>
+<br>
+<div id="count-notice" class="hidden">Showing only the latest 50 opportunities. Logon or <a class="c-color-active" href="/register">Join Us</a> to see all opportunities.</div>
+
+

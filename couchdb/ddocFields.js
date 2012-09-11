@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.108",
+  version: "0.1.122",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -222,7 +222,7 @@ module.exports = {
     
     userTemplates:{
       map: function (doc){
-      	if (doc.docType === 'template' && doc.isUserTemplate && doc.isActive){
+      	if (doc.docType === 'template' && doc.isUserTemplate && !doc.isPublic && doc.isActive){
       		emit(
       			[doc.username, doc.name], doc
       		);	
@@ -240,11 +240,27 @@ module.exports = {
       } 
     },
     
-    publicTemplates: {
+    sharedTemplates: {
+
       map: function(doc){
-        if (doc.docType === 'template' && doc.isPublic){
+        
+        function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+      	
+        if (doc.docType === 'template' && !doc.isUserTemplate && doc.isPublic && doc.isActive){
           emit(
-            [doc.name], doc
+            [toDateArray(new Date(doc.created)), doc.name], doc
           );
         }
       }
@@ -318,12 +334,46 @@ module.exports = {
       	}
         
         if (doc.docType === "project" && doc.status === "ACTIVE" && doc.substatus === "OPPORTUNITY"){
-          
-        	emit(
-      			[toISODateArray(doc.created), doc._id],
-      			doc
-      		);
-        	
+          if (!doc.opportunity){
+            emit(
+        			[toISODateArray(doc.created), doc._id],
+        			doc
+        		);
+          } else if (doc.opportunity && !doc.opportunity.isCoordel){
+            emit(
+        			[toISODateArray(doc.created), doc._id],
+        			doc
+        		);
+          }	
+        }
+      }
+    },
+    
+    coordelOpportunities: {
+      map: function(doc){
+        
+        function toISODateArray (date){
+      	  var dtString = date.split("T")[0];
+      	  dtString = dtString.split("-");
+      	  var tmString = date.split("T")[1];
+      	  tmString = tmString.split(".");
+      	  tmString = tmString[0].split(":");
+      	  return [
+      	    parseInt(dtString[0],10), 
+      	    parseInt(dtString[1],10), 
+      	    parseInt(dtString[2],10), 
+      	    parseInt(tmString[0],10), 
+      	    parseInt(tmString[1],10), 
+      	    parseInt(tmString[2],10)];
+      	}
+        
+        if (doc.docType === "project" && doc.status === "ACTIVE" && doc.substatus === "OPPORTUNITY"){
+          if (doc.opportunity && doc.opportunity.isCoordel) {
+        	  emit(
+        			[toISODateArray(doc.created), doc._id],
+        			doc
+        		);
+        	}
         }
       }
     },
@@ -1052,6 +1102,8 @@ module.exports = {
 
       	    });
       	  } 
+      	  
+
 
       	  //pending
       	  if (doc.status === "ACTIVE" && doc.substatus === "PENDING"){
@@ -1392,6 +1444,63 @@ module.exports = {
               }
             }
           }); 
+        }
+      }
+    },
+    
+    templateSearch: {
+        
+      map: function(doc){
+        
+       if (doc.docType === 'template' && !doc.isUserTemplate && doc.isPublic && doc.isActive){
+          var stopwords_en = {"a":true, "an":true, "the":true};
+          var name = "", purpose = "";
+          if (doc.name){
+            name = doc.name;
+          }
+          
+          if (doc.purpose){
+            purpose = doc.purpose;
+          }
+          
+          
+          if (doc.project){
+            if (doc.project.name){
+              name = name + " " +  doc.project.name;
+            }
+            
+            if (doc.project.purpose){
+              purpose = purpose + " " + doc.project.purpose; 
+            }
+            
+          }
+          
+          if (doc.tasks && doc.tasks.length){
+            doc.tasks.forEach(function(task){
+              if (task.name){
+                name = name + " " + task.name;
+              }
+
+              if (task.purpose){
+                purpose = purpose + " " + task.purpose; 
+              }
+            });
+          }
+          
+          
+          var words  = ((name + purpose).toLowerCase().match(/\w+/g));
+          words.forEach(function(word){
+            word = word.replace(/^[_]+/,"");
+            if (!stopwords_en[word]){
+              if (word.length >= 3){
+                if (!word.match(/^\d+$/)){
+                  emit(word,
+                    {id:doc._id
+                  });
+                }
+              }
+            }
+          });
         }
       }
     },

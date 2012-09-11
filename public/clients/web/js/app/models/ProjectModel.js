@@ -334,10 +334,17 @@ define("app/models/ProjectModel",
   	        roleid = db.uuid(),
   	        def = new dojo.Deferred(),
             status = "INVITE",
-  	        hasUser = false;
+  	        hasUser = false,
+  	        userAssigned = (db.username() === task.username);
   	        
   	    //console.debug("updating project assignments", p, task.username);
   	    //make sure this task's user is part of the project
+  	    
+  	    console.log("userAssigned", userAssigned);
+  	    
+  	    if (userAssigned){
+  	      status = "ACCEPTED";
+  	    }
       
   	    dojo.forEach(p.users, function(user){
   	      if (task.username === user){
@@ -351,8 +358,17 @@ define("app/models/ProjectModel",
   	      //if this is my delegated project, the project invitation process is skipped and the
           //tasks are accepted on a task by task basis
   	      if (!p.isMyDelegated){
+  	        
   	        //console.debug("inviting user to project", task.username);
-    	      p = self.invite(task.username, p);
+  	        console.log("is the current user the user adding the task", userAssigned );
+  	        if (userAssigned){
+  	          console.log("should skip the invite process");
+  	          p.users.push(task.username);
+  	          status = "ACCEPTED";
+  	        } else {
+  	          p = self.invite(task.username, p);
+  	        }
+    	      
   	      } else {
   	        p.users.push(task.username);
   	        status = "ACCEPTED";
@@ -382,6 +398,11 @@ define("app/models/ProjectModel",
     			  } else {
     			    hasAssign = true;
       				roleid = assign.role;
+      				if (userAssigned){
+      				  assign.status = status;
+      				  assign.role = roleid;
+      				  doUpdate = true;
+      				}
     			  }		
     			}
     		});
@@ -397,7 +418,7 @@ define("app/models/ProjectModel",
     			});
     			
     			doUpdate = true;
-  	    }
+  	    } 
   	    
   	    //set the roleid of the task
   	    task.role = roleid;

@@ -179,6 +179,10 @@ border-bottom: 1px solid #a3aab1;
   background-position: -144px;
 }
 
+.tasklist-item .task-actions:hover li.add a ins, .task-actions.active li.add a ins  {
+  background-position: -192px;
+}
+
 .tasklist-item .task-actions:hover li.accept a ins, .task-actions.active li.accept a ins  {
   background-position: -312px;
 }
@@ -189,6 +193,14 @@ border-bottom: 1px solid #a3aab1;
 
 .tasklist-item .task-actions:hover li.remove-defer a ins, .task-actions.active li.remove-defer a ins {
   background-position: -384px;
+}
+
+.tasklist-item .task-actions:hover li.share a ins, .task-actions.active li.share a ins {
+  background-position: -408px;
+}
+
+.tasklist-item .task-actions:hover li.copy a ins, .task-actions.active li.copy a ins {
+  background-position: -432px;
 }
 
 

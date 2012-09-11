@@ -1001,14 +1001,101 @@ define(["dojo",
               
             },
             
-            templates: function(filter){
+            templates: function(filter, query){
               if (!filter){
                 filter = "all";
               }
+            
               //console.log("templates filter", filter);
-              var templates = this.appStore.memTemplates.query(filter);
+              var templates;
+              
+              if (filter === "shared"){
+                templates = this.appStore.memShared.query("all");
+              } else {
+                /*
+                if (query){
+                  query = query.toLowerCase();
+                  templates = this.appStore.memTemplates.query(filter).filter(function(template){
+                    console.log("query in filter", query);
+                    var strings = getSearchStrings(template);
+                    console.log("query in filter", query, strings.name, strings.purpose);
+                    console.log("names index", strings.name.indexOf(query));
+                    console.log("purpose index", strings.purpose.indexOf(query));
+                    return (strings.name.indexOf(query)> -1) || (strings.purpose.indexOf(query)>-1);
+                  });
+                } else {
+                  templates = this.appStore.memTemplates.query(filter);
+                }
+                */
+                templates = this.appStore.memTemplates.query(filter);
+                
+              } 
+              
+              function getSearchStrings(doc){
+                var vals = {};
+                var name = "", purpose = "";
+                if (doc.name){
+                  name = doc.name;
+                }
+
+                if (doc.purpose){
+                  purpose = doc.purpose;
+                }
+
+                if (doc.task){
+                  if (doc.task.name){
+                    name = name + " " + doc.task.name;
+                  }
+
+                  if (doc.task.purpose){
+                    purpose = purpose + " " + doc.task.purpose; 
+                  }
+
+                }
+
+                if (doc.project){
+                  if (doc.project.name){
+                    name = name + " " +  doc.project.name;
+                  }
+
+                  if (doc.project.purpose){
+                    purpose = purpose + " " + doc.project.purpose; 
+                  }
+
+                }
+                vals.name = name.toLowerCase();
+                vals.purpose = purpose.toLowerCase();
+                return vals;
+              }
               
               return templates;
+            },
+            
+            getSharedTemplates: function(){
+              var memory = new mem({idProperty: "_id"});
+              var remote = new couch({target: this.db, idProperty: "_id", queryEngine: dojo.store.util.QueryResults});
+              memory = new obs(memory);
+              store = new cache(remote, memory);
+
+              memory.deliverable = function(template){
+                return template.templateType === "deliverable";
+              };
+
+              memory.tasks = function(template){
+                return template.templateType === "task";
+              };
+
+              memory.projects = function(template){
+                return template.templateType === "project";
+              };
+
+              var queryArgs = {
+                view: "coordel/sharedTemplates",
+                startkey: [this._app.id],
+                endkey: [this._app.id, {}]
+            	};
+
+            	return this.templateStore.query(queryArgs);
             }
           	
         };

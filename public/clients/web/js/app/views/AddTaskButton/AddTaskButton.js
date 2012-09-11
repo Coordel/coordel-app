@@ -34,7 +34,7 @@ define(
         
         dojo.connect(this.addTaskDialog, "onOpen", this, function(){
             //console.debug("onOpen fired");
-            var form = new tf({task: {}, isNew: true});
+            var form = new tf({id: "addTaskForm", task: {}, isNew: true});
             var connections = [];
             
             connections.push(dojo.connect(this.taskFormCancel, "onClick", form, "cancel"));

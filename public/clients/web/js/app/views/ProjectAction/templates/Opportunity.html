@@ -1,6 +1,7 @@
 <div style="border-top: 1px solid #999" class="c-padding-large">
 	<h3 class="no-background">${project.name}</h3>
 	<div class="instructions">${instructions}</div>
+	<!--
 	<div class="deliverable full">
 		<div class="left">
 			<div class="desc">
@@ -21,16 +22,16 @@
 					<option id="EUR">€ Euros</option>
 					<option id="YEN">¥ Japanese Yen</option>
 					<option id="GBP">£ British Pounds</option>
-					<option id="CLS">Coordel Licenses</option>
 				</select>
 			</div>
 		</div>
 	</div>
 	<div class="clear"></div>
+-->
 	<div class="full c-padding-t">
 		<div class="desc">
 			<span class="name">${coordel.message}</span>
-			<em class="required"></em>
+			<em dojoAttachpoint="isRequired" class="required">•</em>
 		</div>
 		<div class="instructions">Enter a message you would like to add to the Stream about this Opportunity</div>
 		<div class="textarea">

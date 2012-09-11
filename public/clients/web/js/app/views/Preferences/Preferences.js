@@ -32,23 +32,23 @@ define(
         }
         
         dojo.connect(self.emailUpdates, "onChange", this, function(){
-          console.log("in connect");
+          //console.log("in connect");
           var suppress = self.emailUpdates.get("checked");
           var a = db.appStore.app();
-          console.log("app", a);
+          //console.log("app", a);
           if (suppress){
-            console.log("send updates");
+            //console.log("send updates");
             delete a.suppressEmail;
             dojo.when(db.appStore.post(a), function(){
               db.appStore._app = a;
-              console.log("updated", a);
+              //console.log("updated", a);
             });
           } else {
-            console.log("don't send updates");
+            //console.log("don't send updates");
             a.suppressEmail = true;
             dojo.when(db.appStore.post(a), function(){
               db.appStore._app = a;
-              console.log("updated", a);
+              //console.log("updated", a);
             });
           }
           

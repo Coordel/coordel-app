@@ -29,6 +29,18 @@ define(
         this.inherited(arguments);
         var self = this;
         
+        if (!self.projectName){
+          self.projectName = "";
+          console.log("project not found in StreamEntry", self);
+        }
+        
+        if (!self.contact){
+          console.log("contact not found in StreamEntry", self);
+        }
+        
+        self.projectLink.innerHTML = self.projectName;
+        self.contactLink.innerHTML = self.contact;
+        
         self._showProject(self.showProject);
         
         //if the user clicks the project link, show the project 

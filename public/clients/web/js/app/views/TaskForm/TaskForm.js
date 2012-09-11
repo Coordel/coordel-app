@@ -163,7 +163,7 @@ define(
         self._setFilteringSelect(self.taskFormProject, db.taskFormProjects());
         self._setFilteringSelect(self.taskFormDelegate, db.contacts(), true);
         self._setFilteringSelect(self.taskFormBlockers, db.taskFormProjects());
-        self._setFilteringSelect(self.taskFormDeliverables, db.templates("deliverable"));
+        self._setFilteringSelect(self.taskFormDeliverables, db.templates("deliverables"));
         
         //make the datetextbox dropdown on focus rather than waiting to a click
         //dojo.connect(this.taskFormDeadline, "onFocus", this.taskFormDeadline, "openDropDown");
@@ -293,7 +293,7 @@ define(
             if (templateId){
               hasTemplate = true;
              
-              template = db.getDeliverableTemplate("deliverable", templateId);
+              template = db.getDeliverableTemplate("deliverables", templateId);
               //console.debug("got the template to add", template, templateId);
             }
            

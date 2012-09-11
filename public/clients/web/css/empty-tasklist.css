@@ -68,8 +68,23 @@ background-image: url(images/emptyList/taskList.png);
 background-image: url(images/emptyList/deliverables.png);
 }
 
+.empty-tasklist.deliverable-blueprints .text {
+background-image: url(images/emptyList/deliverableBlueprints.png);
+}
+
+
 .empty-tasklist.store .text {
 background-image:url(images/emptyList/store.png);
+}
+
+.empty-tasklist.task-blueprints .text {
+background-image:url(images/emptyList/taskBlueprints.png);
+}
+.empty-tasklist.project-blueprints .text {
+background-image:url(images/emptyList/projectBlueprints.png);
+}
+.empty-tasklist.shared-blueprints .text {
+background-image:url(images/emptyList/sharedBlueprints.png);
 }
 
 .empty-tasklist.calendar .text {
