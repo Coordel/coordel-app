@@ -106,7 +106,7 @@ define([
       }).placeAt(tabsContain);
       
       list.startup();
-      
+      listCont.startup();
       cont.resize();
 		}
   };

@@ -1,8 +1,3 @@
-/*
-
-If you are developing a project that makes use of Dojo's built-in widgets,
-you will probably want to include these two files.
-*/
 
 @import '../js/dojo-release-1-1.6.1-src/dojo/resources/dojo.css';
 @import '../js/dojo-release-1-1.6.1-src/dijit/themes/coordel/coordel.css';
@@ -114,7 +109,7 @@ hr {
 
 
 .c-ellipsis{
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
