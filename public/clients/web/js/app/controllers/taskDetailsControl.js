@@ -190,7 +190,7 @@ define([
 		},
 	
 	  handleStreamNotify: function(args){
-      console.log("stream notify", args);
+      //console.log("stream notify", args);
       //if (args.message.task === this.task._id){
         this.showStream();
       //}

@@ -718,7 +718,7 @@ define([
       },
       
       showStream: function(){
-        console.log("show project stream");
+        //console.log("show project stream");
         
   		  var node = dijit.byId("projDetailsStream"),
   		      store = db.projectStore;
