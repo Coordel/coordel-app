@@ -102,7 +102,7 @@ define(
           var form, cont;
           if (type === "task"){
             var bn = dijit.byId("addTaskDropdown");
-            console.log("dropdown", bn.dropDown);
+            //console.log("dropdown", bn.dropDown);
           
             bn.openDropDown();
           
@@ -159,13 +159,13 @@ define(
             if (isEveryone){
               delete t.isUserTemplate;
               t.isPublic = true;
-              console.log("isEveryone", t);
+              //console.log("isEveryone", t);
             } else {
               var contact = share.contact.get("value");
               delete t.isPublic;
               t.isUserTemplate = true;
               t.username= contact;
-              console.log("isContact", contact, t);
+              //console.log("isContact", contact, t);
             }
             db.appStore.sharedStore.add(t, {username: db.username()});
             var node = self.feedbackContainer;
@@ -189,7 +189,7 @@ define(
         
         //wire up the delete button
         dojo.connect(self.removeBlueprint, "onclick", this, function(){
-          console.log("deactivating template", this.template);
+          //console.log("deactivating template", this.template);
           var template = this.template;
           template.isActive = false;
           if (this.template.isPublic){
@@ -202,7 +202,7 @@ define(
         
         //wire up the info button
         dojo.connect(this.showInfo, "onclick", self, function(){
-          console.debug("task in showInfo", self.template);
+          //console.debug("task in showInfo", self.template);
           //console.debug("dialog", i);
           var cont = self.infoContainer;
           if (cont.hasChildren()){

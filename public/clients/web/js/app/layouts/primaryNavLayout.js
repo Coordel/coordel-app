@@ -42,7 +42,7 @@ define(['dojo',
         splitter: false,
         style: "padding: 0px"
       }).placeAt(leftNavContainer);
-
+    
 
       var pcHead = new pane({
         region: "top",
@@ -80,6 +80,7 @@ define(['dojo',
       var pcFoot = new cpane({
         region: "bottom",
         splitter: false,
+        style: "padding:0",
         id: "otherListFooter"
       }).placeAt(otherListNav);
       

@@ -30,7 +30,7 @@ define(
           if (evt.which === 13){
             //so the search
             var val = this.search.get("value").trim();
-            console.debug("search for this", val);
+            //console.debug("search for this", val);
             if (val.length){
                self.onSearch(val);
             }

@@ -174,7 +174,7 @@ define(
         
         dojo.connect(this.blueprints, "onclick", this, function(){
           this.coordelUserPreferences.closeDropDown();
-          console.log("show blueprints");
+          //console.log("show blueprints");
         });
         
         dojo.connect(this.refresh, "onclick", this, function(){

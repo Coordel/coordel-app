@@ -85,6 +85,12 @@ li.deliverable-blueprints a {
 li.shared-blueprints a {
 	background: url(images/icons/sharedBlueprint.png) no-repeat left center;
 }
+li.view a {
+	background: url(images/primaryBoxes/view.png) no-repeat left center;
+}
+li.view.selected a {
+  background: url(images/primaryBoxes/view-h.png) no-repeat left center;
+}
 
 
 li.task-invited a {

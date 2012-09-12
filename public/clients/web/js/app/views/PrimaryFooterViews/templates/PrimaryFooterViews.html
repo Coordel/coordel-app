@@ -1,0 +1,41 @@
+<div>
+  <h3>Other Views</h3>
+  <div>
+    <ul class="primary-boxes">
+  		<li id="all" dojoAttachPoint="showAll" class="box view">
+  			<a>
+  				<span>${coordel.all}</span>
+  			</a>
+  		</li>
+  		<li id="someday" dojoAttachPoint="showSomeday" class="box view">
+  			<a>
+  				<span>${coordel.someday}<span>
+  			</a>
+  		</li>
+  		<li id="archive" dojoAttachPoint="showArchive" class="box view">
+  			<a>
+  				<span>${coordel.archive}<span>
+  			</a>
+  		</li>
+  		<li id="done" dojoAttachPoint="showDone" class="box view">
+  			<a>
+  				<span>${coordel.done}<span>
+  			</a>
+  		</li>
+  	</ul>
+  </div>
+  <div class="primary-footer">
+	  <div dojoAttachPoint="hideViews" id="closeOtherLists">&nbsp;</div>
+  	<div id="addObject" class="menu-button">
+  		<div dojoAttachPoint="showObjectMenu" title="${coordel.addObject.project}" dojoType="dijit.form.DropDownButton" showLabel="false">
+  			<div dojoAttachPoint="addObjectDialog" class="menu" layoutAlign="top" dojoType="dijit.TooltipDialog">
+  				<ul class="menu-items">
+  					<li dojoAttachPoint="addProject">${coordel.addObject.project}...</li>
+  					<li dojoAttachPoint="addContact">${coordel.addObject.contact}...</li>
+  				</ul>
+  			</div>
+  		</div>
+  	</div>
+  	<div class="coordel-logo-footer coordel-logo-black">&nbsp;</div>
+  </div>
+</div>

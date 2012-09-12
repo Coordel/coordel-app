@@ -128,7 +128,7 @@ exports.register = function(userData, fn){
 
 exports.invite = function(inviteData, fn){
   
-  console.log("invite data", inviteData);
+  //console.log("invite data", inviteData);
       
   function rand(digits){
     return Math.floor(Math.random()* parseInt(digits+1, 10));

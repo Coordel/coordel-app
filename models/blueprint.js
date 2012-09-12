@@ -44,7 +44,7 @@ function loadBlueprintAttachments(bpAtts, fn){
 
 function loadProjectAttachments(docs, fn){
   //this creates attachment holders for any docs in the project that have attachments
-  console.log("loading project attachments...", docs.length);
+  //console.log("loading project attachments...", docs.length);
   var attached = {};
   
   async.forEach(docs, 
@@ -62,7 +62,7 @@ function loadProjectAttachments(docs, fn){
 
     function(err){
       if (err){
-        console.log("ERROR loading project attachments", err);
+        //console.log("ERROR loading project attachments", err);
         fn(err, null);
       } else {
         fn(false, attached);
@@ -89,7 +89,7 @@ function loadAttachments(args, fn){
   
   db.save(doc, function(err, res){
     if (err){
-      console.log("ERROR saving initial blueprint doc", err);
+      //console.log("ERROR saving initial blueprint doc", err);
     } else {
       doc._id = res.id;
       doc._rev = res.rev;
@@ -103,7 +103,7 @@ function loadAttachments(args, fn){
             contentType: args.attachments[key].content_type
         }, function(err, attachRes){
           if (err) {
-            console.log("ERROR adding attachment to blueprinted object", err);
+            //console.log("ERROR adding attachment to blueprinted object", err);
             //res.json({error: err});
           } else {
             doc._rev = attachRes.rev;
@@ -117,7 +117,7 @@ function loadAttachments(args, fn){
 
           db.get(doc._id, function(err, result){
             if (err){
-              console.log("ERROR getting blueprinted attachments", err);
+              //console.log("ERROR getting blueprinted attachments", err);
               fn(err, null);
             } else {
               fn(false, result);
@@ -129,7 +129,7 @@ function loadAttachments(args, fn){
 }
 
 function getProject(args, fn){
-  console.log("GETTING PROJECT", args.project._id);
+  //console.log("GETTING PROJECT", args.project._id);
   
   
   
@@ -159,7 +159,7 @@ function getProject(args, fn){
           //add them first. this solves the problem of tasks exist outside the project
       
       
-      console.log("DOCS", docs.length);
+      //console.log("DOCS", docs.length);
       
       var toAttach = [];
       docs.forEach(function(doc){
@@ -170,7 +170,7 @@ function getProject(args, fn){
       
       if (toAttach.length > 0){
         loadProjectAttachments(toAttach, function(err, result){
-          console.log("project docs with attachments", result);
+          //console.log("project docs with attachments", result);
           bp.blueprintAttachments = result;
           doBlueprint();
         });
@@ -180,7 +180,7 @@ function getProject(args, fn){
       
       function doBlueprint(){
         
-        console.log("doBlueprint", docs);
+        //console.log("doBlueprint", docs);
         
         docs.rows.map(function(r){
           switch (r.key[1]){
@@ -188,7 +188,7 @@ function getProject(args, fn){
               bp.roles = [];
               bp.tasks = [];//tasks will be any tasks that dont block
               bp.blockers = [];//blockers will contain any of the tasks that block others in the project
-              console.log('Creating blueprint: ' , r.doc.name);
+              //console.log('Creating blueprint: ' , r.doc.name);
             break;
             case ROLE:
               //roles will arrive next, expand the bp assignment role with the role doc
@@ -196,9 +196,9 @@ function getProject(args, fn){
             break;
             case BLOCK:
               if (r.doc.project !== bp.sourceId){
-                console.log("Blocker from another Coord, discarding...", r.doc.name);
+                //console.log("Blocker from another Coord, discarding...", r.doc.name);
               } else {
-                console.log("Attach blocker to Coord: ", r.doc.name);
+                //console.log("Attach blocker to Coord: ", r.doc.name);
                 bp.blockers.push(r.doc);
                 taskMap[r.doc._id] = true;
               }
@@ -206,10 +206,10 @@ function getProject(args, fn){
             case TASK: 
               //last will be the tasks. iterate the assigments for role.responsibilities and expand
               if (!taskMap[r.doc._id]){
-                console.log("Attach task to Coord: ", r.doc.name);
+                //console.log("Attach task to Coord: ", r.doc.name);
                 bp.tasks.push(r.doc);
               } else {
-                console.log("Task already in taskMap, discarding...", r.doc.name);
+                //console.log("Task already in taskMap, discarding...", r.doc.name);
               }
             break;
           }
@@ -223,7 +223,7 @@ function getProject(args, fn){
 
 function getTask(args, fn){
   
-  console.log("Getting Task: '" + args.task.name + "'" );
+  //console.log("Getting Task: '" + args.task.name + "'" );
 
   var bp,
       id = args.task._id,
@@ -404,7 +404,7 @@ exports.getAttachments = function(templateid, fn){
    * @api public
    */
   //get the template based on the id in the args
-  console.log("getAttachments", templateid);
+  //console.log("getAttachments", templateid);
   db.get(templateid, function(err, bp){
     if (err){
       console.log("ERR creating template attachments", err);
@@ -418,7 +418,7 @@ exports.getAttachments = function(templateid, fn){
         switch (bp.templateType){
           case "project":
             if (bp.blueprintAttachments){
-              console.log("get project starter docs...");
+              //console.log("get project starter docs...");
               
               loadBlueprintAttachments(bp.blueprintAttachments, function(err, list){
                 fn(false, list);

@@ -119,7 +119,7 @@ define(
             
             var f = new FeedbackMessage(data).placeAt(self.feedbackMessages);
             
-            console.log("comment", data);
+            //console.log("comment", data);
           });
         }
         

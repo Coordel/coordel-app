@@ -79,8 +79,10 @@ define(
             boxes.removeClass("selected active");
             //it might be that selection is cleared without a click of one of the primary boxes
             //this makes sure that selection is set to what was clicked if it doesn't match
-            if (doSet && selection !=="search"){
-              dojo.addClass(selection, "active selected");
+            if (doSet && selection !=="search" && selection !== "other"){
+          
+                dojo.addClass(selection, "active selected");
+  
             }
           }
         //}

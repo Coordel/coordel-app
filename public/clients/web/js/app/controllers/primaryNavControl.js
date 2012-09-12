@@ -19,12 +19,13 @@ define(['dojo',
   'app/models/CoordelStore',
   'dijit/TooltipDialog',
   'app/views/PrimaryFooter/PrimaryFooter',
+  'app/views/PrimaryFooterViews/PrimaryFooterViews',
   'app/views/ProjectGroup/ProjectGroup',
   'i18n!app/nls/coordel',
   'app/views/EmptyTaskList/EmptyTaskList',
   'app/views/QuickSearch/QuickSearch',
   'app/util/Sort'
-  ], function(dojo, dl, dijit, layout, ph, rh, add, pb,bpb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer, ProjectGroup, coordel, etl, search, util) {
+  ], function(dojo, dl, dijit, layout, ph, rh, add, pb,bpb, p, c, tf, tControl,tdControl, pControl, cControl, sControl, stamp, db, Tooltip, Footer,FooterViews, ProjectGroup, coordel, etl, search, util) {
     
   return {
     activeTab: "projects",
@@ -141,6 +142,11 @@ define(['dojo',
         this.setTurboHandler = dojo.subscribe("coordel/setTurbo", this, "handleSetTurbo");
       }
       
+      //listen for show footer views on/off
+      if (!this.showFooterViewsHandler){
+        this.showFooterViewsHandler = dojo.subscribe("coordel/showPrimaryFooterViews", this, "handleShowPrimaryFooterViews");
+      }
+      
       //publish a refresh signal every 60 seconds for objects that need to update like
 	    //tasks that might be deferred when loaded, but aren't more, or if time is showing
 	    //alter the time remaining or ago
@@ -153,6 +159,21 @@ define(['dojo',
         //console.log("handleProjectNotify primaryNavControl", args);
         this.activateProjects();
       }
+    },
+    
+    handleShowPrimaryFooterViews: function(args){
+      //console.debug("should popup the show other lists menu", args.showViews);
+      var foot = dijit.byId("otherListFooter");
+      foot.destroyDescendants();
+      
+      if (args.showViews){
+        foot.addChild(new FooterViews());
+      } else {
+        foot.addChild(new Footer());
+      }
+    
+      dijit.byId("leftNavContainer").resize();
+      
     },
     
     handleSetTurbo: function(args){
@@ -170,7 +191,7 @@ define(['dojo',
         
         dojo.when(db.appStore.post(a), function(){
           db.appStore._app = a;
-          console.log("updated", a);
+          //console.log("updated", a);
         });
       
       } 
@@ -327,6 +348,7 @@ define(['dojo',
         
         c.search = this.currentArgs.search;
         c.searchBlueprint = this.currentArgs.searchBlueprint;
+        c.primaryNavName = name;
         //console.debug("task list controller is", c, focus );
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);

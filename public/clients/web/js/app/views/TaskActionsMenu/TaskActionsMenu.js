@@ -113,7 +113,7 @@ define([
     },
     
     setMenuItems: function(){
-      console.log("task in task actions", this.task);
+      //console.log("task in task actions", this.task);
       var stat = this.task.status + "-" + this.task.substatus,
           own = false,
           t = db.getTaskModel(this.task, true);
@@ -124,7 +124,7 @@ define([
               
       //reuse shows by default but hide it if this is a PROJECT invite
       if (this.task.status === "PROJECT"){
-        console.log("it's a project invite", this.task.status, this.task.substatus);
+        //console.log("it's a project invite", this.task.status, this.task.substatus);
         dojo.addClass(this.reuseTask, "hidden");
         //dojo.addClass(this.reuseDeliverables, "hidden");
       }
@@ -142,7 +142,7 @@ define([
         }
       }
       
-      console.log("stat", stat);
+      //console.log("stat", stat);
              
       switch(stat){	
         case "CURRENT-PAUSED":
@@ -268,7 +268,7 @@ define([
   		  case "PROJECT-INVITE":
   			//owner
   			//not owner - propose
-  		    console.log("this.task in project-invite case", this.task);
+  		    //console.log("this.task in project-invite case", this.task);
   			  if (this.task.role !== "follower"){
   			    dojo.removeClass(this.proposeProjChange, "hidden");
   			  } 

@@ -233,7 +233,7 @@ define(['dojo',
 	  
 	  doTaskAction: function(args){
 	    
-	    console.log("args", args);
+	    //console.log("args", args);
 	    
 	    if (args.action === "reuse") {
 	      return;
@@ -340,7 +340,7 @@ define(['dojo',
     },
     
     doOpportunityAction: function(args){
-      console.log("appControl should do opportunity action", args);
+      //console.log("appControl should do opportunity action", args);
       var css = "highlight-button",
 	        d,
 	        proj;
@@ -392,7 +392,7 @@ define(['dojo',
 	        d,
 	        proj;
 	        
-	    console.log("project action args", args);
+	    //console.log("project action args", args);
 	    
 	    if (args.action === "reuse"){
 	      //need to show the project form with blueprint titles
@@ -424,7 +424,7 @@ define(['dojo',
 	      
 	    } else {
 	      
-	      console.log("showing project action", args.validate);
+	      //console.log("showing project action", args.validate);
 	      //show a project action
 	      if (args.cssClass){
   	      css = args.cssClass;
@@ -449,7 +449,7 @@ define(['dojo',
   	    });
         
         dojo.connect(proj, "onValidate", function(isValid){
-  	      console.debug("app control got onValidate", isValid);
+  	      //console.debug("app control got onValidate", isValid);
   	      d.validate(isValid);
   	    });
 
@@ -516,7 +516,7 @@ define(['dojo',
 	      case "showEmailIntegration":
 	      title = "E-mail Integration";
 	      template = "support/emailIntegration.html";
-	      console.log("show email integration");
+	      //console.log("show email integration");
 	      break;
 	    }
 	    
@@ -707,7 +707,7 @@ define(['dojo',
 	  
 	  handleContact: function(contact){
 	    //should refresh the contact store with the contact
-	    console.log("handle the contact");
+	    //console.log("handle the contact");
 	    db.contactStore.store.notify(contact);
 	  },
 	  
@@ -726,7 +726,7 @@ define(['dojo',
 	    } else {
 	      if (a.vips && a.vips.length > 0){
 	        dojo.forEach(a.vips, function(vip){
-	          console.log("alert in handle alert", alert);
+	          //console.log("alert in handle alert", alert);
 	          if (alert.actor.id === vip){
 	            //update the notification count
               dojo.publish("coordel/updateNotificationCount", [{currentAlerts: self.currentAlerts}]);
@@ -748,7 +748,7 @@ define(['dojo',
 	  
 	  handleChange: function(resp){
 	    
-	    console.log("appControl handleChanges called", resp);
+	    //console.log("appControl handleChanges called", resp);
 	  
   	  var notifications = [];
   		//resp.results.map(function(r){
@@ -825,9 +825,9 @@ define(['dojo',
   				    var test = list.filter(function(item){
   				      return item.id === id;
   				    });
-  				    console.log("tested contact", id, test.length);
+  				    
   				    if (!test.length){
-  				      console.log("add new contact", id);
+  				      //console.log("add new contact", id);
   				      db.contactStore.addContact(id);
   				    }
   				  });
@@ -848,7 +848,7 @@ define(['dojo',
   					//console.debug("STATUS:", chg.status, chg.substatus);
   					if (isNew && chg.creator !== app.username && chg.updater !== app.username && chg.status !== "ARCHIVE" && chg.status !== "TRASH" && !chg._deleted){
   					  //this is a new project that I didn't create so add
-  					  console.debug("Notify Project ADD", chg._id, chg._rev);
+  					  //console.debug("Notify Project ADD", chg._id, chg._rev);
   					  if (chg.substatus === "OPPORTUNITY"){
   					    if (db.isOpportunities){
   					      db.projectStore.oppStore.notify(chg);
@@ -864,12 +864,12 @@ define(['dojo',
   					  
   					} else if (assignStatus === "DECLINED" || chg.substatus === "DELETED" || chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   					  //this project was deleted
-  					  console.debug("Notify Project DELETE",chg._id, chg._rev);
+  					  //console.debug("Notify Project DELETE",chg._id, chg._rev);
   					  db.projectStore.store.notify(null, chg._id);
   					  
   					} else {
   					  //this is an update
-  					  console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
+  					  //console.debug("Notify Project UPDATE", chg, chg._id, chg._rev);
   					  
   					  if (chg.substatus === "OPPORTUNITY" && db.projectStore.oppStore){
   					    db.projectStore.oppStore.notify(chg, chg._id);

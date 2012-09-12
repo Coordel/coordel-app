@@ -167,6 +167,15 @@ define(["dojo",
               });
     
             },
+            getDone: function(){
+              return this._getView({
+                view: "userDoneTasks",
+                startkey: [this.username],
+                endkey: [this.username, {}],
+                limit: 100
+              });
+              
+            },
             _getView: function(options){
 
               var remote = new couch({
@@ -180,6 +189,10 @@ define(["dojo",
             		endkey: options.endkey,
             		include_docs: true
             	};
+            	
+            	if (options.limit){
+            	  queryArgs.limit = options.limit;
+            	}
 
             	return remote.query(queryArgs);
           

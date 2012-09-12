@@ -60,7 +60,7 @@ everyauth
       if (errors.length) return errors;
       var promise = this.Promise();
       User.get(login, function(err, user){
-        console.log(logId, "User Login: " + user.email);
+        //console.log(logId, "User Login: " + user.email);
         if (err) promise.fulfill([err]);
         if (user.password !== password){
           promise.fulfill(['Login failed: invalid username or password']);

@@ -18,7 +18,7 @@
 			//load
 	    require(["dojo/dom", "dojo/dom-construct", "dojo/domReady!"], function(dom, con){
 				socket.on('changes:<%=appId%>', function (change) {
-			    console.log(change);
+			    //console.log(change);
 					var changes = dom.byId("changes");
 			    con.create("div",{innerHTML: change.name}, changes);
 			  });

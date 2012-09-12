@@ -72,6 +72,9 @@ background-image: url(images/emptyList/deliverables.png);
 background-image: url(images/emptyList/deliverableBlueprints.png);
 }
 
+.empty-tasklist.other .text{
+  background-image:url(images/emptyList/other.png);
+}
 
 .empty-tasklist.store .text {
 background-image:url(images/emptyList/store.png);

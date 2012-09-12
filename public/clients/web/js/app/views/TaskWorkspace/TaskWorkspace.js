@@ -109,7 +109,7 @@ define(
   		},
       
       showDeliverables: function(){
-        console.debug("showing deliverables", this.task.workspace);
+        //console.debug("showing deliverables", this.task.workspace);
         //this gets all the deliverables that aren't blocked and shows them
         var task = this.task,
             //dels = new ContainerPane().placeAt(this.deliverables),
@@ -120,7 +120,7 @@ define(
         
         var ready = t.readyDeliverables();
         
-        console.debug("ready deliverables", ready);
+        //console.debug("ready deliverables", ready);
         
         blocked = total - ready.length;
         

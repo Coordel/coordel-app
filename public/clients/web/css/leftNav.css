@@ -1,13 +1,14 @@
 #addObject {
   width: 1.8em;
   height: 1.8em;
-  background: #ccc url(images/footerButtons/add.png) no-repeat;
+  background: #ccc url(images/footerButtons/add.png) no-repeat center center;
   border-right:1px solid #999;
   /* for IE */
   filter:alpha(opacity=60);
   /* CSS3 standard */
   opacity:0.6;
   float:left;
+  border-bottom: 0px;
 }
 
 #addObject:hover {
@@ -19,17 +20,40 @@
 }
 
 #showOtherLists {
+  height: 1.8em;
   width: 1.8em;
-  background: #ccc url(images/footerButtons/showOtherLists.png) no-repeat;
+  background: #ccc url(images/footerButtons/showOtherLists.png) no-repeat center center;
   border-right:1px solid #999;
   /* for IE */
   filter:alpha(opacity=60);
   /* CSS3 standard */
   opacity:0.6;
   float:left;
+  border-bottom: 0px;
 }
 
 #showOtherLists:hover {
+  background-color: #e5e5e5;
+  /* for IE */
+  filter:alpha(opacity=100);
+  /* CSS3 standard */
+  opacity:1;
+}
+
+#closeOtherLists {
+  width: 1.8em;
+  height: 1.8em;
+  background: #ccc url(images/footerButtons/closeOtherLists.png) no-repeat center center;
+  border-right:1px solid #999;
+  /* for IE */
+  filter:alpha(opacity=60);
+  /* CSS3 standard */
+  opacity:0.6;
+  float:left;
+  border-bottom: 0px;
+}
+
+#closeOtherLists:hover {
   background-color: #e5e5e5;
   /* for IE */
   filter:alpha(opacity=100);

@@ -410,7 +410,7 @@ define(
       
           //hide the check box and show the project opportunity, follow or participate icon
           dojo.addClass(this.taskCheckbox.domNode, "hidden");
-          console.log("this role", this.role);
+          //console.log("this role", this.role);
           if (this.role === "project"){
             dojo.removeClass(this.participateIcon, "hidden");
           } else if (this.role === "follower"){
@@ -647,7 +647,7 @@ define(
         
         //wire up the info button
         dojo.connect(this.showInfo, "onclick", this, function(){
-          console.debug("task in showInfo", this.task);
+          //console.debug("task in showInfo", this.task);
           //console.debug("dialog", i);
           var cont = this.infoContainer;
           if (cont.hasChildren()){

@@ -234,9 +234,9 @@ define(
         var self = this;
         if (self.domNode && self.currentArgs.focus === "project" && self.currentArgs.id === self.project._id){
           /*
-          console.log("setting project selection", self.currentArgs, self.project._id);
+          //console.log("setting project selection", self.currentArgs, self.project._id);
           dojo.addClass(self.domNode, "active selected");
-          console.log("project should be active", self.project._id, self.currentArgs);
+          //console.log("project should be active", self.project._id, self.currentArgs);
           */
         }
         

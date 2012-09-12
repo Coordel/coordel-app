@@ -429,7 +429,7 @@ define(
               
               //console.log("there is a duration", current.duration);
               if (current.duration){
-                console.log("durNumber, durChoices", durNumber, durChoices);
+                //console.log("durNumber, durChoices", durNumber, durChoices);
                 durNumber.set("value", current.duration.number);
                 durChoices.set("value", current.duration.unit);
               }
@@ -490,7 +490,7 @@ define(
                     }
                     if (!current.coordinates || (current.coordinates && current.coordinates.length === 0)){
                       if (current.duration){
-                        console.log("resetting current duration");
+                        //console.log("resetting current duration");
                         durNumber.set("value", 0);
                         durChoices.set("value", "m");
                         current.duration = false;
@@ -661,7 +661,7 @@ define(
         
         //blockers
         dojo.connect(this.taskFormBlockers, "onAddOption", this, function(duration){
-          console.debug("adding blockers", duration);
+          //console.debug("adding blockers", duration);
           
           self.task.duration = duration;
           
@@ -762,7 +762,7 @@ define(
         //purpose
         this.taskFormPurpose.watch("value", function(prop, oldVal, newVal){
           
-          console.log("purpose", this.value, newVal);
+          //console.log("purpose", this.value, newVal);
           
           //protect from saving the placeholder value
           if(this.value !== coordel.taskForm.phPurpose){
@@ -1032,7 +1032,7 @@ define(
               //first delete the correct pill and then remove the deliverable
               //console.log("deliverables before filter", self.task.workspace);
               self.task.workspace = dojo.filter(self.task.workspace, function(d){
-                console.log("d.id", d.id, "removeId", removeId, (d.id !== removeId));
+                //console.log("d.id", d.id, "removeId", removeId, (d.id !== removeId));
                 return (d.id !== removeId);
               });
               //console.log("deliverables after filter", self.task.workspace);
@@ -1130,11 +1130,11 @@ define(
                       p.destroy();
                     }
                   });
-                  console.log("blockers", blockers);
+                  //console.log("blockers", blockers);
                   if (blockers && blockers.length === 0){
-                    console.log("deleting duration");
+                    //console.log("deleting duration");
                     delete self.task.duration;
-                    console.log("self task duration", self.task.duration);
+                    //console.log("self task duration", self.task.duration);
                   }
                 });
                 
@@ -1148,7 +1148,7 @@ define(
               cont.destroyDescendants();
             }
             
-            console.log("should reset duration");
+            //console.log("should reset duration");
             self.task.duration = false;
           }
         }

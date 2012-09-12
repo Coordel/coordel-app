@@ -26,7 +26,7 @@ define(
         this.inherited(arguments);
         var self = this;
         db.profileStore.get(db.username()).then(function(data){
-          console.log("profile", data);
+          //console.log("profile", data);
           self.profile = data.profile;
           
           self.firstName.set("value",  self.profile.first);
@@ -45,7 +45,7 @@ define(
         self.profile.skype = self.skype.get("value");
         self.profile.phone = self.phone.get("value");
         
-        console.log("profile to save", self.profile);
+        //console.log("profile to save", self.profile);
         
         db.profileStore.store.put(self.profile, {username:db.username()});
       },

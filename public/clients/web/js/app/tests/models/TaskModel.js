@@ -12,7 +12,7 @@ dojo.require("app.models.CoordelStore")
   
   var model = db.getTaskModel(task, true);
   
-  console.debug(task, model);
+  //console.debug(task, model);
   
 	var store = new dojo.store.Memory({
 		data: [

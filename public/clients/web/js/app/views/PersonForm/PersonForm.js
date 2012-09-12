@@ -56,7 +56,7 @@ define(
               data: {}});
               
             dojo.when(invite, function(user){
-              console.log("user added", user);
+              //console.log("user added", user);
               db.contactStore.store.notify(user);
             });
           }

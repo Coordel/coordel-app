@@ -24,7 +24,7 @@ define(
         this.inherited(arguments);
         var from = db.username();
         
-        console.log("in Rating form", this.project, from);
+        //console.log("in Rating form", this.project, from);
         
         dojo.forEach(this.project.assignments, function(assign){
           //only give feedback to people who accepted a role in the project and who
@@ -40,10 +40,10 @@ define(
       },
       
       _getFeedback: function(username){
-        console.log("getting feedback for", username);
+        //console.log("getting feedback for", username);
         var toReturn = false;
         dojo.forEach(dijit.findWidgets(this.entries), function(e){
-          console.log("testing entries", e, e.get("to"));
+          //console.log("testing entries", e, e.get("to"));
           if (e.get("to") === username){
             toReturn = e.getEntry();
           }
@@ -52,10 +52,10 @@ define(
       },
       
       save: function(){
-        console.log("save called", this);
+        //console.log("save called", this);
         dojo.forEach(this.project.assignments, function(assign){
           var e = this._getFeedback(assign.username);
-          console.log("testing for feedback", e);
+          //console.log("testing for feedback", e);
           if (e){
             if (!assign.feedback){
               assign.feedback = [];

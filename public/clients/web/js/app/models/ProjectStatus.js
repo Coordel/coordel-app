@@ -319,6 +319,7 @@ define("app/models/ProjectStatus",
         if (this.isActive(project, username)){
           dojo.forEach(project.assignments, function(assign){
             if (assign.username === username && assign.status === "ACCEPTED" && assign.role !== "FOLLOWER"){
+              //console.log("participating");
               test = true;
             }
           });
@@ -336,6 +337,7 @@ define("app/models/ProjectStatus",
           dojo.forEach(project.assignments, function(assign){
             if (assign.username === username && assign.status === "ACCEPTED" && assign.role === "FOLLOWER"){
               test = true;
+              //console.log("following");
             }
           });
         }

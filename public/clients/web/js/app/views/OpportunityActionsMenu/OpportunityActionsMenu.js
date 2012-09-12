@@ -25,14 +25,14 @@ define([
   
       //wire up the follow menu option
       dojo.connect(this.follow, "onclick", this, function(){
-        console.log("follow clicked");
+        //console.log("follow clicked");
         dojo.publish("coordel/opportunityAction", [{action: "follow", project: this.project, validate: true}]);
         this.onSelect();
       });
       
       //wire up the addTask menu option
       dojo.connect(this.proposeTask, "onclick", this, function(){
-        console.log("proposeTask clicked");
+        //console.log("proposeTask clicked");
         //dojo.publish("coordel/opportunityAction", [{action: "proposeTask", project: this.project, validate: true, cssClass: "warning-button"}]);
         dojo.publish("coordel/addObject", [{object: "task", project: this.project}]);
         this.onSelect();

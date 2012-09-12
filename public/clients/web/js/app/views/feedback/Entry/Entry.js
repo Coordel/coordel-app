@@ -29,7 +29,7 @@ define(
       
       postCreate: function(){
         this.inherited(arguments);
-        console.log("creating entry", this.from, this.to);
+        //console.log("creating entry", this.from, this.to);
         
         dojo.connect(this.low1, "onClick", this, function(){
           dojo.addClass(this.commentContainer, "hidden");

@@ -45,7 +45,7 @@ define(
   		  }
 
   		  dojo.connect(this.quickEntry, "onSave", this, function(args){
-  		    //console.debug("quickentry onSave notes", args);
+  		    //console.debug("quickentry onSave notes", args.entry, args.entry.entry);
   		    this.add(args.entry);
   		  });
   		  

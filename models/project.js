@@ -29,7 +29,7 @@ var Project = exports = module.exports = function Project(args){
 Project.prototype.add = function(fn){
   
   if (this.assignments && this.creator && this.responsible && this.users){
-    console.log('adding project to couchdb store', this);
+    //console.log('adding project to couchdb store', this);
     
   } else {
     fn('CoordelApp is not valid. id, email, firstName, lastName, ' +

@@ -158,7 +158,7 @@ define(
       },
       
       add: function(todo){
-        console.debug("add called");
+        //console.debug("add called");
         this.store.add(todo);
         this.save();
         

@@ -72,7 +72,7 @@ define(
           this.displayValue.innerHTML = this.source;
           break;
           case "people":
-          console.log("setting pill for people", value, contact);
+          //console.log("setting pill for people", value, contact);
           if (value === "pending"){
             this.value = contact.email;
             this.source = contact.firstName + " " + contact.lastName;
@@ -82,9 +82,9 @@ define(
             var self = this;
             var c = db.contactStore.store.get(value); 
             dojo.when(c, function(contact){
-              console.log("contact", contact);
+              //console.log("contact", contact);
               self.source = db.contactFullName(value);
-              console.log("self source", self.source, self.displayValue.innerHTML);
+              //console.log("self source", self.source, self.displayValue.innerHTML);
               self.displayValue.innerHTML = self.source;
             });
           }

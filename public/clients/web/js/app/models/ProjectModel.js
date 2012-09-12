@@ -175,7 +175,7 @@ define("app/models/ProjectModel",
     		var has = (dojo.indexOf(project.users, username) > -1);
         
         if (!has){
-          console.log("didn't have user in project");
+          //console.log("didn't have user in project");
           project.users.push(username);
 
       		if (!project.assignments){
@@ -340,7 +340,7 @@ define("app/models/ProjectModel",
   	    //console.debug("updating project assignments", p, task.username);
   	    //make sure this task's user is part of the project
   	    
-  	    console.log("userAssigned", userAssigned);
+  	    //console.log("userAssigned", userAssigned);
   	    
   	    if (userAssigned){
   	      status = "ACCEPTED";
@@ -360,9 +360,9 @@ define("app/models/ProjectModel",
   	      if (!p.isMyDelegated){
   	        
   	        //console.debug("inviting user to project", task.username);
-  	        console.log("is the current user the user adding the task", userAssigned );
+  	        //console.log("is the current user the user adding the task", userAssigned );
   	        if (userAssigned){
-  	          console.log("should skip the invite process");
+  	          //console.log("should skip the invite process");
   	          p.users.push(task.username);
   	          status = "ACCEPTED";
   	        } else {
@@ -944,7 +944,7 @@ define("app/models/ProjectModel",
     	    project = this.db.projectStore.store.get(this._id);
     	  }
     	  
-    	  console.debug("mark Done", project);
+    	  //console.debug("mark Done", project);
     	  
     		project = this.addActivity({
     			verb: "COMPLETE",

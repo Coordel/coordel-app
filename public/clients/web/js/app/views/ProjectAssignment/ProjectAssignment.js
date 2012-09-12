@@ -41,7 +41,7 @@ define(
         
         if (self.isResponsible){
           var role = self.assignment.role;
-          console.debug ("i'm responsible", role);
+          //console.debug ("i'm responsible", role);
           self.setContact(self.assignment.username);
           self.header.innerHTML = coordel.projDetails.responsible;
           dojo.addClass(self.status, "hidden");
@@ -50,11 +50,11 @@ define(
             dojo.addClass(self.roleContainer, "hidden");
             dojo.style(self.contactContainer, "border","0px solid transparent");
           } else {
-            console.log("im responsible and im going to show the role", role);
+            //console.log("im responsible and im going to show the role", role);
             self.setRole(role, self.assignment.name);
           }
         } else if (self.isFollowers){
-          console.debug ("it's the followers", this.followers);
+          //console.debug ("it's the followers", this.followers);
           //if isFollowing add a contact for each follower and hide the role
           dojo.addClass(self.roleContainer, "hidden");
           dojo.addClass(self.contactContainer, "followers");
@@ -64,7 +64,7 @@ define(
           
         } else {
         
-          console.debug("participant", this.assignment.username, this.assignment.role);
+          //console.debug("participant", this.assignment.username, this.assignment.role);
           //get the role from the assignment and add it to the container
           self.setContact(self.assignment.username);
           //get the username from the assignment and add the contact details to the container
@@ -74,7 +74,7 @@ define(
       },
       
       setRole: function(roleid, rolename){
-        console.log("roleid", roleid);
+        //console.log("roleid", roleid);
         this._clear(this.roleContainer);
         var self = this;
         
@@ -84,7 +84,7 @@ define(
           //success case
           function(r){
           
-            console.log("setRole", r, roleid);
+            //console.log("setRole", r, roleid);
 
             //if the role has responsibilities, show them
             if (r.responsibilities && r.responsibilities.length > 0){

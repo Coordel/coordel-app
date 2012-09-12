@@ -97,8 +97,8 @@ define([
           
           dojo.style(this.showView.domNode, {"margin-right": "0"});
               
-        } else if (pStatus.isOpportunity(this.project)) {
-          
+        } else if (pStatus.isOpportunity(this.project) && !pStatus.isResponsible(this.project,username) && !pStatus.isParticipating(this.project, username) && !pStatus.isFollowing(this.project, username)) {
+          //console.log("here we are", this.project, username,pStatus.isActive(this.project), pStatus.isParticipating(this.project, username), pStatus.isFollowing(this.project, username));
           dojo.removeClass(this.follow.domNode, "hidden");
           dojo.addClass(this.chooseAction.domNode, "hidden");
           dojo.style(this.showView.domNode, {"margin-right": "0"});
@@ -178,7 +178,7 @@ define([
         });
         
         dojo.connect(this.projBackToFocus, "onClick", this, function(){
-          console.log ("backToFocus", this.project, this.focus);
+          //console.log ("backToFocus", this.project, this.focus);
           dojo.publish("coordel/primaryNavSelect", [{focus:this.backFocus, name: "", id:"", setSelection: true}]);
         });
         

@@ -45,12 +45,10 @@ define(
           this.showObjectMenu.closeDropDown();
         });
         
-        /*
-        dojo.connect(dojo.byId("showOtherLists"), "onclick", this, function(){
-          console.debug("should popup the show other lists menu");
-           
+        
+        dojo.connect(this.showViews, "onclick", this, function(){
+          dojo.publish("coordel/showPrimaryFooterViews", [{showViews:true}]);
         });
-        */
         
       },
     

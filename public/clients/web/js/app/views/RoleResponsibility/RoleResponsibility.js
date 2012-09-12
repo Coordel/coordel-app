@@ -32,7 +32,7 @@ define(
         */
         
         if (!this.task){
-          console.debug("ERROR: no task was provided to RoleResponsiblility view");
+          //console.debug("ERROR: no task was provided to RoleResponsiblility view");
         }
         
         self.setResponsibility();

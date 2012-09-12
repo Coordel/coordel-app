@@ -27,69 +27,7 @@ define(
         this.inherited(arguments);
             
         this.setProject(this.project);
-        /* 
-        //watch the task for changes
-        self.watch("task", function(prop, oldVal, newVal){
-          console.debug("task changed", prop, oldVal, newVal);
-          self.setTask(newVal);
-        });
         
-        //watch the task properties for changes
-        self.name.watch("value", function(prop, oldVal, newVal){
-          console.debug("task name changed", prop, oldVal, newVal);
-          self.name.innerHTML = newVal;
-        });
-        
-        self.username.watch("value", function(prop, oldVal, newVal){
-          console.debug("task username changed", prop, oldVal, newVal);
-          self.username.innerHTML = db.contactFullName(newVal);
-        });
-        
-        self.deadline.watch("value", function(prop, oldVal, newVal){
-          console.debug("task deadline changed", prop, oldVal, newVal);
-          if (t.hasDeadline()){
-            self.deadline.innerHTML = dt.deadline(newVal);
-            dojo.removeClass(self.infoDeadline, "hidden");
-          } else {
-            dojo.addClass(self.infoDeadline, "hidden");
-          }
-        });
-        
-        self.calendar.watch("value", function(prop, oldVal, newVal){
-          console.debug("task deferred changed", prop, oldVal, newVal);
-          if (t.isDeferred()){
-            self.deferred.innerHTML = dt.deferred(newVal.start);
-            dojo.removeClass(self.infoDeferDate, "hidden");
-          } else {
-            dojo.addClass(self.infoDeferDate, "hidden");
-          }
-        });
-      
-        self.delegator.watch("value", function(prop, oldVal, newVal){
-          console.debug("task delegator changed", prop, oldVal, newVal);
-          
-          
-        });
-        
-        self.purpose.watch("value", function(prop, oldVal, newVal){
-          console.debug("task purpose changed", prop, oldVal, newVal);
-          if (newVal && newVal !== ""){
-            self.purpose.innerHTML = newVal;
-            dojo.removeClass(self.infoPurpose, "hidden");
-          } else {
-            dojo.addClass(self.infoPurpose, "hidden");
-          }
-        });
-        
-        self.project.watch("value", function(prop, oldVal, newVal){
-          console.debug("task project changed", prop, oldVal, newVal, t);
-          var hide = false;
-          
-          self.projectName.innerHTML = t.projName();
-          
-          
-        });
-        */
       },
       
       setProject: function(project){

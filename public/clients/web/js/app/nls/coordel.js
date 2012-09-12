@@ -16,6 +16,7 @@ define({
 	  date: "Date",
 	  time: "Time",
 	  add: "Add",
+	  all: "All",
 	  store: "Store",
 	  positiveFeedback: "Positive Feedback",
 	  externalProject: "Task in another Coord",
@@ -403,7 +404,7 @@ define({
 		  privateTitle: "No Private Tasks",
 		  privateText: "Keep track of Tasks only you care about. All new Tasks go here unless they are added to a Coord",
 		  opportunitiesTitle: "No Opportunities",
-		  opportunitiesText: "Track all Tasks available in Public Opportunity Coords here. To Publish an Opportunity, create a new Coord and then click Publish Opportunity rather than Activate.",
+		  opportunitiesText: "Track all Public Opportunity Coords here. To Publish an Opportunity, create a new Coord and then click Publish Opportunity.",
 		  projectTasksTitle: "No Coord Tasks",
 		  projectTasksText: "Track all Tasks in this Coord by Status here",
 		  projectOrderTitle: "No Coord Tasks",
@@ -426,7 +427,15 @@ define({
 		  "deliverable-blueprintsTitle": "No Deliverable Blueprints",
 		  "deliverable-blueprintsText": "Track your Deliverable Blueprints here",
 		  "shared-blueprintsTitle": "No Shared Blueprints",
-		  "shared-blueprintsText": "Track Blueprints shared by you and others in the Coordel Network here"
+		  "shared-blueprintsText": "Track Blueprints shared by you and others in the Coordel Network here",
+		  "allTitle": "No Tasks",
+		  "allText": "Track all tasks that aren't Done here",
+		  "somedayTitle": "No Someday Tasks",
+		  "somedayText": "Track all tasks that you have saved for Someday here",
+		  "archiveTitle": "No Archive Tasks",
+		  "archiveText": "Track all tasks you have Archived here",
+		  "doneTitle": "No Done Tasks",
+		  "doneText": "Track all Done tasks here"
 		},
 		"metainfo" : {
 		  "follow": "Follow",

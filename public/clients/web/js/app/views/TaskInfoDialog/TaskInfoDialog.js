@@ -53,7 +53,7 @@ define([
         
         if (t.hasBlockers()){
           var blockers = this.task.coordinates;
-          console.debug("task has Blockers in TaskInfoDialog", this.task, this.task.coordinates);
+          //console.debug("task has Blockers in TaskInfoDialog", this.task, this.task.coordinates);
           
           var aPane = new cp({
             style: "padding:0"
@@ -61,7 +61,7 @@ define([
           
         
           blockers.forEach(function(id){
-            console.debug("blocker id", id);
+            //console.debug("blocker id", id);
             var blocker = db.getBlockerModel(id);
             
             var b = new Info({task:blocker.task});
@@ -72,20 +72,20 @@ define([
           this.taskBlockers.set("content", aPane);
         } else {
           //hide the title pane
-          console.debug("task had no blockers, hid the title pane TaskInfoDialog");
+          //console.debug("task had no blockers, hid the title pane TaskInfoDialog");
           dojo.addClass(this.taskBlockers.domNode, "hidden");
         }
         
       },
       
       _setBlocking: function(){
-        console.log("setting blocking");
+        //console.log("setting blocking");
         var query = db.taskStore.getBlocking(this.task._id),
             self = this;
         dojo.when(query, function(blocking){
-          console.log("blocking", blocking);
+          //console.log("blocking", blocking);
           if (blocking.length > 0){
-            console.debug("this task was blocking", blocking);
+            //console.debug("this task was blocking", blocking);
 
             //add the blockers to a container
             var bPane = new cp({
@@ -100,7 +100,7 @@ define([
 
             self.taskBlocking.set("content", bPane);
           } else {
-            console.debug("task wasn't blocking, hid the title pane TaskInfoDialog");
+            //console.debug("task wasn't blocking, hid the title pane TaskInfoDialog");
             dojo.addClass(self.taskBlocking.domNode, "hidden");
           }
         });

@@ -40,7 +40,7 @@ define([
       
       if (this.action === "ackDone"){
         this.templateString = feedback;
-        console.log("it's feedback");
+        //console.log("it's feedback");
       }
       
       if (this.action === "publish"){
@@ -52,7 +52,7 @@ define([
     postCreate: function(){
       this.inherited(arguments);
       
-      console.log("project action", this.action);
+      //console.log("project action", this.action);
       
       if (this.project.status === "PROJECT"){
         this.project = db.projectStore.store.get(this.project.project);
@@ -80,14 +80,14 @@ define([
         this.rating = new Rating({
           project: this.project
         }).placeAt(this.containerNode);
-        console.log("it was ackDone", this.rating);
+        //console.log("it was ackDone", this.rating);
       }
       
     },
     
     save: function(){
     
-      console.debug("save called in ProjectAction", this.action, this.project);
+      //console.debug("save called in ProjectAction", this.action, this.project);
       var p = db.getProjectModel(this.project, true),
           message = "",
           project = this.project,
@@ -112,13 +112,13 @@ define([
           p.leave(username, project, message);
           break;
         case "follow": 
-          console.log("before follow, db, username, project", db, username, project);
+          //console.log("before follow, db, username, project", db, username, project);
           if (db.focus === "project" && db.projectStore.currentProject === project._id){
-            console.log("before primaryNavSelect");
+            //console.log("before primaryNavSelect");
             dojo.publish("coordel/primaryNavSelect", [{focus: "current", setSelection: true}]);
           }
           p.follow(username, project, message);
-          console.log("after follow");
+          //console.log("after follow");
           
           
           break;

@@ -24,13 +24,8 @@ define(
         this.inherited(arguments);
         
         var self = this;
-        /*
-        this.watch("role", function(prop, oldVal, newVal){
-          console.debug("role changed", prop, oldVal, newVal);
-        });
-        */
         
-        console.debug("in Role: ", this.role);
+        //console.debug("in Role: ", this.role);
         
         this.setResps();
         
@@ -54,11 +49,11 @@ define(
           return r.substatus !== "CANCELLED" && r.substatus !== "TRASH";
         });
         
-        console.debug("responsibilities", resps);
+        //console.debug("responsibilities", resps);
         
         if (resps && resps.length > 0){
           dojo.forEach(resps, function(r){
-            console.log("setResps", r.task);
+            //console.log("setResps", r.task);
             var t = db.projectStore.taskStore.get(r.task);
 
             var resp = new R({

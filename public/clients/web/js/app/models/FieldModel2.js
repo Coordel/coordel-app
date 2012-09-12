@@ -84,7 +84,7 @@ define([
           });
           
           if (!childValue){
-            console.debug("children didn't have a value",f);
+            //console.debug("children didn't have a value",f);
             has = false;
           }
         } else {

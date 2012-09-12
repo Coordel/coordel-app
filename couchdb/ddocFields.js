@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.122",
+  version: "0.1.124",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -1273,7 +1273,6 @@ module.exports = {
       	}
 
       	if (doc.docType == "task" 
-      			&& doc.status !== "IN-ITEM"
       			&& doc.status !== "TRASH"
       			&& doc.status !== "ARCHIVE"
       			&& doc.status !== "SOMEDAY"
@@ -1358,6 +1357,35 @@ module.exports = {
         			[doc.username, toDateArray(new Date(doc.updated))],
         			{"_id": doc._id}
         		);
+      	}
+      }
+    },
+    
+    userDoneTasks: {
+      map: function(doc){
+        function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+      	
+      	if (doc.docType === "task"){
+      	  if (doc.status === "DONE"){
+      	    if (doc.substatus === "APPROVED" || doc.substatus === "FINISHED"){
+      	      emit(
+            			[doc.username, toDateArray(new Date(doc.updated))],
+            			{"_id": doc._id}
+            		);
+      	    }
+      	  }
       	}
       }
     },

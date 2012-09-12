@@ -38,7 +38,7 @@ define([
       
       postMixInProperties : function() {
         //set values for button labels and titles
-        console.log("this.focus", this.focus);
+        //console.log("this.focus", this.focus);
         this.backLabel = this.focus;
         if (this.focus === "project"){
           this.backLabel = coordel.project;
@@ -239,7 +239,7 @@ define([
           focus = this.focus;
         }
 
-        console.debug("back publish parameters", "id: "+id, "name: "+name, "focus: "+focus);
+        //console.debug("back publish parameters", "id: "+id, "name: "+name, "focus: "+focus);
         
         dojo.publish("coordel/primaryNavSelect", [{focus:focus, name: name, id:id, setSelection: true}]);
         

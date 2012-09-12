@@ -24,7 +24,7 @@ define(
     
     postCreate: function(){
       this.inherited(arguments);
-      console.debug("in vipsDialog");
+      //console.debug("in vipsDialog");
       
       this.app = dojo.clone(db.appStore.app());
       
@@ -73,7 +73,7 @@ define(
 
   	    }, this);
       } else {
-        console.log("show the empty list");
+        //console.log("show the empty list");
         dojo.removeClass(this.empty, "hidden");
       }
       

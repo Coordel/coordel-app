@@ -1,7 +1,7 @@
 define(["dojo"], function(dojo) {
     return {
   		init:function(elem, flag, target){
-  		  console.log("init fade", elem, flag, target);
+  		  //console.log("init fade", elem, flag, target);
   		  var self = this;
   			this.elem = elem;
   			clearInterval(this.elem.si);

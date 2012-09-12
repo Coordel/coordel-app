@@ -960,10 +960,14 @@ define("app/models/TaskModel",
 
     		if (t.status === "DONE" && (t.substatus === "APPROVED" || t.substatus === "DONE" || t.substatus === "FINISHED")){
     			isDone = true;
-    		} else if (t.status === "ARCHIVE" || t.status === "SOMEDAY"){
-    		  isDone = true;
-    		}
+    		} 
     		return isDone;
+    	},
+    	isSomeday: function(){
+    	  return (t.status === "SOMEDAY");
+    	},
+    	isArchive: function(){
+    	  return (t.status === "ARCHIVE");
     	},
     	isDeleted: function(){
     	  var t = this;
@@ -1403,7 +1407,7 @@ define("app/models/TaskModel",
           }
           
           dojo.when(save, function(args){
-            console.log("updating blocking", updatedTask);
+            //console.log("updating blocking", updatedTask);
             t.updateBlocking(updatedTask);
 
             dojo.publish("coordel/setPrimaryBoxCounts");
@@ -1435,7 +1439,7 @@ define("app/models/TaskModel",
         
         if (task.coordinates){
           
-          console.log("coordinates", task.coordinates, latest);
+          //console.log("coordinates", task.coordinates, latest);
           
     	    function getBlocker(task){
     	      var def = new dojo.Deferred();
@@ -1449,7 +1453,7 @@ define("app/models/TaskModel",
     	    
     	    function addBlocking(item){
     	      
-    	      console.log("adding blocking entry for", item.name, task.name);
+    	      //console.log("adding blocking entry for", item.name, task.name);
     
     	      if (!item.blocking){
     	        item.blocking = [];
@@ -1470,7 +1474,7 @@ define("app/models/TaskModel",
     	    }
     	    
     	    function removeBlocking(item){
-    	      console.log("removing blocking entry for", item.name, task.name);
+    	      //console.log("removing blocking entry for", item.name, task.name);
             if (item.blocking && dojo.indexOf(item.blocking, task._id) > -1){
               item.blocking = dojo.filter(item.blocking, function(id){
                 return id !== task._id;
@@ -1548,7 +1552,7 @@ define("app/models/TaskModel",
     	    }
     	  
     	  } else {
-    	    console.log("no coordinates", task);
+    	    //console.log("no coordinates", task);
     	    if (latest && latest.coordinates){
     	      //all of these were removed
     	      hasChange = true;
@@ -2438,7 +2442,7 @@ define("app/models/TaskModel",
     	      var def = new dojo.Deferred();
     	      var mod = db.get(task);
     	      dojo.when(mod, function(t){
-    	        console.log("t after get", t);
+    	        //console.log("t after get", t);
     	        var blocker = db.getTaskModel(t, true);
     	        blocker = coordel.task + ": "  + blocker.name + " | " + coordel.project + ": " + blocker.p.project.name;
     	        def.callback(blocker);

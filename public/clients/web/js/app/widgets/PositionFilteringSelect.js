@@ -132,7 +132,7 @@ dojo.declare(
       duration.number = this.altDropDown.durNumber.get("value");
       duration.unit = this.altDropDown.durationChoices.get("value");
       
-      console.log("adding duration", duration);
+      //console.log("adding duration", duration);
       
       this.onAddOption(duration);
     },

@@ -44,7 +44,7 @@ define(
           //console.debug("task deadline changed", prop, oldVal, newVal);
           //self.set("deadline", newVal);
           if (newVal){
-            console.log("new blueprint value", newVal);
+            //console.log("new blueprint value", newVal);
             //self.task.deadline = stamp.toISOString(new Date(newVal), {selector: "datetime"});
           } else {
            

@@ -201,7 +201,7 @@ define([
             group.show();
           }
 
-          console.debug("adding to list", task, group.focus);
+          //console.debug("adding to list", task, group.focus);
 
           group.addChild(new Task({
             focus: group.focus,

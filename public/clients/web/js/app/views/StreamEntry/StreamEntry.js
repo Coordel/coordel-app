@@ -31,7 +31,7 @@ define(
         
         if (!self.projectName){
           self.projectName = "";
-          console.log("project not found in StreamEntry", self);
+          //console.log("project not found in StreamEntry", self);
         }
         
         if (!self.contact){
@@ -45,7 +45,7 @@ define(
         
         //if the user clicks the project link, show the project 
         var pLink = dojo.connect(this.projectLink, "onclick", this, function(){
-  	      console.debug("showProject", this.project);
+  	      //console.debug("showProject", this.project);
   	      
   	    });
   	    

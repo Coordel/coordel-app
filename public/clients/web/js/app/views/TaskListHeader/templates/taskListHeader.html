@@ -4,17 +4,6 @@
 	<div class="c-text-center c-float-r" dojoAttachPoint="buttonContainer">
 		<span dojoAttachPoint="goTurbo" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconTurbo" style="margin-right: 6px" class="c-float-l" title="${coordel.goTurbo}" showLabel="false"></span>
 		<span dojoAttachPoint="cancelTurbo" dojoType="dijit.form.Button" iconClass="coordelHeaderIcon coordelHeaderIconCancelTurbo" style="margin-right: 6px" class="c-float-l hidden" title="${coordel.cancelTurbo}" label="${coordel.cancel}" showLabel="true"></span>
-		<span id="taskListViewButton" dojoAttachPoint="showView" showLabel="false" dojoType="dijit.form.DropDownButton" title="Show View" class="coordelHeaderDropDown c-float-r hidden" iconClass="coordelHeaderIcon coordelHeaderIconView" style="margin-left: 6px">
-			<div dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden">
-				<div>
-					<h3 class="menu-header">${coordel.projectActions.viewHeader}</h3>
-					<ul class="menu-items">
-							<li dojoAttachPoint="showTasks" class="sort-attribute selected"><ins></ins><a>${coordel.current}</a></li>
-							<li dojoAttachPoint="showSomeday" class="sort-attribute"><ins></ins><a>${coordel.someday}</a></li>
-							<li dojoAttachPoint="showArchive" class="sort-attribute"><ins></ins><a>${coordel.archive}</a></li>
-					</ul>
-				</div>
-			</div>
-		</span>
+	
 	</div>
 </div>

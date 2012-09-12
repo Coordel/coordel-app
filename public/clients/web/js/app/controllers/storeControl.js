@@ -13,7 +13,7 @@ define([
       init: function(){
     
         var self = this;
-        console.debug("storeControl init called", db);
+        //console.debug("storeControl init called", db);
         
         //the contact layout will show any tasks this person has in any of the current user's
         //projects

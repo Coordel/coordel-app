@@ -126,7 +126,7 @@ define(["dojo",
                     purpose = purpose.toLowerCase();
                     query = query.toLowerCase();
                     
-                    console.log("query: " + query, name, purpose);
+                    //console.log("query: " + query, name, purpose);
 
                     if (name.indexOf(query)> -1) has = true;
                     if (purpose.indexOf(query)>-1) has = true;
@@ -213,7 +213,7 @@ define(["dojo",
                 def.callback([]);
               } else {
                 post.then(function(res){
-                  console.log("got results from searchSharedTemplates", res);
+                  //console.log("got results from searchSharedTemplates", res);
                   //var results = util.sort(res.results, {sort: [{attribute:"name"}]});
                   var results = [];
                   if (res.results.length){

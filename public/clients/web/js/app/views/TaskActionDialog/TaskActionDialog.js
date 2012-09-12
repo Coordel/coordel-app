@@ -29,7 +29,7 @@ define([
     templateString: template,
     
     postMixInProperties: function(){
-      console.debug ("task action", this.action);
+      //console.debug ("task action", this.action);
       this.instructions = coordel.taskActions.instructions[this.action];
       
       //if this issue, then use the issue template
@@ -89,7 +89,7 @@ define([
     },
     
     save: function(){
-      console.debug("save called in TaskActionDialog", this.action, this.task);
+      //console.debug("save called in TaskActionDialog", this.action, this.task);
       var t = db.getTaskModel(this.task, true),
           task = this.task,
           message = "";

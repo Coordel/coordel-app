@@ -263,7 +263,7 @@ define(
           
           
           
-          console.debug("projectFormPeople onChange, pending user is", this.pendingUser);
+          //console.debug("projectFormPeople onChange, pending user is", this.pendingUser);
         
           var u = self.projectFormPeople.get("value");
           
@@ -301,9 +301,9 @@ define(
           var query = db.getUser(contact.email);
           
           dojo.when(query, function(user){
-            console.log("queried coordel user", user);
+            //console.log("queried coordel user", user);
             if (user){
-              console.log("coordel member, add to this user's app", user);
+              //console.log("coordel member, add to this user's app", user);
               
               var add = db.contactStore.addContact(user.app);
               dojo.when(add, function(){
@@ -313,7 +313,7 @@ define(
               });
             
             } else {
-              console.log("non-member, will do invite on save", contact);
+              //console.log("non-member, will do invite on save", contact);
             
               self.pendingContact = contact;
               setUser(contact, true);
@@ -465,12 +465,12 @@ define(
       
       _setTemplate: function(templateid){
         this.isBlueprint = true;
-        console.log("set template", templateid);
+        //console.log("set template", templateid);
         var def = db.getProjectFromBlueprint(templateid), 
             self = this;
             
         dojo.when(def, function(bp){
-          console.log("finished getting docs", bp);
+          //console.log("finished getting docs", bp);
           
           self.blueprint = bp;
           
@@ -583,7 +583,7 @@ define(
 
               dojo.connect(p.removeValue, "onclick", this, function(evt){
                 evt.stopPropagation();
-                console.log("remove");
+                //console.log("remove");
                 var dKey = -1;
                 dojo.forEach(self.project.assignments, function(assign, key){
                   if(assign.role === p.value.role){
@@ -622,7 +622,7 @@ define(
             dojo.connect(pill.removeValue, "onclick", function(){
               var removeId = pill.value;
               
-              console.log("removeId");
+              //console.log("removeId");
               
               //remove the user from the users collection
               self.project.users = dojo.filter(people, function(d){
@@ -777,7 +777,7 @@ define(
              //console.log("invited users", userList);
              dojo.forEach(userList, function(user){
                if (user[0]){
-                 console.log("invited user", user[1]);
+                 //console.log("invited user", user[1]);
                  p.project = p.invite(user[1].appId, p.project);
                  
                } else {
@@ -794,7 +794,7 @@ define(
         }
         
         function save(p){
-          console.log("saving project", p, self.isNew, self.isBlueprint);
+          //console.log("saving project", p, self.isNew, self.isBlueprint);
           var def = new dojo.Deferred();
           
           if (self.isBlueprint){

@@ -79,7 +79,7 @@ define([
       
       setTask: function(task){
         //TODO: animate sliding the turbo in when a task is set
-        console.debug("setTask in Turbo", task);
+        //console.debug("setTask in Turbo", task);
         
         //hide info if not checklist
         if (!this.isChecklist){
@@ -130,7 +130,7 @@ define([
       
       
       next: function(args){
-        console.log("turbo next args", args);
+        //console.log("turbo next args", args);
         //args will be {hasTask: true/false, isEmpty: true/false, task: {}}
         //if the task is false, then the wizard ends otherwise set the task
         if (!args.hasTask){
@@ -233,7 +233,7 @@ define([
       },
       
       deferTask: function(args){
-        console.debug("deferred args", args);
+        //console.debug("deferred args", args);
         var t = this.model,
             now = new Date(),
             date,

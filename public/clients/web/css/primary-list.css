@@ -12,11 +12,24 @@
 }
 
 #otherListFooter{
+  background-color: transparent;
+  padding: 0;
+}
+
+.primary-footer-views {
+  border-top: 1px solid #66727F;
+  background-color: transparent;
+  padding:0;
+  border-bottom: none;
+}
+
+.primary-footer {
   background: #b4b4b4 url(images/titlebar1.png) repeat-x;
   border-top: 1px solid #A3AAB1;
-  padding: 0;
   color: #66727F;
-  line-height: 1.8em;
+  line-height: 1.8em !important;
+  padding: 0;
+  border-bottom: none;
 }
 
 #leftOtherListTab {

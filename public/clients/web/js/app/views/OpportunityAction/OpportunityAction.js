@@ -38,7 +38,7 @@ define([
     postCreate: function(){
       this.inherited(arguments);
       
-      console.log("opportunity action", this.action);
+      //console.log("opportunity action", this.action);
       
       if (this.project.status === "PROJECT"){
         this.project = db.projectStore.store.get(this.project.project);
@@ -56,7 +56,7 @@ define([
     
     save: function(){
     
-      console.debug("save called in OpportunityAction", this.action, this.project);
+      //console.debug("save called in OpportunityAction", this.action, this.project);
       var p = db.getProjectModel(this.project, true),
           message = "",
           project = this.project,

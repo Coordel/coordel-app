@@ -46,7 +46,7 @@ define(
     },
     
     sendMessage: function(message, project){
-      console.debug("in StreamModel sendMessage", message, project);
+      //console.debug("in StreamModel sendMessage", message, project);
       var a = this._getMessage(message, project),
           db = this.db;
           
@@ -69,10 +69,10 @@ define(
   		  //unless there's a delegator then all three get the message
   		  a.users.push(task.delegator);
   		};
-      console.debug("here's the message to send", a, db.focus);
+      //console.debug("here's the message to send", a, db.focus);
       
       if (db.focus === "task"){
-        console.log("adding to streamStore.taskStore");
+        //console.log("adding to streamStore.taskStore");
         return db.streamStore.taskStore.add(a, {username: db.username()});
       }
   		return db.streamStore.store.add(a, {username: db.username()});

@@ -313,7 +313,7 @@ define(
           var canStart = false;
           var hasDisabled = false;
           dojo.forEach(this.task.workspace, function(del){
-            console.log("del name", del.name, count);
+            //console.log("del name", del.name, count);
             if (del.id !== self.deliverable.id && (!del.blockers || del.blockers.length === 0)){
               count += 1;
             }
@@ -416,7 +416,7 @@ define(
             this.blockersPane.addChild(new Label({value: coordel.deliverableMessages.blocked, "class": "c-margin-t"}));
           }
 
-          console.log("canStart", canStart);
+          //console.log("canStart", canStart);
           if (canStart){
             this.blockersPane.addChild(new Label({value: coordel.deliverableMessages.circular, "class": "c-margin-t"}));
           }

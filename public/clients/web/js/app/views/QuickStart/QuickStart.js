@@ -34,7 +34,7 @@ define(
             url: "/support/source.json",
             handleAs: "json",
             load: function(stepSource) {
-              console.log("source", stepSource);
+              //console.log("source", stepSource);
               self.steps = stepSource.features;
               
               /* here, obj will already be a JS object deserialized from the JSON response */

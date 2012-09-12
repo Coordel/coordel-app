@@ -657,10 +657,6 @@ define([
           }
         }, this);
         
-        console.debug("responsible", own);
-        console.debug("participants", part);
-        console.debug("followers", follow);
-        
         //add the responsible
         cont.addChild(new Assign({
           assignment: own,
