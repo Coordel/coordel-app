@@ -58,7 +58,7 @@ define(["dojo",
             	return this.store.query(query);
             },
             loadProjectStream: function(project){
-              //console.log("loadProjectStream called", project);
+              console.log("loadProjectStream called", project);
               var query = {
                 view: "coordel/projectStream",
             		startkey: [project, {}],

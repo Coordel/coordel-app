@@ -10,7 +10,6 @@ define(['dojo',
         'app/controllers/primaryNavControl',
         'app/controllers/streamControl',
         'app/views/RightHeader/RightHeader',
-    
         'dijit/Dialog',
         'app/views/TaskActionDialog/TaskActionDialog',
         "i18n!app/nls/coordel",
@@ -923,7 +922,7 @@ define(['dojo',
   				  break;
   				case "task":
   				  //taskStore - incoming change to one of my tasks
-  				  //console.debug("STATUS: ", chg.status);
+  				  //console.debug("STATUS: ", chg.status, db.focus);
   				  
   				  if (chg.username === app.username ||
   				        //if I'm the delegator then I need to know what happens to this task
@@ -1003,33 +1002,38 @@ define(['dojo',
   				  dojo.publish("coordel/taskNotify", [{task: chg}]);
   					break;
   				case "message":
-  				  //console.log("message", chg.updater ,app.username, db.focus);
+  				  console.log("message", chg.updater ,app.username, db.focus, db.streamStore.currentContextId);
   			
   				  //a message notify the stream store
   				  //if i sent it, it's an update, if I didn't send it , it's an add
   				  if (chg.updater !== app.username){
   				    //I didn't send this message, it's an add
-  				    if (db.focus === "project" && db.projectStore.streamStore){
-  				      db.projectStore.streamStore.notify(chg);
+  				    if (db.streamStore.currentContext === "projectStream" && chg.project === db.streamStore.currentContextId){
+  				      db.streamStore.projectStore.notify(chg);
   				    }
-  				    if (db.focus === "task" && db.streamStore.taskStore){
-  				        db.streamStore.taskStore.notify(chg);
+  				    if (db.streamStore.currentContext==="taskStream" && db.streamStore.currentContextId === chg.task){
+  				      db.streamStore.taskStore.notify(chg);
   				    }
   				    db.streamStore.store.notify(chg);
   				    //console.log("Notify Message ADD", chg);
   				    dojo.publish("coordel/streamNotify", [{message: chg}]);
   				  } else {
   				    
-  				    //console.log("Notify Message UPDATE");
-  				    if (db.focus === "project" && db.projectStore.streamStore && chg.project === db.projectStore.currentProject){
-  				      //db.projectStore.streamStore.notify(chg, chg._id);
+  				    console.log("Notify Message UPDATE", chg.project, db.streamStore.currentContextId, db.streamStore.currentContext);
+  				    if (db.streamStore.currentContext === "projectStream" && chg.project === db.streamStore.currentContextId){
+  				      console.log("notifying streamStore");
+  				      db.streamStore.projectStore.notify(chg, chg._id);
+  				      
   				    }
   				    
-  				    if (db.streamStore.currentContext==="task" && db.streamStore.currentContextId === chg.task){
-  				      //db.streamStore.taskStore.notify(chg, chg._id);
+  				    if (db.streamStore.currentContext==="taskStream" && db.streamStore.currentContextId === chg.task){
+  				      console.log("notifying streamStore");
+  				      db.streamStore.taskStore.notify(chg, chg._id);
+  				    
   				    }
   				    
   				    db.streamStore.store.notify(chg, chg._id);
+  				    dojo.publish("coordel/streamNotify", [{message: chg}]);
   				    //I sent it, it's an update
   				    //db.streamStore.store.notify(chg, chg._id);
   				  }

@@ -111,8 +111,14 @@ define([
           self._showQuickEntry();
   
     	    var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
-          //check if we should show the right column
-    	    self.setRightColumn(showColumn);
+    	    
+    	    //load the task stream
+    		  dojo.when(db.streamStore.loadProjectStream(self.project._id), function(res){
+    		    //check if we should show the right column
+      	    self.setRightColumn(showColumn);
+    		  });
+    	    
+          
     	    
     	    
           self.setView(self.view);
@@ -120,23 +126,23 @@ define([
           //handle click of the people and roles tabs
           self.connections.push(dojo.connect(dojo.byId("projInfoTab"), "onclick", this, function(evt){
             //console.debug("clicked info", evt);
-            if (dojo.hasClass(evt.target, "inactive")){
+            //if (dojo.hasClass(evt.target, "inactive")){
               self.showInfo();
-            }
+            //}
           }));
 
           self.connections.push(dojo.connect(dojo.byId("projRolesTab"), "onclick", this, function(evt){
             //console.debug("clicked roles", evt);
-            if (dojo.hasClass(evt.target, "inactive")){
+            //if (dojo.hasClass(evt.target, "inactive")){
               self.showRoles();
-            }
+            //}
           }));
 
           self.connections.push(dojo.connect(dojo.byId("projStreamTab"), "onclick", this, function(evt){
             //console.debug("clicked stream", evt);
-            if (dojo.hasClass(evt.target, "inactive")){
+            //if (dojo.hasClass(evt.target, "inactive")){
               self.showStream();
-            }
+            //}
           }));
           
           //handle click of sendProjMessageButton
@@ -291,9 +297,9 @@ define([
       
       handleStreamNotify: function(args){
         //console.log("stream notify", args);
-        if (args.message.project === this.project._id){
+        //if (args.message.project === this.project._id){
           this.showStream();
-        }
+        //}
       },
       
       handleViewChange: function(args){
@@ -712,6 +718,8 @@ define([
       },
       
       showStream: function(){
+        console.log("show project stream");
+        
   		  var node = dijit.byId("projDetailsStream"),
   		      store = db.projectStore;
   		  
@@ -720,12 +728,14 @@ define([
     		    node.destroyDescendants();
     		  }
 
-          var messages= store.streamMemory.query(null, {sort:[{attribute: "time", descending: true}]});
-
-          node.addChild(new Stream({
-            stream: messages
-          }));
-
+          var messages= db.streamStore.projectMemory.query(null, {sort:[{attribute: "time", descending: true}]});
+          
+          dojo.when(messages, function(){
+            node.addChild(new Stream({
+              stream: messages
+            }));
+          });
+          
     		  dojo.removeClass("projDetailsToolbar", "hidden");
           this._openStreamTab();
   		  }

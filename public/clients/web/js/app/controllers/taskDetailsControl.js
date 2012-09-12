@@ -117,25 +117,25 @@ define([
       //checklist
       dojo.connect(dojo.byId("checklistTab"), "onclick", this, function(evt){
         //console.debug("clicked checklist", evt);
-        if (dojo.hasClass(evt.target, "inactive")){
+        //if (dojo.hasClass(evt.target, "inactive")){
           this.showChecklist();
-        }
+        //}
       });
       
       //notes
       dojo.connect(dojo.byId("notesTab"), "onclick", this, function(evt){
         //console.debug("clicked notes", evt);
-        if (dojo.hasClass(evt.target, "inactive")){
+        //if (dojo.hasClass(evt.target, "inactive")){
           this.showNotes();
-        }
+        //}
       });
       
       //stream
       dojo.connect(dojo.byId("streamTab"), "onclick", this, function(evt){
         //console.debug("clicked stream", evt);
-        if (dojo.hasClass(evt.target, "inactive")){
+        //if (dojo.hasClass(evt.target, "inactive")){
           this.showStream();
-        }
+        //}
       });
       
       dojo.connect(dijit.byId("taskSendMessageButton"), "onClick", this, function(){
@@ -190,10 +190,10 @@ define([
 		},
 	
 	  handleStreamNotify: function(args){
-      //console.log("stream notify", args);
-      if (args.message.task === this.task._id){
+      console.log("stream notify", args);
+      //if (args.message.task === this.task._id){
         this.showStream();
-      }
+      //}
     },
 		
 		updateRight: function(){
@@ -590,11 +590,11 @@ define([
       var stream = db.streamStore.taskMemory.query(null, {sort:[{attribute: "time", descending: true}]});
   
       //console.debug("stream in taskDetailsControl", stream);
-      
-      node.addChild(new Stream({
-        stream: stream
-      }));
-      
+      dojo.when(stream, function(){
+        node.addChild(new Stream({
+          stream: stream
+        }));
+      });
 		}
 	};
 });
