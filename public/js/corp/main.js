@@ -153,11 +153,26 @@ define([
       		show("nav-about");
       		break;
       		
+      		case "membership":
+      		show("nav-membership");
+      		showSubNav("sub-nav-membership");
+      		break;
+      		
       		case "pricing":
+      		showParent("nav-membership");
       		show("nav-pricing");
+      		showSubNav("sub-nav-membership");
+      		break;
+      		
+      		case "advocate":
+      		showParent("nav-membership");
+      		show("nav-advocate");
+      		showSubNav("sub-nav-membership");
       		break;
       		
       		case "business":
+      		showParent("nav-opportunity");
+      		showSubNav("sub-nav-opportunity");
       		show("nav-business");
       		break;
       		

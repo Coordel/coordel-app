@@ -393,6 +393,18 @@ img.right,img.alignright {margin: 0 0 15px 12px;}
 	text-decoration: none;
 }
 
+#nav-home a {
+  height: 16px;
+  width: 20px;
+  display: inline-block;
+  background: url('img/home.png') no-repeat center center;
+  padding: 0;
+}
+
+#nav-home a:hover {
+  background-image: url('img/home-h.png');
+}
+
 #nav1 a {
 	color: #BBB;
 	padding: 10px 12px 12px;

@@ -573,10 +573,7 @@ define(["dojo",
     	        taskList: latest,
     	        showChecklist: self.sortOptions.showChecklist,
     	        showProjectLabel: self.showProjectLabel
-    	      }).placeAt("taskListMain");
-            
-            
-            
+    	      }).placeAt("taskListMain");   
             
           } else {
             self.showEmptyTasks();
@@ -616,11 +613,11 @@ define(["dojo",
            });
         } else if (self.primaryNavName === "done"){
           db.taskStore.getDone().then(function(done){
-             //console.log("done tasks", archive);
-             self._showTasks(done, "done");
-           });
+            //console.log("done tasks", archive);
+            self._showTasks(done, "done");
+          });
         } else if (self.primaryNavName === "all"){
-          dojo.when(db.taskStore.memory.query({db: db, focus: "all"}, {sort: [{attribute: "name"}]}), function(all){
+          dojo.when(db.taskStore.memory.query({db: db, focus: "active"}, {sort: [{attribute: "name"}]}), function(all){
             all = all.filter(function(task){
               return task.username === db.username();
             });

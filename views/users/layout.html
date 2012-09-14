@@ -48,7 +48,7 @@
   	    require(["dojo", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dojo, cookie, corp){
   	      dojo.removeClass("bnLogin", "hidden");
   	      corp.setBackground();
-  	      
+  	      corp.setSpotlightSidebar();
   	      //if the current location is the registration page, then we need to hide the join us button
   	      /*
   	      if (window.location.pathname === "/register" || window.location.pathname === "/reset"){
@@ -179,13 +179,15 @@
 
         			<div id="nav1">
 
-        				 <ul>
-                  	<li id="nav-home"><a href="/">Home</a></li>
-                  	<!--<li id="nav-about"><a href="/?p=about">About</a></li>
-                  	<li id="nav-pricing"><a href="/?p=pricing">Pricing</a></li>-->
-                  	<li id="nav-business"><a href="/?p=business">Your Coordel Business</a></li>
-                  	<li id="nav-tour"><a href="/?p=tour">Features</a></li>
-                  </ul>
+        				<ul>
+                	<li id="nav-home"><a href="/"></a></li>
+
+                	<li id="nav-productivity"><a href="/?p=productivity">Productivity</a></li>
+                	<li id="nav-opportunity"><a href="/?p=opportunity">Opportunity</a></li>
+                	<!--<li id="nav-membership"><a href="/?p=pricing">Membership</a></li>
+                	<li id="nav-about"><a href="/?p=about">About</a></li>-->
+                </ul>
+
 
         				<div class="clearer">&nbsp;</div>
 
@@ -200,48 +202,54 @@
                   <div class="clearer"></div>
     				    </div>
   		        </div>
-  		        <div class="right" id="content_sidebar">
-  		          <div id="sidebar">
+  		        <div class="right" id="sidebar_outer">
+        				<div id="sidebar">
 
         					<div class="box">
+
+        						<div class="box_title">Productivity Spotlight</div>
+
+        						<div class="box_content">
+        							<ul id="spotlight" class="capitalize">
+
+        							</ul>
+        						</div>
+
+        					</div>
+        				  <!--
+        					<div class="box">
+
+        						<div class="box_title">Coordel Opportunities</div>
+
+        						<div class="box_content">
+        							<ul id="coordelOpps">
+
+        							</ul>
+        						</div>
+
+        					</div>
+      					-->
+                  <div class="box">
 
         						<div class="box_title">Case Studies</div>
 
         						<div class="box_content">
         							<ul>
-        								<li><a>Independent Contractor</a></li>
-        								<li><a>Employed Full Time</a></li>
-        								<li><a>Spare Time Expert</a></li>
-        								<li><a>Consultant</a></li>
+        								<li id="nav-employed"><a href="/?p=employed">Full Time Employees</a></li>
+        								<li id="nav-contract"><a href="/?p=contract">Independent Contractors</a></li>
+        								<li id="nav-consult"><a href="/?p=consult">Consultants</a></li>
         							</ul>
         						</div>
-
         					</div>
-
-        					<div class="box">
-
-        						<div class="box_title">Current Opportunities</div>
-
-        						<div class="box_content">
-        							<ul>
-        								<li><a>User Interface Design and Usability</a></li>
-        								<li><a>Continuous Deployment Platform</a></li>
-        								<li><a >Coordel API</a></li>
-        								<li><a>Coordel Web Clients</a> </li>
-        								<li><a>Payments Integrations</a></li>
-        							</ul>
-        						</div>
-
-        					</div>
-
 
 
 
         				</div>
-  		        </div>
-  				    
-  			      <div class="clearer">&nbsp;</div>
-  		      </div>
+        			</div>
+
+        			<div class="clearer">&nbsp;</div>
+
+        		</div>
   			    <div id="dashboard" class="splash">
   				    <div id="dashboard_inner">
   					    <button id="joinUs" class="c-float-r corp-contrast hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us Free for 30 Days
@@ -268,7 +276,7 @@
   	    </div>
   	    <div id="footer" class="splash">
   		    <div class="left">
-  			    &copy; 2012 <a href="http://www.coordel.com">Coordel</a> - do what you love
+  			    &copy; 2012 <a href="/">Coordel</a> - do what you love
   		    </div>
   		    <div class="clearer">&nbsp;</div>
   	    </div>
