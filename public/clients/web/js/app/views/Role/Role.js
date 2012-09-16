@@ -25,7 +25,7 @@ define(
         
         var self = this;
         
-        //console.debug("in Role: ", this.role);
+        console.debug("in Role: ", this.role);
         
         this.setResps();
         
@@ -55,7 +55,7 @@ define(
           dojo.forEach(resps, function(r){
             //console.log("setResps", r.task);
             var t = db.projectStore.taskStore.get(r.task);
-
+						
             var resp = new R({
               task: t
             }).placeAt(this.roleResps);
@@ -66,6 +66,7 @@ define(
           this.onEmpty();
           
         }
+
         
       },
       

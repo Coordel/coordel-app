@@ -24,7 +24,7 @@ require({
     }
   ],
 
-  // set the path for the require plugins—text, i18n, etc.
+  // set the path for the require plugins text, i18n, etc
   paths: {
     text: 'requirejs-0.24.0/text',
     i18n: 'requirejs-0.24.0/i18n'

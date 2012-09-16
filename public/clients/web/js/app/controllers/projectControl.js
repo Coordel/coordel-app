@@ -693,6 +693,7 @@ define([
         this._openTab("projRolesTab");
         this.tabFocus = "rolesTab";  
         dijit.byId("prMain").selectChild("projDetailsRoles");
+				dijit.byId("rightDetailsLayout").resize();
       },
       
       showInfo: function(){

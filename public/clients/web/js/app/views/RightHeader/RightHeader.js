@@ -108,6 +108,11 @@ define(
           dojo.publish("coordel/support", ["showEmailIntegration"]);
         });
         
+        dojo.connect(this.supDemos, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          dojo.publish("coordel/support", ["showDemos"]);
+        });
+        
         dojo.connect(this.optPreferences, "onclick", this, function(){
           this.coordelUserPreferences.closeDropDown();
           dojo.publish("coordel/support", ["preferences"]);
@@ -172,15 +177,10 @@ define(
           d.show();
         });
         
-        dojo.connect(this.blueprints, "onclick", this, function(){
-          this.coordelUserPreferences.closeDropDown();
-          //console.log("show blueprints");
-        });
-        
         dojo.connect(this.refresh, "onclick", this, function(){
           //do not disturb is off, click this to activate
           this.coordelUserPreferences.closeDropDown();
-          	dojo.addClass(document.body, "loading login");
+          dojo.addClass(document.body, "loading login");
           dijit.byId("outerLayout").destroyRecursive();
           //setTimeout(1000, dojo.publish("coordel/refresh"));
           dojo.publish("coordel/refresh");

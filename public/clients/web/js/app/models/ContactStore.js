@@ -70,6 +70,8 @@ define(["dojo",
               	username: this.username
               };
 
+							//console.log("getting contact="+contact + " for username="+this.username);
+
               return this.taskStore.query(queryArgs);
             },
             search: function(query){

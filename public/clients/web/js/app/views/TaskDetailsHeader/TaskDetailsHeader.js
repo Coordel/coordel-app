@@ -125,12 +125,13 @@ define([
         //or approves if project responsible. There won't be a message when checking the box
         //the user can give a message by choosing submit or approve from actions menu
         dojo.connect(this.markDone, "onClick", this, function(){
+          this.goBackToFocus();
           
-          var t = db.getTaskModel(this.task, true);
+					var t = db.getTaskModel(this.task, true);
           
           t.markDone(this.task);
           
-          this.goBackToFocus();
+          
         });
     
         dojo.connect(this.showChecklistNotes, "onClick", this, function(){

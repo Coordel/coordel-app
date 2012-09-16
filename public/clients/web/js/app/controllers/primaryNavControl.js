@@ -48,11 +48,11 @@ define(['dojo',
   
     setTurboHandler: null,
   
-    taskListControl: tControl,
+    //taskListControl: tControl,
   
-    taskDetailsControl: tdControl,
+    //taskDetailsControl: tdControl,
     
-    storeControl: sControl,
+    //storeControl: sControl,
   
     primaryBoxes: null,
   
@@ -218,8 +218,6 @@ define(['dojo',
         search = args.search;
         searchBlueprint = args.searchBlueprint;
       } 
-      
-      //console.log("focus", args);
     
       this.currentArgs.focus  = focus;
       this.currentArgs.name = name;
@@ -291,7 +289,10 @@ define(['dojo',
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
         
-        c = this.taskDetailsControl;
+        //c = this.taskDetailsControl;
+				c = tdControl;
+				
+				tControl.isActive = false;
       
         if (c.showRightColumnHandler){
           dojo.unsubscribe(c.showRightColumnHandler);
@@ -316,11 +317,14 @@ define(['dojo',
         */
       } else if (name === "store"){
         db.projectStore.currentProject = "";
-        c = this.storeControl;
+        //c = this.storeControl;
+				c = sControl;
         c.init(focus);
         //console.debug("after storeControl init");
         
       } else {
+				
+				tControl.isActive = true;
         
         //shim in the search capability of the blueprints search should probably be elsewhere
         if (this.currentArgs.focus === "task-blueprints"){
@@ -344,8 +348,8 @@ define(['dojo',
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
       
-        c = this.taskListControl;
-        
+        //c = this.taskListControl;
+        c = tControl;
         c.search = this.currentArgs.search;
         c.searchBlueprint = this.currentArgs.searchBlueprint;
         c.primaryNavName = name;
@@ -455,8 +459,6 @@ define(['dojo',
       var goToCurrent = false;
       
       var curFocus = db.focus;
-    
-      //console.debug("updating primary box counts", curFocus);
       
       db.focus = "task";
   

@@ -539,7 +539,7 @@ define("app/models/TaskModel",
     				//console.debug("testing blocker", c);
     				if (!c.isReady()){
     					isBlocked = true;
-    					//console.log(t.name + " BLOCKER " + c.name + " NOT READY");
+    					//console.log(t.name + " BLOCKER " + c.name + " NOT READY", t);
     				}
     				//make sure the blocker has been saved once if it's not done or cancelled. 
     				//if not, it's not ready
@@ -570,6 +570,11 @@ define("app/models/TaskModel",
   		  if (t.isUnassigned()){
   		    return false;
   		  }
+				
+				if (t.status === "PENDING"){
+					//console.log("it's pending, project invite should be true");
+					return true;
+				}
          
         dojo.forEach(p.project.assignments, function(assign){
           //console.debug(t.name, assign.status);

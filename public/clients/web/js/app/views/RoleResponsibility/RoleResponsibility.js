@@ -32,7 +32,7 @@ define(
         */
         
         if (!this.task){
-          //console.debug("ERROR: no task was provided to RoleResponsiblility view");
+          console.debug("ERROR: no task was provided to RoleResponsiblility view");
         }
         
         self.setResponsibility();
@@ -54,21 +54,25 @@ define(
       },
       
       setResponsibility: function(){
-        dojo.removeClass(this.purpose, "hidden");
+				
+       
         if (this.task.name === undefined){
           console.debug("ERROR: undefined name", this.task);
         }
-        this.name.innerHTML = this.task.name;
-        
-        if (!this.task.purpose || this.task.purpose.length === 0){
-          dojo.addClass(this.purpose, "hidden");
-        } else if (this.task.purpose){
+				
+				if (this.task.name && this.task.name.length){
+					 this.name.innerHTML = this.task.name;
+				}
+       
+				
+				if (this.task.purpose && this.task.purpose.length){
+					dojo.removeClass(this.purpose, "hidden");
           this.purpose.innerHTML = this.task.purpose;
-        }
+				}
         
         //if this task has deliverables defined, list them here;
         
-        if (this.task.workspace && this.task.workspace.length > 0){
+        if (this.task.workspace && this.task.workspace.length){
           this._clear(this.deliverables);
           dojo.removeClass(this.deliverables, "hidden");
           

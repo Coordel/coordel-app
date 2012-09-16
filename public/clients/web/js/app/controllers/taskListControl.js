@@ -113,6 +113,9 @@ define(["dojo",
         //}
       });
           
+			//listen for task changes
+			this.subscribeHandlers.push(dojo.subscribe("coordel/taskNotify", this, "handleTaskNotify"));
+
       //listen for sortChange
       this.subscribeHandlers.push(this.sortChangeHandler = dojo.subscribe("coordel/sortChange", this, "setSortOrder"));
       
@@ -131,6 +134,18 @@ define(["dojo",
       this.isInitialized = true;
     
     },
+
+		handleTaskNotify: function(){
+			//if there are task changes and the focus is current, need to make sure that the list refreshes in case
+			//any of them have become current because of the incoming change
+			console.log("handleTaskNotify", this.focus, db.focus);
+			var focus = this.focus;
+			if (focus === "current"){
+				if (this.isActive){
+					this.showTaskList(focus);
+				}
+			}
+		},
     
     _showTab: function(tabId){
       
@@ -492,7 +507,7 @@ define(["dojo",
           map,
           self = this;
       
-      if (cont.hasChildren()){
+      if (cont && cont.hasChildren()){
         cont.destroyDescendants();
       }
       
@@ -1017,23 +1032,27 @@ define(["dojo",
       this._showTab("streamTab");
       
       //console.debug("store data", db.streamStore.memory.data.length);
-    
-      var stream = db.streamStore.memory.query("all", {sort: [{attribute: "time", descending: true}]});
-      //var stream = db.streamStore.loadUserStream();
-      
-      
-      dojo.when(stream, function(resp){
-        //console.debug("stream", resp.length);
-        self._updateStream(resp);
 
-        var handler = resp.observe(function(entry, removedFrom, insertedInto){
-          //console.debug("stream observed, entry: ", entry, "removedFrom: ", removedFrom, "insertedInto: ", insertedInto);
-          if (insertedInto > -1){
-            handler.cancel();
-            self.showStream();
-          }
-        });
-      });
+			db.streamStore.loadUserStream().then(function(){
+				var stream = db.streamStore.memory.query("all", {sort: [{attribute: "time", descending: true}]});
+	      //var stream = db.streamStore.loadUserStream();
+
+
+	      dojo.when(stream, function(resp){
+	        //console.debug("stream", resp.length);
+	        self._updateStream(resp);
+
+	        var handler = resp.observe(function(entry, removedFrom, insertedInto){
+	          //console.debug("stream observed, entry: ", entry, "removedFrom: ", removedFrom, "insertedInto: ", insertedInto);
+	          if (insertedInto > -1){
+	            handler.cancel();
+	            self.showStream();
+	          }
+	        });
+	      });
+			});
+    
+      
     },
     
     _updateStream: function(stream){

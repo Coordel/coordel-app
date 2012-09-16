@@ -6,11 +6,10 @@
     db.load("/coordel/view/opportunities",{ query: {limit: 50, descending: true},
         handleAs: "json"
       }).then(function(data){
-        console.log("opportunities", data, data.rows);
+  
         if (data.rows && data.rows.length){
           
           if (data.rows.length === 0){
-            console.log("it's one");
             dc.add("opp-instructions", "hidden");
             dc.add("opp-list", "hidden");
             dc.remove("empty-notice", "hidden");

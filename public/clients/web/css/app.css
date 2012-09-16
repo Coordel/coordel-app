@@ -44,6 +44,7 @@
 @import 'support.css';
 @import 'preferences.css';
 @import 'tutorial.css';
+@import 'demo.css';
 
 /*FEEDBACK tab should hide when loading*/
 .loading #fdbk_tab, .login #fdbk_tab{
@@ -108,8 +109,11 @@ hr {
 }
 
 
+.dj_gecko .tasklist-item.c-ellipsis {
+	white-space: normal !important;
+}
 .c-ellipsis{
-	/*white-space: nowrap;*/
+	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }

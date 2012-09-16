@@ -42,7 +42,7 @@ define(
                 
               });
                 
-              self.setStep(2);
+              self.setStep(1);
             },
             error: function(err) {
                 /* this will execute if the response couldn't be converted to a JS object,

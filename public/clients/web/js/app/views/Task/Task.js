@@ -981,7 +981,7 @@ define(
               dojo.removeClass(self.linkIcon,"hidden");
             }
             
-            if (show){
+            if (show && self.metaProjectInfo){
               dojo.removeClass(self.metaProjectInfo, "hidden");
               self.metaProjectInfo.innerHTML = project.name + " : ";
             }

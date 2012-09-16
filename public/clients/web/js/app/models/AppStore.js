@@ -47,6 +47,30 @@ define(["dojo",
               return this._app;
           
             },
+
+						getDemos: function(){
+							//console.log("getting demos");
+						 	var remote = new couch({
+                    target: this.db, 
+                    idProperty: "_id"
+                  });
+
+              var queryArgs = {
+                view: "coordel/demoTemplates",
+            		include_docs: true
+            	};
+
+            	return remote.query(queryArgs);
+						},
+						
+						addDoc: function(demo){
+							var remote = new couch({
+                    target: this.db, 
+                    idProperty: "_id"
+                  });
+
+            	remote.add(demo, {username: this.username});
+						},
             
             _loadApp: function(){
               var self = this;

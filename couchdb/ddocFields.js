@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.124",
+  version: "0.1.129",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -878,6 +878,18 @@ module.exports = {
         }
       }
     },
+
+		demoTemplates: {
+			//demo templates are used by the demo control in the app and by the demos app
+			//they are just altered blueprints whose doctype has been changed to demoTemplate,
+			//and has isUserTemplate, isPublic, isDefault deleted. isActive is there to be able to turn templates 
+			//on and off
+      map: function(doc){
+        if (doc.docType === "demoTemplate" && doc.isActive){
+          emit([doc.name, doc.created], doc);
+        }
+      }
+    },
     
     userFeedbackAvg: {
       map: function(doc) {
@@ -972,13 +984,11 @@ module.exports = {
     userContactProjects: {
       map: function(doc) {
 
-      	if (doc.docType === "project"){
+      	if (doc.docType === "project" && !doc.isMyPrivate){
       	 
       	  doc.users.forEach(function(username){
-      	    var test = {};
       	    doc.users.forEach(function(contact){
-      	      if (username !== contact && !test[doc._id] && !doc.isMyPrivate) {
-      	        test[doc._id] = true;
+      	      if (username !== contact) {
       	        emit([username, contact, doc._id], doc._id);
       	      }
       	    });

@@ -1,0 +1,17 @@
+.demolist .demolist-footer {
+	padding: 8px;
+}
+
+.demo {
+	padding: 8px;
+	min-height: 2.6em;
+	background-color: #f9f9f9;
+	border-bottom: 1px solid #CCC;
+	border-top: 1px solid #F9F9F9;
+}
+
+.demo-name {
+	line-height: 2.2em;
+	font-size: 14px;
+	font-weight: bold;
+}

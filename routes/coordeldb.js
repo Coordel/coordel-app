@@ -257,19 +257,23 @@ module.exports = function(app, validate){
     
     var user = req.query.username;
     var contact = req.query.contact;
-    
+    console.log("got request for contact="+contact + " for username="+user);
     //we need to get the user/contact projects
     //console.log('queryString params', req.query, opts);
     couch.view('coordel/userContactProjects', {startkey: [user, contact], endkey:[user,contact,{}]}, function(err, resView){
+		
       var projects = [],
           tasks = [],
           toReturn;
    
       if (err){
+				console.log("err", err);
         toReturn = {rows: [], error: err};
       } else if (!resView){
+				console.log("no res view");
         toReturn = {rows: [], error: "unexpected error"};
       } else {
+				console.log("userContactProjects", resView);
         if (resView.rows & resView.rows.length > 0){
           resView.rows.forEach(function(row){
             //console.log("IN FOR EACH ROWS", row);
@@ -282,6 +286,8 @@ module.exports = function(app, validate){
           });
         }
       }
+
+			console.log("projects in common", projects);
       
       //load the contact tasks and filter them
       couch.view('coordel/contactTasks', {startkey: [contact], endkey:[contact,{}], include_docs: true}, function(err, resTasks){
@@ -291,18 +297,21 @@ module.exports = function(app, validate){
         } else if (!resView){
           toReturn = {rows: [], error: "unexpected error"};
         } else {
+					console.log("resTasks", resTasks.length);
           if (resTasks.rows & resTasks.rows.length){
             resTasks.rows.forEach(function(row){
-              //console.log("IN FOR EACH ROWS", row);
+              
               if (projects.indexOf(row.project) > -1){
+								console.log("IN FOR EACH ROWS SUCCESS", row.name);
                 tasks.push(row);
               }
               
             });
           } else if (resTasks && resTasks.length){
             resTasks.forEach(function(row){
-              //console.log("IN FOR EACH", row);
+              
               if (projects.indexOf(row.project) > -1){
+								console.log("IN FOR EACH SUCCESS", row.name);
                 tasks.push(row);
               }
             });

@@ -22,7 +22,7 @@ define(
       
       steps: {},
       
-      currentStep: 1,
+      currentStep: 0,
       
       totalSteps: 13,
       

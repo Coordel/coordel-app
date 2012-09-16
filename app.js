@@ -93,7 +93,7 @@ everyauth
       return promise;
     })
     .registerUser( function (newUserAttrs) {
-      var login = newUserAttrs[this.loginKey()];
+  
       var promise = this.Promise();
       newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){

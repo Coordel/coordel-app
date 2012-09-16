@@ -105,6 +105,11 @@ define([
         "class": "rightFooter",
         content: "<div>&nbsp;</div>"
       }).placeAt(prContain);
+			
+			prFoot.startup();
+			prMain.startup();
+			prHead.startup();
+			prContain.startup();
 
       details.startup();
       cont.resize();

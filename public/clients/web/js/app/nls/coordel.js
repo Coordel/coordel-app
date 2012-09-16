@@ -135,6 +135,7 @@ define({
 	  quickStart: "Quick Start Guide",
 	  tutorial: "Feature Tutorial",
 	  emailIntegration: "E-mail Integration",
+	  demos: "Demos",
 	  emailUpdates: "E-mail Updates",
 	  logout: "Logout",
 	  deadlineCalendar: "Deadline Calendar",

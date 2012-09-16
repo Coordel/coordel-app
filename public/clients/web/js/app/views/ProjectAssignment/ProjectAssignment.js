@@ -121,18 +121,21 @@ define(
             //set the status
             if (status === "ACCEPTED"){
               //no need to show accepted only show new or change cases
-              display = "&nbsp;";
+              display = "";
             }
 
             if (status === "DECLINED" || status === "LEFT"){
               //add red to status
-              dojo.addClass(this.status, "c-color-error");
+              dojo.addClass(self.status, "c-color-error");
             } else if (status === "INVITE" || status === "PROPOSED" || status === "AGREED" || status === "AMENDED"){
               //add purple to status
-              dojo.addClass(this.status, "c-color-purple");
+              dojo.addClass(self.status, "c-color-purple");
             }
 
             self.status.innerHTML = display;
+						if (display && display.length){
+							dojo.removeClass(self.statusContainer, "hidden");
+						}
           },
           //error case
           function(err){

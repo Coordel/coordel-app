@@ -25,8 +25,9 @@ define(['dojo',
         "app/views/OpportunityAction/OpportunityAction",
         "dojo/cookie",
         "app/views/QuickStart/QuickStart",
-        "app/views/PersonalInfo/PersonalInfo"], 
-        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie, QuickStart, PersonalInfo) {
+        "app/views/PersonalInfo/PersonalInfo",
+				"app/views/DemoList/DemoList"], 
+        function (dojo, defList, dijit, layout, login, db, t, tl, p, pNavControl, streamControl, rh, Dialog, ActionDialog, coordel, cDialog, ProjectForm, ProjectAction, PersonForm, vDialog, Tutorial, Preferences, TaskForm, ContainerPane, OpportunityAction, cookie, QuickStart, PersonalInfo, DemoList) {
 	
 	var app = {
 	  username: null,//should be null and set when user logs in
@@ -142,25 +143,23 @@ define(['dojo',
 	    //any time based values (i.e. timeago) use this hearbeat
 	    this.interval = setInterval(dojo.hitch(self, self._timeUpdate), 60000);
 	    
-	  	//listen for logout
-	  	this.handlers.push(dojo.subscribe("coordel/logout", this, "doLogout"));
-	  	
-	  	//listen for task actions
-	  	this.handlers.push(dojo.subscribe("coordel/taskAction", this, "doTaskAction"));
-	  	
-	  	//listen for project actions
-	  	this.handlers.push(dojo.subscribe("coordel/projectAction", this, "doProjectAction"));
-	  	
-	  	//listen for opportunity actions
-  	  this.handlers.push(dojo.subscribe("coordel/opportunityAction", this, "doOpportunityAction"));
-	  	
-	  	//listen for project edit
-	  	this.handlers.push(dojo.subscribe("coordel/editProject", this, "handleEditProject"));
-	  	
-	  	//listen for addObject actions
-	  	this.handlers.push(dojo.subscribe("coordel/addObject", this, "addObjectAction"));
-	  	
-	  	//listen for sound requiest
+      //listen for logout
+      this.handlers.push(dojo.subscribe("coordel/logout", this, "doLogout"));
+      
+      //listen for task actions
+      this.handlers.push(dojo.subscribe("coordel/taskAction", this, "doTaskAction"));
+      
+      //listen for project actions
+      this.handlers.push(dojo.subscribe("coordel/projectAction", this, "doProjectAction"));
+      //listen for opportunity actions
+      this.handlers.push(dojo.subscribe("coordel/opportunityAction", this, "doOpportunityAction"));
+      //listen for project edit
+      this.handlers.push(dojo.subscribe("coordel/editProject", this, "handleEditProject"));
+      
+      //listen for addObject actions
+      this.handlers.push(dojo.subscribe("coordel/addObject", this, "addObjectAction"));
+			
+			//listen for sound requiest
 	  	this.handlers.push(dojo.subscribe("coordel/playSound", this, "playSound"));
 	  	
 	  	//listen for alerts clear
@@ -517,6 +516,10 @@ define(['dojo',
 	      template = "support/emailIntegration.html";
 	      //console.log("show email integration");
 	      break;
+	      
+	      case "showDemos":
+	      title = coordel.demos;
+	      break;
 	    }
 	    
 	    if (args === "showTutorial"){
@@ -557,7 +560,22 @@ define(['dojo',
   	        d.destroy();
   	      }
   	    });
-	    }else {
+	    } else if (args === "showDemos") {
+		
+				//console.log("show demos");
+				
+				 d = new vDialog({
+	  	      title: title,
+	  	      style: {width: "560px"},
+	  	      content: new DemoList(),
+	  	      onCancel: function(){
+	  	        d.destroy();
+	  	      }
+	  	    });
+				
+				
+				
+			} else {
 	      d = new vDialog({
   	      title: title,
   	      content: new QuickStart(),
@@ -922,7 +940,7 @@ define(['dojo',
   				  break;
   				case "task":
   				  //taskStore - incoming change to one of my tasks
-  				  //console.debug("STATUS: ", chg.status, db.focus);
+  				  console.debug("STATUS: ", chg.status, db.focus);
   				  
   				  if (chg.username === app.username ||
   				        //if I'm the delegator then I need to know what happens to this task
