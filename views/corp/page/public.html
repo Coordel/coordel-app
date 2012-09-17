@@ -6,10 +6,13 @@
     db.load("/coordel/view/opportunities",{ query: {limit: 50, descending: true},
         handleAs: "json"
       }).then(function(data){
+        console.log("data", data);
+        //data.rows = [];
   
-        if (data.rows && data.rows.length){
+        if (data.rows){
           
-          if (data.rows.length === 0){
+          if (!data.rows.length){
+            console.log("in hide");
             dc.add("opp-instructions", "hidden");
             dc.add("opp-list", "hidden");
             dc.remove("empty-notice", "hidden");
@@ -41,7 +44,7 @@ Community Opportunities are <a class="c-color-active" href="/?p=feature&f=coord"
 <div id="empty-notice" class="hidden"><h3>Just getting started...</h3></div>
 <div id="opp-instructions">Click the binoculars to follow an Opportunity. Non-members will be invited to start a free 30 trial membership. Opportunities you follow will appear in your <a class="c-color-active" href="/?p=feature&f=coord">Coord</a> list in the application.</div>
 <br>
-<div id="opp-list"></div>
+<div id="opp-list" class="public"></div>
 <br>
 
 <div id="count-notice" class="hidden">Showing only the latest 50 opportunities. Logon or <a class="c-color-active" href="/register">Join Us</a> to see all opportunities.</div>

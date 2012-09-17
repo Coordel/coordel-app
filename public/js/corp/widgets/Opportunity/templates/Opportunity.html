@@ -1,14 +1,16 @@
 <div>
   <div class="opp-left">
-    <img data-dojo-attach-point="avatar" width="32" height="32" src="" class="ui-corner-all c-float-l c-margin-large-r">
+    <img data-dojo-attach-point="avatar" width="32" height="32" src="" class="ui-corner-all c-float-l c-margin-large-r hidden">
+    <img data-dojo-attach-point="coordelAvatar" src="images/coordelAvatar.png" class="ui-corner-all c-float-l c-margin-large-r hidden">
   </div>
   <div class="opp-content">
     <div>
       <div data-dojo-attach-point="oppName" class="c-bold c-ellipsis"></div>
     </div>
-    <div data-dojo-attach-point="oppPurpose" class="opp-purpose" title="Purpose"></div>
-    <div class="opp-deadline">Deadline <span data-dojo-attach-point="oppDeadline"></span></div>
-    <div class="opp-users">People <span data-dojo-attach-point="oppUsers"></span></div>
+    <div data-dojo-attach-point="oppPurpose" class="opp-purpose c-padding-b" title="Purpose"></div>
+    <div class="opp-deadline c-padding-b">Deadline <span data-dojo-attach-point="oppDeadline"></span></div>
+    <div class="opp-users c-padding-b">People <span data-dojo-attach-point="oppUsers"></span></div>
+    <div data-dojo-attach-point="oppCoordel" class="opp-opportunity c-padding-b hidden"><span data-dojo-attach-point="oppDetails"></span></div>
     <div data-dojo-attach-point="oppAttachments" class="opp-attachments">
       	<span>Attachments</span>
 				<div data-dojo-attach-point="attachments"></div>

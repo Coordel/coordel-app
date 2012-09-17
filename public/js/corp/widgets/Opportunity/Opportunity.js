@@ -3,7 +3,8 @@ define(["dojo/_base/declare",
         "dijit/_TemplatedMixin", 
         "dijit/_WidgetsInTemplateMixin",
         "dojo/text!./templates/Opportunity.html",
-        "dojo/text!./templates/Profile.html", 
+        "dojo/text!./templates/Profile.html",
+ 				"dojo/text!./templates/CoordelOpportunity.html",
         "dojo/dom-style", 
         "dojo/_base/fx",
         "dojo/_base/lang",
@@ -25,7 +26,7 @@ define(["dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/_base/array"
         ],
-  function(declare, WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, template, profileTemplate, domStyle, baseFx, lang, on, dc, mouse,keys,Tooltip, TooltipDialog, DropDownButton, TextBox, Button, ValidationTextBox, validate, locale, JSON, xhr, cookie, build, array){
+  function(declare, WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, template, profileTemplate, oppTemplate, domStyle, baseFx, lang, on, dc, mouse,keys,Tooltip, TooltipDialog, DropDownButton, TextBox, Button, ValidationTextBox, validate, locale, JSON, xhr, cookie, build, array){
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
       
       // Our template - important!
@@ -35,6 +36,8 @@ define(["dojo/_base/declare",
       baseClass: "opp",
       
       isActive: false,
+
+			isCoordel: false,
       
       project: {},
       
@@ -54,6 +57,13 @@ define(["dojo/_base/declare",
         
         var project = self.project;
 
+				//test is this is a coordel opportunity
+				console.log("opp", self.project);
+				if (project.opportunity && project.opportunity.isCoordel){
+					this.isCoordel = true;
+				}
+			
+
         this.oppPurpose.innerHTML = getPurpose(project.purpose);
         this.oppName.innerHTML = project.name;
         this.oppDeadline.innerHTML = getPrettyDate(project.deadline);
@@ -63,7 +73,15 @@ define(["dojo/_base/declare",
         } else {
           dc.add(this.oppAttachments, "hidden");
         }
-        this.setAvatar(project.responsible);
+
+				if (this.isCoordel){
+					//show coordel avatar
+					this.setOpportunity(project.opportunity);
+					
+				} else {
+					//set the user avatar for the responsible
+					this.setAvatar(project.responsible);
+				}
         
         
         function getPurpose(purpose){
@@ -87,7 +105,6 @@ define(["dojo/_base/declare",
           if (!self.isActive){
             dc.remove(follow.domNode, "hidden");
           }
-          
         });
         
         on(this.domNode, mouse.leave, function(){
@@ -171,6 +188,22 @@ define(["dojo/_base/declare",
     		}
     		
       },
+
+			setOpportunity: function(opp){
+				dc.remove(this.coordelAvatar, "hidden");
+				dc.remove(this.oppCoordel, "hidden");
+				this.oppDetails.innerHTML = opp.budget.toString() + " " + "Licenses";
+				
+				var monthly = opp.budget * 0.5 * 10;
+				var annual = monthly * 12;
+				
+				//console.log("profile", profile);
+  	    var tip = new Tooltip({
+          label: lang.replace(oppTemplate, {licenseCount: opp.budget, monthly: monthly, annual: annual}),
+          showDelay: 250,
+          connectId: [this.oppDetails]
+        });
+			},
       
       setAvatar: function(id){
         var profile = {
@@ -179,6 +212,8 @@ define(["dojo/_base/declare",
           count: "Not yet rated"
         };
         var avatar = this.avatar;
+				
+				dc.remove(avatar, "hidden");
         
         var query = {
           startkey: JSON.stringify([id]),

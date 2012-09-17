@@ -51,19 +51,19 @@
 
 .opp-purpose {
   margin-top: 4px;
-  padding-left: 20px;
+  padding-left: 24px;
   background: url(img/purpose.png) no-repeat left top;
 }
 
 .opp-users {
   margin-top: 4px;
-  padding-left: 20px;
+  padding-left: 24px;
   background: url(img/users.png) no-repeat left top;
 }
 
 .opp-attachments {
   margin-top: 4px;
-  padding-left: 20px;
+  padding-left: 24px;
   background: url(img/attachments.png) no-repeat left top;
 }
 
@@ -90,14 +90,22 @@
   font-size: 16px;
   line-height: 18px;
 }
+
 .opp-profile .contact-count {
   margin-left: 6px;
 }
 
 .opp-deadline {
   margin-top:4px;
-  padding-left: 20px;
+  padding-left: 24px;
   background: url(img/deadline.png) no-repeat left top;
+}
+
+.opp-opportunity {
+	margin-top:4px;
+  padding-left: 24px;
+  background: url(img/opp-opportunity.png) no-repeat left top;
+ 
 }
 
 .follow-icon {
