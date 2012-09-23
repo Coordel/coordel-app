@@ -22,6 +22,8 @@ define(["dojo",
       
         var uuidCache = [];
         var CoordelStore = {
+	
+						deleted: [],
           
             userStore: null,
           
@@ -797,23 +799,26 @@ define(["dojo",
               //console.debug("getTaskModel task", task, "isObject",isObject, "focus", this.focus);
               var focus = this.focus,
                   db = this,
-                  obj; 
+                  obj = {}; 
               
            
               if (isObject){
                 obj = task;
               } else {
-                //console.log("getTaskModel", task);
-                obj = db.taskStore.store.get(task);
-                /*
-                if (focus === "task" ){
-                  console.log("task to get in getTaskModel", task.name, task.project, db.projectStore.currentProject);
-                  obj = db.taskStore.store.get(task);
-                } else if (focus === "project") {
-                  console.log("task to get in getTaskModel", task.name, task.project, db.projectStore.currentProject);
-                  obj = db.projectStore.taskStore.get(task);
-                }
-                */
+								if (!this.deleted[task]){
+									//console.log("getTaskModel", task);
+	                obj = db.taskStore.store.get(task);
+	                /*
+	                if (focus === "task" ){
+	                  console.log("task to get in getTaskModel", task.name, task.project, db.projectStore.currentProject);
+	                  obj = db.taskStore.store.get(task);
+	                } else if (focus === "project") {
+	                  console.log("task to get in getTaskModel", task.name, task.project, db.projectStore.currentProject);
+	                  obj = db.projectStore.taskStore.get(task);
+	                }
+	                */
+								}
+                
               }
               
               
@@ -831,15 +836,15 @@ define(["dojo",
          
               var focus = this.focus,
                   db = this,
-                  obj; 
+                  obj = {}; 
                   
               if (isObject){
                 obj = role;
               } else {
                 //console.debug("getTaskModel is loading the task");
-              
-                  obj = db.roleStore.store.get(role);
-             
+              	if (!this.deleted[role]){
+									obj = db.roleStore.store.get(role);
+								}
               }
               var r = new rModel({db:db});
               r.role = obj;
@@ -870,14 +875,17 @@ define(["dojo",
               //console.debug("getBlockerModel id focus", id, this.focus);
               var focus = this.focus,
                   db = this,
-                  obj;
+                  obj = {};
               
               if (isObject){
                 obj = task;
               } else {
                 //console.debug("getBlockerModel is loading blocker");
                 //if (focus === "task") {
-                  obj = new tModel(this.taskStore.blockStore.get(task));
+								if (!this.deleted[task]){
+									obj = new tModel(this.taskStore.blockStore.get(task));
+								}
+                  
                 //} else if (focus === "project"){
                   //obj = new tModel(this.projectStore.blockStore.get(task));
                 //}
@@ -895,7 +903,7 @@ define(["dojo",
             
             getProjectModel: function(project, isObject){
               var db = this, 
-                  obj;
+                  obj = {};
               
               if (!project){
                 //if no id is given or the id is undefined, return the private project
@@ -909,7 +917,10 @@ define(["dojo",
               if (isObject){
                 obj = project;
               } else {
-                obj = this.projectStore.store.get(project);
+								if (!this.deleted[project]){
+									obj = this.projectStore.store.get(project);
+								}
+                
               }
               
               

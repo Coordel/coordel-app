@@ -1,5 +1,6 @@
 {
   "version": "",
+	"url":"dev.coordel.com:8080",
   "config": {
     "redisOptions": {
       "host": "dev.coordel.com",

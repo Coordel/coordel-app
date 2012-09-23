@@ -138,7 +138,7 @@ define(["dojo",
 		handleTaskNotify: function(){
 			//if there are task changes and the focus is current, need to make sure that the list refreshes in case
 			//any of them have become current because of the incoming change
-			console.log("handleTaskNotify", this.focus, db.focus);
+			//console.log("handleTaskNotify", this.focus, db.focus);
 			var focus = this.focus;
 			if (focus === "current"){
 				if (this.isActive){

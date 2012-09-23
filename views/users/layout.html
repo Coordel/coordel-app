@@ -177,21 +177,32 @@
   	      <div id="layout_body">
   	        <div id="navigation">
 
-        			<div id="nav1">
-
-        				<ul>
-                	<li id="nav-home"><a href="/"></a></li>
-
-                	<li id="nav-productivity"><a href="/?p=productivity">Productivity</a></li>
-                	<li id="nav-opportunity"><a href="/?p=opportunity">Opportunity</a></li>
-                	<!--<li id="nav-membership"><a href="/?p=pricing">Membership</a></li>
-                	<li id="nav-about"><a href="/?p=about">About</a></li>-->
+        			<div>
+          	    <ul id="primary-nav">
+                    <li id="nav-home"><a id="home-icon" href="/"></a></li>
+                    <li id="nav-productivity"><a href="/?p=productivity">Productivity</a>
+                        <div id="m1" class="invisible">
+                        <a href="/?p=tour">Features</a>
+                        <a href="/?p=cases" class="bottom-rounded">Case Studies</a>
+                        </div>
+                    </li>
+                    <li id="nav-opportunity"><a href="/?p=opportunity">Opportunity</a>
+                        <div id="m2" class="invisible">
+                        <a href="/?p=public">From the Network</a>
+                        <a href="/?p=coordel">With Coordel</a>
+                        <a href="/?p=business" class="bottom-rounded">Your Own Business</a>
+                        </div>
+                    </li>
+                    <li id="nav-about"><a href="/?p=about">About</a>
+                        <div id="m3" class="invisible">
+                        <a href="/?p=pricing">Pricing</a>
+                        <a href="/?p=transparency" class="bottom-rounded">Transparency</a>
+                        </div>
+                    </li>
                 </ul>
 
-
-        				<div class="clearer">&nbsp;</div>
-
-        			</div>
+                <div class="clear"></div>
+          	  </div>
         		</div>
   		      <div id="main">
 
@@ -252,7 +263,7 @@
         		</div>
   			    <div id="dashboard" class="splash">
   				    <div id="dashboard_inner">
-  					    <button id="joinUs" class="c-float-r corp-contrast hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us Free for 30 Days
+  					    <button id="joinUs" class="c-float-r corp-contrast hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us
   					      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
                     // Do something:
                     castor.info("buttonClick=joinUs");
@@ -262,7 +273,7 @@
   					    <div id="tagLine" class="right">
           				<h1 style="font-size: 1.8em" class="right handwritten hand-nav">Coordel = <span><a href="/?p=productivity" class="secondary">Productivity</a></span><span> + </span> <span><a href="/?p=opportunity" class="secondary">Opportunity</a></span></h1>
           			</div>
-  		        	<button id="tour" class="c-float-l corp-dark" data-dojo-type="dijit.form.Button" type="submit">Take the Tour
+  		        	<button id="tour" class="c-float-l corp-dark" data-dojo-type="dijit.form.Button" type="submit">Tour Features
   					      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
                     // Do something:
                     castor.info("buttonClick=takeTour, location=home");

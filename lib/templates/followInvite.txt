@@ -254,7 +254,7 @@ cite {
                                 <td class="w580" width="580"> 
                                     <div id="mainMessage" align="left" class="article-content-large">
 	                                    <p align="left" class="article-content-large">
-	                                    Thank you for Following a Community Opportunity on Coordel. Just click the Activate button below and and get started now participating.
+	                                    Thank you for Following a Network Opportunity on Coordel. Just click the Activate button below and and get started now participating.
 		                                </p>
 		                                
 		                                <p align="left" class="article-content-large">

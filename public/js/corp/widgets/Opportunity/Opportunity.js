@@ -58,7 +58,7 @@ define(["dojo/_base/declare",
         var project = self.project;
 
 				//test is this is a coordel opportunity
-				console.log("opp", self.project);
+				//console.log("opp", self.project);
 				if (project.opportunity && project.opportunity.isCoordel){
 					this.isCoordel = true;
 				}
@@ -127,7 +127,7 @@ define(["dojo/_base/declare",
           var email = cookie("oppEmail");
           
           if (name){
-            console.log("name", name);
+            //console.log("name", name);
             self.name.set("value", name.firstName + " " + name.lastName);
             self.validate();
           }
@@ -172,7 +172,7 @@ define(["dojo/_base/declare",
         
         var self = this;
         var files = self.project._attachments;
-        console.log("setting attachments", files);
+        //console.log("setting attachments", files);
         build.empty(self.attachments);
         //console.debug("showing attachments", files);
     		for (var key in files){
@@ -316,11 +316,11 @@ define(["dojo/_base/declare",
       	xhr("/coordel/view/users", { query: userArgs,
             handleAs: "json"
           }).then(function(userRows){
-            console.log("users", userRows);
+            //console.log("users", userRows);
             
             if (userRows && userRows.rows.length){
               var user = userRows.rows[0];
-              console.log("existing user", user);
+              //console.log("existing user", user);
               self._followProject(user);
               
             } else {
@@ -338,10 +338,10 @@ define(["dojo/_base/declare",
       
       _followProject: function(user){
         var self = this;
-        console.log("follow project", user);
+        //console.log("follow project", user);
 
         xhr("/coordel/"+self.project._id, {handleAs:"json"}).then(function(proj){
-          console.log("refreshed the project", proj);
+          //console.log("refreshed the project", proj);
           
           var assigned = false;
           
@@ -349,13 +349,13 @@ define(["dojo/_base/declare",
           array.forEach(proj.assignments, function(assign){
             if (assign.username === user.appId){
               //notify already part of project and quit
-              console.log("user is part of this project already");
+              //console.log("user is part of this project already");
               assigned = true;
             }
           });
           
           if (!assigned){
-            console.log("add this user to project as follower", user);
+            //console.log("add this user to project as follower", user);
             proj.users.push(user.appId);
             if (!proj.assignments){
               proj.assignments = [];
@@ -385,10 +385,10 @@ define(["dojo/_base/declare",
               headers: 	{"Content-Type": "application/json; charset=UTF-8"}
             }).then(function(res){
               if (res.error){
-                console.log("notify error");
+                //console.log("notify error");
                 self.setResponse("Error Following the Opportunity. Please try again.", "c-color-error");
               } else {
-                console.log("following", res);
+                //console.log("following", res);
                 self.setResponse("You are now Following <strong>" + proj.name + "</strong>", "c-color-active");
                 var count = parseInt(self.oppUsers.innerHTML, 10);
                 count += 1;
@@ -399,7 +399,7 @@ define(["dojo/_base/declare",
             });
   
           } else {
-            console.log("this user was already part of the project");
+            //console.log("this user was already part of the project");
             self.setResponse("You already joined that Opportunity", "c-color-active");
             self.follow.set("disabled", true);
           }
@@ -409,7 +409,7 @@ define(["dojo/_base/declare",
       _inviteUser: function(invite){
         //the invite will have email, subject and optional data members
         
-        console.log("invite", invite);
+        //console.log("invite", invite);
      
         var self = this;
         
@@ -436,7 +436,7 @@ define(["dojo/_base/declare",
           invite.data.calendar.start = dtFormat.prettyISODate(invite.data.calendar.start);
         }
         
-        console.log("invite", invite);
+        //console.log("invite", invite);
         
         xhr("/invite", { method: "POST",
             handleAs: "json", data: invite
@@ -445,8 +445,8 @@ define(["dojo/_base/declare",
               //console.log("show this error", res.error);
               self.setResponse(res.error, "c-color-error");
             } else {
-              console.log("did the invitation, now follow the project");
-              console.log("user", res);
+              //console.log("did the invitation, now follow the project");
+              //console.log("user", res);
               self._followProject(res);
             }
           });

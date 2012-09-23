@@ -168,6 +168,7 @@ define("app/models/TaskModel",
       },
       
       getContextDeadline: function(task){
+				//console.log("task in getContextDeadline", task, this);
         var def = new dojo.Deferred();
         var t = this,
             deadline = t.getDeadline(),

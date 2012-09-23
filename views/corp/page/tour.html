@@ -75,14 +75,14 @@
           var feature = node.create("div", {"class": "qs-content"}, "featureList");
           
           var header = node.create("h4", {}, feature);
-          node.create("a", {innerHTML: step.title,name: step.code, "class": "qs-link link-image", href: "?p=feature&f="+step.code}, header);
+          node.create("a", {innerHTML: step.title, name: step.code, "class": "qs-link link-image", href: "?p=feature&f="+step.code}, header);
           node.create("h4", {innerHTML: step.headline, "class": "qs-headline"}, feature);
           node.create("div", {style: {clear: "both"}}, feature);
           if (onRight){
-            node.create("img", {src: step.image, style:{"float": "right", "margin-left":"6px"}, height: "140", width: "220"}, feature); 
+            node.create("img", {src: step.image, alt: step.title, style:{"float": "right", "margin-left":"6px"}, height: "140", width: "220"}, feature); 
             onRight = false;
           } else {
-            node.create("img", {src: step.image, style:{ "float": "left", "margin-right":"6px"}, height: "140", width: "220"}, feature);
+            node.create("img", {src: step.image, alt: step.title, style:{ "float": "left", "margin-right":"6px"}, height: "140", width: "220"}, feature);
             onRight = true;
           }
           
@@ -97,9 +97,11 @@
   });
 </script>
 <div>
+
   <h1>Coordel Features</h1>
-  <div>See how Coordel creates opportunity in making you more productive. For more details about how Coordel works, check out the features section below.</div>
+  <div>See how Coordel creates opportunity by making you more productive. For more details about how Coordel works, check out the features spotlight section below.</div>
   
+  <img class="full-screen-image" alt="Productivity Tasks Software Features" src="images/newtask.png">
   <div id="featureTable"></div>
   <br>
   <div>Something missing? Head over to the Coordel Get Satisfaction <a class="c-color-active" href="https://getsatisfaction.com/coordel/ideas/popular" target="_blank">community</a> to see what others think and to add your own ideas.</div>

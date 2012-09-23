@@ -212,7 +212,7 @@ define({
 		  "somedayConfirmTitle": "Maybe Someday",
 		  "somedayExecuteText": "Someday",
 		  "archiveText": "Keep it for future reference",
-		  "archiveLabel": "Archive",
+		  "archiveLabel": "Archive It",
 		  "archiveConfirmText": "This will archive the task. Retrieve it in the Archive list.",
 		  "archiveConfirmTitle": "Archive Task",
 		  "archiveExecuteText": "Archive",

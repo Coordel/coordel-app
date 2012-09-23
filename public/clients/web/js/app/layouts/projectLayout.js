@@ -73,6 +73,7 @@ define([
         region: "right",
         design: "headline",
         style:"padding:0",
+				"class": "hidden",
         id: "rightDetailsLayout"
       }).placeAt(details);
       

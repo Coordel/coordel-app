@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.129",
+  version: "0.1.162",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -21,6 +21,26 @@ module.exports = {
         }
       }
     },
+
+		networkStats: {
+			 map: function(doc) {
+	      	if (doc.docType === "user"){
+						if (doc.license){
+							emit("members", 1);
+						} else {
+							emit("non-members", 1);
+						}
+	      	}
+					if (doc.docType === "project" && doc.status === "ACTIVE" && doc.substatus === "OPPORTUNITY"){
+	          if (doc.opportunity && doc.opportunity.isCoordel) {
+							if (doc.opportunity.budget){
+								emit("coordel-pledged", doc.opportunity.budget);
+							}
+						}
+					}
+	      },
+	      reduce: "_sum"
+		},
     
     userProfiles: {
       map: function(doc){
@@ -315,7 +335,7 @@ module.exports = {
       }
     },
     
-    opportunities: {
+    publicOpportunities: {
       map: function(doc){
         
         function toISODateArray (date){
@@ -348,7 +368,36 @@ module.exports = {
         }
       }
     },
-    
+
+		opportunities: {
+      map: function(doc){
+        
+        function toISODateArray (date){
+      	  var dtString = date.split("T")[0];
+      	  dtString = dtString.split("-");
+      	  var tmString = date.split("T")[1];
+      	  tmString = tmString.split(".");
+      	  tmString = tmString[0].split(":");
+      	  return [
+      	    parseInt(dtString[0],10), 
+      	    parseInt(dtString[1],10), 
+      	    parseInt(dtString[2],10), 
+      	    parseInt(tmString[0],10), 
+      	    parseInt(tmString[1],10), 
+      	    parseInt(tmString[2],10)];
+      	}
+        
+        if (doc.docType === "project" && doc.status === "ACTIVE" && doc.substatus === "OPPORTUNITY"){
+         
+          emit(
+       			[toISODateArray(doc.created), doc._id],
+       			doc
+       		);
+        
+        }
+      }
+    },
+
     coordelOpportunities: {
       map: function(doc){
         
@@ -898,7 +947,7 @@ module.exports = {
 
         	doc.assignments.forEach(function(assign){
 
-          	if (assign.feedback && assign.feedback.length > 0){
+          	if (assign.feedback && assign.feedback.length){
       				assign.feedback.forEach(function(f){
       	 	 			emit(assign.username, parseInt(f.score, 10));
               });

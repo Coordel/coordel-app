@@ -16,8 +16,12 @@ define([
     "dojo/_base/lang",
     "dojo/_base/array",
     "dojo/request",
-    "dojo/json"
-], function(dom, on, cookie, xhr, connect, dc, oppTemplate, db, build, lang, array, request, JSON){
+    "dojo/json",
+		"dijit/Tooltip",
+		"dojo/text!./templates/nav-productivity.html",
+    "dojo/text!./templates/nav-opportunity.html",
+		"dojo/text!./templates/nav-about.html"
+], function(dom, on, cookie, xhr, connect, dc, oppTemplate, db, build, lang, array, request, JSON, Tooltip, prodHtml, oppHtml, aboutHtml){
     // Once all modules in the dependency list have loaded, this
     // function is called to define the demo/myModule module.
     //
@@ -30,10 +34,31 @@ define([
     on(dom.byId("site_title"), "click", function(){
   	  window.location.href = "/";
   	});
+
+	
+		
+		/*
+		
+		on(navopp, 'mouseover', function(){
+			self.openMenu("m2");
+		});
+		
+		on(navopp, 'mouseout', function(){
+			self.closeMenus();
+		});
+		
+		on(navabout, 'mouseover', function(){
+			self.openMenu("m3");
+		});
+		
+		on(navabout, 'mouseout', function(){
+			self.closeMenus();
+		});
   	
   	connect.subscribe("/corp/log", function(data){
       corp.log(data);
     });
+*/
     
     // This returned object becomes the defined value of this module
     var corp = {
@@ -79,11 +104,6 @@ define([
             }
           });
         
-        
-
-       
-   
-        
       },
       
       setOppSidebar: function(){
@@ -101,6 +121,67 @@ define([
             }
           });
       },
+
+
+			openMenu: function(id){
+				//if (this.currentMenu !== id){
+					this.closeMenus();
+					//this.currentMenu = id;
+					dc.remove(id, "invisible");
+					
+					var node = dom.byId(id).parentNode;
+					dc.add(node, "open");
+				//}
+			},
+			
+			closeMenus: function(){
+				dc.add("m1", "invisible");
+				dc.add("m2","invisible");
+				dc.add("m3","invisible");
+				dc.remove("nav-productivity", "open");
+				dc.remove("nav-opportunity", "open");
+				dc.remove("nav-about", "open");
+			},
+			
+			currentMenu: "nav-home",
+
+			setTransparency: function(){
+				db.load("/coordel/reduce/networkStats",{ query: {group: true, reduce: true},
+            handleAs: "json"
+          }).then(function(data){
+						console.log("transparency data", data, data.keys, data.values);
+						var paying = 0;
+						var non = 0;
+						var total = 0;
+						var allocated = 0;
+						var pledged = 0;
+						if (data.rows.length){
+							
+								array.forEach(data.rows, function(row){
+									if (row.key === "members"){
+										paying = row.value;
+									} else if (row.key === "non-members"){
+										non = row.value;
+									} else if (row.key === "coordel-pledged"){
+										pledged = row.value;
+									}
+								});
+						
+								total = parseInt(paying, 10) + parseInt(non, 10);
+							
+						}
+            
+						
+						dom.byId("payingMembers").innerHTML = paying.toString();
+						dom.byId("nonPayingMembers").innerHTML = non.toString();
+						dom.byId("totalMembers").innerHTML = total.toString();
+						
+						dom.byId("pledged").innerHTML = pledged.toString();
+						dom.byId("available").innerHTML = paying.toString();
+						dom.byId("allocated").innerHTML = allocated.toString();
+						
+          });
+			},
       
       log: function(doc){
         var xhrArgs = {
@@ -123,6 +204,44 @@ define([
       },
    
       setCurrentPage: function(page){
+		
+				var self = this;
+	
+				self.closeMenus();
+				
+				
+				var navprod = dom.byId("nav-productivity");
+				var navopp = dom.byId("nav-opportunity");
+				var navabout = dom.byId("nav-about");
+
+				on(navprod, 'mouseover', function(){
+					self.openMenu("m1");
+				});
+
+				on(navprod, 'mouseout', function(){
+					self.closeMenus();
+				});
+				
+				on(navopp, 'mouseover', function(){
+					self.openMenu("m2");
+				});
+
+				on(navopp, 'mouseout', function(){
+					self.closeMenus();
+				});
+
+				on(navabout, 'mouseover', function(){
+					self.openMenu("m3");
+				});
+
+				on(navabout, 'mouseout', function(){
+					self.closeMenus();
+				});
+
+		  	connect.subscribe("/corp/log", function(data){
+		      corp.log(data);
+		    });
+				
         
         function showNav2(){
           dc.remove(dom.byId("nav2"), "hidden");
@@ -151,16 +270,29 @@ define([
       		
       		case "about":
       		show("nav-about");
+					showSubNav("sub-nav-about");
+      		break;
+
+					case "pricing":
+      		showParent("nav-about");
+      		show("nav-pricing");
+      		showSubNav("sub-nav-about");
+      		break;
+
+					case "transparency":
+      		showParent("nav-about");
+      		show("nav-transparency");
+      		showSubNav("sub-nav-about");
+      		break;
+
+					case "allocations":
+      		showParent("nav-about");
+      		show("nav-allocations");
+      		showSubNav("sub-nav-about");
       		break;
       		
       		case "membership":
       		show("nav-membership");
-      		showSubNav("sub-nav-membership");
-      		break;
-      		
-      		case "pricing":
-      		showParent("nav-membership");
-      		show("nav-pricing");
       		showSubNav("sub-nav-membership");
       		break;
       		
@@ -174,46 +306,54 @@ define([
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
       		show("nav-business");
+					document.title = "Your Own Business";
       		break;
       		
       		case "tour":
       		showParent("nav-productivity");
       		show("nav-tour");
       		showSubNav("sub-nav-productivity");
+					document.title = "Productivity Features";
       		break;
       		
       	  case "feature":
       	  show("nav-productivity");
         	showSubNav("sub-nav-productivity");
       	  show("nav-tour");
+					document.title = "Productivity";
       	  break;
       	  
       	  case "cases":
       	  show("nav-productivity");
         	showSubNav("sub-nav-productivity");
       	  show("nav-cases");
+					document.title = "Productivity and Opportunity Use Cases";
       	  break;
       		
       		case "productivity":
       		show("nav-productivity");
       		showSubNav("sub-nav-productivity");
+					document.title = "Productivity";
       		break;
       		
       		case "opportunity":
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
+					document.title = "Opportunity";
       		break;
       		
       		case "public":
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
       		show("nav-public");
+					document.title = "Public Opportunity";
       		break;
       		
       		case "coordel":
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
       		show("nav-coordel");
+					document.title = "Coordel Opportunity";
       		break;
       		
       		case "employed":
@@ -221,6 +361,7 @@ define([
         	showSubNav("sub-nav-productivity");
         	show("nav-cases");
       		show("nav-employed");
+					document.title = "Employed Productivity";
       		break;
       		
       		case "consult":
@@ -228,6 +369,7 @@ define([
         	showSubNav("sub-nav-productivity");
         	show("nav-cases");
       		show("nav-consult");
+					document.title = "Consultant Productivity";
       		break;
       		
       		case "contract":
@@ -235,6 +377,7 @@ define([
         	showSubNav("sub-nav-productivity");
         	show("nav-cases");
       		show("nav-contract");
+					document.title = "Contractor Productivity";
       		break;
       	}
       },
@@ -261,3 +404,53 @@ define([
     };
   return corp;
 });
+
+/*
+ * Title Caps
+ * 
+ * Ported to JavaScript By John Resig - http://ejohn.org/ - 21 May 2008
+ * Original by John Gruber - http://daringfireball.net/ - 10 May 2008
+ * License: http://www.opensource.org/licenses/mit-license.php
+ */
+
+(function(){
+	var small = "(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v[.]?|via|vs[.]?)";
+	var punct = "([!\"#$%&'()*+,./:;<=>?@[\\\\\\]^_`{|}~-]*)";
+  
+	this.titleCaps = function(title){
+		var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0;
+		
+		while (true) {
+			var m = split.exec(title);
+
+			parts.push( title.substring(index, m ? m.index : title.length)
+				.replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, function(all){
+					return (/[A-Za-z]\.[A-Za-z]/.test(all)) ? all : upper(all);
+				})
+				.replace(RegExp("\\b" + small + "\\b", "ig"), lower)
+				.replace(RegExp("^" + punct + small + "\\b", "ig"), function(all, punct, word){
+					return punct + upper(word);
+				})
+				.replace(RegExp("\\b" + small + punct + "$", "ig"), upper));
+			
+			index = split.lastIndex;
+			
+			if ( m ) parts.push( m[0] );
+			else break;
+		}
+		
+		return parts.join("").replace(/ V(s?)\. /ig, " v$1. ")
+			.replace(/(['Õ])S\b/ig, "$1s")
+			.replace(/\b(AT&T|Q&A)\b/ig, function(all){
+				return all.toUpperCase();
+			});
+	};
+    
+	function lower(word){
+		return word.toLowerCase();
+	}
+    
+	function upper(word){
+	  return word.substr(0,1).toUpperCase() + word.substr(1);
+	}
+})();

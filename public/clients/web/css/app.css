@@ -45,6 +45,7 @@
 @import 'preferences.css';
 @import 'tutorial.css';
 @import 'demo.css';
+@import 'contact.css';
 
 /*FEEDBACK tab should hide when loading*/
 .loading #fdbk_tab, .login #fdbk_tab{

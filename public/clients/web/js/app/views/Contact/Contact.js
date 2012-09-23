@@ -16,6 +16,8 @@ define(
       name: null,
       
       id: null,
+
+			isMember: true,
       
       templateString: html,
       
@@ -53,6 +55,12 @@ define(
         self.email.innerHTML = email;
         self.firstName.innerHTML = self.contact.firstName;
         self.lastName.innerHTML = self.contact.lastName;
+				
+				//self.isMember = false;
+				if (!self.isMember){
+					dojo.addClass(self.userImage, "non-member");
+					dojo.removeClass(self.nonMemberImg, "hidden");
+				}
         
         dojo.connect(self.domNode, "onclick", this, function(evt){
           //console.debug("contact clicked", evt);

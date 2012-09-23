@@ -270,6 +270,11 @@ app.store.util.TaskQueryEngine = function(query, options){
     //console.debug("here is the query in the TaskQueryEngine", query);
 		// execute the whole query, first we filter
 		//console.debug("executing query in TQE");
+		//console.log("results", array);
+		array = dojo.filter(array, function(item){
+			//console.log("item", item);
+			return !item.error;
+		});
 		var results = dojo.filter(array, query);
 
 		// next we sort
@@ -288,6 +293,7 @@ app.store.util.TaskQueryEngine = function(query, options){
     		  //tasks are due when there isn't a specific deadline set for the task
     		  //this makes sure that that deadline can move with the project
     		  t.getContextDeadline().then(function(dead){
+						//console.log("dead", dead);
     		    task.contextDeadline = dead;
     		  });
     		  //console.debug("contextDeadline",task.name, task.contextDeadline);

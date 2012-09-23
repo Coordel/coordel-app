@@ -1,0 +1,12 @@
+.non-member {
+	filter: alpha(opacity=40); /* internet explorer */
+	-khtml-opacity: 0.4;      /* khtml, old safari */
+	-moz-opacity: 0.4;       /* mozilla, netscape */
+	opacity: 0.4;           /* fx, safari, opera */
+}
+
+.non-member-img {
+	position:relative; 
+	top:15px;
+	left:-25px;
+}

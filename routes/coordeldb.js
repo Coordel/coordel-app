@@ -369,9 +369,43 @@ module.exports = function(app, validate){
         }
         
       } else {
+				console.log("object from get", obj);
         res.json(obj);
       }
       
+    });
+  });
+
+	app.get('/coordel/reduce/:name', function(req, res){
+  
+    var view = req.params.name;
+    view = 'coordel/' + view;
+    //console.log('GET VIEW', view);
+    var opts = {};
+    
+    for (var key in req.query){
+      if (key === "key" || key === "startkey" || key === "endkey"){
+        opts[key] = JSON.parse(req.query[key]);
+      } else {
+        opts[key] = req.query[key];
+      }
+    }
+    
+    //console.log('queryString params', req.query, opts);
+    couch.view(view, opts, function(err, resView){
+      var ret = [],
+          toReturn;
+   
+      if (err){
+        toReturn = {rows: [], error: err};
+      } else if (!resView){
+        toReturn = {rows: [], error: "unexpected error"};
+      } else {
+        
+        toReturn = {rows: resView};
+      }
+      //console.log("returning", toReturn);
+      res.json(toReturn);
     });
   });
 
@@ -401,12 +435,12 @@ module.exports = function(app, validate){
         toReturn = {rows: [], error: "unexpected error"};
       } else {
         //console.log("VIEW ROWS", resView);
-        if (resView.rows & resView.rows.length > 0){
+        if (resView.rows & resView.rows.length){
           resView.rows.forEach(function(row){
             //console.log("IN FOR EACH ROWS", row);
             ret.push(row);
           });
-        } else if (resView && resView.length > 0){
+        } else if (resView && resView.length){
           resView.forEach(function(row){
             //console.log("IN FOR EACH", row);
             ret.push(row);

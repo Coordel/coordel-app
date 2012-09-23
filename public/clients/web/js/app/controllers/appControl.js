@@ -792,6 +792,11 @@ define(['dojo',
   			  
   			  //appStore - i'll only ever get changes to my app, update the store, no notification
   			
+			  if (chg._deleted){
+					if (!db.deleted[chg._id]){
+						db.deleted[chg._id] = true;
+					}
+				}
   			
   	    
   	    
@@ -832,8 +837,7 @@ define(['dojo',
   				  });
   				  
   				  //make sure everyone in the project is in my contacts list
-  				  
-  				 
+  		
   				  var newContact = false;
   				  
   				  dojo.forEach(chg.users, function(id){
@@ -849,10 +853,6 @@ define(['dojo',
   				    }
   				  });
   				    
-  				  
-  				  
-  				  
-  				  
   				  //now get the status for the user
   				  dojo.forEach(chg.assignments, function(assign){
   				    if (assign.username === app.username){
@@ -940,7 +940,7 @@ define(['dojo',
   				  break;
   				case "task":
   				  //taskStore - incoming change to one of my tasks
-  				  console.debug("STATUS: ", chg.status, db.focus);
+  				  //console.debug("STATUS: ", chg.status, db.focus);
   				  
   				  if (chg.username === app.username ||
   				        //if I'm the delegator then I need to know what happens to this task
@@ -975,7 +975,14 @@ define(['dojo',
   				    } else if (chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   				      //this task was deleted
   				      db.taskStore.store.notify(null, chg._id);
-  				      //console.log("Notify Task DELETE", chg);
+  				      //console.log("Notify Task DELETE", chg, db.taskStore.memory);
+								
+								
+								//need to track deleted from session to session to make sure we don't try and load it again
+								//this came up when demos required that docs get deleted en masse
+							
+								
+							
   				      
   				    } else {
   				      //this is an update
@@ -1059,58 +1066,10 @@ define(['dojo',
   				case "file":
   					break;
   			};
-  	    
-  	    /*
-  	    //check if I made this change and capture the notifications
-	      if (chg.updater !== app.username){
-	        
-	        console.log("CHANGED by someone else", chg);
-	        //if I didn't make the change, capture notifications
-	        //if this requires a notification, there will be a history array
-	        if (chg.history){
-  	        //get the most recent history entry and use it for the notification
-	          notifications.push(chg.history.shift());
-	        }
-	        
-	        //publish the change so views can react
-	        //dojo.publish("coordel/changeNotification", [chg]);
-	        //console.debug("published a change");
-	        
-	      } 
-	      */
 	      
 	      //update the counts in case
 	      dojo.publish("coordel/setPrimaryBoxCounts");
-  		//});
-  		//console.log("notifications length, array", notifications.length, notifications);
-  		//if there are notifications, publish them
-      if (notifications.length > 0){
-        
-        //post the new notification and set the currentAlerts = to the returned list
-        
-        
-        
-        
-        /*
-        var a = db.appStore.app();
-        if (!a.notifications){
-          a.notifications = [];
-        }
-      
-        
-        //merge the notifications with the existing notifications
-        a.notifications = a.notifications.concat(notifications);
-        */
-        //save the notification into the app
-        //console.debug("app", a);
-        //db.appStore.store.put(a, {id: a._id, username: app.username});
-        //update the notification count
-        
-        //dojo.publish("coordel/updateNotificationCount", [{count: this.currentAlerts.length}]);
-        
-        //play the sound
-        //dojo.publish("coordel/playSound", ["ding"]);
-      }
+
   	}
 	  
 	};

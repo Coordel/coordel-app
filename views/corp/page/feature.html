@@ -25,6 +25,7 @@
             if (source){
               dom.byId("feature-title").innerHTML = source.title;
               dom.byId("feature-headline").innerHTML = source.headline;
+              document.title = titleCaps(source.title);
             }
             
             if (source.movie){
