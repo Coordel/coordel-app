@@ -58,7 +58,7 @@
 				<div id="content" class="entry-content">
 					<div class="ui-corner-all large-shadow content-panel">
 						<div>
-							<div style="font-size: 18px;padding-bottom: 12px;"><span style="font-weight: bold;">{{fromFirstName}} {{fromLastName}}</span> invited you to <a href="http://www.coordel.com">Coordel</a></div>
+							<div style="font-size: 18px;padding-bottom: 12px;"><span style="font-weight: bold;">{{fromFirstName}} {{fromLastName}}</span> invited you to <a href="http://coordel.com">Coordel</a></div>
 							<div style="padding-bottom: 12px;">Coordel is the online partner that helps you redefine the way you innovate, execute and reuse your work and how you interact with others.</div>
 						</div>
 					</div>

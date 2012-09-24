@@ -60,7 +60,7 @@
 					<div class="ui-corner-all large-shadow content-panel">
 						<div>
 							<h3 style="font-size:18px;-webkit-font-smoothing:antialiased">
-								<strong style="font-weight:bold;white-space:nowrap">{{fromFirstName}} {{fromLastName}}</strong> <span style="white-space:nowrap">assigned you a task using <a href="http://www.coordel.com/">Coordel</a>…</span>
+								<strong style="font-weight:bold;white-space:nowrap">{{fromFirstName}} {{fromLastName}}</strong> <span style="white-space:nowrap">assigned you a task using <a href="http://coordel.com/">Coordel</a>…</span>
 							</h3>
 							<div class="task-header">
 								<table width="100%" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc; padding: 12px 0px">

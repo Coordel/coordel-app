@@ -204,11 +204,11 @@ define([
       },
    
       setCurrentPage: function(page){
+				
 		
 				var self = this;
 	
 				self.closeMenus();
-				
 				
 				var navprod = dom.byId("nav-productivity");
 				var navopp = dom.byId("nav-opportunity");
@@ -271,18 +271,21 @@ define([
       		case "about":
       		show("nav-about");
 					showSubNav("sub-nav-about");
+					document.title = "About Coordel";
       		break;
 
 					case "pricing":
       		showParent("nav-about");
       		show("nav-pricing");
       		showSubNav("sub-nav-about");
+					document.title = "Coordel Pricing";
       		break;
 
 					case "transparency":
       		showParent("nav-about");
       		show("nav-transparency");
       		showSubNav("sub-nav-about");
+					document.title = "Transparency is Accountability";
       		break;
 
 					case "allocations":
@@ -306,7 +309,7 @@ define([
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
       		show("nav-business");
-					document.title = "Your Own Business";
+					document.title = "Partner with Coordel";
       		break;
       		
       		case "tour":
@@ -320,7 +323,7 @@ define([
       	  show("nav-productivity");
         	showSubNav("sub-nav-productivity");
       	  show("nav-tour");
-					document.title = "Productivity";
+					document.title = "Coordel Productivity Feature";
       	  break;
       	  
       	  case "cases":
@@ -346,14 +349,14 @@ define([
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
       		show("nav-public");
-					document.title = "Public Opportunity";
+					document.title = "Network Opportunities";
       		break;
       		
       		case "coordel":
       		showParent("nav-opportunity");
       		showSubNav("sub-nav-opportunity");
       		show("nav-coordel");
-					document.title = "Coordel Opportunity";
+					document.title = "Coordel Opportunities";
       		break;
       		
       		case "employed":

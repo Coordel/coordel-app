@@ -274,7 +274,7 @@ module.exports = function(app, validate){
         toReturn = {rows: [], error: "unexpected error"};
       } else {
 				console.log("userContactProjects", resView);
-        if (resView.rows & resView.rows.length > 0){
+        if (resView.rows && resView.rows.length > 0){
           resView.rows.forEach(function(row){
             //console.log("IN FOR EACH ROWS", row);
             projects.push(row);
@@ -298,7 +298,7 @@ module.exports = function(app, validate){
           toReturn = {rows: [], error: "unexpected error"};
         } else {
 					console.log("resTasks", resTasks.length);
-          if (resTasks.rows & resTasks.rows.length){
+          if (resTasks.rows && resTasks.rows.length){
             resTasks.rows.forEach(function(row){
               
               if (projects.indexOf(row.project) > -1){
@@ -435,7 +435,7 @@ module.exports = function(app, validate){
         toReturn = {rows: [], error: "unexpected error"};
       } else {
         //console.log("VIEW ROWS", resView);
-        if (resView.rows & resView.rows.length){
+        if (resView.rows && resView.rows.length){
           resView.rows.forEach(function(row){
             //console.log("IN FOR EACH ROWS", row);
             ret.push(row);
