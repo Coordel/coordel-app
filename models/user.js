@@ -126,11 +126,8 @@ exports.register = function(userData, fn){
   });
 };
 
-exports.invite = function(inviteData, fn){
-  
-  //console.log("invite data", inviteData);
-      
-  function rand(digits){
+function getTempPassword(){
+	function rand(digits){
     return Math.floor(Math.random()* parseInt(digits+1, 10));
   }
   
@@ -145,7 +142,59 @@ exports.invite = function(inviteData, fn){
   var dt = new Date(year, month, day, hour, min, sec, mills);
   
   var time = dt.getTime().toString(),
-      password = new Buffer(time).toString('base64'),
+      password = new Buffer(time).toString('base64');
+
+	return password;
+	
+}
+
+exports.getReset = function(id, fn){
+	db.get(id, function(err, reset){
+		if (err) return fn(err, null);
+		return fn(false, reset);
+	});
+};
+
+exports.resetPassword = function(email, fn){
+	//console.log("resetting password for ", email);
+	//get the user
+	var stamp = (new Date()).toISOString();
+	this.getByEmail(email, function(err, user){
+		if (err) return fn(err, null);
+		var doc = {
+			email: email,
+			username: user.value.app,
+			isActive: true,
+			stamp: stamp,
+			docType: "passwordReset"
+		};
+		//console.log("reset doc", doc, user);
+		db.save(doc, function(err, res){
+			//console.log("now send email with this id", res.id);
+			if (err) return fn(err, null);
+			Email.send({
+        to: email,
+				from: "robot@coordel.com",
+        subject: "Coordel Password Request",
+				template: "./lib/templates/reset.txt",
+        data: {id: res.id}
+        }, function(err, res){
+					if (err){
+						console.log("error sending email", err);
+						fn(err, null);
+					} else {
+						fn(false, email);
+					}
+           
+      });
+		});
+	});
+};
+
+exports.invite = function(inviteData, fn){
+  
+  //console.log("invite data", inviteData);
+  var password = getTempPassword(),
       self = this;
       
   //this is an invitation and won't have a password so use the generated one
@@ -257,6 +306,14 @@ exports.get = function(id, fn){
     if (err) return fn(err, false);
     return fn(null, user);
   });
+};
+
+exports.getByEmail = function(email, fn){
+	var self = this;
+	db.view('coordel/users', {startkey: [email], endkey:[email,{}]}, function(err, user){
+		if (err) return fn(err, null);
+		return fn(false, user[0]);
+	});
 };
 
 function _save(user, fn){

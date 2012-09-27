@@ -1,0 +1,18 @@
+<script>
+  // Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
+  require(["corp/main"], function(corp){
+    corp.setCurrentPage("");
+  });
+</script>
+
+<div class="password-container" style="width: 36em">
+	<div class="handwritten c-padding-large-b">We have sent an e-mail to <span class="c-color-active"><%=email%></span> with instructions how to reset your password.</div>
+	<%if ('undefined' !== typeof errors && errors.length){%>
+	<div class="feedback c-color-error c-text-center c-padding-large-t">
+		<% for (var key in errors) {%>
+			<span class="error"><%=errors[key]%>.</span>
+		<%}%>
+		<span>Please try again.
+	</div>
+	<%}%>
+</div>

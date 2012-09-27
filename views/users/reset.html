@@ -5,19 +5,38 @@
   });
 </script>
 
-<div style="width: 18em">
-	<div class="handwritten c-padding-large-b">Enter your email and we'll send you instructions how to reset your password</div>
-	<form action="/password" method="post">
-		<div class="full" style="padding-bottom:1em">
-			<input name="email" type="text" class="text x-large">
-		</div>
-		<div>
-		  <button id="resetPassword" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Reset
+<div>
+	<div class="handwritten">
+		<div>All you need to do is enter your new password and then you'll be redirected to where you can log in with your new password.</div>
+		<br/>
+	</div>
+</div>
+<div class="register-form" style="border-right: none;width: 23em">
+	<form action="/resetPassword" method="post">
+		<ul>
+			<li>
+  			<label for="regPassword">Password</label>
+				<div>
+					<input id="regPassword" name="newPass" type="password">
+				<div>
+			</li>
+			<li>
+  			<label for="regVerify">Verify Password</label>
+				<div>
+					<input id="regVerify" name="verifypassword" type="password">
+				<div>
+			</li>
+		</ul>
+		<input type="hidden" name="email" value="<%=email%>">
+		<input type="hidden" name="username" value="<%=username%>">
+		<div class="c-padding-large-t">
+		  <button id="submitLogin" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Reset Password
 	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
           // Do something:
-          castor.info("buttonClick=resetPassword");
+          castor.info("buttonClick=setPassword");
         </script>
 	    </button>
+  		
 			<div class="clear"></div>
 		</div>
 	</form>
@@ -30,3 +49,4 @@
 	</div>
 	<%}%>
 </div>
+	

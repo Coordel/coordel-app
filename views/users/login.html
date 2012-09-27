@@ -4,25 +4,38 @@
     corp.setCurrentPage("");
   });
 </script>
-
-<div style="width: 18em">
+<div class="handwritten">
+	<div>Please enter your E-mail and Password to login to Coordel</div>
+	<br/>
+</div>
+<div style="width: 23em;">
+  
 	<form action="/login" method="post">
-		<div class="full" style="padding-bottom:1em">
-  		<label>Email</label> 
-			<input name="email" type="text" class="text x-large">
-		</div>
-		<div class="full" style="padding-bottom:2em">
-  		<label for="password">Password</label>
-			<input name="password" type="password" class="text x-large">
-		</div>
-		<div>
-		  <button id="submitLogin" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Login
-	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-          // Do something:
-          castor.info("buttonClick=login, page=login");
-        </script>
-	    </button>
-		</div>
+	  <ul>
+			<li>
+  			<label for="regEmail">E-mail</label>
+				<div>
+					<input id="regEmail" name="email" type="text">
+				<div>
+			</li>
+			<li>
+  			<label for="regPassword">Password</label>
+				<div>
+					<input id="regPassword" name="password" type="password">
+				<div>
+			</li>
+			<li>
+			  <div style="margin-right: 2em">
+    		  <button id="submitLogin" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Login
+    	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+              // Do something:
+              castor.info("buttonClick=login, page=login");
+            </script>
+    	    </button>
+    		</div>
+			</li>
+		</ul>
+		
 	</form>
 	<%if ('undefined' !== typeof errors && errors.length){%>
 	<div class="clear c-padding"></div>
@@ -34,3 +47,5 @@
 	</div>
 	<%}%>
 </div>
+
+		

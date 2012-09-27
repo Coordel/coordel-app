@@ -20,10 +20,10 @@ exports.getCoordelUsers = function(fn){
       fn(err, false);
     } else {
       var users = [];
-      console.log("ids", ids);
+      //console.log("ids", ids);
       ids = ids[0];
       ids.forEach(function(key){
-        console.log("key", key);
+        //console.log("key", key);
         multi.hgetall(key, function(err, user){
           users.push(user);
         });
@@ -48,16 +48,16 @@ exports.getCoordelApps = function(fn){
       fn(err, false);
     } else {
       var apps = [];
-      console.log("ids", ids);
+      //console.log("ids", ids);
       ids = ids[0];
       ids.forEach(function(key){
-        console.log("key", key);
+        //console.log("key", key);
         multi.hgetall(key, function(err, app){
           apps.push(app);
         });
       });
       multi.exec(function(err, results){
-        console.log("apps", results);
+        //console.log("apps", results);
         if (err){
           fn(err, false);
         } else {
@@ -69,10 +69,10 @@ exports.getCoordelApps = function(fn){
 };
 
 exports.getUserPeople = function(user){
-  console.log("in admin getUserPeople", user);
+  //console.log("in admin getUserPeople", user);
   var a = new App({});
   a.getPeople(user, function(err, people){
     if (err) console.log("error", err);
-    console.log("people", people);
+    //console.log("people", people);
   });
 };

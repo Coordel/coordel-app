@@ -149,7 +149,7 @@ define([
 				db.load("/coordel/reduce/networkStats",{ query: {group: true, reduce: true},
             handleAs: "json"
           }).then(function(data){
-						console.log("transparency data", data, data.keys, data.values);
+						//console.log("transparency data", data, data.keys, data.values);
 						var paying = 0;
 						var non = 0;
 						var total = 0;
@@ -199,7 +199,7 @@ define([
    				 }
         };
           
-        console.log("xhrArgs", xhrArgs);
+        //console.log("xhrArgs", xhrArgs);
         xhr.post(xhrArgs);
       },
    

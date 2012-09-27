@@ -51,6 +51,7 @@ body {
   font-family: 'Shadows Into Light', cursive;
   color: #000000;
   font-weight: bold;
+	font-size: 18px;
 }
 
 .capitalize {
@@ -961,6 +962,13 @@ ul.simple li{
 	border-radius: 4px;
 	border: 1px solid #333;
 	margin: 8px 0;
+}
+
+.password-container {
+	width: 25em; 
+	margin-top: 2em;
+	margin-left:1.5em;
+	line-height: 1.5em;
 }
 
 

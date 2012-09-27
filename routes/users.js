@@ -5,6 +5,8 @@ var User        = require('./../models/user'),
     settings    = config('settings'),
     App         = require('./../models/userApp');
 
+require("date-utils");
+
 module.exports = function(app, validate){
   
   app.get('/login', function(req, res){
@@ -25,25 +27,49 @@ module.exports = function(app, validate){
       App.get(login.appId, function(err, userApp){
         //console.log('userApp', userApp);
       });
-      
     });
-    
-    
   });
   
   app.get('/reset', function(req, res){
     //res.render('login', {auth: req.session.user});
-    res.render('users/reset', {layout: 'users/layout'});
+    res.render('users/resetRequest', {layout: 'users/layout'});
   });
+	
+	app.get('/reset/:id', function(req, res){
+		User.getReset(req.params.id, function(err, reset){
+			//console.log("reset", reset);
+			if (err){
+				console.log("error resetting", err);
+				res.render('users/login', {layout: 'users/layout'});
+			} else {
+				
+				var now = new Date();
+				var stamp = new Date(reset.stamp);
+				var diff = stamp.getMinutesBetween(now);
+				if (diff <= 30){
+					res.render('users/reset', {layout: 'users/layout', email: reset.email, username: reset.username});
+				} else {
+					res.render('users/resetRequest', {layout:'users/layout'});
+				}
+			}
+		});
+	});
+
+	app.post('/reset', function(req,res){
+		var email = req.body.email;
+		User.resetPassword(email, function(err, reply){
+			//console.log("reset", reply);
+			res.render('users/resetSuccess', {layout: 'users/layout', email: email});
+		});
+	});
+	
   
   app.get('/gravatar', function(req, res){
     
     var defaultUrl = 'http://' + settings.url + '/images/default_contact.png',
         url = gravatar.url(req.query.email, {s:req.query.s, d:defaultUrl});
-    
     //console.log("gravatar url", req.query.email, url);
     res.json({url:url});
-  
   });
   
   /*
@@ -123,6 +149,25 @@ module.exports = function(app, validate){
     });
     */
   });
+
+	app.post('/resetPassword', function(req, res){
+		var newPass = req.body.newPass,
+				username = req.body.username,
+				email = req.body.email;
+				
+		//console.log("resetting password", newPass, username, email);
+				
+		User.get(email, function(err, user){
+			
+       user.password = newPass;
+       var u = new User(user);
+       u.update(function(err, reply){
+         res.redirect('/logout');
+       });
+    	
+     });		
+		
+	});
 
   app.post('/password', function(req, res){
     //this updates the user password. 

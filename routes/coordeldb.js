@@ -70,7 +70,7 @@ module.exports = function(app, validate){
     
     //push the load word function for each of the words in the query  
     words.forEach(function(word){
-      console.log("word", word);
+      //console.log("word", word);
       funcs.push(loadWord(word));
     });
     
@@ -94,7 +94,7 @@ module.exports = function(app, validate){
         var ids = [];
         list.forEach(function(word,doc){
           
-          console.log("view", view);
+          //console.log("view", view);
         
           //we don't send back trash for projects and tasks and we don't send back inactive templates
           if(view === "taskSearch" || view === "projectSearch"){
@@ -111,7 +111,7 @@ module.exports = function(app, validate){
               //console.log("trash", doc.name);
             }
           } else if (view === "templateSearch"){
-            console.log("doc", doc);
+            //console.log("doc", doc);
             if (doc.isActive){
               
               //don't need to verify if this is for this user
@@ -171,7 +171,7 @@ module.exports = function(app, validate){
     
     couch.get(req.params.id, function(err, doc){
       if (err){
-        console.log(logId, "Error getting files: " + JSON.stringify(err));
+        //console.log(logId, "Error getting files: " + JSON.stringify(err));
         res.json({error: "ERROR getting files: " + err});
       } else {
         res.json(doc);
@@ -200,7 +200,7 @@ module.exports = function(app, validate){
             contentType: type
         }, function(err, attachRes){
           if (err) {
-            console.log(logId, "Error saving file" + JSON.stringify(err));
+            //console.log(logId, "Error saving file" + JSON.stringify(err));
             res.json({error: err});
           } else {
             //console.log("RESPONSE", attachRes);
@@ -219,7 +219,7 @@ module.exports = function(app, validate){
      
      couch.remove(id, rev, function(err, docRes){
        if (err){
-         console.log(logId, "Error removing doc: " + JSON.stringify(err));
+         //console.log(logId, "Error removing doc: " + JSON.stringify(err));
          res.json({error: err});
        } else {
          res.json(docRes);
@@ -240,7 +240,7 @@ module.exports = function(app, validate){
     
     nanoCouch.attachment.destroy(id, name, rev, function(e,b,h){
       if (e){
-        console.log(logId, "ERROR deleting file: " + JSON.stringify(e));
+        //console.log(logId, "ERROR deleting file: " + JSON.stringify(e));
       } else {
         //console.log("RESPONSE", b);
         res.json(b);
@@ -257,7 +257,7 @@ module.exports = function(app, validate){
     
     var user = req.query.username;
     var contact = req.query.contact;
-    console.log("got request for contact="+contact + " for username="+user);
+    //console.log("got request for contact="+contact + " for username="+user);
     //we need to get the user/contact projects
     //console.log('queryString params', req.query, opts);
     couch.view('coordel/userContactProjects', {startkey: [user, contact], endkey:[user,contact,{}]}, function(err, resView){
@@ -273,8 +273,8 @@ module.exports = function(app, validate){
 				console.log("no res view");
         toReturn = {rows: [], error: "unexpected error"};
       } else {
-				console.log("userContactProjects", resView);
-        if (resView.rows && resView.rows.length > 0){
+				//console.log("userContactProjects", resView);
+        if (resView.rows & resView.rows.length > 0){
           resView.rows.forEach(function(row){
             //console.log("IN FOR EACH ROWS", row);
             projects.push(row);
@@ -287,7 +287,7 @@ module.exports = function(app, validate){
         }
       }
 
-			console.log("projects in common", projects);
+			//console.log("projects in common", projects);
       
       //load the contact tasks and filter them
       couch.view('coordel/contactTasks', {startkey: [contact], endkey:[contact,{}], include_docs: true}, function(err, resTasks){
@@ -297,12 +297,12 @@ module.exports = function(app, validate){
         } else if (!resView){
           toReturn = {rows: [], error: "unexpected error"};
         } else {
-					console.log("resTasks", resTasks.length);
-          if (resTasks.rows && resTasks.rows.length){
+					//console.log("resTasks", resTasks.length);
+          if (resTasks.rows & resTasks.rows.length){
             resTasks.rows.forEach(function(row){
               
               if (projects.indexOf(row.project) > -1){
-								console.log("IN FOR EACH ROWS SUCCESS", row.name);
+								//console.log("IN FOR EACH ROWS SUCCESS", row.name);
                 tasks.push(row);
               }
               
@@ -311,7 +311,7 @@ module.exports = function(app, validate){
             resTasks.forEach(function(row){
               
               if (projects.indexOf(row.project) > -1){
-								console.log("IN FOR EACH SUCCESS", row.name);
+								//console.log("IN FOR EACH SUCCESS", row.name);
                 tasks.push(row);
               }
             });
@@ -356,8 +356,8 @@ module.exports = function(app, validate){
     couch.get(req.params.id, function(err, obj){
       if (err){
         
-        console.log(logId, "ERROR getting " + req.params.id + ": " + err.error);
-        console.log(err);
+        //console.log(logId, "ERROR getting " + req.params.id + ": " + err.error);
+        //console.log(err);
         if (err.error === "not_found"){
           err.code = 404;
           //res.send("ERROR getting " + req.params.id + ": " + err.error, 404);
@@ -369,7 +369,7 @@ module.exports = function(app, validate){
         }
         
       } else {
-				console.log("object from get", obj);
+				//console.log("object from get", obj);
         res.json(obj);
       }
       
@@ -435,19 +435,32 @@ module.exports = function(app, validate){
         toReturn = {rows: [], error: "unexpected error"};
       } else {
         //console.log("VIEW ROWS", resView);
+
+				//console.log("VIEW ROWS", resView);
+			  if (resView && resView.length > 0){
+	         resView.forEach(function(row){
+	           //console.log("IN FOR EACH", row);
+	           ret.push(row);
+	         });
+
+	       }
+	       toReturn = {rows: ret};
+				
+				/*
         if (resView.rows && resView.rows.length){
           resView.rows.forEach(function(row){
-            //console.log("IN FOR EACH ROWS", row);
-            ret.push(row);
+            //console.log("IN FOR EACH ROWS", row.value);
+            ret.push(row.value);
           });
         } else if (resView && resView.length){
           resView.forEach(function(row){
-            //console.log("IN FOR EACH", row);
+            //console.log("IN FOR EACH");
             ret.push(row);
           });
           
         }
         toReturn = {rows: ret};
+				*/
       }
       //console.log("returning", toReturn);
       res.json(toReturn);

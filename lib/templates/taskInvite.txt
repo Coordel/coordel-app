@@ -152,8 +152,8 @@
 							</div>
 						</div>
 					</div>
-				</div><!-- .entry-conten
-				</div><!== .content .hfeed -->
+				</div><!-- .entry-conten -->
+				</div><!-- .content .hfeed -->
 			</div><!-- #container -->
 		</div><!-- #body-container -->
 	</body>
