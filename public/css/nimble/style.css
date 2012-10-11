@@ -10,7 +10,7 @@ Author URI: http://coordel.com
 @import url("css/opportunity.css");
 @import url("css/dialog.css");
 
-@import '/clients/web/js/dojo-release-1-1.6.1-src/dijit/themes/coordel/coordel.css';
+@import '/clients/web/0.0.1/js/dojo-release-1-1.6.1-src/dijit/themes/coordel/coordel.css';
 
 #spotlight li {
 	background: #fff;
