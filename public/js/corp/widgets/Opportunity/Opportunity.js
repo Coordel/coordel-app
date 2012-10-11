@@ -122,19 +122,22 @@ define(["dojo/_base/declare",
         
         follow.on("click", function(){
           self.isActive = true;
+					var cookie = cookie("oppNames");
           //check if there is a cookie for this user so they only have to do it once
-          var name = JSON.parse(cookie("oppNames"));
-          var email = cookie("oppEmail");
-          
-          if (name){
-            //console.log("name", name);
-            self.name.set("value", name.firstName + " " + name.lastName);
-            self.validate();
-          }
-          if (email){
-            self.email.set("value", email);
-            self.validate();
-          }
+					if (cookie){
+						var name = JSON.parse(cookie("oppNames"));
+	          var email = cookie("oppEmail");
+
+	          if (name){
+	            //console.log("name", name);
+	            self.name.set("value", name.firstName + " " + name.lastName);
+	            self.validate();
+	          }
+	          if (email){
+	            self.email.set("value", email);
+	            self.validate();
+	          }
+					} 
         });
         
         bnFollow.on("click", function(){
