@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.162",
+  version: "0.1.163",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -15,6 +15,25 @@ module.exports = {
       		  doc.altEmails.forEach(function(email){
       		    emit(
           			[email.toLowerCase()], doc
+          		);
+      		  });
+      		}
+        }
+      }
+    },
+
+		usersCreated: {
+      map: function(doc){
+        if (doc.docType === "user"){
+        	//emit the contact
+      		emit(
+      			[doc.created, doc.email.toLowerCase()], doc
+      		);
+      		if (doc.altEmails && doc.altEmails.length > 0){
+      		  //emit the contact
+      		  doc.altEmails.forEach(function(email){
+      		    emit(
+          			[doc.create, email.toLowerCase()], doc
           		);
       		  });
       		}

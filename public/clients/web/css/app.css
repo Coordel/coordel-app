@@ -395,9 +395,7 @@ background:transparent url(connections/gravatar.jpg) center left no-repeat !impo
 }
 
 .bg1 {
-  background: Ïurl('images/wood/1.jpg');
-  background-color: rgba(200, 54, 54, 0.5);
-  }
+  background: #666666 url('images/wood/1.jpg');
 }
 .bg2 {
   background:  #666666 url('images/wood/2.jpg');

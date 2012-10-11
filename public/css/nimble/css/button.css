@@ -1,0 +1,272 @@
+a.button{ display: inline-block; text-shadow: 1px 1px 0 rgba(255,255,255,0.3); -moz-box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.4), 1px 1px 1px rgba(0,0,0,0.1); -webkit-box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.4), 1px 1px 1px rgba(0,0,0,0.1); box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.4), 1px 1px 1px rgba(0,0,0,0.1); -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; line-height: 26px; }
+
+a.button { padding: 6px 14px; font-size: 14px; margin: 0 5px 8px 0; }
+	a.button:hover{ text-decoration: none; }
+	
+a.graybutton { 
+	color: #fff !important; 
+	background: rgb(61,75,85);
+	/* Old browsers */ background: -moz-linear-gradient(top,  rgba(61,75,85,1) 1%, rgba(53,66,75,1) 100%); 
+	/* FF3.6+ */ background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(61,75,85,1)), color-stop(100%,rgba(53,66,75,1))); 
+	/* Chrome,Safari4+ */ background: -webkit-linear-gradient(top,  rgba(61,75,85,1) 1%,rgba(53,66,75,1) 100%); 
+	/* Chrome10+,Safari5.1+ */ background: -o-linear-gradient(top,  rgba(61,75,85,1) 1%,rgba(53,66,75,1) 100%); 
+	/* Opera 11.10+ */ background: -ms-linear-gradient(top,  rgba(61,75,85,1) 1%,rgba(53,66,75,1) 100%); 
+	/* IE10+ */ background: linear-gradient(to bottom,  rgba(61,75,85,1) 1%,rgba(53,66,75,1) 100%); 
+	/* W3C */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3d4b55', endColorstr='#35424b',GradientType=0 ); 
+	/* IE6-9 */ border: 1px solid #2d363d;
+	-moz-box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2), 1px 1px 1px rgba(0,0,0,0.1); 
+	-webkit-box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2), 1px 1px 1px rgba(0,0,0,0.1); 
+	box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2), 1px 1px 1px rgba(0,0,0,0.1); 
+	text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+}
+
+a.graybutton:hover { 
+	border: 1px solid #2e82b3; 
+	-webkit-box-shadow: 1px 1px 0 #66bef2 inset, 0 1px 2px rgba(0,0,0,0.1); 
+	-moz-box-shadow: 1px 1px 0 #66bef2 inset, 0 1px 2px rgba(0,0,0,0.1); 
+	box-shadow: 1px 1px 0 #66bef2 inset, 0 1px 2px rgba(0,0,0,0.1); 
+	background: rgb(65,166,224); 
+	/* Old browsers */ background: -moz-linear-gradient(top,  rgba(65,166,224,1) 0%, rgba(57,154,209,1) 100%); 
+	/* FF3.6+ */ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,166,224,1)), color-stop(100%,rgba(57,154,209,1))); 
+	/* Chrome,Safari4+ */ background: -webkit-linear-gradient(top,  rgba(65,166,224,1) 0%,rgba(57,154,209,1) 100%); 
+	/* Chrome10+,Safari5.1+ */ background: -o-linear-gradient(top,  rgba(65,166,224,1) 0%,rgba(57,154,209,1) 100%); 
+	/* Opera 11.10+ */ background: -ms-linear-gradient(top,  rgba(65,166,224,1) 0%,rgba(57,154,209,1) 100%); 
+	/* IE10+ */ background: linear-gradient(to bottom,  rgba(65,166,224,1) 0%,rgba(57,154,209,1) 100%); 
+	/* W3C */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#41a6e0', endColorstr='#399ad1',GradientType=0 ); 
+	/* IE6-9 */
+}
+
+/* Button | DropDownButton | ComboButton | ToggleButton
+ * 
+ * Styling Buttons mainly includes:
+ * 
+ * 1. Containers
+ * 		.dijitButton
+ * 		.dijitDropDownButton
+ * 		.dijitComboButton
+ * 		.dijitButtonNode - common button/arrow wrapper shared across all three button types 
+ *
+ * 2. Button text
+ * 		.dijitButtonText
+ * 
+ * 3. Arrows - only for DropDownButton and ComboButton
+ * 	     There are total four directions arrows - down, left, right, up:
+ * 		.dijitArrowButtonInner - down arrow by default
+ *      .dijitLeftArrowButton .dijitArrowButtonInner - left arrow
+ *      .dijitRightArrowButton .dijitArrowButtonInner - right arrow
+ *      .dijitUpArrowButton .dijitArrowButtonInner - up arrow
+ * 
+ * 4. States - Hover, Active, Disabled, e.g.
+ * 		.dijitButtonHover .dijitButtonNode
+ * 		.dijitButtonActive .dijitButtonNode
+ * 		.dijitButtonDisabled .dijitButtonNode
+ *      
+ *      .dijitDisabled .dijitArrowButtonInner  - disabled arrow states 
+ */
+.corp-button .dijitButtonNode {
+  /* rules for dijit.form.*Button widgets and arrow nodes on ComboBox, Spinner etc. */
+  -webkit-transition-property: #00629b;
+  -moz-transition-property: #00629b;
+  transition-property: #00629b;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+.corp-button.dijitButton .dijitButtonNode,
+.corp-button.dijitDropDownButton .dijitButtonNode,
+.corp-button.dijitComboButton .dijitButtonNode,
+.corp-button.dijitToggleButton .dijitButtonNode {
+  /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
+
+  border: 1px solid #00629b;
+ 
+  background-image: url("/clients/web/0.0.1/css/images/button_background.png");
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #00629b;
+  color: #eeeeee;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  text-transform: capitalize;
+  font-weight: bold;
+  font-family: sans-serif;
+  font-size: 1.3em;
+}
+
+.corp-contrast.dijitButton .dijitButtonNode,
+.corp-contrast.dijitDropDownButton .dijitButtonNode,
+.corp-contrast.dijitComboButton .dijitButtonNode,
+.corp-contrast.dijitToggleButton .dijitButtonNode {
+/* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
+
+  border: 1px solid #DA291C;
+
+  background-image: url("/clients/web/0.0.1/css/images/button_background.png");
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #DA291C;
+  color: #eeeeee;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  text-transform: capitalize;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+/* hover status */
+.corp-contrast.dijitButtonHover .dijitButtonNode,
+.corp-contrast.dijitDropDownButtonHover .dijitButtonNode,
+.corp-contrast.dijitComboButton .dijitButtonNodeHover,
+.corp-contrast.dijitComboButton .dijitDownArrowButtonHover,
+.corp-contrast.dijitToggleButtonHover .dijitButtonNode {
+  background-color: #DA291C;
+  color: #ffffff;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+.corp-dark.dijitButton .dijitButtonNode,
+.corp-dark.dijitDropDownButton .dijitButtonNode,
+.corp-dark.dijitComboButton .dijitButtonNode,
+.corp-dark.dijitToggleButton .dijitButtonNode {
+/* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
+
+  border: 1px solid #003C60;
+
+  background-image: url("/clients/web/0.0.1/css/images/button_background.png");
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #003C60;
+  color: #eeeeee;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  text-transform: capitalize;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+/* hover status */
+.corp-dark.dijitButtonHover .dijitButtonNode,
+.corp-dark.dijitDropDownButtonHover .dijitButtonNode,
+.corp-dark.dijitComboButton .dijitButtonNodeHover,
+.corp-dark.dijitComboButton .dijitDownArrowButtonHover,
+.corp-dark.dijitToggleButtonHover .dijitButtonNode {
+  background-color: #003C60;
+  color: #ffffff;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+/*
+.corp-button .dijitComboButton .dijitArrowButton {
+  border-left-width: 0;
+  padding: 4px 2px 4px 2px;
+ 
+
+}
+*/
+/*arrow styles for down/up/left/right directions*/
+.corp-button .dijitArrowButtonInner {
+  width: 15px;
+  height: 15px;
+  margin: 0 auto;
+  /*background-image: url("images/buttonArrows.png");*/
+  background-repeat: no-repeat;
+  background-position: -51px 53%;
+}
+.corp-button .dijitLeftArrowButton .dijitArrowButtonInner {
+  background-position: -77px 53%;
+}
+.corp-button .dijitRightArrowButton .dijitArrowButtonInner {
+  background-position: -26px 53%;
+}
+.corp-button .dijitUpArrowButton .dijitArrowButtonInner {
+  background-position: 0 53%;
+}
+.corp-button .dijitDisabled .dijitArrowButtonInner {
+  background-position: -151px 53%;
+}
+.corp-button .dijitDisabled .dijitLeftArrowButton .dijitArrowButtonInner {
+  background-position: -177px 53%;
+}
+.corp-button .dijitDisabled .dijitRightArrowButton .dijitArrowButtonInner {
+  background-position: -126px 53%;
+}
+.corp-button .dijitDisabled .dijitUpArrowButton .dijitArrowButtonInner {
+  background-position: -100px 53%;
+}
+.corp-button .dijitButtonText {
+  /*padding: 0 0.3em;*/
+  text-align: center;
+}
+/* hover status */
+.corp-button.dijitButtonHover .dijitButtonNode,
+.corp-button.dijitDropDownButtonHover .dijitButtonNode,
+.corp-button.dijitComboButton .dijitButtonNodeHover,
+.corp-button.dijitComboButton .dijitDownArrowButtonHover,
+.corp-button.dijitToggleButtonHover .dijitButtonNode {
+  background-color: #00629b;
+  color: #ffffff;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+/* checked status */
+.corp-button .dijitButtonActive .dijitButtonNode,
+.corp-button .dijitDropDownButtonActive .dijitButtonNode,
+.corp-button .dijitComboButtonActive .dijitButtonNode,
+.corp-button .dijitToggleButtonActive .dijitButtonNode {
+  background-color: #333;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+/* disabled status */
+.corp-button .dijitButtonDisabled,
+.corp-button .dijitDropDownButtonDisabled,
+.corp-button .dijitComboButtonDisabled,
+.corp-button .dijitToggleButtonDisabled {
+  background-image: none;
+  outline: none;
+}
+.corp-button .dijitButtonDisabled .dijitButtonNode,
+.corp-button .dijitDropDownButtonDisabled .dijitButtonNode,
+.corp-button .dijitComboButtonDisabled .dijitButtonNode,
+.corp-button .dijitToggleButtonDisabled .dijitButtonNode {
+  background-color: #00629b;
+  border: solid 1px #00629b;
+  background-image: none;
+  color: #ffffff;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+/* Buttons */
+
+.corp-button .dijitToggleButton,
+.corp-button .dijitButton,
+.corp-button .dijitDropDownButton,
+.corp-button .dijitComboButton {
+	/* outside of button */
+	margin: 0;
+	vertical-align: middle;
+}
+
+.corp-button .dijitArrowButtonInner {
+  background-image: url("/clients/web/0.0.1/css/images/icons/headerButtonArrows.png");
+}

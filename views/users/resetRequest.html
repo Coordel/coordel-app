@@ -4,31 +4,61 @@
     corp.setCurrentPage("");
   });
 </script>
+<div id="page-name">	
+  <hgroup class="section-title">
+    <h1 id="page-title">Reset Password</h1>
+  </hgroup>
+</div> <!-- end #page-name -->
+</div> <!-- end .container -->
+<div id="breadcrumbs">
+<div class="container clearfix">
+  <div id="breadcrumbs_box">
+		<a href="/" class="breadcrumbs_home">Home</a> <span class="raquo">»</span>Reset Password
+	</div> <!-- end #breadcrumbs_box -->
+</div> <!-- end .container -->
+</div> <!-- end #breadcrumbs -->
+</header> <!-- end #main-header -->
 
-<div class="password-container">
-	<div class="handwritten c-padding-large-b">Enter your email and we'll send you instructions how to reset your password<sup>*</sup></div>
-	
-	<form action="/reset" method="post">
-		<div class="full" style="padding-bottom:1em">
-			<input name="email" type="text" class="text x-large">
-		</div>
-		<div>
-		  <button id="resetPassword" class="c-float-r corp-dark" data-dojo-type="dijit.form.Button" type="submit">Reset
-	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-          // Do something:
-          castor.info("buttonClick=resetPassword");
-        </script>
-	    </button>
-			<div class="clear"></div>
-		</div>
-	</form>
-	<div class="c-padding-large-t c-padding-large-b c-color-label"><sup>*</sup>If more than 30 minutes pass after receiving the e-email, you will be returned here to make a new request.</div>
-	<%if ('undefined' !== typeof errors && errors.length){%>
-	<div class="feedback c-color-error c-text-center c-padding-large-t">
-		<% for (var key in errors) {%>
-			<span class="error"><%=errors[key]%>.</span>
-		<%}%>
-		<span>Please try again.
-	</div>
-	<%}%>
-</div>
+
+<div id="main-area">
+<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+		<article class="clearfix">
+      <div class="post_content">
+
+<div>
+	<div class="handwritten c-padding-large-b">Enter your e-mail and we'll send instructions how to reset your password<sup style="font-size: 12px">*</sup></div>
+	<div id="et-contact" class="responsive" style="width: 23em">
+  	<form action="/reset" method="post">
+  		<div>
+  			<p class="clearfix">
+  				<label for="email" >E-mail</label>
+  				<input type="text" name="email" id="email" class="input" />
+  			</p>
+
+  		</div> <!-- #et_contact_left -->
+
+  		<div class="clear"></div>
+
+  		<input class="et_contact_submit" type="submit" value="Reset" id="et_contact_submit" />
+  	</form>
+  </div> <!-- end #et-contact -->
+  <div class="clear"></div>
+  <br><br>
+	<div class="c-padding-large-t c-padding-large-b c-color-label"><em><sup>*</sup>If more than 30 minutes pass after receiving the e-email, you will be returned here to make a new request.</em></div>
+	<br><br>
+  <%if ('undefined' !== typeof errors && errors.length){%>
+  <div class="et-box et-warning">
+  	<div class="et-box-content">
+  	  <div style="font-size: 17px;">Oops</div>
+  	  <br>
+  	  <div>
+  	    	<% for (var key in errors) {%>
+      			<span><%=errors[key]%>.</span>
+      		<%}%>
+      		<span> Please try again.</span>
+  	  </div>
+  	</div>
+  </div>
+  <%}%>

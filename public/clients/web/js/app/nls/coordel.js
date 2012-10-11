@@ -289,7 +289,7 @@ define({
 		    pause: "This will pause all Tasks in the Coord",
 		    resume: "This will resume all Paused Tasks in the Coord",
 		    send: "This will activate the Coord and send Pending Tasks to the assigned People",
-		    publish: "Click Ok to  Publish an Opportunity that will show up in all Coordel Members' Opportunities.",
+		    publish: "Click Ok to Publish an Opportunity that will show up in all Coordel Members' Opportunities.",
 	      deleteProject: "This will permanently delete this Coord",
 	      decline: "This will remove access from the Coord",
 	      reuse: "Click Ok to save this Coord as a Blueprint Coord for reuse in the future",
@@ -368,7 +368,7 @@ define({
 		    "clearIssue": "Enter what was done to clear the Issue",
 		    "decline": "Enter why you are declining this Task",
 		    "proposeChange": "Describe the change or changes you made to the Task. If you haven't made changes, Cancel and make the changes first.",
-		    "agreeChange": "Enter comments you have about the changes or details any additional changes you have made",
+		    "agreeChange": "Enter comments you have about the changes or details about any additional changes you have made",
 		    "quickEnterPrivate": "Click to quick-enter Private Tasks...",
 		    reuse: "",
 		    reuseDeliverables: "",
@@ -395,7 +395,7 @@ define({
 		  currentTitle: "No Current Tasks",
 		  currentText: "See all Tasks that aren't Blocked, Delegated, or Deferred here",
 		  invitedTitle: "No Invitations",
-		  invitedText: "Manage new work here. Accept, Decline or Propose Changes to Tasks delegated to you. Agree Changes proposed to Tasks you've delegated.",
+		  invitedText: "Manage new work here. Accept, Decline or Propose Changes to Tasks delegated to you. Agree the Changes proposed to Tasks you've delegated.",
 		  blockedTitle: "No Blocked Tasks",
 		  blockedText: "Keep track of Tasks that are Blocked by Prerequisites that aren't ready yet",
 		  deferredTitle: "No Deferred Tasks",
@@ -551,7 +551,7 @@ define({
 		  deadlineTitle: "Set a Deadline",
 		  deadlineText: "<p>Deadline indicate when the Coord must be completed. When Tasks are added, if they don't have a Deadline, the Coord Deadline will be used.</p><p>Deadlines default to one week from now if left blank.</p>",
 		  responsibleTitle: "Choose the Person who is responsible for this Coord.",
-		  responsibleText: "The Responsible has full authority to get the Coord done.",
+		  responsibleText: "The person Responsible has full authority to get the Coord done.",
 		  peopleTitle: "Add People to the Coord",
 		  peopleText: "Every Person in the Coord has access to the Stream and can have a Role in the Coord",
 		  rolesTitle: "Add Roles to the Coord",
@@ -559,7 +559,7 @@ define({
 		  deferTitle: "Define work on the Coord until a later date",
 		  deferText: "Defer a Coord if you aren't ready to start working on it yet. This removes all Tasks from everyone's Current list until the Defer Date",
 			attachmentsTitle: "Add an Attachment",
-		  attachmentsText: "An Attachment is someone People in the Coord need to get their Tasks done. It might be a Template, a report, or some other file"
+		  attachmentsText: "An Attachment is something People in the Coord need to get their Tasks done. It might be a Template, a report, or some other file"
 		},
 		"taskFormTip": {
 		  "nameTitle": "Add Tasks here",
@@ -569,15 +569,15 @@ define({
 		  "deadlineTitle": "Set a Deadline",
 		  "deadlineText": "Deadlines clearly indicate when Tasks must be completed and can be a date or a date and time. Raise the priority of a Task by setting its deadline sooner.<br><br>If the Task is part of a Coord and doesn't have a Deadline, the Coord's Deadline will be used",
 		  "projectTitle": "Add Task to a Coord",
-		  "projectText": "Coords let you coordinate your work with others. Create a Coord whenever there are two or more people required to get work done.<br><br>Start typing to select from your existing Coords, or add a new one if what you type doesn't exist.<br><br> Press down arrow to see all Coords. ",
+		  "projectText": "Coords let you coordinate your work with others. Create a Coord whenever there are two or more people required to get work done.<br><br>Start typing to select from your existing Coords, or add a new Coord if what you are typing doesn't exist.<br><br> Press down arrow to see all Coords. ",
 		  "delegateTitle": "Delegate the Task to Someone",
-		  "delegateText": "You can delegate a Task to anyone. If you don't add it to a Coord, find it in your Delegated list.<br><br>Start typing to select from existing People, or invite someone if what you type isn't found.<br><br>Press down arrow to see all People.",
+		  "delegateText": "You can delegate a Task to anyone. If you don't add it to a Coord, find it in your Delegated list.<br><br>Start typing to select from existing People, or invite if the name you type isn't found.<br><br>Press down arrow to see all People.",
 		  "deferTitle": "Defer this Task to a later date",
 		  "deferText": "Defer a task if you aren't ready to start working on it yet. This removes it from your Current list until the Defer Date",
 		  "deliverablesTitle": "Add Deliverables to this Task",
-		  "deliverablesText": "Deliverables are what gets done by this Task. Don't worry if you don't know. The Person doing the Task probably does and can add it before accepting the Task.<br><br>Start typing to choose or press down arrow to see all possible Deliverables.",
+		  "deliverablesText": "Deliverables are what gets done by this Task. Don't worry if you don't know what the Deliverables are. The Person doing the Task probably does know and can add the correct Deliverables before accepting the Task.<br><br>Start typing to choose or press down arrow to see all possible Deliverables.",
 		  "blockersTitle": "Select Tasks that Block this one",
-		  "blockersText": "Blockers are Tasks that have Deliverables that must be done before starting this one. Tasks from one Coord can block Tasks in another Coord.<br><br>To set a Blocker, start typing to choose the Coord and tick the box next to the blocking Tasks.<br><br>Press down arrow to see all Coords.",
+		  "blockersText": "Blockers are Tasks that have Deliverables that must be done before starting this Task. Tasks from one Coord can block Tasks in another Coord.<br><br>To set a Blocker, start typing to choose the Coord and tick the boxes next to the blocking Tasks.<br><br>Press down arrow to see all Coords.",
 		  "attachmentsTitle": "Add an Attachment",
 		  "attachmentsText": "An Attachment is something needed to get this Task done. It might be a Template, a report, or some other file."
 		},
@@ -624,12 +624,12 @@ define({
 		  }
 		},
 		"blockerMessages": {
-		  "blocked": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because already blocking this one</span>",
-		  "circular": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because this is the last unblocked task in this Coord. At least one task can't block the other tasks in a Coord.</span>"
+		  "blocked": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because already blocking this task</span>",
+		  "circular": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because this is the last unblocked task in this Coord. There must be at least one unblocked Task in every Coord.</span>"
 		},
 		"deliverableMessages": {
-		  "blocked": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because already blocking this one</span>",
-		  "circular": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because this is the last unblocked deliverable. At least one deliverable can't block.</span>"
+		  "blocked": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because already blocking this task</span>",
+		  "circular": "<sup class='c-color-active'>*</sup><span class='c-font-small c-color-light'>Disabled because this is the last unblocked deliverable. There must be at least one unblocked Deliverable in every Task.</span>"
 		},
 		"deliverableSettings": {
 		  "name": "Deliverable Name",

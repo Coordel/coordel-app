@@ -4,48 +4,68 @@
     corp.setCurrentPage("");
   });
 </script>
+<div id="page-name">	
+  <hgroup class="section-title">
+    <h1 id="page-title">Login</h1>
+  </hgroup>
+</div> <!-- end #page-name -->
+</div> <!-- end .container -->
+<div id="breadcrumbs">
+<div class="container clearfix">
+  <div id="breadcrumbs_box">
+		<a href="/" class="breadcrumbs_home">Home</a> <span class="raquo">»</span>Login
+	</div> <!-- end #breadcrumbs_box -->
+</div> <!-- end .container -->
+</div> <!-- end #breadcrumbs -->
+</header> <!-- end #main-header -->
+
+
+<div id="main-area">
+<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+		<article class="clearfix">
+      <div class="post_content">
+
 <div class="handwritten">
 	<div>Please enter your E-mail and Password to login to Coordel</div>
 	<br/>
 </div>
-<div style="width: 23em;">
-  
+<div id="et-contact" class="responsive" style="width: 23em">
 	<form action="/login" method="post">
-	  <ul>
-			<li>
-  			<label for="regEmail">E-mail</label>
-				<div>
-					<input id="regEmail" name="email" type="text">
-				<div>
-			</li>
-			<li>
-  			<label for="regPassword">Password</label>
-				<div>
-					<input id="regPassword" name="password" type="password">
-				<div>
-			</li>
-			<li>
-			  <div style="margin-right: 2em">
-    		  <button id="submitLogin" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Login
-    	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-              // Do something:
-              castor.info("buttonClick=login, page=login");
-            </script>
-    	    </button>
-    		</div>
-			</li>
-		</ul>
-		
+		<div>
+			<p class="clearfix">
+				<label for="email" >E-mail</label>
+				<input type="text" name="email" id="email" class="input" />
+			</p>
+
+			<p class="clearfix">
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" class="input" />
+			</p>
+		</div> <!-- #et_contact_left -->
+
+		<div class="clear"></div>
+
+		<input class="et_contact_submit" type="submit" value="Login" id="et_contact_submit" />
 	</form>
-	<%if ('undefined' !== typeof errors && errors.length){%>
-	<div class="clear c-padding"></div>
-  <div class="feedback error c-color-error c-text-center c-padding-large-t">
-		<% for (var key in errors) {%>
-			<span><%=errors[key]%>.</span>
-		<%}%>
-		<span>Please try again.</span>
+</div> <!-- end #et-contact -->
+<div class="clear"></div>
+<br><br>
+<%if ('undefined' !== typeof errors && errors.length){%>
+<div class="et-box et-warning">
+	<div class="et-box-content">
+	  <div style="font-size: 17px;">Oops</div>
+	  <br>
+	  <div>
+	    	<% for (var key in errors) {%>
+    			<span><%=errors[key]%>.</span>
+    		<%}%>
+    		<span> Please try again.</span>
+	  </div>
 	</div>
-	<%}%>
 </div>
+<%}%>
+
 
 		

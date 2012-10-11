@@ -1,0 +1,58 @@
+<script>
+  // Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
+  require(["corp/main", "dojo/_base/array", "dojo/dom-class", "corp/widgets/Opportunity/Opportunity", "corp/db"], function(corp, array, dc, Opportunity, db){
+    corp.setCurrentPage("public");
+    
+    db.load("/coordel/view/publicOpportunities",{ query: {limit: 50, descending: true},
+        handleAs: "json"
+      }).then(function(data){
+        //console.log("data", data);
+        //data.rows = [];
+  
+        if (data.rows){
+          
+          if (!data.rows.length){
+            console.log("in hide");
+            dc.add("opp-instructions", "hidden");
+            dc.add("opp-list", "hidden");
+             dc.add("opp-list-header", "hidden");
+            dc.remove("empty-notice", "hidden");
+            
+          }
+          if (data.rows.length === 50){
+            dc.remove("count-notice", "hidden");
+          }
+          
+          array.forEach(data.rows, function(item){
+            var o = new Opportunity({project: item}).placeAt("opp-list");
+            o.startup();
+          });
+        } else {
+          //need to show empty;
+        }
+      });
+  });
+</script>
+<div class="c-float-r">
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="coordel" data-count="none">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</div>
+<div class="c-float-r c-margin-r">
+  <div class="fb-like" data-href="http://www.facebook.com/coordelinfo" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false" data-font="lucida grande"></div>
+</div>
+
+<h1>Network Opportunities</h1>
+
+<p>
+"Network Opportunities" are <a href="/?p=feature&f=coord">Coords</a> that have been published by other Coordel members who need particular expertise to get their work done. Check out the list below to see Opportunities that might interest you.</p> 
+<p>Anyone who is a <a href="/register">Registered Member</a> can participate in Network Opportunities.</p>
+
+<div id="empty-notice" class="hidden"><h3>Just getting started...</h3></div>
+<p id="opp-instructions">Scroll over and click the binoculars icon to follow a Network Opportunity. Non-members will be invited to start a free 30-day trial membership. Opportunities you follow will appear in your <a href="/?p=feature&f=coord">Coord</a> list within the application.</p>
+<h2 id="opp-list-header" class="c-padding-large-b">Network Opportunities</h2>
+<p id="opp-list" class="public coordel"></p>
+
+<p id="count-notice" class="hidden">Showing only the latest 50 Opportunities. Log on or <a href="/register">Join Us</a> to see all Opportunities.</p>
+
+

@@ -36,31 +36,39 @@ module.exports = function(app, validate){
   });
 	
 	app.get('/reset/:id', function(req, res){
-		User.getReset(req.params.id, function(err, reset){
-			//console.log("reset", reset);
-			if (err){
-				console.log("error resetting", err);
-				res.render('users/login', {layout: 'users/layout'});
-			} else {
-				
-				var now = new Date();
-				var stamp = new Date(reset.stamp);
-				var diff = stamp.getMinutesBetween(now);
-				if (diff <= 30){
-					res.render('users/reset', {layout: 'users/layout', email: reset.email, username: reset.username});
+		var id = req.params.id;
+		if (id){
+			User.getReset(req.params.id, function(err, reset){
+				//console.log("reset", reset);
+				if (err){
+					console.log("error resetting", err);
+					res.render('users/login', {layout: 'users/layout'});
 				} else {
-					res.render('users/resetRequest', {layout:'users/layout'});
+
+					var now = new Date();
+					var stamp = new Date(reset.stamp);
+					var diff = stamp.getMinutesBetween(now);
+					if (diff <= 30){
+						res.render('users/reset', {layout: 'users/layout', email: reset.email, username: reset.username});
+					} else {
+						res.render('users/resetRequest', {layout:'users/layout'});
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 
 	app.post('/reset', function(req,res){
 		var email = req.body.email;
-		User.resetPassword(email, function(err, reply){
-			//console.log("reset", reply);
-			res.render('users/resetSuccess', {layout: 'users/layout', email: email});
-		});
+		if (email){
+			User.resetPassword(email, function(err, reply){
+				//console.log("reset", reply);
+				res.render('users/resetSuccess', {layout: 'users/layout', email: email});
+			});
+		} else {
+			res.redirect('/reset');
+		}
+		
 	});
 	
   

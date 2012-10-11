@@ -4,64 +4,77 @@
     corp.setCurrentPage("");
   });
 </script>
+<div id="page-name">	
+  <hgroup class="section-title">
+    <h1 id="page-title">Join Us</h1>
+  </hgroup>
+</div> <!-- end #page-name -->
+</div> <!-- end .container -->
+<div id="breadcrumbs">
+<div class="container clearfix">
+  <div id="breadcrumbs_box">
+		<a href="/" class="breadcrumbs_home">Home</a> <span class="raquo">»</span>Join Us
+	</div> <!-- end #breadcrumbs_box -->
+</div> <!-- end .container -->
+</div> <!-- end #breadcrumbs -->
+</header> <!-- end #main-header -->
 
-<div class="c-float-l register-form" style="width: 23em;padding-right: 2em;">
-	<form action="/register" method="post">
-		<ul>
-			<li>
-  			<label for="regFirstName">First Name</label>
-				<div>
-					<input id="regFirstName" name="firstName" type="text"/>
-				<div>
-			</li>
-			<li>
-  			<label for="regLastName">Last Name</label>
-				<div>
-					<input id="regLastName" name="lastName" type="text">
-				<div>
-			</li>
-			<li>
-  			<label for="regEmail">Email</label>
-				<div>
-					<input id="regEmail" name="email" type="text">
-				<div>
-			</li>
-			<li>
-  			<label for="regPassword">Password</label>
-				<div>
-					<input id="regPassword" name="password" type="password">
-				<div>
-			</li>
-			<li>
-  			<label for="regVerify">Verify Password</label>
-				<div>
-					<input id="regVerify" name="verifypassword" type="password">
-				<div>
-			</li>
-		</ul>
-		<div>
-			<button class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Join Us
-	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-          // Do something:
-          castor.info("buttonClick=joinUs, location=register");
-        </script>
-      </button>
-		</div>
-	</form>
-	<%if ('undefined' !== typeof errors && errors.length){%>
-  <div class="clear c-padding"></div>
-	<div class="feedback error c-color-error c-text-center c-padding-large-t">
-		<% for (var key in errors) {%>
-			<span><%=errors[key]%>.</span>
-		<%}%>
-		<span> Please try again.</span>
-	</div>
-	<%}%>
-</div>
-<div class="c-float-r alt-form" style="width: 14em; margin-left: 1em">
-	<div class="handwritten" style="line-height: 1.3em">Save time by using your Facebook or LinkedIn account to join Coordel</div> 
-	<div class="c-padding-large-t">
-		<p class="c-text-center c-padding-large"><a href="/auth/facebook" class="signin-facebook"></a></p>
-		<p class="c-text-center c-padding-large"><a href="/auth/linkedin" class="signin-linkedin"></a></p>
-	</div>
-</div>
+
+<div id="main-area">
+<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+		<article class="clearfix">
+      <div class="post_content">
+        <h1>Join us free for 30 days</h1>
+        <br>
+        <h2>Fully functional, no credit card required.</h2>
+        <br>
+        <div id="et-contact" class="responsive">
+        	<form action="/register" method="post">
+        		<div>
+     					<p class="clearfix">
+    						<label for="firstName">First Name</label>
+    						<input type="text" name="firstName" id="firstName" class="input" />
+    					</p>
+    					
+    					<p class="clearfix">
+    						<label for="lastName" >Last Name</label>
+    						<input type="text" name="lastName" id="lastName" class="input" />
+    					</p>
+
+    					<p class="clearfix">
+    						<label for="email" >E-mail</label>
+    						<input type="text" name="email" id="email" class="input" />
+    					</p>
+
+    					<p class="clearfix">
+    						<label for="password">Password</label>
+    						<input type="password" name="password" id="password" class="input" />
+    					</p>
+    				</div> <!-- #et_contact_left -->
+
+    				<div class="clear"></div>
+
+    				<input type="reset" id="et_contact_reset" value="Reset" />
+    				<input class="et_contact_submit" type="submit" value="Submit" id="et_contact_submit" />
+    			</form>
+
+        	<p class="c-text-center"><em>Find out all about our <a class="c-color-active" href="/?p=pricing">Simple Pricing</a></em></p>
+        </div> <!-- end #et-contact -->
+        <br><br>
+        <%if ('undefined' !== typeof errors && errors.length){%>
+        <div class="et-box et-warning">
+        	<div class="et-box-content">
+        	  <div style="font-size: 17px;">Oops</div>
+        	  <br>
+        	  <div>
+        	    	<% for (var key in errors) {%>
+            			<span><%=errors[key]%>.</span>
+            		<%}%>
+            		<span> Please try again.</span>
+        	  </div>
+        	</div>
+        </div>
+        <%}%>
+      

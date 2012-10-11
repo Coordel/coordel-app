@@ -61,7 +61,7 @@ define(['dojo',
 	        def = db.init();
 	    
 	    def.then(function(res){
-	      console.log("DATABASE LOADED: ", res, db.appStore.username);
+	      console.log("DATABASE LOADED: ", res);
 	      //db.projectStore.loadExtendedTasks("3c0b0b22b121ab3c3ae522593cbfab6a");
 	      app.username = db.appStore.username;
 	      app.showApp();
@@ -93,7 +93,7 @@ define(['dojo',
 	  },
 	  
 	  playSound: function(sound){
-	    console.debug("PLAYING SOUND", sound);
+	    //console.debug("PLAYING SOUND", sound);
 	    switch (sound){
 	      case "ding":
 	      this.dingSound.play();
@@ -125,12 +125,12 @@ define(['dojo',
 		  });
 		  
 		  socket.on("alerts:" + this.username.toString(), function(alert){
-		    console.log("SOCKET ALERT", alert);
+		    //console.log("SOCKET ALERT", alert);
 		    app.handleAlert(alert);
 		  });
 		  
 		  socket.on("contacts:" + this.username.toString(), function(contact){
-		    console.log("SOCKET CONTACT", contact);
+		    //console.log("SOCKET CONTACT", contact);
 		    app.handleContact(contact);
 		  });
 		  

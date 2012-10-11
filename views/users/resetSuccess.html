@@ -4,15 +4,43 @@
     corp.setCurrentPage("");
   });
 </script>
+<div id="page-name">	
+  <hgroup class="section-title">
+    <h1 id="page-title">Password Reset</h1>
+  </hgroup>
+</div> <!-- end #page-name -->
+</div> <!-- end .container -->
+<div id="breadcrumbs">
+<div class="container clearfix">
+  <div id="breadcrumbs_box">
+		<a href="/" class="breadcrumbs_home">Home</a> <span class="raquo">»</span>Password Reset
+	</div> <!-- end #breadcrumbs_box -->
+</div> <!-- end .container -->
+</div> <!-- end #breadcrumbs -->
+</header> <!-- end #main-header -->
 
-<div class="password-container" style="width: 36em">
+
+<div id="main-area">
+<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+		<article class="clearfix">
+      <div class="post_content">
+
+
 	<div class="handwritten c-padding-large-b">We have sent an e-mail to <span class="c-color-active"><%=email%></span> with instructions how to reset your password.</div>
-	<%if ('undefined' !== typeof errors && errors.length){%>
-	<div class="feedback c-color-error c-text-center c-padding-large-t">
-		<% for (var key in errors) {%>
-			<span class="error"><%=errors[key]%>.</span>
-		<%}%>
-		<span>Please try again.
-	</div>
-	<%}%>
-</div>
+	<br><br>
+  <%if ('undefined' !== typeof errors && errors.length){%>
+  <div class="et-box et-warning">
+  	<div class="et-box-content">
+  	  <div style="font-size: 17px;">Oops</div>
+  	  <br>
+  	  <div>
+  	    	<% for (var key in errors) {%>
+      			<span><%=errors[key]%>.</span>
+      		<%}%>
+      		<span> Please try again.</span>
+  	  </div>
+  	</div>
+  </div>
+  <%}%>

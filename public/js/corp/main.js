@@ -20,127 +20,38 @@ define([
 		"dijit/Tooltip",
 		"dojo/text!./templates/nav-productivity.html",
     "dojo/text!./templates/nav-opportunity.html",
-		"dojo/text!./templates/nav-about.html"
-], function(dom, on, cookie, xhr, connect, dc, oppTemplate, db, build, lang, array, request, JSON, Tooltip, prodHtml, oppHtml, aboutHtml){
+		"dojo/text!./templates/nav-about.html",
+		"dojo/text!./templates/slide.html"
+], function(dom, on, cookie, xhr, connect, dc, oppTemplate, db, build, lang, array, request, JSON, Tooltip, prodHtml, oppHtml, aboutHtml, slideHtml){
     // Once all modules in the dependency list have loaded, this
     // function is called to define the demo/myModule module.
     //
     // The dojo/dom module is passed as the first argument to this
     // function; additional modules in the dependency list would be
     // passed in as subsequent arguments.
+
     
     var self = this;
     
-    on(dom.byId("site_title"), "click", function(){
-  	  window.location.href = "/";
-  	});
-
-	
-		
-		/*
-		
-		on(navopp, 'mouseover', function(){
-			self.openMenu("m2");
-		});
-		
-		on(navopp, 'mouseout', function(){
-			self.closeMenus();
-		});
-		
-		on(navabout, 'mouseover', function(){
-			self.openMenu("m3");
-		});
-		
-		on(navabout, 'mouseout', function(){
-			self.closeMenus();
-		});
-  	
-  	connect.subscribe("/corp/log", function(data){
-      corp.log(data);
-    });
-*/
     
     // This returned object becomes the defined value of this module
     var corp = {
       
       setSpotlightSidebar: function(){
-        
-        request("/support/source.json", {
-            handleAs: "json"
-          }).then(function(data){
-            
-            var features = data.features;
-            
-            
-            // Do something with the handled data
-            var count = features.length - 1;
-            
-            
-            //randomize the features for updates
-
-            var f1 = Math.floor((Math.random()*count)+1);
-            var f2;
-            var f3;
-            do
-              {
-              f2 = Math.floor((Math.random()*count)+1);
-              }
-            while (f1 === f2);
-            do
-              {
-              f3 = Math.floor((Math.random()*count)+1);
-              }
-            while (f1 === f3 || f2 === f3);
-            
-            setFeatures([f1,f2, f3]);
-            
-            function setFeatures(list){
-              array.forEach(features, function(f){
-                if (array.indexOf(list, f.order)>-1){
-                  var node = lang.replace(oppTemplate, {url: "/?p=feature&f=" + f.code, name: f.title});
-                  build.place(node, dom.byId("spotlight"), "last");
-                }
-              });
-            }
-          });
-        
+       
       },
       
       setOppSidebar: function(){
-       
-        db.load("/coordel/view/coordelOpportunities",{ query: {limit: 6, descending: true},
-            handleAs: "json"
-          }).then(function(data){
-            if (data.rows && data.rows.length){
-              array.forEach(data.rows, function(item){
-                var node = lang.replace(oppTemplate, {url: "/?p=coordel#" + item._id, name: item.name});
-                build.place(node, dom.byId("coordelOpps"), "last");
-              });
-            } else {
-              //need to show empty;
-            }
-          });
+      
       },
 
 
 			openMenu: function(id){
-				//if (this.currentMenu !== id){
-					this.closeMenus();
-					//this.currentMenu = id;
-					dc.remove(id, "invisible");
-					
-					var node = dom.byId(id).parentNode;
-					dc.add(node, "open");
-				//}
+				
 			},
 			
 			closeMenus: function(){
-				dc.add("m1", "invisible");
-				dc.add("m2","invisible");
-				dc.add("m3","invisible");
-				dc.remove("nav-productivity", "open");
-				dc.remove("nav-opportunity", "open");
-				dc.remove("nav-about", "open");
+				
 			},
 			
 			currentMenu: "nav-home",
@@ -171,7 +82,6 @@ define([
 							
 						}
             
-						
 						dom.byId("payingMembers").innerHTML = paying.toString();
 						dom.byId("nonPayingMembers").innerHTML = non.toString();
 						dom.byId("totalMembers").innerHTML = total.toString();
@@ -202,207 +112,142 @@ define([
         //console.log("xhrArgs", xhrArgs);
         xhr.post(xhrArgs);
       },
+
+			setSpotlight: function(){
+				console.log("setting spotlight");
+				request("/support/source.json").then(
+		      function(text){
+						console.log("steps", text);
+		        var steps = JSON.parse(text).features;
+		        
+
+						var slideList = "";
+		        array.forEach(steps, function(step){
+		          if (!step.isIntro){
+		            slideList = slideList + lang.replace(slideHtml, step);
+		          }
+		        });
+
+		        dom.byId("slides").innerHTML = slideList;
+
+		      },
+		      function(error){
+		        console.log("Features not found");
+		      }
+		    );
+			},
    
       setCurrentPage: function(page){
 				
-		
 				var self = this;
-	
-				self.closeMenus();
 				
-				var navprod = dom.byId("nav-productivity");
-				var navopp = dom.byId("nav-opportunity");
-				var navabout = dom.byId("nav-about");
-
-				on(navprod, 'mouseover', function(){
-					self.openMenu("m1");
-				});
-
-				on(navprod, 'mouseout', function(){
-					self.closeMenus();
-				});
+				//self.setSpotlight();
 				
-				on(navopp, 'mouseover', function(){
-					self.openMenu("m2");
-				});
-
-				on(navopp, 'mouseout', function(){
-					self.closeMenus();
-				});
-
-				on(navabout, 'mouseover', function(){
-					self.openMenu("m3");
-				});
-
-				on(navabout, 'mouseout', function(){
-					self.closeMenus();
-				});
-
-		  	connect.subscribe("/corp/log", function(data){
-		      corp.log(data);
-		    });
-				
-        
-        function showNav2(){
-          dc.remove(dom.byId("nav2"), "hidden");
+				function show(id){
+					console.log("showing ", id);
+          dc.add(dom.byId(id), "current-menu-item");
         }
+
+				function setTitles(title){
+					/*
+					dom.byId("page-title").innerHTML = title;
+					var node = dom.byId("breadcrumbs_box");
+					var html = node.innerHTML;
+					html = html + title;
+					node.innerHTML = html;
+					*/
+				}
         
-        function showSubNav(id){
-          dc.add("sub-nav-opportunity", "hidden");
-          dc.add("sub-nav-productivity", "hidden");
-          dc.remove(dom.byId(id), "hidden");
-        }
-        
-        
-        function show(id){
-          dc.add(dom.byId(id), "current_page_item");
-        }
-        
-        function showParent(id){
-          dc.add(dom.byId(id), "current_page_parent");
-        }
-        
-        
+        var title;
         switch(page){
-         	case "home":
-      		show("nav-home");
-      		break;
-      		
-      		case "about":
-      		show("nav-about");
-					showSubNav("sub-nav-about");
-					document.title = "About Coordel";
-      		break;
 
 					case "pricing":
-      		showParent("nav-about");
       		show("nav-pricing");
-      		showSubNav("sub-nav-about");
-					document.title = "Coordel Pricing";
+					title = "Pricing";
+					setTitles(title);
+					document.title = title;
       		break;
 
 					case "transparency":
-      		showParent("nav-about");
-      		show("nav-transparency");
-      		showSubNav("sub-nav-about");
 					document.title = "Transparency is Accountability";
-      		break;
-
-					case "allocations":
-      		showParent("nav-about");
-      		show("nav-allocations");
-      		showSubNav("sub-nav-about");
-      		break;
-      		
-      		case "membership":
-      		show("nav-membership");
-      		showSubNav("sub-nav-membership");
-      		break;
-      		
-      		case "advocate":
-      		showParent("nav-membership");
-      		show("nav-advocate");
-      		showSubNav("sub-nav-membership");
+					title = "Transparency";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "business":
-      		showParent("nav-opportunity");
-      		showSubNav("sub-nav-opportunity");
-      		show("nav-business");
-					document.title = "Partner with Coordel";
+					title = "Partner with Coordel";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "tour":
-      		showParent("nav-productivity");
-      		show("nav-tour");
-      		showSubNav("sub-nav-productivity");
-					document.title = "Productivity Features";
+					title = "Features";
+					setTitles(title);
+					document.title = title;
+
       		break;
       		
       	  case "feature":
-      	  show("nav-productivity");
-        	showSubNav("sub-nav-productivity");
-      	  show("nav-tour");
-					document.title = "Coordel Productivity Feature";
+					title = "Feature";
+					setTitles(title);
+					document.title = title;
       	  break;
       	  
       	  case "cases":
-      	  show("nav-productivity");
-        	showSubNav("sub-nav-productivity");
-      	  show("nav-cases");
-					document.title = "Productivity and Opportunity Use Cases";
+					title = "Case Studies";
+					setTitles(title);
+					document.title = title;
       	  break;
       		
       		case "productivity":
       		show("nav-productivity");
-      		showSubNav("sub-nav-productivity");
-					document.title = "Productivity";
+					title = "Productivity";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "opportunity":
-      		showParent("nav-opportunity");
-      		showSubNav("sub-nav-opportunity");
-					document.title = "Opportunity";
+      		show("nav-opportunity");
+					title = "Opportunity";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "public":
-      		showParent("nav-opportunity");
-      		showSubNav("sub-nav-opportunity");
-      		show("nav-public");
-					document.title = "Network Opportunities";
+					title = "Network Opportunities";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "coordel":
-      		showParent("nav-opportunity");
-      		showSubNav("sub-nav-opportunity");
-      		show("nav-coordel");
-					document.title = "Coordel Opportunities";
+					title = "Coordel Opportunities";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "employed":
-      		show("nav-productivity");
-        	showSubNav("sub-nav-productivity");
-        	show("nav-cases");
-      		show("nav-employed");
-					document.title = "Employed Productivity";
+					title = "Employed Productivity";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "consult":
-      		show("nav-productivity");
-        	showSubNav("sub-nav-productivity");
-        	show("nav-cases");
-      		show("nav-consult");
-					document.title = "Consultant Productivity";
+					title = "Consultant Productivity";
+					setTitles(title);
+					document.title = title;
       		break;
       		
       		case "contract":
-      		show("nav-productivity");
-        	showSubNav("sub-nav-productivity");
-        	show("nav-cases");
-      		show("nav-contract");
-					document.title = "Contractor Productivity";
+					title = "Contractor Productivity";
+					setTitles(title);
+					document.title = title;
       		break;
       	}
       },
       
       setBackground: function(){
-        var bg = cookie("bg");
-
-      	if (!bg){
-      		bg = 0;
-      	}
-
-      	if (bg <= 0){
-      		bg = 1;
-      	}
-
-      	bg = parseInt(bg,10) + 1;
-
-
-      	if (bg > 10){
-      		bg = 1;
-      	}
-      	cookie("bg", bg);
+			
       }
     };
   return corp;

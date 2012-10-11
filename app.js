@@ -30,7 +30,10 @@ var express     = require('express'),
     loggly      = require('loggly'),
     logger      = loggly.createClient(settings.config.logglyOptions),
     logId       = settings.config.logId,
-    home        = true;
+    home        = true,
+		fs					= require('fs'),
+		source  		= JSON.parse(fs.readFileSync(__dirname + '/public/support/source.json', 'utf-8')),
+		pages 			= JSON.parse(fs.readFileSync(__dirname + '/public/support/pages.json', 'utf-8'));
 
 var auth = settings.auth;
 
@@ -71,7 +74,7 @@ everyauth
     })
     .getRegisterPath('/register')
     .postRegisterPath('/register')
-    .registerView('users/register', {layout: 'users/corp'})
+    .registerView('users/register')
     .extractExtraRegistrationParams( function (req) { 
       return { 
           firstName: req.body.firstName,
@@ -105,8 +108,8 @@ everyauth
       return promise;
     })
 
-    .loginSuccessRedirect('/web')
-    .registerSuccessRedirect('/web');
+    .loginSuccessRedirect('/web?re=login')
+    .registerSuccessRedirect('/web?re=register');
 
 
 everyauth.linkedin
@@ -232,25 +235,39 @@ require('./routes/alerts')(app, validate);//alert management
 
 
 
+function getFeatureList(){
+	return source.features.filter(function(f){
+		return f.order !== 0;
+	});
+}
 
 //root 
 app.get('/', function(req, res){
   
-  var bg = req.cookies.bg;
-  
-  if (!bg){
-    bg = "1";
-  }
-  
   if (req.query.p){
     var page = req.query.p;
+		var pageTitle = pages[page];
+
+		var list  = getFeatureList();
+		
+		if (req.query.f){
+			var feature = req.query.f;
+			list.forEach(function(f){
+
+				if (f.code === feature){
+					pageTitle = pages[page] + " – " + f.title;
+				}
+			}); 
+		}
+		
+		var layout = {layout: 'nimble/page', features: list, pageTitle: pageTitle};
 
     //this is a request for a page
-    res.render('corp/page/' + page, {layout: 'corp/page', background: "bg" + bg});
+    res.render('nimble/page/' + page, layout);
  
 
   } else {
-    res.render('corp/home', {layout: 'corp/home', color: 'c-bg-purple', background: "bg" + bg});
+    res.render('nimble/home', {layout: 'nimble/home'});
   }
   
   /*

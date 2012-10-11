@@ -257,12 +257,24 @@ define([
             if (cont.hasChildren()){
               cont.destroyDescendants();
             }
+						var connects = [];
+						function disconnect(){
+							dojo.forEach(connects, function(c){
+								dojo.disconnect(c);
+							});
+						}
             var form = new TaskForm({isNew: false, task: this.currentTask});
             cont.addChild(form);
             this.wizard.deferTaskDialog.show();
-            dojo.connect(this.wizard.deferTaskDialog, "onConfirm", this, function(){
-              form.save();   
-            });
+            connects.push(dojo.connect(this.wizard.deferTaskDialog, "onConfirm", this, function(){
+              form.save(); 
+  						disconnect();
+            }));
+						connects.push(dojo.connect(this.wizard.deferTaskDialog, "onCancel", this, function(){
+							//console.log("destroy this form", form);
+							this.wizard.deferTaskFormContainer.destroyDescendants();
+							disconnect();
+						}));
             break;
         }
       },
@@ -285,14 +297,29 @@ define([
         var form = new TaskForm({isNew: false, task: newTask});
         this.wizard.delegateTaskFormContainer.addChild(form);
         this.wizard.delegateTaskDialog.show();
-        dojo.connect(this.wizard.delegateTaskDialog, "onConfirm", this, function(){
+
+				var connects = [];
+				function disconnect(){
+					dojo.forEach(connects, function(c){
+						dojo.disconnect(c);
+					});
+				}
+				
+        connects.push(dojo.connect(this.wizard.delegateTaskDialog, "onConfirm", this, function(){
           if (this.isChecklist){
             this.onDelegate(form.task);
             form.cancel();
           } else {
             form.save();
           }
-        });
+					disconnect();
+        }));
+
+				connects.push(dojo.connect(this.wizard.delegateTaskDialog, "onCancel", this, function(){
+					//console.log("destroy this form", form);
+					this.wizard.delegateTaskFormContainer.destroyDescendants();
+					disconnect();
+				}));
       },
       
       doTask: function(){

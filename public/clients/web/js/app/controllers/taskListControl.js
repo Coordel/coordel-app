@@ -46,7 +46,7 @@ define(["dojo",
       sortKeys:[{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}]
     },  
     init: function(focus, isTurbo){
-      //console.debug("init taskListControl focus", focus);
+      //console.debug("init taskListControl focus", focus, isTurbo);
       var tlc = this;
       
       db.streamStore.currentContext = "userStream";
@@ -138,7 +138,7 @@ define(["dojo",
 		handleTaskNotify: function(){
 			//if there are task changes and the focus is current, need to make sure that the list refreshes in case
 			//any of them have become current because of the incoming change
-			//console.log("handleTaskNotify", this.focus, db.focus);
+			//console.log("handleTaskNotify", this.focus, db.focus, this.isTurbo);
 			var focus = this.focus;
 			if (focus === "current"){
 				if (this.isActive){
@@ -430,6 +430,7 @@ define(["dojo",
     },
     
     _showTasks: function(tasks, focus){
+			console.log("showTasks", focus);
       var self = this;
       var cont = dijit.byId("taskListMain");
       
@@ -739,7 +740,7 @@ define(["dojo",
           
           this.taskList = db.taskStore.memory.query({db: db, focus: focus, filters: []}, {sort:this.sortOptions.sortKeys});
           
-          //console.log("taskList", this.taskList);
+          //console.log("taskList", this.taskList, this.isTurbo);
           
           dojo.when(this.taskList, function(finalList){
             var list = new tl({
@@ -778,7 +779,12 @@ define(["dojo",
                 self.turboWizard.onNext();
       	      }
     	      });
-            
+						
+						if (self.isTurbo && self.turboWizard){
+							//console.log("current task", self.turboWizard.currentTask._id, "isTurbo: ", self.isTurbo);
+							dojo.publish("coordel/glow", [{id: self.turboWizard.currentTask._id, isGlowing: true}]);
+						}
+					
           });
           
         }

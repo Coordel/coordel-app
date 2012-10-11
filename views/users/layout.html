@@ -1,37 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	  <title>Coordel = Productivity + Opportunity</title>
+	  <title>Coordel = Productivity &amp; Opportunity</title>
 	  <link rel="shortcut icon" href="/images/favicon.gif">
-		<!-- use the "coordel" theme -->
-  	<link rel="stylesheet" href="/clients/web/0.0.1/css/app.css" media="screen">
-  	<link rel="stylesheet" href="/css/corp/style.css" media="screen" >
-  	<link rel="stylesheet" href="/css/corp/button.css" media="screen">
-  	<link rel="stylesheet" href="/css/corp/tooltip.css" media="screen">
-  	<link rel="stylesheet" href="/css/users.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
-    
-    <!-- load loggly -->
-    <script type="text/JavaScript">
-      var scr = document.createElement("script");
-      var host = (("https:" == document.location.protocol) ? "https://d3eyf2cx8mbems.cloudfront.net" : "http://d3eyf2cx8mbems.cloudfront.net");
-      scr.type = "text/javascript";
-      scr.src = host + "/js/loggly-0.1.0.js";
-      document.documentElement.firstChild.appendChild(scr);
-    </script>
-    <script type="text/javascript">
-      window.onload=function(){ 
-        var key = "a9ca9bbc-d314-4a31-9223-d0a59e37a52e";
-        var host = (("https:" == document.location.protocol) ? "https://logs.loggly.com" : "http://logs.loggly.com");
-        castor = new loggly({ url: host+'/inputs/'+key+'?rt=1', level: 'log'});
-        castor.log("url="+window.location.href + " browser=" + castor.user_agent + " height=" + castor.browser_size.height);
-      };
-    </script>
-    
-    
-
+	  <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
   	<!-- load dojo and provide config via data attribute -->
-  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad:true, isDebug: true"></script>
   	<script>
   	
   	    require({
@@ -44,28 +18,58 @@
             ]
         }, [ "corp/main" ]);
   	    
-  			// Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
-  	    require(["dojo", "dojo/cookie", "corp/main", "dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dojo, cookie, corp){
-  	      dojo.removeClass("bnLogin", "hidden");
-  	      corp.setBackground();
-  	      corp.setSpotlightSidebar();
-  	      //if the current location is the registration page, then we need to hide the join us button
-  	      /*
-  	      if (window.location.pathname === "/register" || window.location.pathname === "/reset"){
-  	        
-  	        dojo.removeClass(dojo.byId("tagLine"), "hidden");
-  	        dojo.addClass(dojo.byId("joinUs"), "hidden");
-  	        dojo.addClass(dojo.byId("joinUsUpper"), "hidden");
-  	        
-  	      }
-  	      */
-  	      //connect.publish("/foo/bar/baz", [{ some:"object data" }]);
+  	    require(["dojo/dom", "dojo/on", "dojo/cookie", "corp/main","dijit/Tooltip", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/CheckBox", "dojo/parser", "dojo/domReady!"], function(dom, on, cookie, corp){
+  	  
   	      
+  	      on(dom.byId("login-trigger"), "click", function(){
+  	      
+  	        var email = dojo.cookie("email"),
+                pass = dojo.cookie("pass");
+      
+            if (email && pass){
+              dom.byId("username").value = email;
+              dom.byId("password").value =  pass;
+              dom.byId("remember").checked = true;
+              dom.byId("submit").disabled = false;
+            } else {
+              dom.byId("remember").checked = false;
+              dom.byId("submit").disabled = true;
+            }
+  	      });
+  	      
+  	      on(dom.byId("submit"), "click", function(){
+  	        if (dom.byId("remember").checked){
+              cookie("email", dom.byId("username").value.trim(), {expires: 14});
+              cookie("pass", dom.byId("password").value.trim(), {expires: 14});
+            }
+  	      });
+  	      
+  	      on(dom.byId("username"), "keyup", validate);
+  	      on(dom.byId("password"), "keyup", validate);
+  	      
+  	      function validate(){
+  	        console.log("validate");
+  	        var submit = dom.byId("submit");
+  	        var email = dom.byId("username").value.trim(),
+                pass = dom.byId("password").value.trim();
+            
+            if (email === "Your email address"){
+              email = "";
+            }
+            
+            if (pass === "Password"){
+              pass = "";
+            }
+    
+            submit.disabled=true;
+            if (email.length > 0 && pass.length > 5){
+              console.log("valid");
+              submit.disabled=false;
+            }
+  	      }
+
   	    });
   	</script>
-  	
-  
-  	
   	<!-- load google analytics -->
   	<script type="text/javascript">
 
@@ -80,232 +84,357 @@
   	  })();
 
   	</script>
+    <link rel='stylesheet' id='nimble-fonts-css'  href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,700italic,800italic,400,300,700,800&#038;subset=latin,latin-ext' type='text/css' media='all' />
+    <link rel='stylesheet' id='nimble-style-css'  href='/css/nimble/style.css?ver=3.4.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='et-shortcodes-css-css'  href='/css/nimble/shortcodes/css/shortcodes.css?ver=3.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='et-shortcodes-responsive-css-css'  href='/css/nimble/shortcodes/css/shortcodes_responsive.css?ver=3.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='fancybox-css'  href='/css/nimble/page_templates/js/fancybox/jquery.fancybox-1.3.4.css?ver=1.3.4' type='text/css' media='screen' />
+    <link rel='stylesheet' id='et_page_templates-css'  href='/css/nimble/page_templates/page_templates.css?ver=1.8' type='text/css' media='screen' />
+    <script type='text/javascript' src='/js/jquery/jquery.js?ver=1.7.2'></script>
+ 
+    <link rel="shortcut icon" href="images/favicon.gif" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />	
+
 	</head>
-	<body id="top" class="coordel corp-login bg6">
-    <div id="layout_wrapper_outer">
-      <div id="layout_wrapper">
-  	    <div id="layout_top">
-  	      <div>
-  		      <div id="login-button">
-      			  <div id="bnLogin" class="corp-button hidden" data-dojo-type="dijit.form.DropDownButton" showLabel="true" iconClass="field-icon field-icon-user">
-          		    <span>Login</span><!-- Text for the button -->
-          		    <!-- The dialog portion -->
-          		    <div class="corp-tooltip" style="width:260px;visibility: hidden;" data-dojo-type="dijit.TooltipDialog" id="ttDialog">
-          		      <script type="dojo/method" data-dojo-event="onOpen" data-dojo-args="evt">
-          		        var email = dojo.cookie("email"),
-                          pass = dojo.cookie("pass");
-                      if (email && pass){
-                        dijit.byId("email").set("value", email);
-                        dijit.byId("pass").set("value", pass);
-                        dijit.byId("remember").set("checked", true);
-                        dijit.byId("login").set("disabled", false);
-                        
-                      }
-          		      </script>
-          		      <div id="loginForm">
-          		        <form action="/login" method="post">
-            		        <strong><label for="email" style="display:inline-block;width:100px;">Email:</label></strong>
-            		        <div data-dojo-type="dijit.form.TextBox" name="email" id="email">
-            		          <script type="dojo/method" data-dojo-event="onKeyUp" data-dojo-args="evt">
-                            // Check if we can enable the submit button
-                            var email = dijit.byId("email").get("value").trim(),
-                                pass = this.get("value").trim();
-                              
-                            if (email.length > 0 && pass.length > 5){
-                              dijit.byId("login").set("disabled", false);
-                            }
-                            
-                          </script>
-            		        </div>
-            		        <br />
-            		        <strong><label for="pass" style="display:inline-block;width:100px;">Password:</label></strong>
-            		        <div data-dojo-type="dijit.form.TextBox" type="password" name="password" id="pass">
-            		          <script type="dojo/method" data-dojo-event="onKeyUp" data-dojo-args="evt">
-                            // Check if we can enable the submit button
-                            var email = dijit.byId("email").get("value").trim(),
-                                pass = this.get("value").trim();
-                              
-                            if (email.length > 0 && pass.length > 5){
-                              dijit.byId("login").set("disabled", false);
-                            }
-                            
-                          </script>
-          		          
-            		        </div>
-          		        
-            		        <div class='c-margin-t'>
-            		          <div class="c-float-r"><a href="/reset">Forgot Password</a></div>
-            		          <span data-dojo-type="dijit.form.CheckBox" id="remember"></span>
-            		          <strong><label for="remember" style="display:inline-block;width:100px;">Remember Me</label></strong>
-            		        </div>
-            		        <div class="c-margin-t">
-            		        	<button id="login" class="c-float-r" disabled data-dojo-type="dijit.form.Button" type="submit">Login
-            		        	  <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-                              // if the remember me is checked set the cookie
-                              castor.info("buttonClick=login, location=home");
-                              require(["corp/main", "dojo/_base/connect" ], function(corp, connect){
-                                if (dijit.byId("remember").get("checked")){
-                                  dojo.cookie("email", dijit.byId("email").get("value").trim(), {expires: 14});
-                                  dojo.cookie("pass", dijit.byId("pass").get("value").trim(), {expires: 14});
-                                }
-                              });
-                            
-                            </script>
-            		        	</button>
-            		        </div>
-            		      </form>
-            		    </div>
-          		      <div class="c-margin-t">
-          		        	<button id="joinUsUpper" class="corp-contrast c-float-l hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us
-          		        	  <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-                            // Do something:
-                            castor.info("buttonClick=joinUs");
-                            window.location.href = "/register";
-                          </script>
-                        </button>
-          						</div>
-          					<div class="clear">
-          			
-          		    </div>
-            		</div>
-      		    </div>
-      		  </div>
-  		    <div id="site_title">
-  		    </div>
-  	    </div>
-  	    <div id="layout_body_outer">
-  	      <div id="layout_body">
-  	        <div id="navigation">
-  	          
+	<body class="et_fullwidth_view et_color_scheme_blue nimble-dialog">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
-        			<div>
-          	    <ul id="primary-nav">
-                    <li id="nav-home"><a id="home-icon" href="/"></a></li>
-                    <li id="nav-productivity"><a href="/?p=productivity">Productivity</a>
-                        <div id="m1" class="invisible">
-                        <a href="/?p=tour">Features</a>
-                        <a href="/?p=cases" class="bottom-rounded">Case Studies</a>
-                        </div>
-                    </li>
-                    <li id="nav-opportunity"><a href="/?p=opportunity">Opportunity</a>
-                        <div id="m2" class="invisible">
-                        <a href="/?p=public">Network Opportunities</a>
-                        <a href="/?p=coordel">Coordel Opportunities</a>
-                        <a href="/?p=business" class="bottom-rounded">Partner with Coordel</a>
-                        </div>
-                    </li>
-                    <li id="nav-about"><a href="/?p=about">About</a>
-                        <div id="m3" class="invisible">
-                        <a href="/?p=pricing">Pricing</a>
-                        <a href="/?p=transparency" class="bottom-rounded">Transparency</a>
-                        </div>
-                    </li>
-                    <li id="nav-blog"><a href="http://blog.coordel.com" target="_blank">Blog</a></li>
+  	<header id="main-header">
+  		<div class="container">
+  			<div id="top-area" class="clearfix">
+  								<a href="/"><img src="/css/nimble/images/logo-main.png" alt="Coordel" id="logo"/></a>
+  				<nav class="popup-login">
+  				 <ul>
+  					<li id="login">
+  						<a id="login-trigger" class="popup-button" href="#">
+  							LOGIN <span>▼</span>
+  						</a>
+  						<div id="login-content">
+  							<form action="/login" method="post">
+  								<fieldset id="inputs">
+  									<input style="margin-bottom: 16px" id="username" type="email" name="email" placeholder="Your email address" required>   
+  									<input id="password" type="password" name="password" placeholder="Password" required>
+  								</fieldset>
+  								<div style="padding-left: 8px">
+  									<label style="float:right;margin-top:10px"><input type="submit" id="submit" value="Login"></label>
+  									<label><input id="remember" type="checkbox">Remember me</label>
+  								</div>
+  								<fieldset style="padding-left: 8px">
+  									<a href="/reset">Forgot password</a>
+  								</fieldset>
+
+  							</form>
+  						</div>                     
+  					</li>
+  					<li id="signup">
+  						<a href="/register" class="popup-button">JOIN US FREE</a>
+  					</li>
+  				 </ul>
+  				</nav>	
+  				<nav id="top-menu">
+  					<ul id="menu-secondary" class="nav">
+  					  <li id="nav-productivity" class="menu-item menu-item-object-page">
+  					    <a href="/?p=productivity">Productivity</a>
+                <ul class="sub-menu">
+                	<li class="menu-item"><a href="/?p=tour">Features</a></li>
+                	<li class="menu-item"><a href="/?p=cases">Case Studies</a></li>
                 </ul>
+              </li>
+              <li id="nav-opportunity" class="menu-item">
+                <a href="/?p=opportunity">Opportunity</a>
+                <ul class="sub-menu">
+                 	<li class="menu-item"><a href="/?p=public">Network Opportunities</a></li>
+                 	<li class="menu-item"><a href="/?p=coordel">Coordel Opportunities</a></li>
+                 	<li class="menu-item"><a href="/?p=business">Partner with Coordel</a></li>
+                </ul>
+              </li>
+              <li id="nav-pricing" class="menu-item"><a href="/?p=pricing">Pricing</a></li>
+              <li id="nav-help" class="menu-item">
+                <a href="#">Help</a>
+                <ul class="sub-menu">
+                	<li class="menu-item"><a href="mailto:support@coordel.com">Support</a></li>
+                	<li class="menu-item"><a href="/?p=transparency">Transparency</a></li>
+                	<li class="menu-item"><a href="/?p=contact/">Contact</a></li>
+                </ul>
+              </li>
+              <li class="menu-item"><a href="http://blog.coordel.com">Blog</a></li>
+            </ul>				
+          </nav>	
+  			</div> <!-- end #top-area -->
+  			
+    		        <%- body %>
+    		      </div> 	<!-- end .post_content -->
+    	      </article> <!-- end .post -->
+    			</div> <!-- end #left-area -->	
 
-                <div class="clear"></div>
-          	  </div>
-        		</div>
-  		      <div id="main">
+    			<div id="sidebar">
+    			  <div class="widget">
+    		      <h4 class="widgettitle">Feature Spotlight</h4>
+    		      <div id="spotlight" class="flexslider et_slider_auto et_slider_speed_7000">
+          	    <ul id="slides" class="slides">
+          			  <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=task">Smart Tasks</a></h4>
+                      <div class="headline">Goodbye e-mail</div>
+                      <a href="/?p=feature&f=task">							
+                    	  <img src="/support/features/images/task.png" alt='Smart Tasks' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Instead of free text that leaves room for miscommunication, Tasks give specific instructions, deadlines and deliverables. Everything you need to do your work is right in front of you.</div>
+                    </li>
 
-  		        <div class="left" id="content_outer">
-  		          <div id="content">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=current">Current Tasks</a></h4>
+                      <div class="headline">Track work you can do right now</div>
+                      <a href="/?p=feature&f=current">							
+                    	  <img src="/support/features/images/current.png" alt='Current Tasks' width='220' height='140' />
+                    	</a>
+                    	<div class="description">What’s next? Your Coordel Current list automatically gathers the unblocked tasks you have agreed to, so you can easily decide on what to do next.</div>
+                    </li>
 
-                  <%- body %>
-                  <div class="clearer"></div>
-    				    </div>
-  		        </div>
-  		        <div class="right" id="sidebar_outer">
-        				<div id="sidebar">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=deferred">Deferred Tasks</a></h4>
+                      <div class="headline">Track work you will start later</div>
+                      <a href="/?p=feature&f=deferred">							
+                    	  <img src="/support/features/images/deferred.png" alt='Deferred Tasks' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Set the defer date of a task to when you intend to start work on it. Everyone involved will be notified. Forget e-mail that starts with, “When do you think you will…”</div>
+                    </li>
 
-        					<div class="box">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=delegated">Delegated Tasks</a></h4>
+                      <div class="headline">Track your delegated work</div>
+                      <a href="/?p=feature&f=delegated">							
+                    	  <img src="/support/features/images/delegated.png" alt='Delegated Tasks' width='220' height='140' />
+                    	</a>
+                    	<div class="description">When you delegate some or much of your work, it’s easy to lose sight of who is doing what for you. Coordel provides effortless tracking of your delegated tasks in one overview.</div>
+                    </li>
 
-        						<div class="box_title">Productivity Spotlight</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=blocked">Blocked Tasks</a></h4>
+                      <div class="headline">Set it and forget it</div>
+                      <a href="/?p=feature&f=blocked">							
+                    	  <img src="/support/features/images/blocked.png" alt='Blocked Tasks' width='220' height='140' />
+                    	</a>
+                    	<div class="description">No more “Are you done yet?” Choose the tasks that are blocking your work, and as they are completed Coordel notifies you immediately.</div>
+                    </li>
 
-        						<div class="box_content">
-        							<ul id="spotlight" class="capitalize">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=private">Private Tasks</a></h4>
+                      <div class="headline">Sometimes, it’s your business only</div>
+                      <a href="/?p=feature&f=private">							
+                    	  <img src="/support/features/images/private.png" alt='Private Tasks' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Coordel is not just for teamwork. When you need to do something that doesn't involve someone else, drop that task into your Private list.</div>
+                    </li>
 
-        							</ul>
-        						</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=turbo">Turbo Wizard</a></h4>
+                      <div class="headline">Get your day started</div>
+                      <a href="/?p=feature&f=turbo">							
+                    	  <img src="/support/features/images/turbo.png" alt='Turbo Wizard' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Do it, delegate it or defer it… Turbo your way through your to-do list when you start your day. You are ready to roll in 1-2-3 easy steps.</div>
+                    </li>
 
-        					</div>
-        				  <!--
-        					<div class="box">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=deadline">Deadline Calendar</a></h4>
+                      <div class="headline">Track all deadlines in one place</div>
+                      <a href="/?p=feature&f=deadline">							
+                    	  <img src="/support/features/images/deadline.png" alt='Deadline Calendar' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Coordel automatically organizes all your tasks by deadline into one overview. The result: easy to do list management and transparent communication about deliverables.</div>
+                    </li>
 
-        						<div class="box_title">Coordel Opportunities</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=invite">Explicit Invitations</a></h4>
+                      <div class="headline">Agree or decline new work requests</div>
+                      <a href="/?p=feature&f=invite">							
+                    	  <img src="/support/features/images/invite.png" alt='Explicit Invitations' width='220' height='140' />
+                    	</a>
+                    	<div class="description">In Coordel, you accept or decline new work. It’s the one-click solution to “I thought you were going to do that?”</div>
+                    </li>
 
-        						<div class="box_content">
-        							<ul id="coordelOpps">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=issue">Explict Issue Handling</a></h4>
+                      <div class="headline">Raise and Clear Issues in real time</div>
+                      <a href="/?p=feature&f=issue">							
+                    	  <img src="/support/features/images/issue.png" alt='Explict Issue Handling' width='220' height='140' />
+                    	</a>
+                    	<div class="description">With just one click, Coordel lets you raise an issue with a task assigned to you . Ownership transfers immediately to the Coord responsible to clear it. No miscommunication - no confusion.</div>
+                    </li>
 
-        							</ul>
-        						</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=done">Explicit Completion</a></h4>
+                      <div class="headline">Submit &amp; agree on completed tasks</div>
+                      <a href="/?p=feature&f=done">							
+                    	  <img src="/support/features/images/done.png" alt='Explicit Completion' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Rather than thinking you're finished with a task and find out later you're not, Coordel provides a built-in agreement process so everyone is clear on completed work.</div>
+                    </li>
 
-        					</div>
-      					-->
-                  <div class="box">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=stream">Stream</a></h4>
+                      <div class="headline">Spend your time doing work, not writing about it</div>
+                      <a href="/?p=feature&f=stream">							
+                    	  <img src="/support/features/images/stream.png" alt='Stream' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Say goodbye to the time-consuming status e-mail. Take action and Coordel will immediately inform everyone involved.</div>
+                    </li>
 
-        						<div class="box_title">Case Studies</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=deliverable">Deliverables</a></h4>
+                      <div class="headline">Everything you need, where you expect it to be</div>
+                      <a href="/?p=feature&f=deliverable">							
+                    	  <img src="/support/features/images/deliverable.png" alt='Deliverables' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Rather than searching for the file or email, Coordel makes sure what you need to get your work done is right where you expect it to be.</div>
+                    </li>
 
-        						<div class="box_content">
-        							<ul>
-        								<li id="nav-employed"><a href="/?p=employed">Full Time Employees</a></li>
-        								<li id="nav-contract"><a href="/?p=contract">Independent Contractors</a></li>
-        								<li id="nav-consult"><a href="/?p=consult">Consultants</a></li>
-        							</ul>
-        						</div>
-        					</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=workspace">Task Workspace</a></h4>
+                      <div class="headline">Your work in one go-to place </div>
+                      <a href="/?p=feature&f=workspace">							
+                    	  <img src="/support/features/images/workspace.png" alt='Task Workspace' width='220' height='140' />
+                    	</a>
+                    	<div class="description">How much time do you spend looking for that one e-mail or file? Coordel gives you one Workspace where you plan, execute and deliver your work. From the briefing to the deliverables, it’s all there, neatly organized in one overview.</div>
+                    </li>
 
-                  <div class="box">
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=blockedDeliverable">Blocked Deliverables</a></h4>
+                      <div class="headline">The 1-2-3 of getting your work done</div>
+                      <a href="/?p=feature&f=blockedDeliverable">							
+                    	  <img src="/support/features/images/blockedDeliverable.png" alt='Blocked Deliverables' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Sometimes, there are different steps required to complete even a simple task. Use Coordel to define the order in which the steps will be executed. How’s that for efficient?</div>
+                    </li>
 
-        						<div class="box_title">Contact Us</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=feedback">Feedback</a></h4>
+                      <div class="headline">What do you think?</div>
+                      <a href="/?p=feature&f=feedback">							
+                    	  <img src="/support/features/images/feedback.png" alt='Feedback' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Forget formal evaluations. We’re talking about improving as a team, one job at a time. Coordel allows you to give immediate feedback to the team when a Coord is finished.</div>
+                    </li>
 
-        						<div class="box_content">
-                      <div style="margin-left: 20px" class="c-margin-t">
-                        <div class="c-color-default">Want more information? <br><a style="padding-left: 20px" href="mailto:info@coordel.com">info@coordel.com</a></div>
-                        <br>
-                        <div class="c-color-default">Need help? <br><a style="padding-left: 20px" href="mailto:support@coordel.com">support@coordel.com</a></div>
-                      </div>
-                      <br>
-        						</div>
-        					</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=blueprint">Blueprints</a></h4>
+                      <div class="headline">Get it right &amp; re-use</div>
+                      <a href="/?p=feature&f=blueprint">							
+                    	  <img src="/support/features/images/blueprint.png" alt='Blueprints' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Coordel helps you get the most out of your expertise. When you have captured a job well done in Tasks or Coords, Coordel lets you blueprint and re-use it with just one click.</div>
+                    </li>
 
-        				</div>
-        			</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=alert">Alerts</a></h4>
+                      <div class="headline">Live updates</div>
+                      <a href="/?p=feature&f=alert">							
+                    	  <img src="/support/features/images/alert.png" alt='Alerts' width='220' height='140' />
+                    	</a>
+                    	<div class="description">With Coordel, you don’t miss a thing. When a Task or Coord you are involved in changes, an audio and visual alert lets you know. Even when you’re not logged on, Coordel will track your alerts so they are waiting for you when you check in.</div>
+                    </li>
 
-        			<div class="clearer">&nbsp;</div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=coord">Coords</a></h4>
+                      <div class="headline">Coordinate your work with others</div>
+                      <a href="/?p=feature&f=coord">							
+                    	  <img src="/support/features/images/coord.png" alt='Coords' width='220' height='140' />
+                    	</a>
+                    	<div class="description">What's in a word? In the case of Coords, it is communication, agreements, productivity, transparency and accountability. Coords enable you to get work started and completed (with one or more other people) in just a few clicks. Don’t just take our word for it. Try it!</div>
+                    </li>
 
-        		</div>
-  			    <div id="dashboard" class="splash">
-  				    <div id="dashboard_inner">
-  					    <button id="joinUs" class="c-float-r corp-contrast hidden" data-dojo-type="dijit.form.Button" type="submit">Join Us
-  					      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-                    // Do something:
-                    castor.info("buttonClick=joinUs");
-                    window.location.href = "/register";
-                  </script>
-  					    </button>
-  					    <div id="tagLine" class="right">
-          				<h1 style="font-size: 1.8em" class="right handwritten hand-nav">Coordel = <span><a href="/?p=productivity" class="secondary">Productivity</a></span><span> + </span> <span><a href="/?p=opportunity" class="secondary">Opportunity</a></span></h1>
-          			</div>
-  		        	<button id="tour" class="c-float-l corp-dark" data-dojo-type="dijit.form.Button" type="submit">Tour Features
-  					      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-                    // Do something:
-                    castor.info("buttonClick=takeTour, location=home");
-                    window.location.href = "/?p=tour";
-                  </script>
-                </button>
-  					    <div class="clearer"></div>
-  				    </div>
-  			    </div>
-  	      </div>
-  	    </div>
-  	    <div id="footer" class="splash">
-  		    <div class="left">
-  			    &copy; 2012 <a href="/">Coordel</a> - do what you love
-  		    </div>
-  		    <div class="clearer">&nbsp;</div>
-  	    </div>
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=people">People</a></h4>
+                      <div class="headline">Choose your own team</div>
+                      <a href="/?p=feature&f=people">							
+                    	  <img src="/support/features/images/people.png" alt='People' width='220' height='140' />
+                    	</a>
+                    	<div class="description">Coordel is about allowing you do the work you do best, with the people who complement you most. Coordel automatically keeps a list of past and present team members and the feedback they have received.</div>
+                    </li>
+
+                    <li class="slide">					
+                      <h4><a class="qs-link link-image" href="/?p=feature&f=opportunity">Opportunities</a></h4>
+                      <div class="headline">Opportunity is unlimited</div>
+                      <a href="/?p=feature&f=opportunity">							
+                    	  <img src="/support/features/images/opportunity.png" alt='Opportunities' width='220' height='140' />
+                    	</a>
+                    	<div class="description">When your work is finished, or when time is available, you can search for new Opportunities from Coordel, or you can also search public Network Opportunities.</div>
+                    </li>
+          		  </ul>
+              </div> <!-- end #featured -->
+            </div> <!-- end .widget -->
+    		    <div class="widget">
+    		      <h4 class="widgettitle">Case Studies</h4>
+    		      <div>
+    		        <ul class="menu">
+    		          <li class="menu-item">
+    		            <a href="/?p=employed">Employees</a>
+    		          </li>
+                  <li class="menu-item">
+                    <a href="/?p=contract">Independent Contractors</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="/?p=consult">Consultants</a>
+                  </li>
+                </ul>
+              </div>
+            </div> <!-- end .widget -->
+            <div class="widget">
+              <h4 class="widgettitle">Contact Us</h4>
+              <div class="textwidget"><div>
+              <div>Want more information? <br>
+              <a class="envelope" href="mailto:info@coordel.com">info@coordel.com</a>
+              </div>
+              <br>
+              <div>Need help? <br>
+              <a class="envelope" href="mailto:support@coordel.com">support@coordel.com</a>
+              </div>
+            </div>
+          </div>
+    		</div> <!-- end .widget -->	</div> <!-- end #sidebar -->
+    	</div> <!-- end #content-area -->
+    </div> <!-- end .container -->
+  </div> <!-- end #main-area -->
+	<footer id="main-footer">
+    <div id="footer-widgets" class="clearfix container">
+      <div class="footer-widget twothirds">
+        <h4 class="widgettitle">About Coordel</h4>
+        <div class="textwidget">
+          Coordel is designed to help you become more productive by giving you  everything you need to manage the work you do yourself and the work you coordinate with others. Once your productivity has increased, Coordel also helps you seize more opportunities to do what you love. Coordel helps you do the great work you know you can do.
+        </div>
+      </div>
+      <div class="footer-widget">
+        <a href="/register" class="button graybutton">GET STARTED FOR FREE</a>
+        <a href="mailto:info@coordel.com" class="envelope">General questions?</a>
+        <a href="mailto:support@coordel.com" class="envelope">Lost and need help?</a>
+        <div style="margin-top: 4px">
+          <a href="https://twitter.com/coordel" class="twitter-follow-button" data-show-count="false">Follow @coordel</a>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        </div>
+        <div>
+          <div class="fb-like" data-href="http://www.facebook.com/coordelinfo" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false" data-font="lucida grande"></div>
+        </div>
       </div>
     </div>
+		<div id="footer-bottom">
+			<div class="container">
+				<p id="copyright">© 2012 <a href="/">Coordel</a> - do what you love</p>
+			</div> <!-- end .container -->
+		</div> <!-- end #footer-bottom -->
+	</footer> <!-- end #main-footer -->
+  <script type='text/javascript' src='/js/nimble/superfish.js?ver=1.0'></script>
+  <script type='text/javascript' src='/js/nimble//jquery.fitvids.js?ver=1.0'></script>
+  <script type='text/javascript' src='/js/nimble//modernizr-min.js?ver=1.0'></script>
+  <script type='text/javascript' src='/js/nimble//custom.js?ver=1.0'></script>
+  <script type='text/javascript' src='/css/nimble/page_templates/js/fancybox/jquery.easing-1.3.pack.js?ver=1.3.4'></script>
+  <script type='text/javascript' src='/css/nimble/page_templates/js/fancybox/jquery.fancybox-1.3.4.pack.js?ver=1.3.4'></script>
+  <script type='text/javascript' src='/css/nimble/page_templates/js/et-ptemplates-frontend.js?ver=1.1'></script>
+  <script type='text/javascript' src='/js/nimble/jquery.flexslider-min.js?ver=1.0'></script>
   </body>
 </html>

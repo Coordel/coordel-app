@@ -5,52 +5,71 @@
   });
 </script>
 
+<div id="page-name">	
+  <hgroup class="section-title">
+    <h1 id="page-title">Welcome</h1>
+  </hgroup>
+</div> <!-- end #page-name -->
+</div> <!-- end .container -->
+<div id="breadcrumbs">
+<div class="container clearfix">
+  <div id="breadcrumbs_box">
+		<a href="/" class="breadcrumbs_home">Home</a> <span class="raquo">»</span>Welcome
+	</div> <!-- end #breadcrumbs_box -->
+</div> <!-- end .container -->
+</div> <!-- end #breadcrumbs -->
+</header> <!-- end #main-header -->
+
+
+<div id="main-area">
+<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+		<article class="clearfix">
+      <div class="post_content">
+
+
 <div>
 	<div class="handwritten">
-		<div>Hi <%=firstName%>,</div>
-		<br/>
-		<div>Welcome to Coordel. You're about to get more productive.</div>
-		<br/>
-		<div>All you need to do is set your Password and then you're ready to go.</div>
-		<br/>
+		<p>Hi <%=firstName%>,</p>
 
+		<p>Welcome to Coordel. You're about to get more productive.</p>
+
+		<p>All you need to do is set your Password. Then you'll be able to login to Coordel with your E-mail (address where you received this invitation) and new Password.</p>
+	
 	</div>
 </div>
-<div class="register-form" style="border-right: none;width: 23em">
-	<form action="/password" method="post">
-		<ul>
-			<li>
-  			<label for="regPassword">Password</label>
-				<div>
-					<input id="regPassword" name="newPass" type="password">
-				<div>
-			</li>
-			<li>
-  			<label for="regVerify">Verify Password</label>
-				<div>
-					<input id="regVerify" name="verifypassword" type="password">
-				<div>
-			</li>
-		</ul>
+<br><br>
+<div id="et-contact" class="responsive" style="width: 23em">
+	<form action="/resetPassword" method="post">
+		<div>
+			<p class="clearfix">
+				<label for="password">Password</label>
+				<input type="password" name="newPass" id="password" class="input" />
+			</p>
+		</div> <!-- #et_contact_left -->
 		<input type="hidden" name="email" value="<%=email%>">
-		<div class="c-padding-large-t">
-		  <button id="submitLogin" class="c-float-r corp-contrast" data-dojo-type="dijit.form.Button" type="submit">Set Password
-	      <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
-          // Do something:
-          castor.info("buttonClick=setPassword");
-        </script>
-	    </button>
-  		
-			<div class="clear"></div>
-		</div>
+   
+		<div class="clear"></div>
+
+		<input class="et_contact_submit" type="submit" value="Submit" id="et_contact_submit" />
 	</form>
-	<%if ('undefined' !== typeof errors && errors.length){%>
-	<div class="feedback c-color-error c-text-center c-padding-large-t">
-		<% for (var key in errors) {%>
-			<span class="error"><%=errors[key]%>.</span>
-		<%}%>
-		<span>Please try again.
+</div> <!-- end #et-contact -->
+<div class="clear"></div>
+<br><br>
+<%if ('undefined' !== typeof errors && errors.length){%>
+<div class="et-box et-warning">
+	<div class="et-box-content">
+	  <div style="font-size: 17px;">Oops</div>
+	  <br>
+	  <div>
+	    	<% for (var key in errors) {%>
+    			<span><%=errors[key]%>.</span>
+    		<%}%>
+    		<span> Please try again.</span>
+	  </div>
 	</div>
-	<%}%>
 </div>
+<%}%>
+
 	

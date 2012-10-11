@@ -297,9 +297,10 @@ define(['dojo',
         if (c.showRightColumnHandler){
           dojo.unsubscribe(c.showRightColumnHandler);
         }
-        //console.debug("init taskDetails control:  focus ", focus);
+        //console.debug("init taskDetails control:  focus ", focus, args, this.isTurbo);
   
-        var t;
+        var t,
+						isTurbo = this.isTurbo;
         if (focus === "contact"){
           t = db.contactStore.taskStore.get(id);
         } else{
@@ -307,7 +308,7 @@ define(['dojo',
         }
         //this.primaryController = null;
         dojo.when(t, function(resp){
-          c.init(focus, resp, args.isTurbo);
+          c.init(focus, resp, isTurbo);
         });
         //this.primaryController = tdControl;
         /*
@@ -353,7 +354,8 @@ define(['dojo',
         c.search = this.currentArgs.search;
         c.searchBlueprint = this.currentArgs.searchBlueprint;
         c.primaryNavName = name;
-        //console.debug("task list controller is", c, focus );
+				c.isTurbo = this.isTurbo;
+        //console.debug("task list controller is", focus, this.isTurbo);
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);
         //console.debug("after taskListControl init");

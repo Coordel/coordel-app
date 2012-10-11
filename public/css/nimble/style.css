@@ -1,0 +1,282 @@
+/*
+Description: Coordel Theme inspired by Nimble
+Author: Coordel
+Author URI: http://coordel.com
+*/
+ 
+@import url("css/nimble.css");
+@import url("css/login.css");
+@import url("css/button.css");
+@import url("css/opportunity.css");
+@import url("css/dialog.css");
+
+@import '/clients/web/js/dojo-release-1-1.6.1-src/dijit/themes/coordel/coordel.css';
+
+#spotlight li {
+	background: #fff;
+	padding: 0;
+}
+#spotlight h4 a {
+	color: #43A9E4;
+}
+#spotlight img {
+	padding: 8px 0;
+}
+#spotlight .headline {
+	font-size: 14px
+	line-height: 18px;
+	font-style: italic;
+}
+#spotlight .description {
+	line-height: 18px;
+	font-size: 12px;
+}
+
+#et-contact p input {
+	font-size: 14px;
+}
+
+.indent {
+	margin-left: 20px;
+}
+
+.border-radius-4 {
+	-moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; 
+}
+
+#logo {
+	padding-left: 0;
+}
+
+#top-area {
+	padding: 20px 0 100px;
+}
+
+#top-menu {
+	margin-top: 22px;
+}
+
+.footer-widget.twothirds {
+	width: 520px;
+}
+
+.handwritten{
+  font-family: 'Shadows Into Light', cursive;
+  color: #000000;
+  font-weight: bold;
+	font-size: 18px;
+	line-height: 24px;
+}
+
+/* mailto: links */
+a[href^="mailto:"].envelope {
+	background:transparent url(images/email.png) center left no-repeat !important;
+	padding-left: 20px;
+	display:block;
+}
+
+.hidden {
+	display: none;
+}
+
+.c-text-center {
+	text-align: center;
+}
+.c-float-r {
+	float: right;
+}
+
+.c-float-l {
+	float: left;
+}
+
+.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+
+.c-margin-r {
+	margin-right: 8px;
+}
+
+.c-margin-large-r {
+	margin-right: 16px;
+}
+
+.c-margin-t {
+	margin-top: 8px;
+}
+
+.c-padding-large-b {
+	padding-bottom: 16px;
+}
+
+.clear {
+	clear: both;
+}
+
+.feature {
+  margin-top: 4px;
+}
+
+
+#featureTable td {
+  padding: 2px;
+}
+
+#featureTable a {
+  padding: 2px 0;
+  text-transform: capitalize;
+}
+
+.link-image {
+ padding-right: 16px;
+ background: url(images/link-image2.png) center right no-repeat;
+ height: 16px;
+ width: 16px;
+}
+
+#feature-movie-container {
+  padding: 20px;
+  background:#000;
+}
+
+.qs-content {
+  background: #ffffff;
+  min-height: 178px;
+  padding: 20px 0;
+  border-bottom: 1px solid #eaeaea;
+  color: #666666;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.qs-content:last-child{
+  border-bottom: 0px solid transparent;
+}
+
+.qs-content > h4 {
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.qs-link {
+  text-transform: capitalize;
+  font-size: 18px;
+  font-weight: bold;
+  color: #43A9E4;
+  cursor:pointer;
+}
+
+.qs-headline {
+  color: #333333;
+  font-style: italic;
+}
+
+#feature-title {
+  text-transform: capitalize;
+}
+
+#feature-headline {
+  color: #333333;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+#featureTable table {
+	width: 100%;
+	margin-top: 20px;
+}
+
+#feature-image {
+  margin-left: 8px;
+}
+
+.feature > span {
+  color: #666666;
+  font-style: italic;
+}
+
+.feature > a {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pricing-box {
+  border: 1px solid #9DACB5;
+  padding: 16px;
+  margin-right: 16px;
+}
+
+.pricing-box .price {
+  background: url('images/pricing.png') no-repeat center center;
+  width: 188px;
+  height: 143px;
+  text-indent: -9999px;
+}
+
+.pricing-box .price.storage {
+  background: url('images/pricing-storage.png') no-repeat center center;
+  width: 188px;
+  height: 120px;
+  text-indent: -9999px;
+}
+
+.pricing-features {
+  width: 355px;
+}
+
+.pricing-features ul {
+	padding: 0 0 20px 0;
+}
+
+.pricing-features li {
+	margin-top: 16px;
+}
+
+.pricing-features div {
+	padding: 16px 0 0 0;
+}
+
+.pricing-features h3 {
+  font-size: 1.2em;
+}
+
+.pricing-features li {
+  padding-left: 24px;
+  background: url('/images/favicon.gif') no-repeat left 2px;
+  line-height: 1.3em;
+}
+
+#cases h6 {
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+#cases td {
+  font-size: 12px;
+  padding: 16px;
+  border: 1px solid #e0dddd;
+  line-height: 14px;
+  width: 20%;
+}
+
+#cases td div {
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+#cases thead {
+  background: #9DACB5;
+  color: #ffffff;
+}
+
+#cases thead a {
+	color: #ffffff;
+}
+
+#cases .header {
+  text-align: center;
+  font-weight: bold;
+}
+
+
+

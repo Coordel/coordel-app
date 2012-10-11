@@ -57,7 +57,7 @@
     },
     {
       "order": 6,
-      "title": "Private Pasks",
+      "title": "Private Tasks",
       "headline": "Sometimes, it’s your business only",
       "content": "Coordel is not just for teamwork. When you need to do something that doesn't involve someone else, drop that task into your Private list.",
       "image": "support/features/images/private.png",
@@ -176,7 +176,7 @@
       "order": 19,
       "title": "Coords",
       "headline": "Coordinate your work with others",
-      "content": "What's in a word? In the case of Coords, it is communication, agreements, productivity, transparency and accountability. Coords enable you to get work started and completed (with one or more other people) in just a few clicks. Don’t just take our word for it. <a style='color: #00629b' href='/register'>Try it</a>!",
+      "content": "What's in a word? In the case of Coords, it is communication, agreements, productivity, transparency and accountability. Coords enable you to get work started and completed (with one or more other people) in just a few clicks. Don’t just take our word for it. Try it!",
       "image": "support/features/images/coord.png",
       "isSpotlight": false,
       "code": "coord"

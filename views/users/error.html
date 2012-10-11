@@ -1,0 +1,45 @@
+<script>
+  // Require the Button, TooltipDialog, DropDownButton, and TextBox classes 
+  require(["corp/main"], function(corp){
+    corp.setCurrentPage("");
+  });
+</script>
+<div id="page-name">	
+  <hgroup class="section-title">
+    <h1 id="page-title">Oops</h1>
+  </hgroup>
+</div> <!-- end #page-name -->
+</div> <!-- end .container -->
+<div id="breadcrumbs">
+<div class="container clearfix">
+  <div id="breadcrumbs_box">
+		<a href="/" class="breadcrumbs_home">Home</a> <span class="raquo">»</span>Oops
+	</div> <!-- end #breadcrumbs_box -->
+</div> <!-- end .container -->
+</div> <!-- end #breadcrumbs -->
+</header> <!-- end #main-header -->
+
+
+<div id="main-area">
+<div class="container">
+<div id="content-area" class="clearfix">
+	<div id="left-area">
+		<article class="clearfix">
+      <div class="post_content">
+        <div class="handwritten c-padding-large-b">Oops, we're sorry. Something didn't quite work out...</div>
+
+        <br><br>
+        <%if ('undefined' !== typeof errors && errors.length){%>
+        <div class="et-box et-warning">
+        	<div class="et-box-content">
+        	  <div style="font-size: 17px;">Error</div>
+        	  <br>
+        	  <div>
+        	    	<% for (var key in errors) {%>
+            			<span><%=errors[key]%>.</span>
+            		<%}%>
+            		<span> Please try again.</span>
+        	  </div>
+        	</div>
+        </div>
+        <%}%>
