@@ -192,6 +192,7 @@ define(['dojo',
       //init the primary nav controller 
       app.navController = pNavControl.init(ac.username);
       
+			
       //console.log("after primary nav control init");
       var bg = dojo.cookie("bg");
 
@@ -203,7 +204,7 @@ define(['dojo',
     		bg = 1;
     	}
 
-    	dojo.addClass(dojo.byId("outerLayout"), "bg"+bg.toString());
+    	//dojo.addClass(dojo.byId("outerLayout"), "bg"+bg.toString());
 
     	bg = parseInt(bg,10) + 1;
     	
