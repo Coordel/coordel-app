@@ -143,11 +143,13 @@ define(
           if (args.isDone){
             if (this.domNode){
               dojo.removeClass(this.turboIcon, "hidden");
+							dojo.addClass(this.domNode, "turboDone");
             }
             
           } else {
             if (this.domNode){
               dojo.addClass(this.turboIcon, "hidden");
+							dojo.removeClass(this.domNode, "turboDone");
             }
             
           }

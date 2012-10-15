@@ -232,7 +232,7 @@ define(['dojo',
 	  
 	  doTaskAction: function(args){
 	    
-	    //console.log("args", args);
+	    console.log("args", args);
 	    
 	    if (args.action === "reuse") {
 	      return;
@@ -976,14 +976,11 @@ define(['dojo',
   				    } else if (chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   				      //this task was deleted
   				      db.taskStore.store.notify(null, chg._id);
-  				      //console.log("Notify Task DELETE", chg, db.taskStore.memory);
+  				      console.log("Notify Task DELETE", chg, db.taskStore.memory);
 								
-								
+
 								//need to track deleted from session to session to make sure we don't try and load it again
-								//this came up when demos required that docs get deleted en masse
-							
-								
-							
+								//this came up when demos required that docs get deleted en mass
   				      
   				    } else {
   				      //this is an update

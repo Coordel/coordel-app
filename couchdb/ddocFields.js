@@ -1,5 +1,5 @@
 module.exports = {
-  version: "0.1.163",
+  version: "0.1.168",
   language: 'javascript',
   views: {
     /********************************* PROFILES ***************************************************/
@@ -1410,6 +1410,84 @@ module.exports = {
         			{"_id": doc._id}
         		);
       		}
+      	}
+      }
+    },
+
+		userAllTasks: {
+      map: function (doc){
+
+      	function toDateArray (date){
+
+      		var dtArray = [
+      			date.getFullYear(),
+      			date.getMonth(), 
+      			date.getDate(), 
+      			date.getHours(), 
+      			date.getMinutes(), 
+      			date.getSeconds()
+      		];
+
+      		return dtArray;
+      	}
+
+				//send the archive tasks
+				if (doc.docType === "task" && doc.status === "ARCHIVE" && doc.substatus === ""){
+      	   emit(
+        			[doc.username, doc.name, toDateArray(new Date(doc.updated))],
+        			{"_id": doc._id}
+        		);
+      	}
+				
+				//send the someday tasks
+				if (doc.docType === "task" && doc.status === "SOMEDAY" && doc.substatus === ""){
+      	  emit(
+        			[doc.username, doc.name, toDateArray(new Date(doc.updated))],
+        			{"_id": doc._id}
+        		);
+      	}
+
+				//send the active tasks
+      	if (doc.docType == "task" 
+      			&& doc.status !== "TRASH"
+      			&& doc.substatus !== "TRASH"
+						&& doc.status !== "ARCHIVE"
+	      		&& doc.status !== "SOMEDAY"
+      			&& doc.substatus !== "ARCHIVE"
+      			&& doc.substatus !== "APPROVED"
+      			&& doc.substatus !== "CANCELLED"){
+      		var user = doc.username;
+      		if (doc.status == "CURRENT" && (doc.substatus == "DONE" || doc.substatus == "ISSUE" || doc.substatus == "DECLINED" || doc.substatus === "UNASSIGNED")){
+      			//the user has indicated they are done with the task, have flagged an issue, or declined a task
+      			//so if there is a delegator they get it back otherwise, the responsible now needs to take action
+      			user = doc.responsible;
+      		}
+
+      		if (doc.status === "DELEGATED" && doc.substatus === "PROPOSED" || doc.substatus === "DECLINED"){
+      		  //before a user accepts a task, they can propose what they think they should do by creating
+      		  //deliverables, setting the defer date, refining the purpose, setting blockers etc
+      		  //it then goes back to the invited of the responsible or delegator to agree 
+      		  //or further refine and send back.
+
+      		  //a user can always decline to accept a task. if they do, it goes back to the responsible or delegator
+
+      		  //A user can't delegate the task to someone else until they have accepted
+      		  user = doc.responsible;
+      		  
+      		}
+
+      		if (doc.status === "PENDING"){
+      		  //when a responsible creates a task as part of a project, it gets the pending status 
+      		  //when the user sends the project, then the task status is updated to CURRENT
+      		  user = doc.responsible;
+      		  
+      		}
+
+      		//emit the task
+      		emit(
+      			[user, doc.name, doc.status, doc._id, 0, toDateArray(new Date(doc.updated))],
+      			{"_id": doc._id}
+      		);
       	}
       }
     },

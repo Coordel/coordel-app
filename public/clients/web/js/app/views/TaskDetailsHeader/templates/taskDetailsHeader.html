@@ -27,4 +27,8 @@
 
 		<span dojoAttachPoint="markDone" dojoType="dijit.form.Button" label="${coordel.done}" iconClass="coordelHeaderIcon coordelHeaderIconDone"></span>
 	</div>
+	
+	<div dojoAttachPoint="blueprintDialog" title="${coordel.taskDetails.blueprintTask}" dojoType="app.views.ConfirmDialog" >
+  	<div style="padding:0; width: 30em" dojoAttachPoint="blueprintFormContainer" dojoType="app.widgets.ContainerPane"></div>
+	</div>
 </div>

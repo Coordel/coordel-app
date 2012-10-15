@@ -1171,16 +1171,26 @@ define(
       },
       
       _setFilteringSelect: function(control, list, isContact){
+	
+			
         
         var ident = "_id";
         if (isContact){
           ident = "id";
+					//make sure there isn't an error with a contact that can happen when a bad usernane is entered
+					list = dojo.filter(list, function(item){
+						return !item["error"];
+					});
         }
+
+			
+				//console.log("setfilteringselect", ident, control, list, isContact);
          
          var store = new ws({data: {identifier: ident, items:[]}});
          
          
          dojo.forEach(list, function(obj, key){
+					//console.log("object", obj, "key", key);
            if (isContact){
              var name = obj.firstName + " " + obj.lastName;
              store.newItem({name: name, id: obj.id, label: "<div><span class='c-bold'>" + name + "</span><span class='c-margin-l'>-</span><span class='c-margin-l'>" + obj.email + "</span></div"});

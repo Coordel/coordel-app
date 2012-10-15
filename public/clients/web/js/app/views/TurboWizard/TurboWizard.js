@@ -41,7 +41,7 @@ define([
         
         //if this isn't a private task, then need to hide someday and archive because a user shouldn't 
         //be able to delete or change a Coord's task to archive or someday.
-        if (this.task.project !== db.myPrivate()){
+        if (this.task.project !== db.myPrivate() && !this.isChecklist){
           dojo.addClass(this.noContain, "hidden");
         }
         

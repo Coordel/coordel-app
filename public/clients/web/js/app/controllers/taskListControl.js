@@ -54,6 +54,8 @@ define(["dojo",
       this._clearSubscribeHandlers();
       
       this.isTurbo = isTurbo;
+
+			//console.log("turbo map", this.turboMap);
       
       layout.showLayout();
      
@@ -87,7 +89,6 @@ define(["dojo",
       } else {
         //show the stream
         //console.debug("show the stream, isTurbo false in taskListControl", this.streamTarget);
-        
         if (this.streamTarget === "deadlineCalendar"){
           this.showCalendar();
         } else if (this.streamTarget === "streamActivity"){
@@ -135,15 +136,35 @@ define(["dojo",
     
     },
 
-		handleTaskNotify: function(){
+		handleTaskNotify: function(args){
+			
 			//if there are task changes and the focus is current, need to make sure that the list refreshes in case
 			//any of them have become current because of the incoming change
-			//console.log("handleTaskNotify", this.focus, db.focus, this.isTurbo);
+			console.log("handleTaskNotify", this.focus, this.isActive, db.focus, this.isTurbo, this.turboMap, args);
+			var task = args.task;
 			var focus = this.focus;
 			if (focus === "current"){
 				if (this.isActive){
 					this.showTaskList(focus);
 				}
+			}
+			
+			//if this is one of the other lists, then we need to refresh the list
+			var name = this.primaryNavName;
+			if (name === "archive" || name === "someday" || name === "all" && task.status !== "TRASH" && task.substatus !== "TRASH"){
+				
+				dojo.publish("coordel/primaryNavSelect", [{focus:"other", name: name, id:"", setSelection: true}]);
+			}else if (name === "archive" || name === "someday" || name === "all" && task.status && task.status === "TRASH" && task.substatus === "TRASH"){
+				dojo.publish("coordel/primaryNavSelect", [{focus:"other", name: name, id:"", setSelection: true}]);
+			}
+			
+			if (this.isTurbo && (this.focus === "current" || this.focus === "private")){
+				this._getNext();
+			} else {
+				if (this.turboWizard && this.turboWizard.currentTask){
+					this.turboWizard.currentTask = false;
+				}
+				
 			}
 		},
     
@@ -292,6 +313,7 @@ define(["dojo",
 	      dojo.addClass(this.header.goTurbo.domNode, "hidden");
 	      dojo.removeClass(this.header.cancelTurbo.domNode, "hidden");
 	      //hide the sort button
+		
 	    }
 	    
 	    var a = dojo.connect(this.header.goTurbo, "onClick", this, function(){
@@ -304,6 +326,7 @@ define(["dojo",
 	    var b = dojo.connect(this.header.cancelTurbo, "onClick", this, function(){
 	      dojo.publish("coordel/setTurbo", [{isTurbo: false}]);
 	      this.turboMap = {};
+				this.turboWizard.currentTask = false;
 	      //this.showTurbo();
 	      dojo.disconnect(b);
 	    });
@@ -357,6 +380,7 @@ define(["dojo",
       
       if (done){
         //console.debug("no more items in this list, wizard should stop");
+				this.turboWizard.currentTask = false;
         return({hasTask: false, isEmpty: false});
       } else {
         //console.debug("in _getNext returning ", t);
@@ -381,7 +405,7 @@ define(["dojo",
     
     showTurbo: function(){
       
-      //console.debug("showing turbo", this.focus);
+      
       
       //the right container needs to be updated; hide the stream header and resize
       dojo.addClass("streamHeader", "hidden");
@@ -430,7 +454,7 @@ define(["dojo",
     },
     
     _showTasks: function(tasks, focus){
-			console.log("showTasks", focus);
+			//console.log("showTasks", focus);
       var self = this;
       var cont = dijit.byId("taskListMain");
       
@@ -633,13 +657,18 @@ define(["dojo",
             self._showTasks(done, "done");
           });
         } else if (self.primaryNavName === "all"){
+					/*
           dojo.when(db.taskStore.memory.query({db: db, focus: "active"}, {sort: [{attribute: "name"}]}), function(all){
             all = all.filter(function(task){
               return task.username === db.username();
             });
             self._showTasks(all, "all");
           });
-          
+					*/
+          db.taskStore.getAll().then(function(all){
+            //console.log("done tasks", archive);
+            self._showTasks(all, "all");
+          });
         }
       } else if (focus === "task-blueprints"){
         self._cancelObserveHandlers();

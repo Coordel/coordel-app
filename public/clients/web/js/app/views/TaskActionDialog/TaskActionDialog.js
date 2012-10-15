@@ -143,6 +143,15 @@ define([
         case "decline":
           t.decline(task, message);
           break;
+				case "someday":
+          t.someday(task, message);
+          break;
+				case "archive":
+          t.archive(task, message);
+          break;
+				case "activate":
+	        t.activate(task, message);
+	        break;
       }
     },
     

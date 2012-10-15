@@ -44,6 +44,11 @@ border-bottom: 1px solid #a3aab1;
   background-repeat: repeat-y;
 }
 
+.tasklist-item.turboDone, .todo-item.turboDone {
+	background-color: #eaeaea;
+	border-bottom: 1px solid #cccccc;
+}
+
 .tasklist-item .taskname.mine {
   cursor: pointer;
 }
@@ -83,12 +88,12 @@ border-bottom: 1px solid #a3aab1;
   text-align: center;
 }
 
-.tasklist-item .meta-turbo{
+.tasklist-item .meta-turbo, .todo-item .meta-turbo{
   display:inline-block;
-  float: right;
+	height; 12px;
+	width: 6px;
   margin: 0 4px;
   background: url(images/icons/meta-turbo.png) center center no-repeat;
-  opacity: 0.4;
 }
 
 .tasklist-item .meta-linked{

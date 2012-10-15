@@ -9,7 +9,8 @@ define([
   "dijit/_Widget", 
   "dijit/_Templated",
   "dijit/Dialog",
-  "app/models/CoordelStore"], function(dojo, dijit, bn, ActionsMenu, TaskForm, coordel, html, w, t, Dialog, db) {
+  "app/models/CoordelStore",
+  "app/views/ConfirmDialog/ConfirmDialog"], function(dojo, dijit, bn, ActionsMenu, TaskForm, coordel, html, w, t, Dialog, db) {
   dojo.declare(
     "app.views.TaskDetailsHeader", 
     [w, t], 
@@ -120,7 +121,6 @@ define([
           //show the task form in a dialog
         });
         
-        
         //wire up the done button so clicking it submits to approve if not project responsible
         //or approves if project responsible. There won't be a message when checking the box
         //the user can give a message by choosing submit or approve from actions menu
@@ -130,8 +130,6 @@ define([
 					var t = db.getTaskModel(this.task, true);
           
           t.markDone(this.task);
-          
-          
         });
     
         dojo.connect(this.showChecklistNotes, "onClick", this, function(){
@@ -200,6 +198,24 @@ define([
         //just close the task action dropdown
         if (dijit.byId(this.chooseAction)){
           dijit.byId(this.chooseAction).closeDropDown();
+        }
+
+				if (args.action === "reuse" && args.task._id === this.task._id){
+          //console.log("show the form");
+          var form = new TaskForm({isNew: false, task: args.task});
+          var cont = this.blueprintFormContainer;
+          if (cont.hasChildren()){
+            cont.destroyDescendants();
+          }
+          cont.addChild(form);
+          this.blueprintDialog.show();
+          
+          var confirm = dojo.connect(this.blueprintDialog, "onConfirm", this, function(){
+            //console.debug("should blueprint the task");
+            var t = db.getTaskModel(args.task, true);
+            t.reuse(args.task);
+            dojo.disconnect(confirm);
+          });
         }
       },
       

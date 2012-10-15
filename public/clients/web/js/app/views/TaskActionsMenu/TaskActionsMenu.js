@@ -94,6 +94,24 @@ define([
         //console.log("reuse clicked");
         dojo.publish("coordel/taskAction", [{action: "reuse", task: dojo.clone(this.task)}]);
       });
+
+			//wire up the someday menu option
+      dojo.connect(this.somedayTask, "onclick", this, function(){
+        //console.log("reuse clicked");
+        dojo.publish("coordel/taskAction", [{action: "someday", task: dojo.clone(this.task)}]);
+      });
+
+			//wire up the someday menu option
+      dojo.connect(this.archiveTask, "onclick", this, function(){
+        //console.log("reuse clicked");
+        dojo.publish("coordel/taskAction", [{action: "archive", task: dojo.clone(this.task)}]);
+      });
+
+			//wire up the activate menu option
+      dojo.connect(this.activateTask, "onclick", this, function(){
+        console.log("activate clicked");
+        dojo.publish("coordel/taskAction", [{action: "activate", task: dojo.clone(this.task)}]);
+      });
       
       /*
       //wire up the reuse menu option
@@ -133,7 +151,9 @@ define([
       //is my private project when I see delete or when it's a PROJECT invite
       if (own) {
         if (this.task.project === db.myPrivate()){
-          dojo.removeClass(this.deleteTask, "hidden");
+          //dojo.removeClass(this.deleteTask, "hidden");
+					dojo.removeClass(this.somedayTask, "hidden");
+					dojo.removeClass(this.archiveTask, "hidden");
         } else {
           if (this.task.status !== "PROJECT"){
             dojo.removeClass(this.cancelTask, "hidden");
@@ -145,6 +165,16 @@ define([
       //console.log("stat", stat);
              
       switch(stat){	
+				case "SOMEDAY-":
+					dojo.removeClass(this.activateTask, "hidden");
+					dojo.removeClass(this.archiveTask, "hidden");
+					dojo.addClass(this.somedayTask, "hidden");
+					break;
+				case "ARCHIVE-":
+					dojo.removeClass(this.activateTask, "hidden");
+					dojo.removeClass(this.somedayTask, "hidden");
+					dojo.addClass(this.archiveTask, "hidden");
+					break;
         case "CURRENT-PAUSED":
   			//owner - reuse cancel resume
   			//not owner - reuse

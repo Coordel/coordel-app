@@ -240,11 +240,13 @@ define(
           if (args.isDone){
             if (this.domNode){
               dojo.removeClass(this.turboIcon, "hidden");
+							dojo.addClass(this.domNode, "turboDone");
             }
             
           } else {
             if (this.domNode){
               dojo.addClass(this.turboIcon, "hidden");
+							dojo.removeClass(this.domNode, "turboDone");
             }
             
           }
@@ -303,17 +305,17 @@ define(
         if (t.projResponsible() !== username && t.delegator !== username && t.username !== username && !t.isDone()){
           this.taskCheckbox.set("disabled", true);
         }
+					
+				//console.log("focus", this.focus);
         
         //if this is current, delegated or invite, the user needs to see metainfo added to the task (Issue, Cleared, etc)
-        if (this.focus === "search" || this.focus === "current" || this.focus==="blocked" || this.focus==="delegated" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
+        if (this.focus === "all" || this.focus === "search" || this.focus === "current" || this.focus==="blocked" || this.focus==="delegated" || this.focus === "deferred" || this.focus === "project" || this.focus === "task-invited" || this.focus === "project-invited" && !t.isDone()){
           this._setMetaInfo();
         }
         
         //set the deadline. not all tasks will have deadlines, so project deadline will default if there is one
         //except for delegated and private projects (unless a deadline is set on the task
         this._setDeadline();
-        
-        
         
         if (t.isPending()){
           //disable the checkbox
@@ -450,9 +452,9 @@ define(
           }
         }
       
-        if (t.isPrivate()){
+        if (t.isPrivate() || t.isSomeday() || t.isArchive()){
           //this is private so hide the actions and show the delete
-          dojo.query(".actions", this.domNode).addClass("hidden");
+          //dojo.query(".actions", this.domNode).addClass("hidden");
           dojo.query(".delete", this.domNode).removeClass("hidden");
         }
         
@@ -640,13 +642,13 @@ define(
        dojo.connect(this.removeTask, "onclick", this, function(){
          //console.debug("removing task", this.task);
          t.remove(this.task);
+				 self.onRemove(this.task);
          //dojo.publish("coordel/removeTask", [this.task]);
-        
        });
         
         
         //wire up the info button
-        dojo.connect(this.showInfo, "onclick", this, function(){
+        dojo.connect(this.showInfo, "onclick", this, function(){ 
           //console.debug("task in showInfo", this.task);
           //console.debug("dialog", i);
           var cont = this.infoContainer;
@@ -680,6 +682,10 @@ define(
         
         
       },
+
+			onRemove: function(){
+				
+			},
       
       doTaskAction: function(args){
         if (args.action === "reuse" && args.task._id === this.task._id){
@@ -777,6 +783,16 @@ define(
           dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.isPrivate + " : ");
           
         }
+
+				//archive
+				if (t.isArchive()){
+					 dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.isArchive + " : ");
+				}
+				
+				//someday
+				if (t.isSomeday()){
+					 dojo.query(".meta-info", this.domNode).removeClass("hidden").addContent(coordel.metainfo.isSomeday+ " : ");
+				}
         
         //invite
         if (t.isInvite()){

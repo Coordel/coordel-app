@@ -150,6 +150,15 @@ define(["dojo",
             	return def;
             
             },
+						getAll: function(){
+							//when getting all they are loaded on demand
+              return this._getView({
+                view: "userAllTasks",
+                startkey: [this.username],
+                endkey: [this.username, {}],
+								descending: true
+              });
+						},
             getArchive: function(){
               //the archive is loaded on demand
               return this._getView({

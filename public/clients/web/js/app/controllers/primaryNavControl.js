@@ -355,6 +355,7 @@ define(['dojo',
         c.searchBlueprint = this.currentArgs.searchBlueprint;
         c.primaryNavName = name;
 				c.isTurbo = this.isTurbo;
+				
         //console.debug("task list controller is", focus, this.isTurbo);
         //console.debug("initializing taskListController, streamTarget = ", c.streamTarget);
         c.init(focus, this.isTurbo);

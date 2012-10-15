@@ -25,6 +25,7 @@
       "headline": "Track work you can do right now",
       "content": "What’s next? Your Coordel Current list automatically gathers the unblocked tasks you have agreed to, so you can easily decide on what to do next.",
       "image": "support/features/images/current.png",
+			"movie": "http://www.youtube.com/embed/tgmudrqjKx0?rel=0",
       "isSpotlight": true,
       "code": "current"
     },
@@ -71,6 +72,7 @@
       "content": "Do it, delegate it or defer it… Turbo your way through your to-do list when you start your day. You are ready to roll in 1-2-3 easy steps.",
       "image": "support/features/images/turbo.png",
       "isSpotlight": true,
+			"movie": "http://www.youtube.com/embed/dihxo8_MQvw?rel=0",
       "code": "turbo"
     },
     {

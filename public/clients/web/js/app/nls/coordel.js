@@ -310,6 +310,9 @@ define({
 		},
 		"taskActions": {
 		  "header": "Actions",
+			"someday": "Someday",
+			"archive": "Archive",
+			"activate": "Activate",
 		  "submit": "Propose Done",
 		  "return": "Return",
 		  "approve": "Agree Done",
@@ -351,7 +354,10 @@ define({
 		    reuse: "Click to Blueprint this Task",
 		    reuseDeliverables: "Click to Blueprint this Task's Deliverables",
 		    "accept": "This will indicate you agree to do this Task",
-		    "decline": "This will indicate you Decline to do the work on this Task and will send it back to the Responsible"
+		    "decline": "This will indicate you Decline to do the work on this Task and will send it back to the Responsible",
+				"someday": "This will send the task to your Someday list",
+				"archive": "This will send the task to your Archive list",
+				"activate": "This will send the task back to your Private list"
 		    
 		    
 		  },
@@ -373,7 +379,10 @@ define({
 		    reuse: "",
 		    reuseDeliverables: "",
 		    "accept": "Accept the Task",
-		    "decline": "Enter why you are declining this Task"
+		    "decline": "Enter why you are declining this Task",
+				someday: "",
+				archive: "",
+				activate: ""
 		    
 		  }
 		},
@@ -446,6 +455,8 @@ define({
 		  "agreed": "Agreed",
 		  "amended": "Amended",
 		  "isPrivate": "Private",
+			"isArchive": "Archive",
+			"isSomeday": "Someday",
 		  "issue": "Issue",
 		  "paused": "Paused",
 		  "blocked": "Blocked",

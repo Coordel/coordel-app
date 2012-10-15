@@ -287,12 +287,19 @@ define([
         
         //create a clone in case the user cancels the form
         var newTask = dojo.clone(this.currentTask);
+
+				
         
         newTask.username = "";
         
         if (this.model.p.isMyPrivate()){
           newTask.project = "";
         }
+
+				if (this.isChecklist){
+					
+				}
+				console.log("delegateTask in Turbo.js", newTask, this.model);
         
         var form = new TaskForm({isNew: false, task: newTask});
         this.wizard.delegateTaskFormContainer.addChild(form);

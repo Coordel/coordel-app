@@ -3,7 +3,10 @@
 }
 
 #taskDetailsChecklist .dijitTitlePaneContentOuter {
-  border: none;
+  border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid #a3aab1;
 }
 
 
@@ -159,12 +162,6 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
   margin-left: 8px;
 }
 
-.todo-item .meta-turbo{
-  margin-left: 4px;
-  background: url(images/icons/meta-turbo.png) center center no-repeat;
-  opacity: 0.4;
-  padding: 2px;
-}
 
 .todo-item .purpose{
   color: #666;

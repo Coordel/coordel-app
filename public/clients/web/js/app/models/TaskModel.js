@@ -350,6 +350,16 @@ define("app/models/TaskModel",
     		if (t.isDeleted()){
     		  return false;
     		}
+
+				//if it's someday, it's not current 
+				if (t.isSomeday()){
+					return false;
+				}
+				
+				//if it's archived, it's not current
+				if (t.isArchive()){
+					return false;
+				}
     		
     		if (t.isBlocked()){
     		  //console.debug(t.name + " was BLOCKED, it's not current");
@@ -786,7 +796,7 @@ define("app/models/TaskModel",
     	      
     	  //console.debug ("private project", this.db.appStore.app().myTasksProject);
     	      
-    	  if (t.project === privProj && !t.isDone()){
+    	  if (t.project === privProj && !t.isDone() && !t.isSomeday() && !t.isArchive()){
     	    isPrivate = true;
     	  }
     	  
@@ -814,6 +824,7 @@ define("app/models/TaskModel",
     		  //&& !t.isCleared()
     		  //&& !t.isReturned()
     			&& !t.isDone()
+					&& !t.isDeleted()
     			&& !t.isCancelled()
     			&& !t.isInvite()
     			&& stamp.toISOString(new Date()) < t.calendar.start){
@@ -844,6 +855,7 @@ define("app/models/TaskModel",
     		  //&& !t.isCleared()
     		  //&& !t.isReturned()
     			&& !t.isDone()
+					&& !t.isDeleted()
     			&& !t.isCancelled()
     			&& !t.isInvite()
     			&& stamp.toISOString(new Date()) < t.calendar.start){
@@ -970,9 +982,11 @@ define("app/models/TaskModel",
     		return isDone;
     	},
     	isSomeday: function(){
+				var t = this;
     	  return (t.status === "SOMEDAY");
     	},
     	isArchive: function(){
+				var t = this;
     	  return (t.status === "ARCHIVE");
     	},
     	isDeleted: function(){
@@ -1715,6 +1729,17 @@ define("app/models/TaskModel",
         });
         */
       },
+
+			activate: function(task){
+				 var t = this,
+	    			db = this.db,
+	          p = this.p,
+	          username = db.username();
+
+	    		task.status = "CURRENT";
+	    		task.substatus = "ACCEPTED";
+	    		t.update(task);
+			},
   
       archive: function(task){
         var t = this,
@@ -1731,6 +1756,7 @@ define("app/models/TaskModel",
     		}, task);
     		t.update(task);
       },
+			
       someday: function(task){
         var t = this,
     			db = this.db,

@@ -1,6 +1,10 @@
 <div>
 	<h3 class="menu-header">${coordel.taskActions.header}</h3>
 	<ul class="menu-items">
+	    <li dojoAttachPoint="activateTask" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.activate}...</a></li>
+	    <li dojoAttachPoint="somedayTask" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.someday}...</a></li>
+	    <li dojoAttachPoint="archiveTask" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.archive}...</a></li>
+	    <li dojoAttachPoint="proposeChange" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.proposeChange}...</a></li>
 			<li dojoAttachPoint="proposeChange" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.proposeChange}...</a></li>
 			<li dojoAttachPoint="agreeChange" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.agreeChange}...</a></li>
 				<li dojoAttachPoint="acceptTask" class="sort-attribute hidden"><ins></ins><a>${coordel.taskActions.accept}...</a></li>
