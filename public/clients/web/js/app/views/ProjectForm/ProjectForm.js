@@ -39,6 +39,8 @@ define(
         this.inherited(arguments);
         
         var self = this;
+				
+				if (!self.isNew) self._setVersion();
         
         if (!self.project._id){
           var id = db.uuid();
@@ -844,6 +846,7 @@ define(
             if (self.isNew){
               def = p.add(self.project);
             } else {
+							self.project.versions = self.versions;
               def = p.update(self.project);
             }
 
@@ -856,6 +859,34 @@ define(
       
       onSave: function(project){
 
+      },
+
+		 	_setVersion: function(){
+				console.log("set versions");
+        //this tracks the versions of this project.we need to clone the original here and
+        //track it so we don't create versions for every change if there aren't any
+        //or if the user changes their mind 
+        var self = this;
+        self.versions = dojo.clone(self.project.versions);
+
+        if (!self.versions){
+          self.versions = {};
+        }
+
+        if (!self.versions.latest){
+           self.versions.latest = dojo.clone(self.project);
+					 console.log("project", self.project, "latest", self.versions.latest);
+        } else {
+          if (!self.versions.history){
+            self.versions.history = [];
+          }
+          self.versions.history.push(self.versions.latest);
+          self.versions.latest = dojo.clone(self.project);
+        }
+
+        delete self.versions.latest.history;
+        delete self.versions.latest.versions;
+        console.log("versions", self.versions);
       },
       
       baseClass: "project-form"

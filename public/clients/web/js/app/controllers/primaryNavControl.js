@@ -240,7 +240,7 @@ define(['dojo',
     
       if (name === "project"){
         
-        
+        tControl.isActive = false;
         //create a projectControl
         //console.debug("setting projectControl with project id", id);
         this.primaryController = null;
@@ -268,6 +268,8 @@ define(['dojo',
 
         //console.debug("created projectControl", this.primaryController);
       } else if (name === "contact"){
+				
+				tControl.isActive = false;
         
         if (cControl.showRightColumnHandler){
           dojo.unsubscribe(cControl.showRightColumnHandler);
@@ -286,6 +288,7 @@ define(['dojo',
         this.primaryController = cControl;
 
       } else if (name === "task"){
+				tControl.isActive = false;
         //reset the current project so in case there are changes while gone, we get updated
         db.projectStore.currentProject = "";
         

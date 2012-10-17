@@ -651,7 +651,7 @@ module.exports = {
       		);
       	}
 
-      	if (doc.docType === "task" && doc.status != "IN-ITEM" && doc.status !== "SOMEDAY"){
+      	if (doc.docType === "task" && doc.status != "IN-ITEM" && doc.status !== "SOMEDAY" && doc.status !== "ARCHIVE"){
       		doc.history.forEach(function(item){
       			emit(
       				[doc.project, toDateArray(new Date(item.time)), "task"],
@@ -1315,7 +1315,7 @@ module.exports = {
 
       	if (doc.docType === "task"){
       		doc.history.forEach(function(item){
-      			if (item.users && item.users.length > 0){
+      			if (item.users && item.users.length){
       				item.users.forEach(function(user){
       					emit(
       						[user, toDateArray(new Date(item.time))],

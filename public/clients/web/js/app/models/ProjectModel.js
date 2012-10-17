@@ -282,7 +282,6 @@ define("app/models/ProjectModel",
 	        }];
 	      }
 
-    		
     		//if there isn't a deadline set for the project, use the default deadline
     		if (!project.deadline){
     		  project.deadline = this.defaultDeadline();
@@ -430,6 +429,7 @@ define("app/models/ProjectModel",
   	    //console.log("after updateResponsibilities in projectModel");
       	//save project if an assignment was added or updated for a follower or responsible
       	if (doUpdate){
+					p = self.setVersion(p);
       	  //console.debug("saving project, assignment was added or updated", p, task.username);
       	  dojo.when(self.update(p), function(){
       	    //console.log("updated project", p, task);
@@ -476,6 +476,8 @@ define("app/models/ProjectModel",
           });
         
           project.status = "ARCHIVE";
+					
+					project = p.setVersion(project);
           
       		p.addActivity({
       			verb: "DELETE",
@@ -490,6 +492,7 @@ define("app/models/ProjectModel",
     	      db = this.db;
     	      
     	  //console.debug("sending project", project);
+				project = p.setVersion(project);
     	  
     	  //add the create entry into the history
   	  	project = p.addActivity({
@@ -509,6 +512,8 @@ define("app/models/ProjectModel",
     	publish: function(project, message){
     	  var p = this,
     	      db = this.db;
+
+				project = p.setVersion(project);
     	    
     	  project = p.addActivity({
     	    verb: "POST",
@@ -534,6 +539,8 @@ define("app/models/ProjectModel",
     	  project.assignments = dojo.filter(project.assignments, function(assign){
     	    return assign.username !== username;
     	  });
+
+				project = p.setVersion(project);
     	  
     	  p.addActivity({
     			verb: "UNFOLLOW",
@@ -599,6 +606,8 @@ define("app/models/ProjectModel",
       			icon: this.icon.follow
       		}, project);
     	  }
+
+				project = p.setVersion(project);
         //console.log("before update in projectModel.follow");
     	  p.update(project);
     	},
@@ -626,6 +635,8 @@ define("app/models/ProjectModel",
     	      assign.status = "DECLINED";
     	    }
     	  });
+
+				project = p.setVersion(project);
   
     	  //make the activity stream mode
     	  p.addActivity({
@@ -715,6 +726,8 @@ define("app/models/ProjectModel",
     	      db = this.db;
 
     	  //console.debug("pausing project", project);
+
+				project = p.setVersion(project);
    
       	project = p.addActivity({
     			verb: "PAUSE",
@@ -732,6 +745,8 @@ define("app/models/ProjectModel",
     	      db = this.db;
 
     	  //console.debug("resuming project", project);
+
+				project = p.setVersion(project);
    
       	project = p.addActivity({
     			verb: "RESUME",
@@ -750,6 +765,8 @@ define("app/models/ProjectModel",
     	      docs = [];
 
     	  //console.debug("cancelling project", project);
+
+				project = p.setVersion(project);
    
       	project = p.addActivity({
     			verb: "CANCEL",
@@ -861,6 +878,8 @@ define("app/models/ProjectModel",
     	      assign.status = "ACCEPTED";
     	    }
     	  });
+
+				project = this.setVersion(project);
     	  
     		project = this.addActivity({
     			verb: "JOIN",
@@ -945,6 +964,8 @@ define("app/models/ProjectModel",
     	  }
     	  
     	  //console.debug("mark Done", project);
+
+				project = this.setVersion(project);
     	  
     		project = this.addActivity({
     			verb: "COMPLETE",
@@ -1056,6 +1077,8 @@ define("app/models/ProjectModel",
       	      assign.status = "LEFT";
       	    }
       	  });
+
+					project = p.setVersion(project);
 
           //make the activity entry for leaving the project
       		project = p.addActivity({
@@ -1169,6 +1192,8 @@ define("app/models/ProjectModel",
     	      assign.ack = true;
     	    }
     	  });
+
+				project = this.setVersion(project);
     	  
     	  project = this.addActivity({
     			verb: "FEEDBACK",
@@ -1191,6 +1216,8 @@ define("app/models/ProjectModel",
     	      }
     	    }
     	  });
+
+				project = this.setVersion(project);
     	  
     	  project = this.addActivity({
     			verb: "ACK",
@@ -1208,8 +1235,14 @@ define("app/models/ProjectModel",
     			actor: {id:username, name:db.fullName(), type:"PERSON"},
     			object: {id: project._id, name: project.name, type: "PROJECT"},
     		  time: stamp.toISOString(new Date(),{milliseconds:true}),
-    		  users: project.users
+    		  users: project.users,
+					rev: "-1"
     		};
+				
+				//we use the rev to track the history. that way the alerts can be tested against the rev
+				if (project._rev){
+					defaults.rev = project._rev;
+				}
     		opts = dojo.mixin(defaults, opts || {});
     		
     		//make sure there is a place to put history

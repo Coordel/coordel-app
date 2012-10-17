@@ -26,6 +26,35 @@ define("app/models/CoordelBase",["dojo", "dojo/Stateful", "dojo/date/stamp"], fu
     		dojo.mixin(this, mixin);
     	
       },
+
+			setVersion: function(doc){
+				console.log("setting version", doc.name, doc.docType);
+				//this tracks the versions of this doc.
+				//if the doc doesn't have versions create them
+        if (!doc.versions){
+          doc.versions = {};
+        }
+        
+        if (!doc.versions.latest){
+					//if there isn't a latest member of versions then set it to a clone of this doc
+          doc.versions.latest = dojo.clone(doc);
+        } else {
+					//create a versions history array
+          if (!doc.versions.history){
+            doc.versions.history = [];
+          }
+					//there was a latest member, so push the existing one to history
+          doc.versions.history.push(doc.versions.latest);
+					//then create a clone of this doc as the new latest
+          doc.versions.latest = dojo.clone(doc);
+        }
+  			
+				//don't replicate versions or history in the versions
+        delete doc.versions.latest.history;
+        delete doc.versions.latest.versions;
+				return doc;
+			},
+			
     	icon: {
       	save: "ui-icon-disk",
       	trash: "ui-icon-trash",

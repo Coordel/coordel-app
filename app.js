@@ -353,24 +353,77 @@ couch.info(function(err, info){
       if(!error) {
         var map = Alert.getChangeAlertMap(change.doc);
         alertContacts(change.doc);
-        //console.log("ALERT MAP", map);
+        console.log("ALERT MAP", map, change.doc.docType, change.doc.name);
         for (var key in map){
           //console.log("CHANGE", key, change.doc.updater);
           changesIO.emit('changes:' + key, change.doc);
           
           //if this user didn't do the update, then alert when history exists
           if (change.doc.username !== "UNASSIGNED" && change.doc.updater !== key && change.doc.history && change.doc.history.length > 0){
-            //console.log(logId, "Alert: ", JSON.stringify(change));
-            var alert = change.doc.history.shift();
-            changesIO.emit('alerts:' + key, alert);
-            var a = new Alert({
-              username: key,
-              alert: alert
-            });
+            //console.log(logId, "Alert: ", change.doc.docType, change.doc.name);
+						var doc = change.doc;
+						//get the history of this doc
+						var history = change.doc.history;
+						//for now there are only messages tracked for projects and tasks
+						if (doc.docType === 'project' || doc.docType === 'task'){
+							console.log("it's a project or task: versions: ", doc.versions);
+							//it might be that a project or task doesn't have versions (an old entry)
+							if (doc.versions && doc.versions.latest){
+								//when an activity is added, the _rev of the current doc is appened to the activity in the rev field
+								//assume that there isn't a rev
+								var rev = false;
+								var latest = false;
+								
+								//check if there's a _rev and if so, assign it to rev
+								if (doc._rev){
+									rev = doc._rev;
+									if (doc.versions.latest && doc.versions.latest._rev){
+										latest = doc.versions.latest._rev;
+										console.log("there was a rev ", latest);
+									}
+									
+								}
+								
+								
+				
+								//there was a latest rev so now iterate over the history to find all entries for this rev
+								console.log("iterate history entries with this rev", latest);
+								
+								history.forEach(function(alert){
+									if (alert.rev && alert.rev === latest){
+										console.log("rev matched: alert this", alert.verb);
+										sendAlert(alert);
+									}
+								});
+								
+							
+							} else {
+								
+								//this is the first save, so show all history entries that equal 
+								console.log("first save, iterate all history entries");
+								history.forEach(function(alert){
+									console.log("alert: ", alert.verb);
+									if (alert.rev === "-1"){
+										sendAlert(alert);
+									}
+								});
+							}
+							//var alert = change.doc.history.shift();
+							function sendAlert (alert){
+								//console.log("sending alert", key, alert);
+								changesIO.emit('alerts:' + key, alert);
+		            var a = new Alert({
+		              username: key,
+		              alert: alert
+		            });
+
+		            a.add(function(err, res){
+		              if (err) console.log(logId, "ERROR adding alert: " + err);
+		            });
+							}
+						}
             
-            a.add(function(err, res){
-              if (err) console.log(logId, "ERROR adding alert: " + err);
-            });       
+              
           } else if (change.doc.docType === "message" && change.doc.updater !== key){
             //console.log(logId, "message alert", change.doc);
             changesIO.emit('alerts:' + key, change.doc);

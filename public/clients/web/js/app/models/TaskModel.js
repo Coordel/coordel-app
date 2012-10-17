@@ -1809,8 +1809,7 @@ define("app/models/TaskModel",
       			object: {id: t._id, name: t.name, type: "TASK"},
       			verb: "DELETE",
       			target: {id:p.project._id, name: p.project.name, type: "PROJECT"},
-      			icon: t.icon.trash,
-      			users: p.project.users
+      			icon: t.icon.trash
       		}, task);
  
           t.update(task);
@@ -2257,26 +2256,10 @@ define("app/models/TaskModel",
     	
     	version: function(){
     	    //create a version of this task when doing an edit
-          var task = this.task;
-
-          if (!task.versions){
-            task.versions = {};
-          }
-
-          if (!task.versions.latest){
-             task.versions.latest = dojo.clone(task);
-          } else {
-            if (!task.versions.history){
-              task.versions.history = [];
-            }
-            task.versions.history.push(task.versions.latest);
-            task.versions.latest = dojo.clone(task);
-          }
-
+          var task = this.setVersion(this.task);
+     
           delete task.versions.latest.contextStarts;
           delete task.versions.latest.contextDeadline;
-          delete task.versions.latest.history;
-          delete task.versions.latest.versions;
           //console.log("setVersion in TaskModel", task.versions);
     	},
     	
@@ -2643,12 +2626,22 @@ define("app/models/TaskModel",
     	  var db = this.db,
           p = this.p,
           username = db.username();
+
+				console.log("addActivity", task, task._rev);
     	  
     	  var defaults = {
     			actor: {id:username, name:db.fullName(), type:"PERSON"},
     			object: {id: task._id, name: task.name, type: "TASK"},
-    		  time: stamp.toISOString(new Date(),{milliseconds:true})
+    		  time: stamp.toISOString(new Date(),{milliseconds:true}),
+					rev: "-1",
+					users: p.project.users
     		};
+
+				//we use the rev of the task to track history entries. if there's a rev, enter it.
+				if (task._rev){
+					defaults.rev = task._rev;
+				}
+				
     		opts = dojo.mixin(defaults, opts || {});
     		
     		//make sure there is a place to put history

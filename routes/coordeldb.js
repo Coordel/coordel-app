@@ -97,7 +97,7 @@ module.exports = function(app, validate){
           //console.log("view", view);
         
           //we don't send back trash for projects and tasks and we don't send back inactive templates
-          if(view === "taskSearch" || view === "projectSearch"){
+          if(view === "taskSearch"){
             //console.log("doc status", doc.status, doc.substatus);
             if (doc.status !== "TRASH" && doc.substatus !== "TRASH"){
               //make sure this doc belongs to this user 
@@ -107,10 +107,27 @@ module.exports = function(app, validate){
                 }
                 ids.push(doc._id);
               }
-            } else {
-              //console.log("trash", doc.name);
-            }
-          } else if (view === "templateSearch"){
+            } 
+          } else if (view === "projectSearch"){
+					 	if (doc.status !== "TRASH" && doc.substatus !== "TRASH"){
+							var	forUser = false;
+							if (doc.responsible === username){
+								forUser = true;
+							}
+							doc.assignments.forEach(function(assign){
+								if (assign.username === username){
+									forUser = true;
+								}
+							});
+              //make sure this doc belongs to this user 
+              if (forUser){
+                if (!docs[doc._id]){
+                  docs[doc._id] = doc;
+                }
+                ids.push(doc._id);
+              }
+            } 
+					} else if (view === "templateSearch"){
             //console.log("doc", doc);
             if (doc.isActive){
               
