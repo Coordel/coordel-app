@@ -10,7 +10,7 @@ define([
   "dijit/TitlePane",
   "app/views/Dialog/Dialog",
   "app/models/CoordelStore",
-  "app/widgets/ContainerPane"], function(dojo, dijit, coordel, html, w, t, Info,BlockerInfo, tp, Dialog, db, cp) {
+  "app/widgets/ContainerPane"], function(dojo, dijit, coordel, html, w, t, Info, BlockerInfo, tp, Dialog, db, cp) {
   dojo.declare(
     "app.views.TaskInfoDialog", 
     [w, t], 

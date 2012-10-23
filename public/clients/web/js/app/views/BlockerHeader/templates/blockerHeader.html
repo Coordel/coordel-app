@@ -2,11 +2,11 @@
 	<div>
 		<span dojoAttachPoint="userName" class="blocker-username c-float-r"></span>
 		<span>
-			<span dojoAttachPoint="projectName"></span> : <span dojoAttachPoint="taskName"></span>
+			<span style="color: #999" dojoAttachPoint="projectName"></span> : <span class="blocker-task-name" dojoAttachPoint="taskName"></span>
 			<span dojoAttachPoint="showInfo" class="small-task-icon icon-info">&nbsp;</span>
 		</span>
 	</div>
 	<div dojoAttachPoint="infoDialog" dojoType="app.views.Dialog">
-  	<div style="padding:0; width: 500px" class="tasklist-titlepane" dojoAttachPoint="infoContainer" dojoType="app.widgets.ContainerPane"></div>
+  	<div style="width: 500px" class="tasklist-titlepane c-padding-large" dojoAttachPoint="infoContainer" dojoType="app.widgets.ContainerPane"></div>
 	</div>
 </div>

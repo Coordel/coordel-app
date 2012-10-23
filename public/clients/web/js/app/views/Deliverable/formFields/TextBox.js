@@ -14,7 +14,13 @@ define([
         
         //add the size class to the domNode
         dojo.addClass(this.domNode, this.field.size);
-      }
+      },
+
+			setDisabled: function(){
+				this.inherited(arguments);
+				console.log("disabling textbox", this.field);
+				this.set("disabled", true);
+			}
       
     });
   return app.views.Deliverable.formFields.TextBox;    

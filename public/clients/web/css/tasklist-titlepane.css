@@ -34,28 +34,26 @@
 	font-weight:bold;
 }
 
-.tasklist-titlepane .turboWizard .dijitTitlePaneTitle, .tasklist-titlepane .turboInfo .dijitTitlePaneTitle,
-.tasklist-titlepane .taskDetailsInfo .dijitTitlePaneTitle, .tasklist-titlepane .taskInfo .dijitTitlePaneTitle{
-  color: #00629B;
+.tasklist-titlepane .turboWizard .dijitTitlePaneTextNode,
+.tasklist-titlepane .turboWizard .dijitTitlePaneFocused .dijitTitlePaneTextNode,
+.tasklist-titlepane .turboInfo .dijitTitlePaneTextNode,
+.tasklist-titlepane .turboInfo .dijitTitlePaneFocused .dijitTitlePaneTextNode,
+.taskDetailsInfo .dijitTitlePaneTextNode, 
+.taskDetailsInfo .dijitTitlePaneFocused .dijitTitlePaneTextNode{
+  color: #00629B !important;
+}
+
+.tasklist-titlepane .taskDetailsBlocking .dijitTitlePaneContentInner{
+	padding: 0;
 }
 
 .coordel .overdue .dijitTitlePaneTitle, .coordel .overdue .dijitTitlePaneFocused .dijitTitlePaneTextNode{
   color: #DA291C !important;
 }
 
-.tasklist-titlepane .taskInfo .dijitTitlePaneFocused .dijitTitlePaneTextNode {
-  color: #00629B !important;
-  /* TODO: do we need this?   we usually don't change text color on focus */
 
-}
 
-.coordel .dijitTitlePaneTitle{
-  color: #66727F;
-}
 
-.coordel .dijitTitlePaneFocused .dijitTitlePaneTextNode {
-  color: #66727F;
-}
 
 
 .dj_ie6 .tasklist-titlepane .dijitTitlePaneTitle {
@@ -95,7 +93,7 @@
 }
 */
 .tasklist-titlepane .dijitTitlePaneFocused .dijitTitlePaneTextNode {
-  color: #66727F;
+  /*color: #66727F;*/
   /* TODO: do we need this?   we usually don't change text color on focus */
 
 }

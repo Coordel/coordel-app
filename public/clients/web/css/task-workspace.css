@@ -5,3 +5,8 @@
 .task-workspace {
   color: #000;
 }
+
+#workspaceContainer .task-info {
+	border-bottom: none;
+}
+

@@ -810,7 +810,12 @@ define(['dojo',
   				  //console.log("appStore notified", chg);
   					break;
   				case "template":
-  				  db.appStore.templateStore.notify(chg, chg._id);
+						if (chg._deleted){
+							db.appStore.templateStore.notify(null, chg._id);
+						} else {
+							db.appStore.templateStore.notify(chg, chg._id);
+						}
+  				  
   				  if (chg.isNew){
   				    
   				  }

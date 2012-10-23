@@ -59,8 +59,9 @@ define(
   		      
   		      dojo.when(def, function(t){
   		        //console.debug("blocker", t);
-  		        self.containerNode.addChild(new BlockerHeader({task: t}));
-  		        if (t.workspace && t.workspace.length > 0){
+							var has = (t.workspace && t.workspace.length);
+  		        self.containerNode.addChild(new BlockerHeader({task: t, showInfoButton: has, focus: self.focus}));
+  		        if (has){
     		        //if this has deliverables, then show it
     		      
     		        

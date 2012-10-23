@@ -38,7 +38,7 @@ define(
         
         this.clearSelectionHandler = dojo.subscribe("coordel/primaryNavSelect", this, "clearSelection");
 
- 				console.debug("in Contact postCreate", this.contact, this.currentArgs);
+ 				//console.debug("in Contact postCreate", this.contact, this.currentArgs);
         
         var email = dojo.trim(this.contact.email.toLowerCase()),
             self = this;

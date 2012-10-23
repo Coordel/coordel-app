@@ -5,7 +5,7 @@
   ],
   "name": "coordel-app",
   "author": "Coordel <support@coordel.com>",
-  "version": "0.1.0-112",
+  "version": "0.1.0-115",
   "scripts": {
     "start": "./app.js",
     "test": "make test"

@@ -10,7 +10,7 @@ module.exports = function(app, validate){
     //when a blueprint has attachments, apps should call this function to get a doc back with
     //the attachments
     var id = req.query.id;
-    console.log("/blueprint/attachments route", id);
+    //console.log("/blueprint/attachments route", id);
     Blueprint.getAttachments(id, function(err, doc){
       if (err){
         console.log("ERROR in /blueprint/attachments route", err);
@@ -31,7 +31,7 @@ module.exports = function(app, validate){
         args = req.body,
         stamp = (new Date()).toISOString();
         
-    console.log("BLUEPRINT", args );
+    //console.log("BLUEPRINT", args );
     if (!args.created){
       args.created = stamp;
       args.creator = args.username;

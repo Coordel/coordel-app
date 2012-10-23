@@ -26,7 +26,8 @@ define([
   "app/views/TaskNotes/TaskNotes",
   "app/views/Turbo/Turbo",
   "app/views/TaskDetailsHeader/TaskDetailsHeader",
-  "app/models/StreamModel"], function(dojo, dijit, dialog, coordel, dModel, layout, ti, tw, ed, del, cpane, todo, note, Stream, tp, textbox, textarea, search, db, BlockerInfo, QuickEntry, Memory, Checklist, Sort, Notes, Turbo, Header, sModel) {
+  "app/models/StreamModel",
+	"app/views/BlockingInfo/BlockingInfo"], function(dojo, dijit, dialog, coordel, dModel, layout, ti, tw, ed, del, cpane, todo, note, Stream, tp, textbox, textarea, search, db, BlockerInfo, QuickEntry, Memory, Checklist, Sort, Notes, Turbo, Header, sModel, BlockingInfo) {
 	return {
 		db: null,
 		focus: null,
@@ -90,11 +91,13 @@ define([
 	    
       this.showHeader();
 		  
-		  //show the info about the task, if there are attachments show them as well
-		  this.showInfo();
+		  
 		  
 		  //if there are blockers, show the blocker or results
 		  this.showBlockers();
+		
+			//show the info about the task, if there are attachments show them as well
+		  this.showInfo();
 		  
 		  //need to show the deliverables will show deliverables or empty
   		this.showDeliverables();
@@ -322,11 +325,12 @@ define([
 		showInfo: function(){
 		  //adds the info title pane to the layout, always shows
 		  var cont = dijit.byId("workspaceMain");
-		    
+		  
+			/*
 		  if (cont.hasChildren()){
 		    cont.destroyDescendants();
 		  }
-		  
+		  */
 		  this.taskInfo = new ti({task:this.task, showName: false, isTurbo: this.isTurbo});
 		      
 		  var pane = new tp({
@@ -374,7 +378,7 @@ define([
 		  
 		  if (task.coordinates && task.coordinates.length > 0){
 		    
-		    var b = new BlockerInfo({task: task}),
+		    var b = new BlockerInfo({task: task, focus: this.focus}),
 		        cont = dijit.byId("workspaceMain");
 		    
 		    /*
@@ -406,7 +410,8 @@ define([
 		    var bl = new tp({
 		      title: coordel.blockers,
 		      "class": "task-details",
-		      content: b
+		      content: b,
+					open: false
 		    });
 		    
 		    cont.addChild(bl);
@@ -416,6 +421,21 @@ define([
 		showBlocking: function(){
 		  //add blocking title pane with tasks this task is blocking
 		  //only shows when this task blocks other tasks
+			var task = this.task;
+			
+			if (task.blocking && task.blocking.length){
+				var cont = dijit.byId("workspaceMain");
+				var pane = new tp({
+			    title: "Blocking",
+			    content: new BlockingInfo({task: task, focus: this.focus}),
+					open: false,
+					"class": "taskDetailsBlocking"
+			  });
+			
+				cont.addChild(pane);
+				
+			}
+			
 		  
 		},
 		

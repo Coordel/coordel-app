@@ -353,7 +353,7 @@ couch.info(function(err, info){
       if(!error) {
         var map = Alert.getChangeAlertMap(change.doc);
         alertContacts(change.doc);
-        console.log("ALERT MAP", map, change.doc.docType, change.doc.name);
+        //console.log("ALERT MAP", map, change.doc.docType, change.doc.name);
         for (var key in map){
           //console.log("CHANGE", key, change.doc.updater);
           changesIO.emit('changes:' + key, change.doc);
@@ -402,7 +402,7 @@ couch.info(function(err, info){
 								//this is the first save, so show all history entries that equal 
 								console.log("first save, iterate all history entries");
 								history.forEach(function(alert){
-									console.log("alert: ", alert.verb);
+									//console.log("alert: ", alert.verb);
 									if (alert.rev === "-1"){
 										sendAlert(alert);
 									}
@@ -470,7 +470,7 @@ app.get('/loadTemplates', function(req, res){
       console.log("ERROR adding temlates");
       res.redirect('/admin');
     } else {
-      console.log("Loaded default templates");
+      //console.log("Loaded default templates");
       res.redirect('/admin');
     }
   });

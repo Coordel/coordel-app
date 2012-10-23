@@ -143,6 +143,11 @@ function getProject(args, fn){
         
   args.sourceId = args.project._id;
   args.name = args.project.name;
+
+	if (args.project.isDemo){
+		args.isDemo = true;
+		args.demoUsername = args.project.demoUsername;
+	}
   
   db.view('coordel/projects', viewArgs, function(err, docs){
     if (err){
@@ -240,6 +245,11 @@ function getTask(args, fn){
   args.sourceId = id;
   args.name = args.task.name;
   args.username = ""; //need to clear out the username so we can attach without notifying the user
+
+	if (args.task.isDemo){
+		args.isDemo = true;
+		args.demoUsername = args.task.demoUsername;
+	}
   
   bp = args;
   

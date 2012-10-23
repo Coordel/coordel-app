@@ -76,7 +76,7 @@ define([
         //or is will add a not started node
         fModel.field = this.field;
         if (!fModel.hasValue()){
-          this.domNode.innerHTML = '<div class="c-border not-started">' + coordel.notStarted + '</div>';
+          this.domNode.innerHTML = '<div class="c-border dijitTextAreaDisabled not-started">' + coordel.notStarted + '</div>';
         }
       },
       

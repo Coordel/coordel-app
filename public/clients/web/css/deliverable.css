@@ -6,6 +6,7 @@
 
 .file-border {
   border: 1px solid #eaeaea;
+	background: #f7f7f7 url(images/icons/deliverables/file.png) no-repeat center right;
 }
 
 .select-field .name {
@@ -38,14 +39,13 @@
   font-weight: bold;
 }
 
-.blocker-info, .blocker-info .current-file{
+.blocker-info .current-file{
   color: #5c5c5c;
 }
 
 .instructions {
- font-size: 10px;
- margin-left: 2px;
- margin-bottom: 2px;
+ font-size: 12px;
+ margin: 2px 0 4px 0;
 }
 
 .deliverable {
@@ -60,7 +60,6 @@
   background-color: #ffffff;
   padding-bottom:16px;
   border-bottom: 1px solid #cccccc;
-
 }
 
 .project-deliverable:last-child{
@@ -75,29 +74,53 @@
   margin-top:0;
   background-color: #f1f1f1;
   color: #000000;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #cccccc;
 }
 
 .blocker-header {
   border-top: 1px solid #B5BCC7;
   margin-top: 24px;
   font-size: 10px;
-  background-color: #fafafa;
+  background-color: #eaeaea;
   border-bottom: 1px solid #cccccc;
   padding: 4px 8px;
   font-weight: bold;
 }
 
 .blocker-info .deliverable {
-  padding: 8px 8px 0 8px;
+  padding: 16px 8px 8px 8px;
 }
 
 .blocker-header .blocker-username {
  font-weight: normal;
 }
+
+.blocker-header .blocker-task-name{
+	opacity: .7;
+}
+
+.blocker-header .blocker-task-name.do-navigation {
+	cursor: pointer;
+}
+
+.blocker-header .blocker-task-name.do-navigation:hover {
+	cursor: pointer;
+	opacity: 1;
+}
+
 .not-started {
-  /*color: #DA291C;*/
-  padding: 2px;
+	color: #DA291C;
+  padding: 8px 4px;
+	opacity: .7;
+}
+
+.coordel .deliverable .dijitTextAreaDisabled {
+	background: #f7f7f7 url(images/icons/deliverables/textarea.png) no-repeat center right;
+}
+
+.coordel .deliverable .dijitTextBoxDisabled, .coordel .deliverable .dijitTextBoxDisabled .dijitButtonNode {
+	border: 1px solid #eaeaea;
+	background: #f7f7f7 url(images/icons/deliverables/textbox.png) no-repeat center right;
 }
 
 
