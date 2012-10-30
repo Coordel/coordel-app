@@ -47,7 +47,7 @@
   	      on(dom.byId("password"), "keyup", validate);
   	      
   	      function validate(){
-  	        console.log("validate");
+  	        //console.log("validate");
   	        var submit = dom.byId("submit");
   	        var email = dom.byId("username").value.trim(),
                 pass = dom.byId("password").value.trim();
@@ -62,7 +62,7 @@
     
             submit.disabled=true;
             if (email.length > 0 && pass.length > 5){
-              console.log("valid");
+              //console.log("valid");
               submit.disabled=false;
             }
   	      }

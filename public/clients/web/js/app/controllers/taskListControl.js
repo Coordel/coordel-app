@@ -137,6 +137,9 @@ define(["dojo",
     },
 
 		handleTaskNotify: function(args){
+			if (db.focus === "project" || db.focus === "contact"){
+				return;
+			}
 			
 			//if there are task changes and the focus is current, need to make sure that the list refreshes in case
 			//any of them have become current because of the incoming change
@@ -542,7 +545,7 @@ define(["dojo",
       
       this.header.sortButton.sortDropdown.set("disabled", false);
       
-      console.debug("focus in showTaskList", focus);
+      //console.debug("focus in showTaskList", focus);
       
       if (focus === "project-invited"){
         this._cancelObserveHandlers();

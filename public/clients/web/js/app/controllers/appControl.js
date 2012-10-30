@@ -232,7 +232,7 @@ define(['dojo',
 	  
 	  doTaskAction: function(args){
 	    
-	    console.log("args", args);
+	    //console.log("args", args);
 	    
 	    if (args.action === "reuse") {
 	      return;
@@ -981,7 +981,7 @@ define(['dojo',
   				    } else if (chg.status === "TRASH" || chg.status === "ARCHIVE" || chg._deleted){
   				      //this task was deleted
   				      db.taskStore.store.notify(null, chg._id);
-  				      console.log("Notify Task DELETE", chg, db.taskStore.memory);
+  				      //console.log("Notify Task DELETE", chg, db.taskStore.memory);
 								
 
 								//need to track deleted from session to session to make sure we don't try and load it again

@@ -677,6 +677,15 @@ define(["dojo",
               
               return def;
             },
+
+						put: function(doc){
+							var store = new couch({
+                target: this.db, 
+                idProperty: "_id"
+              });
+							
+							store.put(doc, {username: this.username()});
+						},
             
             batch: function(list){
               var store = new couch({

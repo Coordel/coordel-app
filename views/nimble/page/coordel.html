@@ -6,7 +6,7 @@
     db.load("/coordel/view/coordelOpportunities",{ query: {descending: true},
         handleAs: "json"
       }).then(function(data){
-        console.log("opportunities", data, data.rows);
+        //console.log("opportunities", data, data.rows);
         if (data.rows && data.rows.length){
           
           array.forEach(data.rows, function(item){

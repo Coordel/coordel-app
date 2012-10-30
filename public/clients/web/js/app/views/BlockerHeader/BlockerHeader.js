@@ -40,9 +40,9 @@ define(
 				}
         
         dojo.connect(this.showInfo, "onclick", this, function(){
-					console.log("this.task", this.task, TaskInfo);
+					//console.log("this.task", this.task, TaskInfo);
           var i = new TaskInfo({task: this.task});
-          console.debug("dialog", i);
+          //console.debug("dialog", i);
           var cont = this.infoContainer;
           if (cont.hasChildren()){
             cont.destroyDescendants();
@@ -54,7 +54,7 @@ define(
           try{
             this.infoDialog.show();
           } catch (err){
-            console.debug("ERROR showing dialog in blocker header");
+            //console.debug("ERROR showing dialog in blocker header");
             this.infoDialog.show();
           }
           
@@ -75,7 +75,7 @@ define(
 					
 					dojo.addClass(this.taskName, "do-navigation");
 					var c = dojo.connect(this.taskName, "onclick", this,function(){
-						console.log("clicked", self.focus, self.task._id, self.task );
+						//console.log("clicked", self.focus, self.task._id, self.task );
 						dojo.publish("coordel/primaryNavSelect", [ {name: "task", focus: self.focus, id: self.task._id, task: self.task}]);
 						dojo.disconnect(c);
 					});

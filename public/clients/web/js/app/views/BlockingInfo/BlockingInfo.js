@@ -47,7 +47,7 @@ define(
 					item.destroy();
 				});
 				
-				console.log("show blocking", self.task.blocking);
+				//console.log("show blocking", self.task.blocking);
 				dojo.forEach(self.task.blocking, function(id){
 					db.get(id).then(function(task){
 						var t = db.getTaskModel(task, true);

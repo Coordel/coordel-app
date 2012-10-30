@@ -103,9 +103,6 @@ define("app/models/TaskModel",
             if (dur && dur.number > 0){
 
               //console.log("block duration", block.name, dur.unit, dur.number);
-              
-              
-
               switch (dur.unit){
                 case "m":
                 testDiff = dojo.date.difference(now, dojo.date.add(now, "minute", dur.number), "minute");
@@ -1438,7 +1435,7 @@ define("app/models/TaskModel",
       },
       
       updateBlocking: function(task){
-        
+        //console.log("update blocking", task);
         var t = this,
       			  db = this.db,
               p = this.p,
@@ -1461,9 +1458,9 @@ define("app/models/TaskModel",
           
           //console.log("coordinates", task.coordinates, latest);
           
-    	    function getBlocker(task){
+    	    function getBlocker(taskid){
     	      var def = new dojo.Deferred();
-    	      var mod = db.get(task);
+    	      var mod = db.get(taskid);
     	      dojo.when(mod, function(t){
     	        
     	        def.callback(t);
@@ -1489,7 +1486,9 @@ define("app/models/TaskModel",
           			icon: t.icon.addBlocking,
           			body: dojo.toJson(body)
           		}, item);
-              t.update(item);
+              //t.update(item);
+							//we just need to update the task so use the simple task put
+							db.put(item);
             }
     	    }
     	    
@@ -1506,7 +1505,8 @@ define("app/models/TaskModel",
           			icon: t.icon.removeBlocking,
           			body: dojo.toJson(body)
           		}, item);
-              t.update(item);
+              //t.update(item);
+							db.put(item);
             }
     	    }
     	    
@@ -1590,144 +1590,7 @@ define("app/models/TaskModel",
         
       
         
-        /*
-        //this function keeps blocking tasks in sync with this one.
-        var db = this.db,
-            p = this.p;
-      
-        console.log("updateBlocking for task: ", task._id, task.name, task.blocking, task.coordinates);
-        
-        var tModel = db.getTaskModel(task, true);
-        var body = {
-          project: tModel.p.project.name,
-          task: task.name
-        };
-        
-        
-        //first get any existing blocking tasks for this task
-        var qBlocking = db.taskStore.getBlocking(task._id);
-        
-        dojo.when(qBlocking, function(blocking){
-
-          console.log("got blocking for task", task.name, blocking);
-
-          if (task.coordinates && task.coordinates.length){
-            //console.log("task has coordinates entry");
-            //since this task has blockers (coordinates) then we need to make sure that all of the blockers
-            //have blocking entries
-            var query;
-           
-            //console.log("has more than 0 coordinates");
-
-            //if a task has blockers, then get the blockers and 
-            //make a blocking entry for each
-            query = db.taskStore.getBlockers(task._id);
-            dojo.when(query, function(blockers){
-              
-              //iterate over the existing blocking tasks to make sure they are still blocked
-              //if not remove them
-              dojo.forEach(blocking, function(item){
-                console.log("iterating blocking", task.coordinates, item._id);
-                if (dojo.indexOf(task.coordinates, item._id) === -1){
-                  //this blocking task isn't blocking any more
-                  //need to remove it if it isn't already
-                  //console.log(task._id + " is no longer blocked, removing blocking entry: ", item._id);
-                 
-                    item.blocking = dojo.filter(item.blocking, function(id){
-                      return id !== task._id;
-                    });
-                    var t = db.getTaskModel(item, true);
-                    item = t.addActivity({
-                			verb: "REMOVE-BLOCKING",
-                			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
-                			icon: t.icon.removeBlocking,
-                			body: dojo.toJson(body)
-                		}, item);
-                    t.update(item);
-                
-                }
-              });
-              
-              //iterate over the existing blockers to make sure there are blocking entries
-             
-              dojo.forEach(blockers, function(item){
-                if (!item.blocking){
-                  item.blocking = [];
-                }
-                          
-                //console.log("testing if this has the blocking item", item.blocking, task._id, task.name);
-                //the item is what is blocking this task. make sure item.blocking has this task._id
-                if (dojo.indexOf(item.blocking, task._id) === -1){
-                  //console.log(task.name + " is now blocked, making blocking entry: ", item.name);
-                  item.blocking.push(task._id);
-                  
-                  var t = db.getTaskModel(item, true);
-
-                  item = t.addActivity({
-              			verb: "ADD-BLOCKING",
-              			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
-              			icon: t.icon.addBlocking,
-              			body: dojo.toJson(body)
-              		}, item);
-                  t.update(item);
-                }
-              });
-            });
-
-          } else {
-            //if a task doesn't have blockers, load any tasks that have blocking
-            //entries for this task and clear them
-            if (blocking.length){
-              console.log("task has no blockers, removing existing");
-              dojo.forEach(blocking, function(item){
-                console.log("blocking", item.name, item.blocking);
-                if (item.blocking && dojo.indexOf(item.blocking, task._id) > -1){
-                  //console.log(task.name + " doesn't have blockers, remove blocking entry: ", item.name);
-                  item.blocking = dojo.filter(item.blocking, function(id){
-                    console.log("id", id, "task._id", task._id);
-                    return id !== task._id ;
-                  });
-                  var t = db.getTaskModel(item, true);
-                  item = t.addActivity({
-              			verb: "REMOVE-BLOCKING",
-              			target: {id: p.project._id, name: p.project.name, type: "PROJECT"},
-              			icon: t.icon.removeBlocking,
-              			body: dojo.toJson(body)
-              		}, item);
-                  t.update(item);
-                }
-              });
-              
-              //now make sure the blocking entries for this task are correct
-              //this is a safety test, so don't do any updates
-              var removeBlocking = false;
-              dojo.forEach(blocking, function(item){
-                if (!item.coordinates || !item.coordinates.length){
-                  console.log("need to remove blocking entry from task", task.name, item.name);
-                  task.blocking = dojo.filter(task.blocking, function(tb){
-                    return tb !== item._id;
-                  });
-                  removeBlocking = true;
-                } else if (item.coordinates && item.coordinates.length){
-                  if (dojo.indexOf(item.coordinates, task._id) === -1){
-                    console.log("need to remove, coords 0, entry from task", task.name, item.name);
-                    task.blocking = dojo.filter(task.blocking, function(tb){
-                      return tb !== item._id;
-                    });
-                    removeBlocking = true;
-                  }
-                } 
-              });
-              if (removeBlocking){
-                console.log("about to update task with removed blockers new blocking is ", task.blocking);
-                tModel.update(task);
-              }
-            }
-          }
-          
-          
-        });
-        */
+       
       },
 
 			activate: function(task){
@@ -1831,15 +1694,15 @@ define("app/models/TaskModel",
         
         //first make sure that this blocker doesn't already exist
         if (t.hasBlockers()){
-          dojo.forEach(t.coordinates, function(id){
-            if (blocker === id){
-              //this blocker already exists, don't do anything
-              return;
-            }
-          });
+					var filter = dojo.filter(t.coordinates, function(id){
+						return blocker === id;
+					});
+          if (filter.length){
+						return task;
+					}
         }
         //now deal with the task
-        if (task.coordinates){
+        if (!task.coordinates){
           task.coordinates = [];
         }
         
@@ -2627,7 +2490,7 @@ define("app/models/TaskModel",
           p = this.p,
           username = db.username();
 
-				console.log("addActivity", task, task._rev);
+				//console.log("addActivity", task, task._rev);
     	  
     	  var defaults = {
     			actor: {id:username, name:db.fullName(), type:"PERSON"},

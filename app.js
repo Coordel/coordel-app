@@ -366,7 +366,7 @@ couch.info(function(err, info){
 						var history = change.doc.history;
 						//for now there are only messages tracked for projects and tasks
 						if (doc.docType === 'project' || doc.docType === 'task'){
-							console.log("it's a project or task: versions: ", doc.versions);
+							//console.log("it's a project or task: versions: ", doc.versions);
 							//it might be that a project or task doesn't have versions (an old entry)
 							if (doc.versions && doc.versions.latest){
 								//when an activity is added, the _rev of the current doc is appened to the activity in the rev field
@@ -379,7 +379,7 @@ couch.info(function(err, info){
 									rev = doc._rev;
 									if (doc.versions.latest && doc.versions.latest._rev){
 										latest = doc.versions.latest._rev;
-										console.log("there was a rev ", latest);
+										//console.log("there was a rev ", latest);
 									}
 									
 								}
@@ -387,11 +387,11 @@ couch.info(function(err, info){
 								
 				
 								//there was a latest rev so now iterate over the history to find all entries for this rev
-								console.log("iterate history entries with this rev", latest);
+								//console.log("iterate history entries with this rev", latest);
 								
 								history.forEach(function(alert){
 									if (alert.rev && alert.rev === latest){
-										console.log("rev matched: alert this", alert.verb);
+										//console.log("rev matched: alert this", alert.verb);
 										sendAlert(alert);
 									}
 								});
@@ -400,7 +400,7 @@ couch.info(function(err, info){
 							} else {
 								
 								//this is the first save, so show all history entries that equal 
-								console.log("first save, iterate all history entries");
+								//console.log("first save, iterate all history entries");
 								history.forEach(function(alert){
 									//console.log("alert: ", alert.verb);
 									if (alert.rev === "-1"){

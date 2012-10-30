@@ -86,11 +86,6 @@ define([
           this.connections = [];
         }
         
-        
-        
-        
-     
-        
         dojo.when(db.projectStore.loadProject(self.project._id), function(){
         
           layout.showLayout(project);
@@ -117,9 +112,6 @@ define([
     		    //check if we should show the right column
       	    self.setRightColumn(showColumn);
     		  });
-    	    
-          
-    	    
     	    
           self.setView(self.view);
         
@@ -197,8 +189,6 @@ define([
       setRightColumn: function(showColumn){
       
   		  //console.debug("setRightColumn projectControl", showColumn, this.tabFocus);
-  		  
-  		  
 
         var col = dijit.byId("rightDetailsLayout");
 
@@ -225,8 +215,6 @@ define([
           }
           dijit.byId("outerLayout").resize();
         }
-        
-      
 
       },
       
@@ -279,19 +267,15 @@ define([
       },
       
       handleProjectNotify: function(args){
-        //console.log("handleProjectNotify", args);
+        //console.log("handleProjectNotify", args, this.project);
         if (this.project._id === args.project._id){
           this.project = args.project;
-          //if we are in the show extended view, refresh it in case there is something we need to know
-    	    if (this.view === "order"){
-    	      this.showOrder();
-    	    }
+					this.setView(this.view);
         }
         
         var showColumn = dojo.hasClass(dijit.byId("showRightColumn").domNode, "hidden");
         //check if we should show the right column
   	    this.setRightColumn(showColumn);
-  	    
   	    
       },
       
@@ -318,6 +302,7 @@ define([
             this.showOrder();
             break;
         }
+				document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
       },
       
       showDeliverables: function(){
@@ -360,27 +345,28 @@ define([
           */
         }
         
-        document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
+        
       
       },
       
       showOrder: function(){
         var self = this;
         var store = db.projectStore;
-        var cont = dijit.byId("projTasksMain");
+       
         this.view = "order";
-        if (cont && cont.hasChildren()){
-          cont.destroyDescendants();
-        }
-        
-        
-        
+
         //var sort = [{attribute: "contextDeadline", descending: false},{attribute: "created", descending: false}];
 
         //get the tasks with usual status
         var ext = db.getExtendedTasks(self.project._id);
         
         dojo.when(ext, function(tasks){
+					var cont = dijit.byId("projTasksMain");
+					//console.log("showing order",cont, cont.hasChildren());
+	        if (cont && cont.hasChildren()){
+						//console.log("destroying descendants");
+	          cont.destroyDescendants();
+	        }
           
           if (tasks.length === 0){
              this.emptyGroup = new Empty({
@@ -400,14 +386,11 @@ define([
               db: db,
               showProjectLabel: true
             });
-
             cont.addChild(group);
          
           }
         });
-        
-        document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
-
+     
       },
       
       _showQuickEntry: function(){
@@ -474,9 +457,7 @@ define([
         var def = store.taskMemory.query({db: db, focus: "deferred"}, {sort: sort});
         var bl = store.taskMemory.query({db: db, focus: "blocked"}, {sort: sort});
         var un = store.taskMemory.query({db:db, focus: "unassigned"}, {sort: sort});
-        
-        
-        
+       
         //console.log("current tasks", cur);
         
         //get the invited tasks
@@ -531,8 +512,6 @@ define([
         self._addGroup(coordel.cancelled, can);
         
         self._checkEmpty();
-        
-        document.title = "Coordel > " + coordel.projects + " > " + this.project.name;
         
       },
       
