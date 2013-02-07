@@ -1,39 +1,39 @@
 /**
  * Module dependencies.
- * 
+ *
  * Redis generates user.id and appId at userKeys and appKeys
  *
  */
 
-var express     = require('express'),
+var express   = require('express'),
     config      = require('konphyg')(__dirname + '/config'),
     settings    = config('settings'),
-    redisOpts   = settings.config.redisOptions,
-    couchOpts   = settings.config.couchOptions,
-    couchName   = settings.config.couchName,
+    redisOpts = settings.config.redisOptions,
+    couchOpts = settings.config.couchOptions,
+    couchName = settings.config.couchName,
     RedisStore  = require('connect-redis')(express),
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),
-    couch       = cn.database(couchName),
-    store       = require('redis').createClient(redisOpts.port, redisOpts.host),
+    couch     = cn.database(couchName),
+    store     = require('redis').createClient(redisOpts.port, redisOpts.host),
     follow      = require('follow'),
-    everyauth   = require('everyauth'),
-    app         = module.exports = express.createServer(),
+    everyauth = require('everyauth'),
+    app       = module.exports = express.createServer(),
     ddoc        = require('./couchdb/ddoc'),
     io          = require('socket.io').listen(app),
     util        = require('util'),
     User        = require('./models/user'),
-    Alert       = require('./models/alert'),
-    App         = require('./models/userApp'),
-    nls         = require('i18n'),
+    Alert     = require('./models/alert'),
+    App       = require('./models/userApp'),
+    nls       = require('i18n'),
     passHash    = require('password-hash'),
     loggly      = require('loggly'),
     logger      = loggly.createClient(settings.config.logglyOptions),
-    logId       = settings.config.logId,
+    logId     = settings.config.logId,
     home        = true,
-		fs					= require('fs'),
-		source  		= JSON.parse(fs.readFileSync(__dirname + '/public/support/source.json', 'utf-8')),
-		pages 			= JSON.parse(fs.readFileSync(__dirname + '/public/support/pages.json', 'utf-8'));
+    fs          = require('fs'),
+    source      = JSON.parse(fs.readFileSync(__dirname + '/public/support/source.json', 'utf-8')),
+    pages      = JSON.parse(fs.readFileSync(__dirname + '/public/support/pages.json', 'utf-8'));
 
 var auth = settings.auth;
 
@@ -75,11 +75,11 @@ everyauth
     .getRegisterPath('/register')
     .postRegisterPath('/register')
     .registerView('users/register')
-    .extractExtraRegistrationParams( function (req) { 
-      return { 
+    .extractExtraRegistrationParams( function (req) {
+      return {
           firstName: req.body.firstName,
           lastName: req.body.lastName
-      }; 
+      };
     })
     .validateRegistration( function (newUserAttrs, errors) {
       var login = newUserAttrs.email.toLowerCase();
@@ -96,7 +96,7 @@ everyauth
       return promise;
     })
     .registerUser( function (newUserAttrs) {
-  
+
       var promise = this.Promise();
       newUserAttrs.invited = 0;
       User.register(newUserAttrs, function(err, user){
@@ -104,7 +104,7 @@ everyauth
         if (err) return promise.fulfill([err]);
         return promise.fulfill(user);
       });
-  
+
       return promise;
     })
 
@@ -140,7 +140,7 @@ everyauth.google
     return promise;
   })
   .redirectPath('/web');
-  
+
 //configure everyauth facebook
 everyauth.facebook
   .appId(auth.fb.appId)
@@ -159,27 +159,50 @@ everyauth.facebook
 //authenticate the redis clients
 store.auth(redisOpts.auth);
 
-//express redis store options 
+//express redis store options
 var options = {
   client: store,
   db: redisOpts.db,
   prefix: redisOpts.expressSessionPrefix
  };
 
+
+//configure cross domain authorization
+var allowCrossDomain = function(req, res, next) {
+  // Add other domains you want the server to give access to
+  // WARNING - Be careful with what origins you give access to
+  var allowedHost = [
+    'app.coordel.com:8090',
+    'dev.coordel.com',
+    'dev.coordel.com:8080',
+    'work.coordel.com:8443'
+  ];
+  if(allowedHost.indexOf(req.headers.host) !== -1) {
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.host);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    next();
+  } else {
+    res.send({auth: false});
+  }
+};
+
+
+
 // Configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'html');
   app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
-  app.use(express.cookieParser('an0thers3cr3tpas$w0rd'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  
-  app.use(express.session({ 
+  app.use(express.cookieParser('c00rd3lsecretpa$$word'));
+  app.use(express.session({
     secret: 'c00rd3lsecretpa$$word',
     store: new RedisStore(options)
   }));
-  
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(allowCrossDomain);
   //app.use(express.session({ secret: 'c00rd3lsecretpa$$word' }));
   app.use(everyauth.middleware());
   app.use(app.router);
@@ -187,12 +210,12 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
   app.use(express.errorHandler());
-  app.use(express.logger()); 
+  app.use(express.logger());
 });
 
 if (app.settings.env === "development") console.log("development environment");
@@ -200,27 +223,95 @@ if (app.settings.env === "development") console.log("development environment");
 app.register('.html', require('ejs'));
 
 var validate = function(req, res, next){
+  var cookie = JSON.parse(req.cookies.logintoken)
+    , Token = require('./models/token')();
+
+  function findByUsername(username, fn){
+    var key = 'users:' + username;
+    store.get(key, function(e, userid){
+      console.log("looked for the username key", key, e, userid);
+      if (e){
+        fn('error-user-login');
+      } else if (userid === null){
+        fn('user-not-found');
+      } else {
+
+        key = 'users:' + userid;
+        console.log("USER GET KEY", key);
+        store.hgetall(key, function(e, user){
+          console.log("USER", e, user);
+          if (e){
+            //console.log("couldn't load existing user from store",err);
+            fn('user-not-found');
+          } else {
+            //console.log("found the user", user);
+            fn(null, user);
+          }
+        });
+      }
+    });
+  }
+
+  Token.find(cookie.username, function(e, token){
+
+    var redirect = settings.ideasUrl + '/intro';
+
+    if (e){
+      res.redirect(redirect);
+    } else if (!token){
+      res.redirect(redirect);
+    } else if (!token.username) {
+      res.redirect(redirect);
+    } else {
+
+      if (cookie.token === token.token && cookie.series === token.series){
+
+        console.log("USER", User);
+
+        findByUsername(token.username, function(e, o) {
+          console.log("tried to do the account", e, o);
+          if (o) {
+            req.session.username = token.username;
+            req.session.auth = o;
+            token = Token.refresh(cookie);
+            Token.save(token, function(){});
+            res.cookie('logintoken', JSON.stringify(token), {expires: new Date(Date.now() + 2 * 604800000), path: '/', domain: '.coordel.com'});
+            next();
+          } else {
+            res.redirect(redirect);
+          }
+        });
+      } else {
+        res.redirect(redirect);
+      }
+    }
+  });
+  /*
   var idx = req.header('Accept').indexOf('application/json');
-  
+  console.log("testing",req.cookies, req.session);
+
   if (req.session.auth && req.session.auth.loggedIn){
-    //console.log("authenticated");
+    console.log("authenticated");
     next();
   } else {
-    
+
     if (app.settings.env === "development"){
+
       req.session.auth = {};
       req.session.auth.loggedIn = true;
       req.session.auth.userId = 'jeff.gorder@coordel.com';
       next();
     } else {
+
       if (idx < 0){
         //go ahead and redirect
         res.redirect('/login');
       } else {
         res.json({error: "Unauthorized"});
       }
-    }   
+    }
   }
+  */
 };
 
 // Routes
@@ -236,40 +327,40 @@ require('./routes/alerts')(app, validate);//alert management
 
 
 function getFeatureList(){
-	return source.features.filter(function(f){
-		return f.order !== 0;
-	});
+  return source.features.filter(function(f){
+    return f.order !== 0;
+  });
 }
 
-//root 
+//root
 app.get('/', function(req, res){
-  
+
   if (req.query.p){
     var page = req.query.p;
-		var pageTitle = pages[page];
+    var pageTitle = pages[page];
 
-		var list  = getFeatureList();
-		
-		if (req.query.f){
-			var feature = req.query.f;
-			list.forEach(function(f){
+    var list  = getFeatureList();
 
-				if (f.code === feature){
-					pageTitle = pages[page] + " – " + f.title;
-				}
-			}); 
-		}
-		
-		var layout = {layout: 'nimble/page', features: list, pageTitle: pageTitle};
+    if (req.query.f){
+      var feature = req.query.f;
+      list.forEach(function(f){
+
+        if (f.code === feature){
+          pageTitle = pages[page] + " – " + f.title;
+        }
+      });
+    }
+
+    var layout = {layout: 'nimble/page', features: list, pageTitle: pageTitle};
 
     //this is a request for a page
     res.render('nimble/page/' + page, layout);
- 
+
 
   } else {
     res.render('nimble/home', {layout: 'nimble/home'});
   }
-  
+
   /*
   if (home){
     home = false;
@@ -300,7 +391,7 @@ app.get('/', function(req, res){
 /* *********************************************** CHANGES AND ALERTS ****************************/
 
 var changesIO = io.sockets.on('connection', function (client) {
-  
+
 });
 
 function alertContacts(change){
@@ -357,96 +448,97 @@ couch.info(function(err, info){
         for (var key in map){
           //console.log("CHANGE", key, change.doc.updater);
           changesIO.emit('changes:' + key, change.doc);
-          
+
           //if this user didn't do the update, then alert when history exists
           if (change.doc.username !== "UNASSIGNED" && change.doc.updater !== key && change.doc.history && change.doc.history.length > 0){
             //console.log(logId, "Alert: ", change.doc.docType, change.doc.name);
-						var doc = change.doc;
-						//get the history of this doc
-						var history = change.doc.history;
-						//for now there are only messages tracked for projects and tasks
-						if (doc.docType === 'project' || doc.docType === 'task'){
-							//console.log("it's a project or task: versions: ", doc.versions);
-							//it might be that a project or task doesn't have versions (an old entry)
-							if (doc.versions && doc.versions.latest){
-								//when an activity is added, the _rev of the current doc is appened to the activity in the rev field
-								//assume that there isn't a rev
-								var rev = false;
-								var latest = false;
-								
-								//check if there's a _rev and if so, assign it to rev
-								if (doc._rev){
-									rev = doc._rev;
-									if (doc.versions.latest && doc.versions.latest._rev){
-										latest = doc.versions.latest._rev;
-										//console.log("there was a rev ", latest);
-									}
-									
-								}
-								
-								
-				
-								//there was a latest rev so now iterate over the history to find all entries for this rev
-								//console.log("iterate history entries with this rev", latest);
-								
-								history.forEach(function(alert){
-									if (alert.rev && alert.rev === latest){
-										//console.log("rev matched: alert this", alert.verb);
-										sendAlert(alert);
-									}
-								});
-								
-							
-							} else {
-								
-								//this is the first save, so show all history entries that equal 
-								//console.log("first save, iterate all history entries");
-								history.forEach(function(alert){
-									//console.log("alert: ", alert.verb);
-									if (alert.rev === "-1"){
-										sendAlert(alert);
-									}
-								});
-							}
-							//var alert = change.doc.history.shift();
-							function sendAlert (alert){
-								//console.log("sending alert", key, alert);
-								changesIO.emit('alerts:' + key, alert);
-		            var a = new Alert({
-		              username: key,
-		              alert: alert
-		            });
+            var doc = change.doc;
+            //get the history of this doc
+            var history = change.doc.history;
+            //for now there are only messages tracked for projects and tasks
+            if (doc.docType === 'project' || doc.docType === 'task'){
+              //console.log("it's a project or task: versions: ", doc.versions);
+              //it might be that a project or task doesn't have versions (an old entry)
+              if (doc.versions && doc.versions.latest){
+                //when an activity is added, the _rev of the current doc is appened to the activity in the rev field
+                //assume that there isn't a rev
+                var rev = false;
+                var latest = false;
 
-		            a.add(function(err, res){
-		              if (err) console.log(logId, "ERROR adding alert: " + err);
-		            });
-							}
-						}
-            
-              
+                //check if there's a _rev and if so, assign it to rev
+                if (doc._rev){
+                  rev = doc._rev;
+                  if (doc.versions.latest && doc.versions.latest._rev){
+                    latest = doc.versions.latest._rev;
+                    //console.log("there was a rev ", latest);
+                  }
+
+                }
+
+
+
+                //there was a latest rev so now iterate over the history to find all entries for this rev
+                //console.log("iterate history entries with this rev", latest);
+
+                history.forEach(function(alert){
+                  if (alert.rev && alert.rev === latest){
+                    //console.log("rev matched: alert this", alert.verb);
+                    sendAlert(alert);
+                  }
+                });
+
+
+              } else {
+
+                //this is the first save, so show all history entries that equal
+                //console.log("first save, iterate all history entries");
+                history.forEach(function(alert){
+                  //console.log("alert: ", alert.verb);
+                  if (alert.rev === "-1"){
+                    sendAlert(alert);
+                  }
+                });
+              }
+              //var alert = change.doc.history.shift();
+              function sendAlert (alert){
+                //console.log("sending alert", key, alert);
+                changesIO.emit('alerts:' + key, alert);
+                var a = new Alert({
+                  username: key,
+                  alert: alert
+                });
+
+                a.add(function(err, res){
+                  if (err) console.log(logId, "ERROR adding alert: " + err);
+                });
+              }
+            }
+
+
           } else if (change.doc.docType === "message" && change.doc.updater !== key){
             //console.log(logId, "message alert", change.doc);
             changesIO.emit('alerts:' + key, change.doc);
-            
+
             var b = new Alert({
               username: key,
               alert: change.doc
             });
-            
+
             b.add(function(err, res){
               if (err) console.log(logId, "ERROR adding alert: " + err);
             });
           }
         }
-      } 
+      }
     });
   }
-  
+
 });
 
-/* ****************************  UTILITY DELETE FOR DEV and PRODUCTION  *************************/
+/* **************************** UTILITY DELETE FOR DEV and PRODUCTION *************************/
 
 if (app.settings.env === "development"){
+  //console.log("resetting dbases", app.settings.env);
   app.get('/flushdb', function(req, res){
     store.flushdb();
     console.log('redis flushed');
@@ -458,8 +550,8 @@ if (app.settings.env === "development"){
         res.redirect('/admin');
       });
     });
-    
-    
+
+
   });
 }
 
@@ -476,7 +568,7 @@ app.get('/loadTemplates', function(req, res){
   });
 });
 
-/* ********************************       CATCH ALL                    ******************************/
+/* ********************************     CATCH ALL                   ******************************/
 
 everyauth.helpExpress(app);
-app.listen(8080);
+app.listen(8090);

@@ -59,7 +59,7 @@ define(
         
         //console.log("contact details contact", c);
         this.fullNameValue.innerHTML = this.fullName;
-        
+        /*
         if (p.email === ""){
           dojo.addClass(this.email, "hidden");
         } else {
@@ -79,7 +79,7 @@ define(
           this.skypeValue.innerHTML = p.skype;
           this.skypeValue.href = "skype:" + p.skype;
         }
-        
+        */
         var email = dojo.trim(p.email.toLowerCase()),
             self = this;
         

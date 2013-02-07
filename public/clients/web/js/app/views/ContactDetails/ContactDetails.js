@@ -58,6 +58,7 @@ define(
         //console.log("contact details contact", c);
         this.fullNameValue.innerHTML = db.contactFullName(c.id);
         
+        /* NEED TO SEE IF WE REALLY WANT TO EXPOSE PERSONAL INFORMATION
         if (c.email === ""){
           dojo.addClass(this.email, "hidden");
         } else {
@@ -75,6 +76,7 @@ define(
         } else {
           this.skypeValue.innerHTMLinnerHTML = c.skype;
         }
+        */
         
         var email = dojo.trim(this.contact.email.toLowerCase()),
             self = this;

@@ -108,7 +108,7 @@ module.exports = function(app, validate){
   });
   
   app.post('/invite', function(req, res){
-     //console.log("INVITE POSTED");
+     console.log("INVITE POSTED", req.body);
      var inv = {to:{}, from:{}};
      inv.to.firstName = req.body.firstName;
      inv.to.lastName = req.body.lastName;
@@ -123,7 +123,7 @@ module.exports = function(app, validate){
 
      //this is where the invite is added
      //console.log("SEND INVITE", inv);
-     
+     console.log("INVITE created", inv);
      User.invite(inv, function(err, reply){
        if (err){
          console.log("ERROR Inviting user", err);

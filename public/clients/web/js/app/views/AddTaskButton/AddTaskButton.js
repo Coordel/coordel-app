@@ -9,12 +9,12 @@ define(
     "dijit/TooltipDialog",
     "app/views/TaskForm/TaskForm",
     "app/widgets/ContainerPane"
-    ], 
+    ],
   function(dojo,dijit,coordel, w, t, html, drop, tip, tf, cp) {
   
   dojo.declare(
-    "app.views.AddTaskButton", 
-    [w, t], 
+    "app.views.AddTaskButton",
+    [w, t],
     {
       
       id: null,
@@ -29,8 +29,6 @@ define(
       
       postCreate: function(){
         this.inherited(arguments);
-        
-
         
         dojo.connect(this.addTaskDialog, "onOpen", this, function(){
             //console.debug("onOpen fired");
@@ -54,5 +52,5 @@ define(
       
       baseClass: "header"
   });
-  return app.views.AddTaskButton;     
+  return app.views.AddTaskButton;
 });

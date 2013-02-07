@@ -85,6 +85,7 @@ module.exports = function(app, validate){
     }
     
     async.parallel(funcs, function(err, results){
+      
       //if there's an error, just send back an empty array
       if (err) res.json({results: []});
       //when the results of the word queries are iterated, the collected docs are held in this map

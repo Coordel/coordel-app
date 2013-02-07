@@ -11,9 +11,10 @@ module.exports = function(app, validate){
   }
   
   app.get('/app', function(req, res){
-    
+    console.log("getting the app", req.session.auth.appId);
     //loads the current user's app
     App.get(req.session.auth.appId, function(err, app){
+      console.log("rsponse from app.get", err, app);
       if (err) {
         res.redirect('/logout');
       } else {

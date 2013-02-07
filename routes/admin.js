@@ -8,7 +8,7 @@ var admin       = require('./../models/admin'),
     
 module.exports = function(app, validate){
   
-  app.get('/admin', validate, function(req, res){
+  app.get('/admin',  function(req, res){
     res.render('admin/page/index', {layout: 'admin/page'});
   });
   
@@ -34,7 +34,7 @@ module.exports = function(app, validate){
     });
   });
   
-  app.del('/admin/apps', validate, function(req, res){
+  app.del('/admin/apps', function(req, res){
     var id = req.query.id;
     
     if (id){
@@ -114,7 +114,7 @@ module.exports = function(app, validate){
   
  
   
-  app.put('/admin/log', validate, function(req, res){
+  app.put('/admin/log', function(req, res){
     var log = req.body;
     console.log("logging", log);
     logger.log(settings.config.corpLogId, log);

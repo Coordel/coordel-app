@@ -435,7 +435,7 @@ define([
         
         //make sure to delete any groups that are there and clear the empty group
         var cont = dijit.byId("projTasksMain");
-        if (cont.hasChildren()){
+        if (cont && cont.hasChildren()){
           cont.destroyDescendants();
         }
         this.emptyGroup = null;

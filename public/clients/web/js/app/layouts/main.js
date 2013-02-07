@@ -24,7 +24,7 @@ define(['dojo',
        var headCont = new bc({
          region: "top",
          design: "sidebar",
-         style: "height: 3.6em;padding: 0",
+         style: "height: 3.6em;padding: 0;margin:0",
          id: "mainLayoutHeaderContainer",
          splitter:false
        }).placeAt(center);

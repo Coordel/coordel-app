@@ -46,7 +46,7 @@ define(['dojo',
 
       var pcHead = new pane({
         region: "top",
-        style: "height: 3.6em",
+        style: "height: 3.6em;padding:0;margin:0;",
         splitter: false,
         id: "otherListHeader",
         //href: 'js/app/layouts/templates/otherListHeader.html'

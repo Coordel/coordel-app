@@ -5,35 +5,35 @@ define(
   ["dojo",
     "i18n!app/nls/coordel",
     "text!./templates/StreamDetails.html",
-    "dijit/_Widget", 
-    "dijit/_Templated", 
+    "dijit/_Widget",
+    "dijit/_Templated",
     "app/models/CoordelStore",
     "app/views/Label/Label",
-    "app/util/dateFormat"], 
+    "app/util/dateFormat"],
   function(dojo, coordel, html, w, t, db, Label, format) {
-  
+
   dojo.declare(
-    "app.views.StreamDetails", 
-    [w, t], 
+    "app.views.StreamDetails",
+    [w, t],
     {
-      
-      widgetsInTemplate: true, 
-      
+
+      widgetsInTemplate: true,
+
       templateString : html,
-      
+
       coordel: coordel,
-      
+
       body: null,
-    
-      postCreate: function(){ 
+
+      postCreate: function(){
         this.inherited(arguments);
-        
+
         var self = this;
-        
-        
-        
+
+
+
         function getChange(label, chg){
-          
+
           var val = "<div class='c-padding-b'>";
           //removed
           if (chg.prev && !chg.value){
@@ -43,9 +43,9 @@ define(
               val += "<div class='c-padding-b'>" + coordel.changes.deadline.removedDeadline + "</div>";
             }
           }
-          //changed 
+          //changed
           if (chg.prev && chg.value){
-            val += "<div class='activity-details'>" + coordel.changes.changed +  " " + label +"</div>";
+            val += "<div class='activity-details'>" + coordel.changes.changed + " " + label +"</div>";
             val += "<div><em>" + coordel.changes.value + "</em></div><div class='c-padding-b'>" + chg.value +"</div>";
             val += "<div><em>" + coordel.changes.previous + "</em></div><div>" + chg.prev +"</div>";
           }
@@ -57,20 +57,22 @@ define(
           val += "</div>";
 
           var c = new Label({
-            value: val
+            value: val,
+            hasHTML: true
           }).placeAt(self.changesContainer);
-          
+
         }
-        
+
         if (this.body.project && this.body.task){
           //console.log("show the coord and task blocker");
           dojo.removeClass(this.changes, "hidden");
           var coord = coordel.task + ": " + this.body.task + " | Coord: " + this.body.project;
           var c = new Label({
-            value: coord
+            value: coord,
+            hasHTML: true
           }).placeAt(self.changesContainer);
         }
-        
+
         if (this.body.raiseIssue){
           //console.log("show the issue and solution");
           dojo.removeClass(this.raiseIssue, "hidden");
@@ -78,7 +80,8 @@ define(
             value: this.body.raiseIssue.issue
           }).placeAt(this.issue);
           var s = new Label({
-            value: this.body.raiseIssue.solution
+            value: this.body.raiseIssue.solution,
+            hasHTML: true
           }).placeAt(this.solution);
         } else if (this.body.changes){
           //console.log("show the changes");
@@ -90,13 +93,14 @@ define(
               case "name":
                 if (chg.prev !== chg.value){
                   val = "<div class='c-padding-b'>";
-                  val += "<div class='activity-details'>" + coordel.changes.changed +  " " + coordel.taskDetails.name +"</div>";
+                  val += "<div class='activity-details'>" + coordel.changes.changed + " " + coordel.taskDetails.name +"</div>";
                   val += "<div><em>" + coordel.changes.value + "</em></div><div class='c-padding-b'>" + chg.value +"</div>";
                   val += "<div><em>" + coordel.changes.previous + "</em></div><div>" + chg.prev +"</div>";
                   val += "</div>";
 
                   c = new Label({
-                    value: val
+                    value: val,
+                    hasHTML: true
                   }).placeAt(self.changesContainer);
                 }
               break;
@@ -121,11 +125,10 @@ define(
             }
           }, this);
         }
-        
+
       },
-      
+
       baseClass: "stream-details"
   });
-  return app.views.StreamDetails;     
+  return app.views.StreamDetails;
 });
-

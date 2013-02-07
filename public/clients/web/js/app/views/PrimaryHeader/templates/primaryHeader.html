@@ -1,1 +1,81 @@
-<div></div>
+<div>
+  <style>
+
+    
+
+    .to-ideas a{
+      background: url('/images/header/ideas.png') no-repeat left center;
+      padding-left:26px;
+    }
+    .to-ideas:hover a{
+      background: url('/images/header/ideas-h.png') no-repeat left center;
+    }
+
+    .to-me a{
+      background: url('/images/header/me.png') no-repeat left center;
+      padding-left:26px;
+    }
+    .to-me:hover a{
+      background: url('/images/header/me-h.png') no-repeat left center;
+    }
+
+    .to-blueprints a{
+      background: url('/images/header/blueprints.png') no-repeat left center;
+      padding-left:26px;
+    }
+    .to-blueprints:hover a{
+      background: url('/images/header/blueprints-h.png') no-repeat left center;
+    }
+
+    .ideas-navigation.dijitDropDownButtonFocused .dijitButtonNode, .ideas-navigation .dijitDropDownButtonFocused .dijitButtonNode, .ideas-navigation.dijitButtonFocused {
+        background-color: #04c;
+    }
+    .ideas-navigation .dijitButton .dijitButtonNode,
+    .ideas-navigation .dijitDropDownButton .dijitButtonNode,
+    .ideas-navigation .dijitComboButton .dijitButtonNode,
+    .ideas-navigation .dijitToggleButton .dijitButtonNode {
+      /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
+
+      
+      padding: 1px 5px 1px 5px;
+      background-color: #006DCC;
+background-image: -moz-linear-gradient(top, #08C, #04C);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08C), to(#04C));
+background-image: -webkit-linear-gradient(top, #08C, #04C);
+background-image: -o-linear-gradient(top, #08C, #04C);
+background-image: linear-gradient(to bottom, #08C, #04C);
+background-repeat: repeat-x;
+border-color: #04C #04C #002A80;
+      color: #ffffff;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+      text-transform: capitalize;
+      font-weight: bold;
+    }
+
+    /* hover status */
+    .ideas-navigation .dijitButtonHover .dijitButtonNode,
+    .ideas-navigation .dijitDropDownButtonHover .dijitButtonNode,
+    .ideas-navigation .dijitComboButton .dijitButtonNodeHover,
+    .ideas-navigation .dijitComboButton .dijitDownArrowButtonHover,
+    .ideas-navigation .dijitToggleButtonHover .dijitButtonNode {
+      background-color: #04c;
+      background-image: none;
+      
+    }
+  </style>
+  <div class="ideas-navigation">
+    <div dojoAttachPoint="toIdeas" style="margin-right: 6px;" showLabel="false" dojoType="dijit.form.DropDownButton" title="Navigation" class="c-float-l" iconClass="coordelHeaderIcon coordelHeaderIconWorkspace">
+       <div dojoType="dijit.TooltipDialog" class="coordelHeaderTooltipDialog menu" style="visibility:hidden">
+        <ul class="menu-items">
+          <li dojoAttachPoint="goToIdeas" class="option to-ideas" style="line-height: 24px"><ins></ins><a>Ideas</a></li>
+          <li dojoAttachPoint="goToBlueprints" class="option to-blueprints" style="line-height: 24px"><ins></ins><a>Blueprints</a></li>
+          <li dojoAttachPoint="goToMe" class="option to-me" style="line-height: 24px"><ins></ins><a>Portfolio</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

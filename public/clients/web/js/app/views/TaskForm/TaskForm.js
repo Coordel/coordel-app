@@ -1375,22 +1375,25 @@ define(
       },
       
       _setTip: function(field, template){
+        var self = this;
         
         //console.debug("in _setTip", field, template);
         
-        var li = dojo.query(".task-" + field)[0];
+        var li = self[field+"Around"];//dojo.query(".task-" + field)[0];
         
         var tipInfo = dojo.position(li, true),
-            left = tipInfo.x + tipInfo.w + 12,
+            left = tipInfo.w + 20,
             top = tipInfo.y - tipInfo.h;
         
         //for some reason when on private, the name tip messes up this fixes it.
+        /*
         if (left < 352){
           left = 352;
         }
         if (top < 52){
           top = 52;
         }
+        */
             
         //console.log("info", tipInfo, left, top);
             

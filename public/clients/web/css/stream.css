@@ -68,7 +68,7 @@
   background-color: #ffffff;
   color: #333333;
   font-size: 11px;
-  padding: 4px 4px 0 8px;
+  padding: 12px 4px 8px 8px;
 }
 
 .stream-activity .activity-message {
@@ -84,7 +84,7 @@
 }
 
 .stream-activity .activity-body{
-  padding: 4px 4px 0 8px;
+  padding: 12px 4px 4px 8px;
 }
 
 
@@ -102,7 +102,7 @@
 
 .stream-activity .activity-footer{
   color: #a9a9a9;
-  padding: 2px 4px 4px 8px;
+  padding: 8px 4px 8px 8px;
 }
 
 .stream-footer .footer-reply{

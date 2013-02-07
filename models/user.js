@@ -1,21 +1,26 @@
-var App         = require('./userApp'),
+var App        = require('./userApp'),
     config      = require('konphyg')(__dirname + './../config'),
     settings    = config('settings'),
-    redisOpts   = settings.config.redisOptions,
-    couchOpts   = settings.config.couchOptions,
-    redis       = require('redis').createClient(redisOpts.port, redisOpts.host),
+    redisOpts  = settings.config.redisOptions,
+    couchOpts  = settings.config.couchOptions,
+    redis      = require('redis').createClient(redisOpts.port, redisOpts.host),
     cradle      = require('cradle').setup(couchOpts),
     cn          = new cradle.Connection(),
     db          = cn.database(settings.config.couchName),
     data        = {},
     Invite      = require('./invite'),
-    Email       = require('./../lib/emailer');
-    
+    Email      = require('./../lib/emailer'),
+    request     = require('request');
+
 //authenticate the redis client
 redis.auth(redisOpts.auth);
 
+
+
 var User = exports = module.exports = function User(args){
+  console.log("args in new user", args);
   data.id = args.email.toLowerCase();
+  data.userId = args.userId;
   data.appId = args.appId;
   data.firstName = args.firstName;
   data.lastName = args.lastName;
@@ -60,11 +65,13 @@ User.prototype.destroy = function(fn){
 
 
 
+
+
 exports.emailAlert = function(id, alert, fn){
   //use the id to get the userpreferences from couch
-  
+
   //send the email with the user prefs and alert
-  
+
   Email.send({
     to: alert.to.email.toLowerCase(),
     from: alert.from.email.toLowerCase(),
@@ -80,10 +87,10 @@ exports.register = function(userData, fn){
   var multi = redis.multi();
   multi.incr('userKeys');
   multi.incr('appKeys');
-  
+
   multi.exec(function(err, ids){
     if (err) fn(err, false);
-    
+
     userData.userId = ids[0];
     userData.appId = ids[1];
     //console.log("REGISTERING: ", userData);
@@ -98,6 +105,7 @@ exports.register = function(userData, fn){
           //add the app with the returned ids of the default objects
           var app = new App({
             id : userData.appId,
+            userId: userData.userId,
             user: objIds.user,
             email: userData.email.toLowerCase(),
             firstName : userData.firstName,
@@ -127,10 +135,10 @@ exports.register = function(userData, fn){
 };
 
 function getTempPassword(){
-	function rand(digits){
+  function rand(digits){
     return Math.floor(Math.random()* parseInt(digits+1, 10));
   }
-  
+
   var year = (1970 + rand(500)),
       month = rand(11),
       day = rand(28),
@@ -138,68 +146,68 @@ function getTempPassword(){
       min = rand(59),
       sec = rand(59),
       mills = rand(999);
-  
+
   var dt = new Date(year, month, day, hour, min, sec, mills);
-  
+
   var time = dt.getTime().toString(),
       password = new Buffer(time).toString('base64');
 
-	return password;
-	
+  return password;
+
 }
 
 exports.getReset = function(id, fn){
-	db.get(id, function(err, reset){
-		if (err) return fn(err, null);
-		return fn(false, reset);
-	});
+  db.get(id, function(err, reset){
+    if (err) return fn(err, null);
+    return fn(false, reset);
+  });
 };
 
 exports.resetPassword = function(email, fn){
-	//console.log("resetting password for ", email);
-	//get the user
-	var stamp = (new Date()).toISOString();
-	this.getByEmail(email, function(err, user){
-		if (err) return fn(err, null);
-		var doc = {
-			email: email,
-			username: user.value.app,
-			isActive: true,
-			stamp: stamp,
-			docType: "passwordReset"
-		};
-		//console.log("reset doc", doc, user);
-		db.save(doc, function(err, res){
-			//console.log("now send email with this id", res.id);
-			if (err) return fn(err, null);
-			Email.send({
+  //console.log("resetting password for ", email);
+  //get the user
+  var stamp = (new Date()).toISOString();
+  this.getByEmail(email, function(err, user){
+    if (err) return fn(err, null);
+    var doc = {
+      email: email,
+      username: user.value.app,
+      isActive: true,
+      stamp: stamp,
+      docType: "passwordReset"
+    };
+    //console.log("reset doc", doc, user);
+    db.save(doc, function(err, res){
+      //console.log("now send email with this id", res.id);
+      if (err) return fn(err, null);
+      Email.send({
         to: email,
-				from: "robot@coordel.com",
+        from: "robot@coordel.com",
         subject: "Coordel Password Request",
-				template: "./lib/templates/reset.txt",
+        template: "./lib/templates/reset.txt",
         data: {id: res.id}
         }, function(err, res){
-					if (err){
-						console.log("error sending email", err);
-						fn(err, null);
-					} else {
-						fn(false, email);
-					}
-           
+          if (err){
+            console.log("error sending email", err);
+            fn(err, null);
+          } else {
+            fn(false, email);
+          }
+
       });
-		});
-	});
+    });
+  });
 };
 
 exports.invite = function(inviteData, fn){
-  
-  //console.log("invite data", inviteData);
+
+  console.log("invite data", inviteData);
   var password = getTempPassword(),
       self = this;
-      
+
   //this is an invitation and won't have a password so use the generated one
-  inviteData.password = password;     
-  
+  inviteData.password = password;
+
   //check if the user exists
   this.get(inviteData.to.email.toLowerCase(), function(err, user){
     if (!err && user){
@@ -223,6 +231,7 @@ exports.invite = function(inviteData, fn){
           if (err){
             fn(err, false);
           } else {
+            console.log("registeredUser", registeredUser);
             //add an invitation with a new id to track that the user has been invited
             redis.incr('inviteKeys', function(err, inviteid){
               if (err){
@@ -233,14 +242,16 @@ exports.invite = function(inviteData, fn){
                   to: inviteData.to.email.toLowerCase(),
                   from: inviteData.from.appId
                 });
+                inviteData.inviteId = inviteid;
+                inviteData.userId = registeredUser.userId;
                 i.add(function(err, reply){
                   if (err){
                     fn(err, false);
                   } else {
-                    //console.log("registered user", registeredUser.appId, inviteData.from.appId);
+                    console.log("registered user", registeredUser.appId, inviteData.from.appId);
                     //don't send back the password
                     delete registeredUser.password;
-                    
+
                     //add each person to the other's people list
                     var multi = redis.multi(),
                         uKey = 'coordelapp:' + inviteData.from.appId + ':people',
@@ -249,8 +260,20 @@ exports.invite = function(inviteData, fn){
                     multi.sadd(uKey, registeredUser.appId);
                     multi.sadd(pKey, inviteData.from.appId);
                     multi.exec();
-                    
+
                     fn(null, registeredUser);
+
+                    request.post({
+                      url: settings.ideasUrl + '/invite',
+                      json: inviteData,
+                      headers: {
+                        "Content-Type": "application/json"
+                      }
+                    }, function(e, r, body){
+                      console.log("response from invite", e);
+                    });
+
+                    /*
                     var template =  './lib/templates/invite.txt';
                     if (inviteData.template){
                       template = './lib/templates/' + inviteData.template;
@@ -258,7 +281,7 @@ exports.invite = function(inviteData, fn){
                     if (inviteData.data.docType === 'task'){
                       template = './lib/templates/taskInvite.txt';
                     }
-                    
+
                     var data = {
                       firstName: inviteData.to.firstName,
                       fromFirstName: inviteData.from.firstName,
@@ -266,20 +289,20 @@ exports.invite = function(inviteData, fn){
                       inviteId: inviteid,
                       name: inviteData.data.name
                     };
-                    
+
                     if (inviteData.data.purpose){
                       data.purpose = inviteData.data.purpose;
                     }
-                    
+
                     if (inviteData.data.deadline){
                       data.deadline = inviteData.data.deadline;
                     }
-                    
+
                     if (inviteData.data.calendar){
                       data.start = inviteData.data.calendar.start;
                     }
-                    
-                    
+
+
                     Email.send({
                       to: inviteData.to.email.toLowerCase(),
                       from: inviteData.from.email.toLowerCase(),
@@ -289,6 +312,7 @@ exports.invite = function(inviteData, fn){
                       }, function(err, res){
                         console.log("ERROR SENDING EMAIL", err);
                     });
+*/
                   }
                 });
               }
@@ -296,7 +320,7 @@ exports.invite = function(inviteData, fn){
           }
         });
       }
-    } 
+    }
   });
 };
 
@@ -309,11 +333,11 @@ exports.get = function(id, fn){
 };
 
 exports.getByEmail = function(email, fn){
-	var self = this;
-	db.view('coordel/users', {startkey: [email], endkey:[email,{}]}, function(err, user){
-		if (err) return fn(err, null);
-		return fn(false, user[0]);
-	});
+  var self = this;
+  db.view('coordel/users', {startkey: [email], endkey:[email,{}]}, function(err, user){
+    if (err) return fn(err, null);
+    return fn(false, user[0]);
+  });
 };
 
 function _save(user, fn){
@@ -321,8 +345,9 @@ function _save(user, fn){
     //console.log('adding user to redis store in _save', user);
     var multi = redis.multi(),
         key = 'user:' + user.email.toLowerCase();
-        
+
     multi.hset(key, 'id', user.id);
+    multi.hset(key, 'userId', user.userId);
     multi.hset(key, 'appId', user.appId);
     multi.hset(key, 'email', user.email.toLowerCase());
     multi.hset(key, 'password', user.password);
@@ -361,10 +386,10 @@ function _getUser(args, fn){
           //console.log("couldn't load existing user from store",err);
           fn(err, false);
         } else {
-          //console.log("found the user", user);
+          console.log("found the user", user);
           fn(false, user);
         }
-      }); 
+      });
     }
   });
 }
@@ -380,10 +405,10 @@ function _getProviderUser(args, fn){
       //console.log('registering new facebook user');
       User.register(args.userData, function(err, regUser){
         if (err){
-          fn(err, false); 
+          fn(err, false);
         } else {
           fn(null, regUser);
-        } 
+        }
       });
     }
   });
@@ -391,55 +416,55 @@ function _getProviderUser(args, fn){
 
 exports.getFacebookUser = function(userData, fn){
   //either returns an existing app or creates a new one and returns it
-  
+
   var data = {
     id: userData.id,
     first: userData.first_name,
     last: userData.last_name,
     email: userData.email.toLowerCase()
   };
-  
+
   //this is facebook, so load the user from facebook
   _getProviderUser({authGroup: 'facebook', id: data.id, userData: data}, function(err, user){
     if (err){
       fn(err, false);
     } else {
       fn(null, user);
-    } 
+    }
   });
 };
 
 exports.getLinkedinUser = function(userData, fn){
   //either returns an existing app or creates a new one and returns it
   //console.log("LINKEDIN", userData);
-  
+
   var data = {
     id: userData.id,
     first: userData.firstName,
     last: userData.lastName
   };
-  
+
   //this is linkedin, so load the user from linkedin
   _getProviderUser({authGroup: 'linkedin', id: data.id, userData: data}, function(err, user){
     if (err){
       fn(err, false);
     } else {
       fn(null, user);
-    } 
+    }
   });
 };
 
 exports.getGoogleUser = function(userData, fn){
   //either returns an existing app or creates a new one and returns it
   //console.log("GOOGLE", userData);
-  
+
   var data = {
     id: userData.id,
     first: userData.firstName,
     last: userData.lastName,
     email: userData.email.toLowerCase()
   };
-  
+
 
   //this is linkedin, so load the user from linkedin
   _getProviderUser({authGroup: 'google', id: data.id, userData: data}, function(err, user){
@@ -447,7 +472,7 @@ exports.getGoogleUser = function(userData, fn){
       fn(err, false);
     } else {
       fn(null, user);
-    } 
+    }
   });
 
 };

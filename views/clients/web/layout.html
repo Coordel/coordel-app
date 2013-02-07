@@ -6,6 +6,7 @@
 	<link rel="shortcut icon" href="/images/favicon.gif">
   <link rel="stylesheet" href="/clients/web<%= version %>/css/app.css">
 	<script src="/socket.io/socket.io.js"></script>
+	
 	<script type="text/javascript">
     var djConfig = {
       couchdb: "coordel",
@@ -30,8 +31,22 @@
 	<!-- APP -->
 </head>
 <body class="coordel loading">
+  <div id="loading">
+    <div style="height: 43px;" class="mainLayoutHeader"> &nbsp;</div>
+    <div style="height: 9999px; background: #fff url(/clients/web/0.0.1/css/images/body-bg15.png);padding-top: 20px">
+
+
+      
+          <div style="background: #fff url(/clients/web/0.0.1/css/images/splashLoading-tagline-gray.gif) no-repeat center center; border-radius: 6px; height: 600px; width: 940px;margin:auto;">&nbsp;</div>
+      
+    </div>
+  </div>
+
   <script data-main="/clients/web<%= version %>/js/app/_base" src="/clients/web<%= version %>/js/requirejs-0.24.0/require.js"></script>
+  <input id="ideasUrl" type="hidden" value="<%=ideasUrl%>"/>
 </body>
+<script type="text/javascript" src="/js/linkify.js"></script>
+
 <script type="text/javascript" charset="utf-8">
   var is_ssl = ("https:" == document.location.protocol);
   var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
@@ -47,22 +62,4 @@
   feedback_widget_options.style = "problem";
   var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
 </script>
-<!-- Google Code for register Conversion Page -->
-<script type="text/javascript">
-/* <![CDATA[ */
-var google_conversion_id = 992923818;
-var google_conversion_language = "en";
-var google_conversion_format = "3";
-var google_conversion_color = "ffffff";
-var google_conversion_label = "Er6FCP7s_AMQqqG72QM";
-var google_conversion_value = 0;
-/* ]]> */
-</script>
-<script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion.js">
-</script>
-<noscript>
-<div style="display:inline;">
-<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/992923818/?value=0&amp;label=Er6FCP7s_AMQqqG72QM&amp;guid=ON&amp;script=0"/>
-</div>
-</noscript>
 </html>

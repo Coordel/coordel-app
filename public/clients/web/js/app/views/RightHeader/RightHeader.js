@@ -80,10 +80,12 @@ define(
           dojo.publish("coordel/showRightColumn", [false]);
         });
         
+        /*
         dojo.connect(this.optLogout, "onclick", this, function(){
           this.coordelUserPreferences.closeDropDown();
           dojo.publish("coordel/logout");
         });
+*/
         
         dojo.connect(this.alertsFooter, "onclick", this, function(){
           dojo.publish("coordel/clearAlerts");
@@ -113,15 +115,17 @@ define(
           dojo.publish("coordel/support", ["showDemos"]);
         });
         
+        /*
         dojo.connect(this.optPreferences, "onclick", this, function(){
           this.coordelUserPreferences.closeDropDown();
           dojo.publish("coordel/support", ["preferences"]);
         });
         
-         dojo.connect(this.optPersonalInfo, "onclick", this, function(){
-            this.coordelUserPreferences.closeDropDown();
-            dojo.publish("coordel/support", ["personalInfo"]);
-          });
+        dojo.connect(this.optPersonalInfo, "onclick", this, function(){
+          this.coordelUserPreferences.closeDropDown();
+          dojo.publish("coordel/support", ["personalInfo"]);
+        });
+        */
         
         dojo.connect(this.showNotifications, "onClick", this, function(){
           dojo.forEach(dijit.findWidgets(this.alertsContainer), function(child){
@@ -141,7 +145,7 @@ define(
           this.showNotifications.closeDropDown();
         });
         
-        //hide the do not disturb button 
+        //hide the do not disturb button
         dojo.addClass(this.doNotDisturb, "hidden");
         
         dojo.connect(this.doNotDisturb, "onclick", this, function(){
@@ -177,6 +181,7 @@ define(
           d.show();
         });
         
+        /*
         dojo.connect(this.refresh, "onclick", this, function(){
           //do not disturb is off, click this to activate
           this.coordelUserPreferences.closeDropDown();
@@ -185,7 +190,7 @@ define(
           //setTimeout(1000, dojo.publish("coordel/refresh"));
           dojo.publish("coordel/refresh");
         });
-        
+        */
         //subscribe to notifications updates
         this.updateNotificationCountHandler = dojo.subscribe("coordel/updateNotificationCount", this, "updateNotificationCount");
         this.showRightColumnHandler = dojo.subscribe("coordel/showRightColumn", this, "handleShowRightColumn");

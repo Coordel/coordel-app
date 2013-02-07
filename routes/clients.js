@@ -4,24 +4,16 @@ var User        = require('./../models/user'),
     App         = require('./../models/userApp');
 
 module.exports = function(app, validate){
-  
-  
+
   app.get('/web', validate, function(req, res){
     var version = settings.version;
-    
-    User.get(req.session.auth.userId, function(err, user){
-      if (err) res.redirect('/logout');
-      req.session.auth.appId = user.appId;
-      //console.log("user.appId", req.session.auth.appId);
-      //need to validate that the users contacts are up to date
-      App.updateContacts(user.appId, function(err, reply){
-        //console.log("USER SESSION", req.session);
-        //loads the dojo web application (other clients might be mobile, etc)
-        //res.render('clients/web/preview/index', {layout: 'clients/web/preview', url: settings.url, appId: user.appId});
-        res.render('clients/web/index', {layout: 'clients/web/layout', version: version});
-      });
-      
-      
+    console.log("user.appId", req.session.auth.appId);
+    //need to validate that the users contacts are up to date
+    App.updateContacts(req.session.auth.appId, function(err, reply){
+      console.log("USER SESSION", req.session.auth);
+      //loads the dojo web application (other clients might be mobile, etc)
+      //res.render('clients/web/preview/index', {layout: 'clients/web/preview', url: settings.url, appId: user.appId});
+      res.render('clients/web/index', {layout: 'clients/web/layout', version: version, ideasUrl: settings.ideasUrl});
     });
   });
   

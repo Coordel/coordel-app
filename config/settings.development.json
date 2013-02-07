@@ -1,6 +1,7 @@
 {
   "version": "",
-	"url":"dev.coordel.com:8080",
+	"url":"dev.coordel.com:8090",
+  "ideasUrl": "http://work.coordel.com:8080",
   "config": {
     "redisOptions": {
       "host": "dev.coordel.com",

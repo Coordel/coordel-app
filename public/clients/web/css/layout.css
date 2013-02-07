@@ -178,13 +178,13 @@ h3 {
 
 
 #leftLayout .mainLayoutHeader {
-  border-right: 1px solid #333;
+  border-right: 1px solid #222;
 }
 
 
 
 #rightLayout .mainLayoutHeader {
- border-left: 1px solid #333;
+ border-left: 1px solid #222;
 }
 
 
@@ -298,7 +298,7 @@ h3 {
 
 #mainLayoutHeaderRight{
   width: 26em;
-  border-left: 1px solid #333;
+  border-left: 1px solid #222;
   padding:0;
 }
 

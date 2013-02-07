@@ -58,6 +58,19 @@ a#fdbk_tab {
 }
 */
 
+a.linkify {
+  color: #000;
+  text-decoration: none;
+}
+
+a.linkify:hover {
+  text-decoration: underline;
+}
+
+a.linkify[href^="mailto:"] {
+  background: none !important;
+}
+
 ul {
   list-style-type: none;
 }

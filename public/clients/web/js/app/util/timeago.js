@@ -7,7 +7,7 @@
  * Copyright © 2011, Tom Elliott (mrtom [at] telliott [dot] net)
  */
 define("ozo/timeago", [
-  "dojo", 
+  "dojo",
   "i18n!app/nls/coordel"], function(dojo, coordel) {
   dojo.declare("ozo.timeago", null, {
 
@@ -52,8 +52,8 @@ define("ozo/timeago", [
                 ozo.timeago.prototype._counter++;
                 this._data[id] = { 'datetime': this._getDatetime(node) };
                 var text = dojo.trim(node.innerHTML); // TODO: Deal with inner nodes here
-                if(text.length > 0) { 
-                    dojo.attr(node, "title", text); 
+                if(text.length > 0) {
+                    dojo.attr(node, "title", text);
                 }
             }
             

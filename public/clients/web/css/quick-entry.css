@@ -213,7 +213,7 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
 to a list (i.e. private tasks, checklist, choices, etc)*/
 .c-quick-search{
   background-color: #ffffff;
-  background-image: url(images/icons/search.png);
+  
   background-position: left center;
   background-repeat: no-repeat;
   padding: 1px 8px 1px 16px;
@@ -223,6 +223,22 @@ to a list (i.e. private tasks, checklist, choices, etc)*/
   margin-top: 1px;
   font-size: 10px;
   font-weight: bold;
+}
+
+.coordel .inverse .dijitTextBox {
+  background-color: #515151;
+}
+
+.inverse .c-quick-search {
+
+  
+  background-color: #515151;
+  border: 1px solid #222222;
+  color: #ffffff;
+}
+
+.search-large .c-quick-search {
+  padding: 4px 8px 4px 16px;
 }
 
 .quick-search{

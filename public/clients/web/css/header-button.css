@@ -40,7 +40,7 @@
 .coordel-header .dijitToggleButton .dijitButtonNode {
   /* rules for the dijit.form.*Button widgets (see also ComboButton section below) */
 
-  border: 1px solid #333;
+  border: 1px solid #222;
   padding: 1px 5px 1px 5px;
   background-image: url("images/button_background.png");
   background-position: center top;

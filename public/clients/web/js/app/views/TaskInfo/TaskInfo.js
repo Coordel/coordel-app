@@ -182,10 +182,7 @@ define(
         if (t.isDone() || t.isCancelled()){
           dojo.addClass(self.infoDeadline, "hidden");
         } else {
-          
         
-          
-      
           t.getContextDeadline().then(function(dead){
            
             if (dead === "" || dead === "2200-01-01"){

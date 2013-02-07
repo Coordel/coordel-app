@@ -161,6 +161,18 @@
   background-position: -700px;
 }
 
+.coordelHeaderIconIdeas{
+  background-position: -725px;
+}
+
+.coordelHeaderIconBlueprints{
+  background-position: -750px;
+}
+
+.coordelHeaderIconWorkspace{
+  background-position: -775px;
+}
+
 
 
 .header.dijitDropDownButtonFocused .dijitButtonNode, .header .dijitDropDownButtonFocused .dijitButtonNode, .header.dijitButtonFocused {
