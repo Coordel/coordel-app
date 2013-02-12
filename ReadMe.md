@@ -1,6 +1,8 @@
 
+# Coordel Productivity Application
 
-# Coordel Prototype
+[https://coordel.com](https://coordel.com)
 
-[http://coordel.com](http://coordel.com)
 
+# License
+MIT
