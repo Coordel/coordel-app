@@ -1,0 +1,1 @@
+require.def("alpha",["beta","gamma"],function(a,b){return{name:"alpha",betaName:a.name}}),require.def("beta",["gamma"],function(a){return{name:"beta",gammaName:a.name}}),require.def("gamma",["theta","epsilon"],function(a,b){return{name:"gamma",thetaName:a.name,epsilonName:b.name}}),require.def("theta",function(){return{name:"theta"}}),require.def("epsilon",{name:"epsilon"})

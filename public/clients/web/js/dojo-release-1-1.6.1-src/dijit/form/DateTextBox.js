@@ -1,0 +1,1 @@
+define("dijit/form/DateTextBox",["dojo","dijit","dijit/Calendar","dijit/form/_DateTimeTextBox"],function(a,b){a.declare("dijit.form.DateTextBox",b.form._DateTimeTextBox,{baseClass:"dijitTextBox dijitComboBox dijitDateTextBox",popupClass:"dijit.Calendar",_selector:"date",value:new Date("")});return b.form.DateTextBox})

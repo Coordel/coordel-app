@@ -1,0 +1,1 @@
+require({priority:["jquery"]}),require(["jquery","jquery.alpha","jquery.beta"],function(a){a(function(){a("body").alpha().beta()})})

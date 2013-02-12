@@ -1,0 +1,1 @@
+dojo.provide("tests.NodeList-data"),dojo.isBrowser&&doh.registerUrl("tests.NodeList-data",dojo.moduleUrl("tests","NodeList-data.html"))

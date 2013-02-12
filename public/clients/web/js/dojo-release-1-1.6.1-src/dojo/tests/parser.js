@@ -1,0 +1,1 @@
+dojo.provide("tests.parser"),dojo.isBrowser&&doh.registerUrl("tests.parser",dojo.moduleUrl("tests","parser.html"))

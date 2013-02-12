@@ -1,0 +1,1 @@
+globalCounter+=1,define(["./second"],function(a){globalCounter+=1;return{load:a}})

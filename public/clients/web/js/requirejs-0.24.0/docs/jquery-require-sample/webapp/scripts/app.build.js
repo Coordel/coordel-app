@@ -1,0 +1,1 @@
+{appDir:"../",baseUrl:"scripts",dir:"../../webapp-build",optimize:"none",modules:[{name:"main"}]}

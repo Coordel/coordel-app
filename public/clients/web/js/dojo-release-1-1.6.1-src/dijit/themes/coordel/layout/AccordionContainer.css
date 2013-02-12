@@ -1,0 +1,81 @@
+
+.coordel .dijitAccordionContainer {
+  border: none;
+}
+.coordel .dijitAccordionInnerContainer {
+  background-color: #e5e5e5;
+  
+  border: solid 1px #a3aab1;
+  margin-bottom: 1px;
+  -webkit-transition-property: background-color, border;
+  -moz-transition-property: background-color, border;
+  transition-property: background-color, border;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  transition-timing-function: linear;
+}
+.coordel .dijitAccordionTitle {
+  background-color: transparent;
+  
+  background-image: url("../layout/images/accordion.png");
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  padding: 5px 7px 2px 7px;
+  min-height: 17px;
+  color: #3f3f3f;
+}
+.dj_ie6 .coordel .dijitAccordionTitle {
+  background-image: none;
+}
+.coordel .dijitAccordionContainer .dijitAccordionChildWrapper {
+  
+  background-color: #ffffff;
+  border: 1px solid #a3aab1;
+  margin: 0 2px 2px;
+}
+.coordel .dijitAccordionContainer .dijitAccordionContainer-child {
+  
+  padding: 9px;
+}
+.coordel .dijitAccordionInnerContainerActive {
+  border: 1px solid #a3aab1;
+  background-color: #8b8b8b;
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+.coordel .dijitAccordionInnerContainerActive .dijitAccordionTitle {
+  background-position: 0 -136px;
+  color: #333333;
+}
+.coordel .dijitAccordionInnerContainerSelected {
+  border-color: #a3aab1;
+  background-color: #b4b4b4;
+}
+.coordel .dijitAccordionInnerContainerSelected .dijitAccordionTitle {
+  color: #333333;
+  background-position: 0 0;
+  
+}
+.coordel .dijitAccordionInnerContainerHover .dijitAccordionTitle {
+  
+  color: #333333;
+}
+.coordel .dijitAccordionInnerContainerHover, .coordel .dijitAccordionInnerContainerSelectedActive {
+  
+  border: 1px solid #a3aab1;
+  background-color: #e5e5e5;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+.coordel .dijitAccordionInnerContainerSelectedHover .dijitAccordionChildWrapper, .coordel .dijitAccordionInnerContainerSelectedActive .dijitAccordionChildWrapper {
+  background-color: #ffffff;
+  border: 1px solid #a3aab1 !important;
+  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.25);
+}

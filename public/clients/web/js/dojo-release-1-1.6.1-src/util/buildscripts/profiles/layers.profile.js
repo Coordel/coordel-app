@@ -1,0 +1,1 @@
+dependencies={layers:[{name:"dojo.js",dependencies:["dojo.parser"]},{name:"string.discard",resourceName:"string.discard",discard:!0,copyrightFile:"myCopyright.txt",dependencies:["dojo.string"]},{name:"../dijit/dijit.js",resourceName:"dijit.dijit",layerDependencies:["string.discard"],dependencies:["dijit.dijit"]}],prefixes:[["dijit","../dijit"],["dojox","../dojox"]]}

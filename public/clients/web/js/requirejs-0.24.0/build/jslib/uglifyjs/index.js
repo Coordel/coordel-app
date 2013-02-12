@@ -1,0 +1,1 @@
+define(function(a,b,c){b.parser=a("./parse-js"),b.uglify=a("./process")})

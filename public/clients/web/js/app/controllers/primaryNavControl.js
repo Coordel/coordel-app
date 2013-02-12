@@ -59,7 +59,7 @@ define(['dojo',
     isTurbo: false, //set this to true to make private and current tasks show in turbo mode
 
     init: function(username) {
-      //console.debug("initializing primaryNav", username);
+      console.debug("initializing primaryNav", username);
       var pnc = this;
       //this controller holds the db loaded in appControl 
       this.username = username;
@@ -184,17 +184,16 @@ define(['dojo',
     
     showQuickStart: function(){
       var a = db.appStore.app();
-      //console.log("app", a);
-      if (!a.showQuickStart){
+      console.log("app", a);
+      if (!JSON.parse(a.showQuickStart)){
         a.showQuickStart = true;
         dojo.publish("coordel/support", ["showQuickStart"]);
-        
+        console.log("should see quick start");
         dojo.when(db.appStore.post(a), function(){
           db.appStore._app = a;
           //console.log("updated", a);
         });
-      
-      } 
+      }
     },
     
   

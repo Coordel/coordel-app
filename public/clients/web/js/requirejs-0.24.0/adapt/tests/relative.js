@@ -1,0 +1,1 @@
+require(["alpha","beta"],function(a,b){console.log("alpha === "+a.name),console.log("beta === "+b.name),console.log("betaSubName === "+b.subName)})

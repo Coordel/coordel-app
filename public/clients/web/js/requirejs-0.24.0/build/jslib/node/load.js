@@ -1,0 +1,1 @@
+define(["fs"],function(a){function b(b){var c=a.readFileSync(b,"utf8");process.compile(c,b)}return b})

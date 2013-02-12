@@ -1,0 +1,1 @@
+hostenvType="rhino",dependencies={layers:[],prefixes:[["dojox","../dojox"],["shrinksafe","../util/shrinksafe"]]}

@@ -1,0 +1,1 @@
+dojo.declare("dijit.tree.model",null,{destroy:function(){},getRoot:function(a){},mayHaveChildren:function(a){},getChildren:function(a,b){},isItem:function(a){},fetchItemByIdentity:function(a){},getIdentity:function(a){},getLabel:function(a){},newItem:function(a,b,c){},pasteItem:function(a,b,c,d){},onChange:function(a){},onChildrenChange:function(a,b){}})

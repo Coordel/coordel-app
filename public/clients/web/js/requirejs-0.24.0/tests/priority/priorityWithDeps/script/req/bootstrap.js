@@ -1,0 +1,1 @@
+require.def("req/bootstrap",["req/begin","req/config","req/utils/utils"],function(){ip.bootstrap="bootstrap"})

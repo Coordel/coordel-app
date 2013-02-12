@@ -1,0 +1,1 @@
+require({baseUrl:require.isBrowser?"./":"./relative/",paths:{text:"../../text"}},["require","foo/bar/one"],function(a,b){doh.register("relative",[function c(a){a.is("one",b.name),a.is("two",b.twoName),a.is("three",b.threeName),a.is("hello world",b.message)}]),doh.run()})

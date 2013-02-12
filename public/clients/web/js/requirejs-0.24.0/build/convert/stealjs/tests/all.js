@@ -1,0 +1,1 @@
+skipDohSetup=!0,require({baseUrl:"../../../jslib/",paths:{parse:"../convert/stealjs/parse"}},["../../../../tests/doh/runner.js","env!../../../../tests/doh/_{env}Runner.js","./parse"],function(){doh.run()})

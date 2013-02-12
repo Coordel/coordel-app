@@ -1,0 +1,1 @@
+require.def("subwidget",["text!subwidget.html!strip","text!subwidget2.html"],function(a,b){return{name:"subwidget",template:a,template2:b}})

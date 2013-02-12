@@ -1,0 +1,1 @@
+require({baseUrl:"./"},["require","simple"],function(a,b){doh.register("dataMain",[function c(a){a.is("blue",b.color)}]),doh.run()})

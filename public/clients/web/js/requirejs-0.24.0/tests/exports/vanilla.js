@@ -1,0 +1,1 @@
+require.def("vanilla",["require","exports","module"],function(a,b,c){b.name="vanilla"})

@@ -15,6 +15,7 @@ module.exports = function(app, validate){
       //only web client now so redirect to it
       res.render('/web');
     } else {
+      console.log("in /login");
       res.render('users/login');
     }
   });

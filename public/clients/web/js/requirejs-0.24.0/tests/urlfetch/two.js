@@ -1,0 +1,1 @@
+require.def("one",{name:"one"}),require.def("two",["one"],function(a){return{name:"two",oneName:"one"}})

@@ -1,0 +1,1 @@
+dojo.provide("tests._base.query"),dojo.isBrowser&&(doh.registerUrl("tests._base.query",dojo.moduleUrl("tests","_base/query.html"),6e4),doh.registerUrl("tests._base.NodeList",dojo.moduleUrl("tests","_base/NodeList.html"),6e4))

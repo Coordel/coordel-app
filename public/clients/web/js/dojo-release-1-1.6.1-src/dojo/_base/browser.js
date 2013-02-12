@@ -1,0 +1,1 @@
+define("dojo/_base/browser",["dojo/_base/window","dojo/_base/connect","dojo/_base/event","dojo/_base/html","dojo/_base/NodeList","dojo/_base/query","dojo/_base/xhr","dojo/_base/fx"],function(){dojo.forEach(dojo.config.require,function(a){dojo.require(a)});return dojo})

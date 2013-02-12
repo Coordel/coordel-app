@@ -1,0 +1,1 @@
+require.def("funcSet",["require","exports","module"],function(a,b,c){c.setExports("funcSet")})

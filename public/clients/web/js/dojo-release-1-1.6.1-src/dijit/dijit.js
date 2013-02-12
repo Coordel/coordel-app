@@ -1,0 +1,1 @@
+define("dijit/dijit",["dojo","dijit","dijit/_base","dojo/parser","dijit/_Widget","dijit/_Templated","dijit/_Container","dijit/layout/_LayoutWidget","dijit/form/_FormWidget"],function(a,b){return b})

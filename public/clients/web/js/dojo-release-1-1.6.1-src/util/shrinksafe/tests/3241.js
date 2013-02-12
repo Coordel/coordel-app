@@ -1,0 +1,1 @@
+result="",function(){function a(){this.foo=function(a,c){var d=b;return d},this.bar=function(){}}var b="data";result=(new a).foo()}()

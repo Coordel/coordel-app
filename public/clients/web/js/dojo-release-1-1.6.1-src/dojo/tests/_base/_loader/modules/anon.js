@@ -1,0 +1,1 @@
+define(["../a","./wrapped"],function(a,b){return{theAnswer:a.number,five:b.five}})

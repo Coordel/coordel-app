@@ -1,0 +1,1 @@
+var jsLibRhinoArgs=[].concat(Array.prototype.slice.call(arguments,0));define(function(){var a=jsLibRhinoArgs;return a})

@@ -1,0 +1,1 @@
+require.def("three",{name:"three"}),define("four",["three"],function(a){return{name:"four",threeName:"three"}})

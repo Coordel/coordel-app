@@ -1,0 +1,1 @@
+define("dijit/form/MappedTextBox",["dojo","dijit","dijit/form/ValidationTextBox"],function(a,b){return b.form.MappedTextBox})

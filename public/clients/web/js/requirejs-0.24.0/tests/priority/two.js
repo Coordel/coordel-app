@@ -1,0 +1,1 @@
+require.def("gamma",["theta","epsilon"],function(a,b){return{name:"gamma",thetaName:a.name,epsilonName:b.name}}),require.def("theta",function(){return{name:"theta"}})

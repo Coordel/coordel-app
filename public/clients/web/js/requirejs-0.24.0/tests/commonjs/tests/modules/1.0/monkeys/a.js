@@ -1,0 +1,1 @@
+define(["require","exports","module","program"],function(a,b,c){a("program").monkey=10})

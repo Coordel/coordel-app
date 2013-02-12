@@ -1,0 +1,51 @@
+
+.coordel .dijitToggleButton .dijitRadio, .coordel .dijitToggleButton .dijitRadioIcon {
+  background-image: url("../form/images/checkboxRadioButtonStates.png");
+}
+.dj_ie6 .coordel .dijitToggleButton .dijitRadio, .dj_ie6 .coordel .dijitToggleButton .dijitRadioIcon {
+  background-image: url("../form/images/checkboxAndRadioButtons_IE6.png");
+}
+.coordel .dijitRadio, .coordel .dijitRadioIcon {
+  
+  background-image: url("../form/images/checkboxRadioButtonStates.png");
+  
+  background-repeat: no-repeat;
+  width: 15px;
+  height: 15px;
+  margin: 0 2px 0 0;
+  padding: 0;
+}
+.dj_ie6 .coordel .dijitRadio, .dj_ie6 .coordel .dijitRadioIcon {
+  
+  background-image: url("../form/images/checkboxAndRadioButtons_IE6.png");
+  
+}
+.coordel .dijitRadio {
+  
+  background-position: -105px;
+}
+.coordel .dijitToggleButton .dijitRadioIcon {
+  
+  background-position: -107px;
+}
+.coordel .dijitRadioDisabled {
+  
+  background-position: -165px;
+}
+.coordel .dijitRadioHover {
+  
+  background-position: -135px;
+}
+.coordel .dijitRadioChecked {
+  background-position: -90px;
+}
+.coordel .dijitToggleButtonChecked .dijitRadioIcon {
+  background-position: -92px;
+}
+.coordel .dijitRadioCheckedHover {
+  background-position: -120px;
+}
+.coordel .dijitRadioCheckedDisabled {
+  
+  background-position: -150px;
+}

@@ -1,0 +1,1 @@
+define("dijit/layout/AccordionPane",["dojo","dijit","dijit/layout/ContentPane"],function(a,b){a.declare("dijit.layout.AccordionPane",b.layout.ContentPane,{constructor:function(){a.deprecated("dijit.layout.AccordionPane deprecated, use ContentPane instead","","2.0")},onSelected:function(){}});return b.layout.AccordionPane})

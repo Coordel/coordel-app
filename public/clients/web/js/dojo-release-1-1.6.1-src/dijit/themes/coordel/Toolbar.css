@@ -1,0 +1,153 @@
+
+.coordel .dijitToolbar {
+  border-bottom: 1px solid #a3aab1;
+  background-color: #e5e5e5;
+  background-image: url("images/commonHighlight.png");
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  padding: 2px 0 2px 4px;
+  zoom: 1;
+}
+.coordel .dijitToolbar label {
+  padding: 0 3px 0 6px;
+}
+.coordel .dijitToolbar .dijitButton .dijitButtonNode,
+.coordel .dijitToolbar .dijitDropDownButton .dijitButtonNode,
+.coordel .dijitToolbar .dijitComboButton .dijitButtonNode,
+.coordel .dijitToolbar .dijitToggleButton .dijitButtonNode,
+.coordel .dijitToolbar .dijitComboBox .dijitButtonNode {
+  border-width: 0;
+  
+  padding: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0.3s, 0.35s;
+  -moz-transition-duration: 0.3s, 0.35s;
+  transition-duration: 0.3s, 0.35s;
+  background-image: url("images/commonHighlight.png");
+  background-position: 0 -30px;
+  background-repeat: repeat-x;
+  background-color: rgba(171, 214, 255, 0);
+}
+.dj_ie .coordel .dijitToolbar .dijitButton .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitDropDownButton .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitComboButton .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitToggleButton .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitComboBox .dijitButtonNode {
+  background-color: transparent;
+  
+}
+.dj_ie6 .coordel .dijitToolbar .dijitButton .dijitButtonNode,
+.dj_ie6 .coordel .dijitToolbar .dijitDropDownButton .dijitButtonNode,
+.dj_ie6 .coordel .dijitToolbar .dijitComboButton .dijitButtonNode,
+.dj_ie6 .coordel .dijitToolbar .dijitToggleButton .dijitButtonNode,
+.dj_ie6 .coordel .dijitToolbar .dijitComboBox .dijitButtonNode {
+  background: none;
+  
+}
+.dj_ie .coordel .dijitToolbar .dijitButtonHover .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitDropDownButtonHover .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitComboButton .dijitButtonNodeHover,
+.dj_ie .coordel .dijitToolbar .dijitComboButton .dijitDownArrowButtonHover,
+.dj_ie .coordel .dijitToolbar .dijitToggleButtonHover .dijitButtonNode {
+  
+  background-color: #cccccc;
+}
+.dj_ie .coordel .dijitToolbar .dijitButtonActive .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitDropDownButtonActive .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitComboButtonActive .dijitButtonNode,
+.dj_ie .coordel .dijitToolbar .dijitToggleButtonActive .dijitButtonNode {
+  
+  background-color: #cccccc;
+}
+.coordel .dijitToolbar .dijitComboButton .dijitStretch {
+  
+  -moz-border-radius: 2px 0 0 2px;
+  border-radius: 2px 0 0 2px;
+}
+.coordel .dijitToolbar .dijitComboButton .dijitArrowButton {
+  
+  -moz-border-radius: 0 2px 2px 0;
+  border-radius: 0 2px 2px 0;
+}
+.coordel .dijitToolbar .dijitComboBox .dijitButtonNode {
+  padding: 0;
+}
+.coordel .dijitToolbar .dijitButtonHover .dijitButtonNode,
+.coordel .dijitToolbar .dijitDropDownButtonHover .dijitButtonNode,
+.coordel .dijitToolbar .dijitToggleButtonHover .dijitButtonNode,
+.coordel .dijitToolbar .dijitComboButtonHover .dijitButtonNode {
+  background-position: 0 0;
+  border-width: 1px;
+  background-color: #e5e5e5;
+  padding: 1px;
+}
+.coordel .dijitToolbar .dijitComboButtonHover .dijitButtonNode, .coordel .dijitToolbar .dijitComboButtonHover .dijitDownArrowButton {
+  background-position: 0 0;
+  background-color: #d3bec8;
+}
+.coordel .dijitToolbar .dijitComboButtonHover .dijitButtonNodeHover, .coordel .dijitToolbar .dijitComboButtonHover .dijitDownArrowButtonHover {
+  background-color: #e5e5e5;
+}
+.coordel .dijitToolbar .dijitButtonActive .dijitButtonNode, .coordel .dijitToolbar .dijitDropDownButtonActive .dijitButtonNode, .coordel .dijitToolbar .dijitToggleButtonActive .dijitButtonNode {
+  border-width: 1px;
+  background-color: #8b8b8b;
+  background-position: 0 -177px;
+  padding: 1px;
+}
+.coordel .dijitToolbar .dijitComboButtonActive {
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  border-width: 1px;
+  padding: 0;
+}
+.coordel .dijitToolbar .dijitComboButtonActive .dijitButtonNode, .coordel .dijitToolbar .dijitComboButtonActive .dijitDownArrowButton {
+  background-color: #d3bec8;
+  background-position: 0 -177px;
+  padding: 2px;
+}
+.coordel .dijitToolbar .dijitComboButtonActive .dijitButtonNodeActive {
+  background-color: #8b8b8b;
+}
+.coordel .dijitToolbar .dijitComboButtonActive .dijitDownArrowButtonActive {
+  background-color: #8b8b8b;
+}
+.coordel .dijitToolbar .dijitComboButtonHover .dijitDownArrowButton, .coordel .dijitToolbar .dijitComboButtonActive .dijitDownArrowButton {
+  border-left-width: 0;
+}
+.coordel .dijitToolbar .dijitComboButtonHover .dijitDownArrowButton {
+  padding-left: 2px;
+  
+}
+.coordel .dijitToolbar .dijitToggleButtonChecked .dijitButtonNode {
+  margin: 0;
+  
+  border-width: 1px;
+  border-style: solid;
+  background-image: none;
+  border-color: #a3aab1;
+  background-color: #ffffff;
+  padding: 1px;
+}
+.dj_ie6 .coordel .dijitToolbar {
+  background-image: none;
+}
+.coordel .dijitToolbarSeparator {
+  
+  background: url("../../icons/images/editorIconsEnabled.png");
+}
+.coordel .dijitDisabled .dijitToolbar {
+  background: none;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid #cccccc;
+}
+.coordel .dijitToolbar .dijitComboBoxDisabled .dijitArrowButtonInner {
+  background-position: 0 50%;
+}

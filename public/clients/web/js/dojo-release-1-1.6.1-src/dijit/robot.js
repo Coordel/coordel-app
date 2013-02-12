@@ -1,0 +1,1 @@
+define("dijit/robot",["dojo","dijit","dojo/robot"],function(a,b){return b})

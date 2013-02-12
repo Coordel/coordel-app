@@ -1,0 +1,1 @@
+define("dojo/data/api/Request",["dojo"],function(a){a.declare("dojo.data.api.Request",null,{abort:function(){throw new Error("Unimplemented API: dojo.data.api.Request.abort")}});return a.data.api.Request})

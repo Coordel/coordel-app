@@ -1,0 +1,1 @@
+define("dojo/tests/_base/_loader/modules/full",["./anon","../a","./wrapped","require"],function(a,b,c,d){return{twiceTheAnswer:b.number+d("../a").number}})

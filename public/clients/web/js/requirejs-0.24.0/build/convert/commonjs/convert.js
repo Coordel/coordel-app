@@ -1,0 +1,1 @@
+require(["env!env/args","commonJs","env!env/print"],function(a,b,c){var d=!1,e,f;while(!d)d=a.shift()==="convert.js";e=a[0],f=a[1];e&&f?b.convertDir(a[0],a[1]):c("Usage: convert.js path/to/commonjs/modules output/dir")})

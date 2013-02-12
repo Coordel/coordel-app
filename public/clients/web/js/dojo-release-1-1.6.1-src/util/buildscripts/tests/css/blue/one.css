@@ -1,0 +1,16 @@
+
+.baz {
+	background-image: url(two/data.png);
+}
+.fuz {
+	background-image: url("data:image/gif;base64,abcdeabcde");
+}
+.fud {
+	background-image:url(data:image/gif;base64,abcdeabcde);
+}
+.foo {
+	background-image:url(data:image/gif;base64,abcdeabcde);
+}
+.bar {
+	background-image: url("one.png");
+}

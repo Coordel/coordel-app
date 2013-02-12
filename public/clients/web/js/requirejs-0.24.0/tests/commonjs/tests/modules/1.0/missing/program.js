@@ -1,0 +1,1 @@
+define(["require","exports","module","test","bogus"],function(a,b,c){var d=a("test");try{a("bogus"),d.print("FAIL require throws error when module missing","fail")}catch(e){d.print("PASS require throws error when module missing","pass")}d.print("DONE","info")})

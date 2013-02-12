@@ -1,0 +1,1 @@
+dojo.provide("tests.html"),dojo.isBrowser&&doh.registerUrl("tests.html",dojo.moduleUrl("tests","html/test_set.html"))

@@ -1,0 +1,11 @@
+
+.coordel .dijitInlineEditBoxDisplayMode {
+  border: 1px solid transparent;
+}
+.coordel .dijitInlineEditBoxDisplayModeHover {
+  background-color: #fdfdfd;
+  border: solid 1px #a3aab1;
+}
+.dj_ie6 .coordel .dijitInlineEditBoxDisplayMode {
+  border: none;
+}

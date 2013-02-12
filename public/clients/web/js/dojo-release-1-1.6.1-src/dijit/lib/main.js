@@ -1,0 +1,1 @@
+define(["dojo"],function(a){dijit=a._dijit||{};return dijit})

@@ -1,0 +1,1 @@
+define("two",["require","one"],function(a,b){return{size:"small",color:"redtwo",doSomething:function(){return a("one").doSomething()}}})

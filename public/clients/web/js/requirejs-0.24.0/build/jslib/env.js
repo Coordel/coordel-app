@@ -1,0 +1,1 @@
+(function(){var a=/(\/|^)env\/|\{env\}/,b="unknown";typeof Packages!=="undefined"?b="rhino":typeof process!=="undefined"?b="node":typeof window!=="undefined"&&navigator&&document&&(b="browser"),define({load:function(c,d,e,f){f.env&&(b=f.env),c=c.replace(a,function(a,c){return a.indexOf("{")===-1?c+b+"/":b}),d([c],function(a){e(a)})}})})()

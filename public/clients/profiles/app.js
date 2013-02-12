@@ -3,7 +3,7 @@
 
   baseUrl: 'js',
 
-  dir: '/Users/Laptop/github/jitsu/coordel-app/public/clients/web/0.0.1',
+  dir: '/Users/Laptop/github/jitsu/coordel-app/public/clients/web',
   
   pragmas: {
     asynchLoader: true

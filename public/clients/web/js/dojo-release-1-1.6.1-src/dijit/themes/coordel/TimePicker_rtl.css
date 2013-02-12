@@ -1,0 +1,9 @@
+
+.dj_ie .coordel .dijitTimePickerRtl .dijitTimePickerTickHover,
+.dj_ie .coordel .dijitTimePickerRtl .dijitTimePickerMarkerHover,
+.dj_ie .coordel .dijitTimePickerRtl .dijitTimePickerMarkerSelected,
+.dj_ie .coordel .dijitTimePickerRtl .dijitTimePickerTickSelected {
+  margin-left: -6px;
+  margin-right: -8px;
+  width: 114%;
+}

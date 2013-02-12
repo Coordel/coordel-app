@@ -1,0 +1,1 @@
+define(function(a,b,c){var d=a("red"),e=a("./blue"),f=a("text!./message.txt");b.name=d.name+e.name,b.path=a.nameToUrl("./foo",".html"),b.message=f})

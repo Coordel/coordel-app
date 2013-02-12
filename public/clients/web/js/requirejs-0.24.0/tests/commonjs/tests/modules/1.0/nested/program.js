@@ -1,0 +1,1 @@
+define(["require","exports","module","test","a/b/c/d"],function(a,b,c){var d=a("test");d.assert(a("a/b/c/d").foo()==1,"nested module identifier"),d.print("DONE","info")})

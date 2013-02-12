@@ -1,0 +1,272 @@
+
+.coordel .dijitSliderBar {
+  border-style: solid;
+  outline: 1px;
+}
+.coordel .dijitSliderFocused .dijitSliderBar {
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderHover .dijitSliderBar {
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderDisabled .dijitSliderBar {
+  background-image: none;
+  border-color: #cccccc;
+}
+.coordel .dijitRuleLabel {
+  color: #333333;
+}
+.coordel .dijitRuleLabelsContainerH {
+  padding: 2px 0;
+}
+.coordel .dijitSlider .dijitSliderProgressBarH, .coordel .dijitSlider .dijitSliderLeftBumper {
+  background-image: url("../form/images/sliderHorizontal.png");
+  background-repeat: repeat-x;
+  background-position: 0 -20px;
+  border-color: #a3aab1;
+  background-color: #b4b4b4;
+}
+.coordel .dijitSlider .dijitSliderRemainingBarH, .coordel .dijitSlider .dijitSliderRightBumper {
+  background-image: url("../form/images/sliderHorizontal.png");
+  background-repeat: repeat-x;
+  background-position: 0 -11px;
+  border-color: #a3aab1;
+  background-color: #ffffff;
+}
+.coordel .dijitSliderRightBumper {
+  border-right: solid 1px #a3aab1;
+}
+.coordel .dijitSliderLeftBumper {
+  border-left: solid 1px #a3aab1;
+}
+.coordel .dijitSliderHover .dijitSliderProgressBarH, .coordel .dijitSliderHover .dijitSliderLeftBumper {
+  background-position: 0 -20px;
+  background-color: #e5e5e5;
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderHover .dijitSliderRemainingBarH, .coordel .dijitSliderHover .dijitSliderRightBumper {
+  background-position: 0 0;
+  background-color: #ffffff;
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderFocused .dijitSliderProgressBarH, .coordel .dijitSliderFocused .dijitSliderLeftBumper {
+  background-position: 0 -30px;
+  background-color: #e5e5e5;
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderFocused .dijitSliderRemainingBarH, .coordel .dijitSliderFocused .dijitSliderRightBumper {
+  background-position: 0 -9px;
+  background-color: #ffffff;
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderDisabled .dijitSliderProgressBarH, .coordel .dijitSliderDisabled .dijitSliderLeftBumper {
+  background-color: #cccccc;
+  
+  background-image: none;
+}
+.coordel .dijitSliderDisabled .dijitSliderRemainingBarH, .coordel .dijitSliderDisabled .dijitSliderRightBumper {
+  background-color: #e5e5e5;
+}
+.coordel .dijitRuleLabelsContainerV {
+  padding: 0 2px;
+}
+.coordel .dijitSlider .dijitSliderProgressBarV, .coordel .dijitSlider .dijitSliderBottomBumper {
+  background-image: url("../form/images/sliderVertical.png");
+  background-repeat: repeat-y;
+  background-position: -36px 0;
+  border-color: #a3aab1;
+  background-color: #b4b4b4;
+}
+.coordel .dijitSlider .dijitSliderRemainingBarV, .coordel .dijitSlider .dijitSliderTopBumper {
+  background-image: url("../form/images/sliderVertical.png");
+  background-repeat: repeat-y;
+  background-position: -3px 0;
+  border-color: #a3aab1;
+  background-color: #ffffff;
+}
+.coordel .dijitSliderBottomBumper {
+  border-bottom: solid 1px #a3aab1;
+}
+.coordel .dijitSliderTopBumper {
+  border-top: solid 1px #a3aab1;
+}
+.coordel .dijitSliderHover .dijitSliderProgressBarV, .coordel .dijitSliderHover .dijitSliderBottomBumper {
+  background-position: -36px 0;
+  background-color: #e5e5e5;
+}
+.coordel .dijitSliderHover .dijitSliderRemainingBarV, .coordel .dijitSliderHover .dijitSliderTopBumper {
+  background-position: 0 0;
+  background-color: #ffffff;
+}
+.coordel .dijitSliderFocused .dijitSliderProgressBarV, .coordel .dijitSliderFocused .dijitSliderBottomBumper {
+  background-position: -56px 0;
+  background-color: #e5e5e5;
+}
+.coordel .dijitSliderFocused .dijitSliderRemainingBarV, .coordel .dijitSliderFocused .dijitSliderTopBumper {
+  background-position: -18px 0;
+  background-color: #ffffff;
+}
+.coordel .dijitSliderDisabled .dijitSliderProgressBarV, .coordel .dijitSliderDisabled .dijitSliderBottomBumper {
+  background-color: #cccccc;
+  
+}
+.coordel .dijitSliderDisabled .dijitSliderRemainingBarV, .coordel .dijitSliderDisabled .dijitSliderTopBumper {
+  background-color: #e5e5e5;
+}
+.coordel .dijitSliderImageHandleH {
+  border: 0;
+  width: 18px;
+  height: 16px;
+  background-image: url("../form/images/sliderThumbs.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+.coordel .dijitSliderHover .dijitSliderImageHandleH {
+  background-position: -18px 0;
+}
+.coordel .dijitSliderFocused .dijitSliderImageHandleH {
+  background-position: -36px 0;
+}
+.coordel .dijitSliderProgressBarH .dijitSliderThumbHover {
+  background-position: -36px 0;
+}
+.coordel .dijitSliderProgressBarH .dijitSliderThumbActive {
+  background-position: -36px 0;
+}
+.coordel .dijitSliderReadOnly .dijitSliderImageHandleH, .coordel .dijitSliderDisabled .dijitSliderImageHandleH {
+  background-position: -54px 0;
+}
+.coordel .dijitSliderImageHandleV {
+  border: 0;
+  width: 18px;
+  height: 16px;
+  background-image: url("../form/images/sliderThumbs.png");
+  background-repeat: no-repeat;
+  background-position: -289px 0;
+}
+.coordel .dijitSliderHover .dijitSliderImageHandleV {
+  background-position: -307px 0;
+}
+.coordel .dijitSliderFocused .dijitSliderImageHandleV {
+  background-position: -325px 0;
+}
+.coordel .dijitSliderProgressBarV .dijitSliderThumbHover {
+  background-position: -325px 0;
+}
+.coordel .dijitSliderProgressBarV .dijitSliderThumbActive {
+  background-position: -325px 0;
+}
+.coordel .dijitSliderReadOnly .dijitSliderImageHandleV, .coordel .dijitSliderDisabled .dijitSliderImageHandleV {
+  background-position: -343px 0;
+}
+.coordel .dijitSliderButtonContainerH {
+  padding: 1px 3px 1px 2px;
+}
+.coordel .dijitSliderButtonContainerV {
+  padding: 3px 1px 2px 1px;
+}
+.coordel .dijitSliderDecrementIconH,
+.coordel .dijitSliderIncrementIconH,
+.coordel .dijitSliderDecrementIconV,
+.coordel .dijitSliderIncrementIconV {
+  background-image: url("../form/images/commonFormArrows.png");
+  background-repeat: no-repeat;
+  background-color: #e5e5e5;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: solid 1px #a3aab1;
+  font-size: 1px;
+}
+.coordel .dijitSliderDecrementIconH, .coordel .dijitSliderIncrementIconH {
+  height: 12px;
+  width: 9px;
+}
+.coordel .dijitSliderDecrementIconV, .coordel .dijitSliderIncrementIconV {
+  height: 9px;
+  width: 12px;
+}
+.coordel .dijitSliderActive .dijitSliderDecrementIconH,
+.coordel .dijitSliderActive .dijitSliderIncrementIconH,
+.coordel .dijitSliderActive .dijitSliderDecrementIconV,
+.coordel .dijitSliderActive .dijitSliderIncrementIconV,
+.coordel .dijitSliderHover .dijitSliderDecrementIconH,
+.coordel .dijitSliderHover .dijitSliderIncrementIconH,
+.coordel .dijitSliderHover .dijitSliderDecrementIconV,
+.coordel .dijitSliderHover .dijitSliderIncrementIconV {
+  
+  border: solid 1px #a3aab1;
+  background-color: #ffffff;
+}
+.coordel .dijitSliderDecrementIconH {
+  background-position: -357px 50%;
+}
+.coordel .dijitSliderActive .dijitSliderDecrementIconH.coordel .dijitSliderHover .dijitSliderDecrementIconH {
+  background-position: -393px 50%;
+}
+.coordel .dijitSliderIncrementIconH {
+  background-position: -251px 50%;
+}
+.coordel .dijitSliderActive .dijitSliderIncrementIconH.coordel .dijitSliderHover .dijitSliderIncrementIconH {
+  background-position: -283px 50%;
+}
+.coordel .dijitSliderDecrementIconV {
+  background-position: -38px 50%;
+}
+.coordel .dijitSliderActive .dijitSliderDecrementIconV.coordel .dijitSliderHover .dijitSliderDecrementIconV {
+  background-position: -73px 50%;
+}
+.coordel .dijitSliderIncrementIconV {
+  background-position: -143px 49%;
+}
+.coordel .dijitSliderActive .dijitSliderIncrementIconV.coordel .dijitSliderHover .dijitSliderIncrementIconV {
+  background-position: -178px 49%;
+}
+.coordel .dijitSliderButtonContainerV .dijitSliderDecrementButtonHover,
+.coordel .dijitSliderButtonContainerH .dijitSliderDecrementButtonHover,
+.coordel .dijitSliderButtonContainerV .dijitSliderIncrementButtonHover,
+.coordel .dijitSliderButtonContainerH .dijitSliderIncrementButtonHover {
+  background-color: #b4b4b4;
+}
+.coordel .dijitSliderButtonContainerV .dijitSliderDecrementButtonActive,
+.coordel .dijitSliderButtonContainerH .dijitSliderDecrementButtonActive,
+.coordel .dijitSliderButtonContainerV .dijitSliderIncrementButtonActive,
+.coordel .dijitSliderButtonContainerH .dijitSliderIncrementButtonActive {
+  background-color: #e5e5e5;
+  border-color: #a3aab1;
+}
+.coordel .dijitSliderButtonInner {
+  visibility: hidden;
+}
+.coordel .dijitSliderDisabled .dijitSliderBar {
+  border-color: #cccccc;
+}
+.coordel .dijitSliderReadOnly *, .coordel .dijitSliderDisabled * {
+  border-color: #cccccc;
+  color: #777777;
+}
+.coordel .dijitSliderReadOnly .dijitSliderDecrementIconH, .coordel .dijitSliderDisabled .dijitSliderDecrementIconH {
+  background-position: -321px 50%;
+  background-color: #e5e5e5;
+}
+.coordel .dijitSliderReadOnly .dijitSliderIncrementIconH, .coordel .dijitSliderDisabled .dijitSliderIncrementIconH {
+  background-position: -215px 50%;
+  background-color: #e5e5e5;
+}
+.coordel .dijitSliderReadOnly .dijitSliderDecrementIconV, .coordel .dijitSliderDisabled .dijitSliderDecrementIconV {
+  background-position: -3px 49%;
+  background-color: #e5e5e5;
+}
+.coordel .dijitSliderReadOnly .dijitSliderIncrementIconV, .coordel .dijitSliderDisabled .dijitSliderIncrementIconV {
+  background-position: -107px 49%;
+  background-color: #e5e5e5;
+}
+.dj_ie6 .coordel .dijitSlider .dijitSliderProgressBarH,
+.dj_ie6 .coordel .dijitSlider .dijitSliderLeftBumper,
+.dj_ie6 .coordel .dijitSlider .dijitSliderRemainingBarH,
+.dj_ie6 .coordel .dijitSlider .dijitSliderRightBumper,
+.dj_ie6 .coordel .dijitSlider .dijitSliderProgressBarV,
+.dj_ie6 .coordel .dijitSlider .dijitSliderTopBumper,
+.dj_ie6 .coordel .dijitSlider .dijitSliderRemainingBarV,
+.dj_ie6 .coordel .dijitSlider .dijitSliderBottomBumper {
+  background-image: none;
+}

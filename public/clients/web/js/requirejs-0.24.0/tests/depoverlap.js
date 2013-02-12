@@ -1,0 +1,1 @@
+require(["require","uno"],function(a,b){doh.register("depoverlap",[function c(a){var c=document.getElementsByTagName("script"),d,e={},f,g,h;for(var d=c.length-1;d>-1;d--)f=c[d].getAttribute("data-requiremodule"),f&&(f in e||(e[f]=0),e[f]+=1);for(prop in e)a.is(1,e[prop]);a.is("uno",b.name),h=b.doSomething(),a.is("dos",h.dosName),a.is("tres",h.tresName)}]),doh.run()})

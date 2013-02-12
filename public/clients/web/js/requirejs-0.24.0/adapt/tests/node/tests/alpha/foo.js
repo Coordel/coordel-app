@@ -1,0 +1,1 @@
+define(function(a){var b=a("../foo");return{name:"ALPHA"+b.name}})

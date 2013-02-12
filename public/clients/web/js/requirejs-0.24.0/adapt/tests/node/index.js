@@ -1,0 +1,1 @@
+require(["sys","http"],function(a,b){b.createServer(function(a,b){setTimeout(function(){b.writeHead(200,{"Content-Type":"text/plain"}),b.end("Hello World\n")},2e3)}).listen(8e3),a.puts("Server running at http://127.0.0.1:8000/")})

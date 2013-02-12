@@ -1,0 +1,1 @@
+define("dijit/_Calendar",["dojo","dijit","dijit/Calendar"],function(a,b){a.deprecated("dijit._Calendar is deprecated","dijit._Calendar moved to dijit.Calendar",1.5),b._Calendar=b.Calendar;return b._Calendar})

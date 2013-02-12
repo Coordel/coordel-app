@@ -15,7 +15,7 @@ redis.auth(redisOpts.auth);
 
 var App = exports = module.exports = function App(args){
   
-  console.log("userApp args", args);
+  //console.log("userApp args", args);
   //auths, contacts, defaultTemplatesLoaded, deliverableTemplates, email, firstName, lastName, license, 
   //myDelegatedProject, myPrivateProject, myPrivateRole,  notifications, vips 
   data.id = args.id;

@@ -1,0 +1,127 @@
+
+.coordel .dijitButtonNode {
+  
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+.coordel .dijitButton .dijitButtonNode,
+.coordel .dijitDropDownButton .dijitButtonNode,
+.coordel .dijitComboButton .dijitButtonNode,
+.coordel .dijitToggleButton .dijitButtonNode {
+  
+  border: 1px solid #a3aab1;
+  padding: 2px 4px 4px 4px;
+  background-image: url("../form/images/button.png");
+  background-position: center top;
+  background-repeat: repeat-x;
+  background-color: #e5e5e5;
+  color: #333333;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+.coordel .dijitComboButton .dijitArrowButton {
+  border-left-width: 0;
+  padding: 4px 2px 4px 2px;
+  
+}
+.coordel .dijitArrowButtonInner {
+  width: 15px;
+  height: 15px;
+  margin: 0 auto;
+  background-image: url("../form/images/buttonArrows.png");
+  background-repeat: no-repeat;
+  background-position: -51px 53%;
+}
+.coordel .dijitLeftArrowButton .dijitArrowButtonInner {
+  background-position: -77px 53%;
+}
+.coordel .dijitRightArrowButton .dijitArrowButtonInner {
+  background-position: -26px 53%;
+}
+.coordel .dijitUpArrowButton .dijitArrowButtonInner {
+  background-position: 0 53%;
+}
+.coordel .dijitDisabled .dijitArrowButtonInner {
+  background-position: -151px 53%;
+}
+.coordel .dijitDisabled .dijitLeftArrowButton .dijitArrowButtonInner {
+  background-position: -177px 53%;
+}
+.coordel .dijitDisabled .dijitRightArrowButton .dijitArrowButtonInner {
+  background-position: -126px 53%;
+}
+.coordel .dijitDisabled .dijitUpArrowButton .dijitArrowButtonInner {
+  background-position: -100px 53%;
+}
+.coordel .dijitButtonText {
+  padding: 0 0.3em;
+  text-align: center;
+}
+.coordel .dijitButtonHover .dijitButtonNode,
+.coordel .dijitDropDownButtonHover .dijitButtonNode,
+.coordel .dijitComboButton .dijitButtonNodeHover,
+.coordel .dijitComboButton .dijitDownArrowButtonHover,
+.coordel .dijitToggleButtonHover .dijitButtonNode {
+  background-color: #cccccc;
+  color: #333333;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+.coordel .dijitButtonActive .dijitButtonNode,
+.coordel .dijitDropDownButtonActive .dijitButtonNode,
+.coordel .dijitComboButtonActive .dijitButtonNode,
+.coordel .dijitToggleButtonActive .dijitButtonNode,
+.coordel .dijitStackController .dijitToggleButtonChecked .dijitButtonNode {
+  background-color: #cccccc;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+.coordel .dijitButtonDisabled,
+.coordel .dijitDropDownButtonDisabled,
+.coordel .dijitComboButtonDisabled,
+.coordel .dijitToggleButtonDisabled {
+  background-image: none;
+  outline: none;
+}
+.coordel .dijitButtonDisabled .dijitButtonNode,
+.coordel .dijitDropDownButtonDisabled .dijitButtonNode,
+.coordel .dijitComboButtonDisabled .dijitButtonNode,
+.coordel .dijitToggleButtonDisabled .dijitButtonNode {
+  background-position: 0 -149px;
+  background-color: #e5e5e5;
+  border: solid 1px #cccccc;
+  color: #777777;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.coordel .dijitComboButtonDisabled .dijitArrowButton {
+  border-left-width: 0;
+}
+.coordel table.dijitComboButton {
+  border-collapse: separate;
+  
+}
+.dj_ie6 .coordel .dijitButtonNode {
+  background-image: none;
+}
+.coordel .dijitComboButton .dijitStretch {
+  -moz-border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px;
+}
+.coordel .dijitComboButton .dijitArrowButton {
+  -moz-border-radius: 0 4px 4px 0;
+  border-radius: 0 4px 4px 0;
+}

@@ -1,0 +1,157 @@
+
+.coordel .dijitDialog {
+  border: 1px solid #a3aab1;
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+}
+.coordel .dijitDialogPaneContent {
+  background: #ffffff repeat-x top left;
+  border-top: 1px solid #a3aab1;
+  padding: 10px 8px;
+  position: relative;
+}
+.coordel .dijitDialogPaneContentArea {
+  
+  margin: -10px -8px;
+  padding: 10px 8px;
+}
+.coordel .dijitDialogPaneActionBar {
+  
+  background-color: #e5e5e5;
+  padding: 3px 5px 2px 7px;
+  text-align: right;
+  border-top: 1px solid #cccccc;
+  margin: 10px -8px -10px;
+}
+.coordel .dijitDialogPaneActionBar .dijitButton {
+  float: none;
+}
+.coordel .dijitDialogTitleBar {
+  
+  border: 1px solid #ffffff;
+  border-top: none;
+  background-color: #e5e5e5;
+  background-image: url("images/titlebar.png");
+  background-repeat: repeat-x;
+  padding: 5px 7px 4px 7px;
+}
+.coordel .dijitDialogTitle {
+  
+  padding: 0 1px;
+  font-size: 1.091em;
+  color: #333333;
+}
+.coordel .dijitDialogCloseIcon {
+  
+  background: url("images/dialogCloseIcon.png");
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 5px;
+  height: 15px;
+  width: 21px;
+}
+.dj_ie6 .coordel .dijitDialogCloseIcon {
+  background-image: url("images/dialogCloseIcon8bit.png");
+}
+.coordel .dijitDialogCloseIconHover {
+  background-position: -21px;
+}
+.coordel .dijitDialogCloseIconActive {
+  background-position: -42px;
+}
+.coordel .dijitTooltip, .coordel .dijitTooltipDialog {
+  
+  background: transparent;
+  
+}
+.dijitTooltipBelow {
+  
+  padding-top: 13px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.dijitTooltipAbove {
+  
+  padding-bottom: 13px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.coordel .dijitTooltipContainer {
+  
+  background-color: #ffffff;
+  background-image: url("images/tooltipGradient.png");
+  background-repeat: repeat-x;
+  background-position: bottom;
+  border: 1px solid #a3aab1;
+  padding: 6px 8px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-size: 1em;
+  color: #333333;
+}
+.dj_ie6 .coordel .dijitTooltipContainer {
+  background-image: none;
+}
+.coordel .dijitTooltipConnector {
+  
+  border: 0;
+  z-index: 2;
+  background-image: url("images/tooltip.png");
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 14px;
+}
+.dj_ie6 .coordel .dijitTooltipConnector {
+  background-image: url("images/tooltip8bit.png");
+}
+.coordel .dijitTooltipABRight .dijitTooltipConnector {
+  
+  left: auto !important;
+  right: 3px;
+}
+.coordel .dijitTooltipBelow .dijitTooltipConnector {
+  
+  top: 0;
+  left: 3px;
+  background-position: -31px 0;
+  width: 16px;
+  height: 14px;
+}
+.coordel .dijitTooltipAbove .dijitTooltipConnector {
+  
+  bottom: 0;
+  left: 3px;
+  background-position: -15px 0;
+  width: 16px;
+  height: 14px;
+}
+.dj_ie7 .coordel .dijitTooltipAbove .dijitTooltipConnector, .dj_ie6 .coordel .dijitTooltipAbove .dijitTooltipConnector {
+  bottom: -1px;
+}
+.coordel .dijitTooltipLeft {
+  padding-right: 14px;
+}
+.coordel .dijitTooltipLeft .dijitTooltipConnector {
+  
+  right: 0;
+  background-position: 0 0;
+  width: 16px;
+  height: 14px;
+}
+.coordel .dijitTooltipRight {
+  padding-left: 14px;
+}
+.coordel .dijitTooltipRight .dijitTooltipConnector {
+  
+  left: 0;
+  background-position: -48px 0;
+  width: 16px;
+  height: 14px;
+}
+.coordel .dijitDialogUnderlay {
+  background: #ffffff;
+}

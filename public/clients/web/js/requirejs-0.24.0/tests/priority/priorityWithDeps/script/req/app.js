@@ -1,0 +1,1 @@
+require.def("Carousel",function(){return function a(a){this.service=a,this.someType="Carousel"}}),require.def("app",["Carousel"],function(){})

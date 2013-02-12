@@ -1,0 +1,1 @@
+require.def(["module","exports","require"],function(a,b,c){a.exports="assign2"})

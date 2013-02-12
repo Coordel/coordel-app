@@ -1,0 +1,1 @@
+define(function(a){return{name:"one",threeName:a("three").name,threeName2:a("three").name}})

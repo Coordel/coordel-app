@@ -1,0 +1,33 @@
+
+.coordel .dijitEditorIFrameContainer {
+  padding: 3px 3px 1px 10px;
+}
+.coordel .dijitEditorIFrame {
+  background-color: #ffffff;
+}
+.coordel .dijitEditor {
+  border: 1px solid #a3aab1;
+}
+.coordel .dijitEditor .dijitEditorIFrameContainer {
+  background-color: #ffffff;
+  background-image: url("form/images/textBox_back.png");
+  background-repeat: repeat-x;
+}
+.dj_ie6 .coordel .dijitEditor .dijitEditorIFrameContainer {
+  background-image: none;
+}
+.coordel .dijitEditorHover .dijitEditorIFrameContainer, .coordel .dijitEditorHover .dijitEditorIFrameContainer .dijitEditorIFrame {
+  background-color: #fdfdfd;
+}
+.coordel .dijitEditorFocused .dijitEditorIFrameContainer, .coordel .dijitEditorFocused .dijitEditorIFrameContainer .dijitEditorIFrame {
+  
+  background-color: #ffffff;
+}
+.coordel .dijitEditorDisabled {
+  border: 1px solid #cccccc;
+  color: #777777;
+}
+.coordel .dijitDisabled .dijitEditorIFrame, .coordel .dijitDisabled .dijitEditorIFrameContainer, .coordel .dijitDisabled .dijitEditorIFrameContainer .dijitEditorIFrame {
+  background-color: #e5e5e5;
+  background-image: none;
+}

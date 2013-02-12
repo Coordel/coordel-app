@@ -1,0 +1,1 @@
+(function(){function a(a){var b=a.split("?"),c=parseInt(b[0],10),d=b[1].split(":"),e=d[c];return{index:c,choices:d,choice:e}}define({pluginBuilder:"./indexBuilder",normalize:function(b,c){var d=a(b),e=d.choices;for(i=0;i<e.length;i++)e[i]=c(e[i]);return d.index+"?"+e.join(":")},load:function(b,c,d,e){c([a(b).choice],function(a){d(a)})}})})()

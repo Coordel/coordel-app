@@ -1,0 +1,1 @@
+define("widget",["subwidget","text!widget.html"],function(a,b){return{subWidgetName:a.name,subWidgetTemplate:a.template,subWidgetTemplate2:a.template2,template:b}})

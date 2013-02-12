@@ -1,0 +1,1 @@
+require.def("uno",["dos","tres"],function(a,b){return{name:"uno",doSomething:function(){return{dosName:a.name,tresName:b.name}}}})

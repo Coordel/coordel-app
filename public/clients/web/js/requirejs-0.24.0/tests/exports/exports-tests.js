@@ -1,0 +1,1 @@
+require({baseUrl:require.isBrowser?"./":"./exports/"},["require","vanilla","funcSet","assign","assign2"],function(a,b,c,d,e){doh.register("exports",[function f(a){a.is("vanilla",b.name),a.is("funcSet",c),a.is("assign",d),a.is("assign2",e)}]),doh.run()})

@@ -1,0 +1,1 @@
+require.def("funcThree",["funcFour"],function(a){var b=function(a){return a+"-"+require("funcFour").suffix()};b.suffix=function(){return"THREE_SUFFIX"};return b})

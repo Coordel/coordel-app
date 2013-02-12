@@ -1,0 +1,1 @@
+load("../jslib/fileUtil.js"),load("../jslib/logger.js"),load("../jslib/buildUtil.js");var result=buildUtil.processConditionals("conditionalTest.txt",fileUtil.readFile("conditionalTest.txt"),{loader:"xdomain",shouldInclude:!0,nesting:1});print(result)

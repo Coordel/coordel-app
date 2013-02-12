@@ -1,0 +1,1 @@
+require.def("req/config",["req/begin"],function(){var a={test:"Hello require",state:"alpha"};return ip.config=a})

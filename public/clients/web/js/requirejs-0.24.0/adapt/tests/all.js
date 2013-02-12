@@ -1,0 +1,1 @@
+skipDohSetup=!0,require({paths:{env:"../../build/jslib/env"}},["alpha","beta","../../tests/doh/runner.js","env!../../tests/doh/_{env}Runner.js"],function(a,b){doh.register("rjsTests",[function c(c){c.is("alpha",a.name),c.is("beta",b.name),c.is("betaSubName",b.subName)}]),doh.run(),doh.run()})

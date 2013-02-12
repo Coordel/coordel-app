@@ -1,0 +1,1 @@
+this.dojo&&dojo.provide("doh._rhinoRunner"),doh.debug=print,doh.error=print,function(){var a=doh._report;doh._report=function(){a.apply(doh,arguments),(this._failureCount>0||this._errorCount>0)&&quit(1)}}()

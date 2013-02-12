@@ -1,0 +1,1 @@
+require(["sys","foo","http","alpha/foo","text!alpha/hello.html"],function(a,b,c,d,e){c.createServer(function(a,c){c.writeHead(200,{"Content-Type":"text/plain"}),c.write("Hello "+b.name+"\nHello "+d.name+"\n"),c.write(e),c.end("\n")}).listen(8e3),a.puts("Server running at http://127.0.0.1:8000/")})

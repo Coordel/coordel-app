@@ -1,0 +1,150 @@
+
+.coordel .dijitTextBox, .coordel .dijitInputInner {
+  color: #333333;
+}
+.coordel .dijitTextBoxError .dijitValidationContainer {
+  background-color: #da291c;
+  background-image: url("../form/images/error.png");
+  background-position: top center;
+  border: solid #da291c 0;
+  border-left-width: 1px;
+  width: 9px;
+}
+.coordel .dijitTextBoxError .dijitValidationIcon {
+  width: 0;
+  background-color: transparent !important;
+  
+}
+.coordel .dijitTextArea {
+  padding: 4px;
+}
+.coordel .dijitInputField .dijitPlaceHolder {
+  padding: 2px;
+}
+.coordel .dijitTextBox .dijitInputField {
+  padding: 1px 2px;
+}
+.dj_gecko .coordel .dijitTextBox .dijitInputInner, .dj_webkit .coordel .dijitTextBox .dijitInputInner {
+  padding: 1px;
+}
+.coordel .dijitTextBox, .coordel .dijitTextBox .dijitButtonNode {
+  
+  border-color: #a3aab1;
+  -webkit-transition-property: background-color, border;
+  -moz-transition-property: background-color, border;
+  transition-property: background-color, border;
+  -webkit-transition-duration: 0.35s;
+  -moz-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+}
+.coordel .dijitTextBox {
+  background-color: #ffffff;
+}
+.coordel .dijitTextBoxHover, .coordel .dijitTextBoxHover .dijitButtonNode {
+  border-color: #a3aab1;
+  -webkit-transition-duration: 0.25s;
+  -moz-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+}
+.coordel .dijitTextBoxHover {
+  background-color: #fdfdfd;
+  background-image: url("../form/images/textBox_back.png");
+  background-repeat: repeat-x;
+}
+.coordel .dijitTextBoxError, .coordel .dijitTextBoxError .dijitButtonNode {
+  border-color: #da291c;
+}
+.coordel .dijitTextBoxError, .coordel .dijitTextBoxError .dijitInputContainer {
+  background-color: #ffffff;
+}
+.coordel .dijitTextBoxFocused, .coordel .dijitTextBoxFocused .dijitButtonNode {
+  border-color: #a3aab1;
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+.coordel .dijitTextBoxFocused {
+  background-color: #ffffff;
+  background-image: url("../form/images/textBox_back.png");
+  background-repeat: repeat-x;
+}
+.coordel .dijitTextBoxFocused .dijitInputContainer {
+  background: #ffffff;
+}
+.coordel .dijitTextBoxErrorFocused, .coordel .dijitTextBoxErrorFocused .dijitButtonNode {
+  border-color: #c32519;
+}
+.coordel .dijitTextBoxDisabled, .coordel .dijitTextBoxDisabled .dijitButtonNode {
+  border-color: #cccccc;
+}
+.coordel .dijitTextBoxDisabled, .coordel .dijitTextBoxDisabled .dijitInputContainer {
+  background-color: #e5e5e5;
+  background-image: none;
+}
+.coordel .dijitTextBoxDisabled, .coordel .dijitTextBoxDisabled .dijitInputInner {
+  color: #777777;
+}
+.dj_webkit .coordel .dijitTextBoxDisabled input {
+  
+  color: #6b6b6b;
+}
+.dj_webkit .coordel textarea.dijitTextAreaDisabled {
+  
+  color: #111111;
+}
+.coordel .dijitComboBox .dijitArrowButtonInner {
+  background-image: url("../form/images/commonFormArrows.png");
+  background-position: -35px 53%;
+  background-repeat: no-repeat;
+  margin: 0;
+  width: 16px;
+  border: 1px solid #ffffff;
+}
+.coordel .dijitToolbar .dijitComboBox .dijitArrowButtonInner {
+  border: none;
+}
+.coordel .dijitToolbar .dijitComboBox .dijitArrowButtonInner {
+  border: none;
+}
+.coordel .dijitTextBox .dijitInputInner, .coordel .dijitTextBox .dijitValidationContainer {
+  padding: 1px 0;
+}
+.coordel .dijitComboBox .dijitButtonNode {
+  background-color: #e5e5e5;
+  background-image: url("../form/images/formHighlight.png");
+  background-repeat: repeat-x;
+}
+.coordel .dijitComboBoxOpenOnClickHover .dijitButtonNode, .coordel .dijitComboBox .dijitDownArrowButtonHover {
+  background-color: #e5e5e5;
+}
+.coordel .dijitComboBoxOpenOnClickHover .dijitArrowButtonInner, .coordel .dijitComboBox .dijitDownArrowButtonHover .dijitArrowButtonInner {
+  background-position: -70px 53%;
+}
+.coordel .dijitComboBox .dijitHasDropDownOpen {
+  background-color: #8b8b8b;
+  background-position: 0 -177px;
+  padding: 1px;
+}
+.coordel .dijitComboBox .dijitHasDropDownOpen .dijitArrowButtonInner {
+  background-position: -70px 53%;
+  border: 0 none;
+}
+.coordel div.dijitComboBoxDisabled .dijitArrowButtonInner {
+  
+  background-position: 0 50%;
+  background-color: #e5e5e5;
+}
+.dj_ff3 .coordel .dijitInputField input[type="hidden"] {
+  display: none;
+  height: 0;
+  width: 0;
+}
+.dj_ie6 .coordel .dijitTextBox, .dj_ie6 .coordel .dijitComboBox .dijitButtonNode {
+  background-image: none;
+}
+.dj_borderbox .coordel .dijitComboBox .dijitHasDropDownOpen .dijitArrowButtonInner {
+  width: 18px;
+}
+.dj_borderbox .coordel .dijitComboBoxFocused .dijitHasDropDownOpen .dijitArrowButtonInner {
+  width: 16px;
+}

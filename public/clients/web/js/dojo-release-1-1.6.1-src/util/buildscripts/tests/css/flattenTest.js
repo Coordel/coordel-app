@@ -1,0 +1,1 @@
+load("../../jslib/logger.js"),load("../../jslib/buildUtil.js"),load("../../jslib/fileUtil.js");var result=buildUtil.flattenCss("blue/one.css",fileUtil.readFile("blue/one.css"));print(result)

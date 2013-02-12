@@ -1,0 +1,1 @@
+define(function(a){return{getA:function(){return a("./index!0?./a:./b:./c")},getC:function(){return a("./index!2?./a:./b:./c")},getB:function(){return a("./index!1?./a:./b:./c")}}})

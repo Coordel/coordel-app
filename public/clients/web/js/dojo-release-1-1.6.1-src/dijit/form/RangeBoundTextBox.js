@@ -1,0 +1,1 @@
+define("dijit/form/RangeBoundTextBox",["dojo","dijit","dijit/form/ValidationTextBox"],function(a,b){return b.form.RangeBoundTextBox})

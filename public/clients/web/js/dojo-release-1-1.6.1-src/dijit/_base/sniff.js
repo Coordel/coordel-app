@@ -1,0 +1,1 @@
+define("dijit/_base/sniff",["dojo","dijit","dojo/uacss"],function(a,b){return b})

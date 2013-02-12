@@ -1,0 +1,1 @@
+var commandLine={};(function(){var a=Packages.java.lang.Runtime.getRuntime();commandLine.exec=function(b){var c=a.exec(["/bin/sh","-c",b]);c.waitFor()}})()

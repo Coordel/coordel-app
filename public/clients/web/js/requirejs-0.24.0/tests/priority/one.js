@@ -1,0 +1,1 @@
+require.def("alpha",["beta","gamma"],function(a,b){return{name:"alpha",betaName:a.name}}),require.def("beta",["gamma"],function(a){return{name:"beta",gammaName:a.name}})

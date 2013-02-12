@@ -1,0 +1,1 @@
+define("tests/data",["dojo","tests/data/utils","tests/data/ItemFileReadStore","tests/data/ItemFileWriteStore"],function(a){a.config.usePlainJson=!0})

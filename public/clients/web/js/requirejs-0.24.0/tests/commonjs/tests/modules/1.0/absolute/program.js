@@ -1,0 +1,1 @@
+define(["require","exports","module","test","submodule/a","b"],function(a,b,c){var d=a("test"),e=a("submodule/a"),f=a("b");d.assert(e.foo().foo===f.foo,"require works with absolute identifiers"),d.print("DONE","info")})

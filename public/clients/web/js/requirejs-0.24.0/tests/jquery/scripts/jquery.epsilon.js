@@ -1,0 +1,1 @@
+(function(){function a(a){a.fn.epsilon=function(){return"epsilon"},a(function(){doh.is("epsilon",a("body").epsilon()),readyFired()})}typeof define!=="undefined"&&define.amd?define(["jquery"],a):typeof jQuery!=="undefined"&&a(jQuery)})()

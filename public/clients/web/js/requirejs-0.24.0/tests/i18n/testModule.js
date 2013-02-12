@@ -1,0 +1,1 @@
+require.def(["i18n!nls/colors"],function(a){var b=a.red})

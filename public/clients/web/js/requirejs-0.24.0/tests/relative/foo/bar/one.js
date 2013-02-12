@@ -1,0 +1,1 @@
+define("foo/bar/one",["require","./two","../three","text!./message.txt"],function(a,b,c,d){return{name:"one",twoName:b.name,threeName:c.name,message:d}})

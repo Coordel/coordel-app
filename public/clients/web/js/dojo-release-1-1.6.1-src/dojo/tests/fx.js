@@ -1,0 +1,1 @@
+dojo.provide("tests.fx"),dojo.isBrowser&&(doh.registerUrl("tests.fx",dojo.moduleUrl("tests","fx.html"),3e4),doh.registerUrl("tests.NodeList-fx",dojo.moduleUrl("tests","NodeList-fx.html")))

@@ -1,0 +1,8 @@
+
+body {
+    background: blue url(common/img/body.png) bottom center;
+}
+nav {
+    color: red;
+    background-image: url("nav.png");
+}

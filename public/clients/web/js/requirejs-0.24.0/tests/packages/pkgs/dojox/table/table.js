@@ -1,0 +1,1 @@
+require.def(["dojox/chair"],function(a){return{name:"dojox/table",chairName:a.name}})

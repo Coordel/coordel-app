@@ -1,0 +1,1 @@
+define(function(a,b,c){var d=a("sub/b");return{name:"a",bName:d.f()}})

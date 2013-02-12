@@ -1,0 +1,1 @@
+define("dijit/form/VerticalRule",["dojo","dijit","dijit/form/HorizontalRule"],function(a,b){a.declare("dijit.form.VerticalRule",b.form.HorizontalRule,{templateString:'<div class="dijitRuleContainer dijitRuleContainerV"></div>',_positionPrefix:'<div class="dijitRuleMark dijitRuleMarkV" style="top:',_isHorizontal:!1});return b.form.VerticalRule})

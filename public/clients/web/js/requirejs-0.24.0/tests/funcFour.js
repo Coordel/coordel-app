@@ -1,0 +1,1 @@
+define("funcFour",["require","funcThree"],function(a){var b=function(a){return"FOUR called with "+a};b.suffix=function(){return a("funcThree").suffix()};return b})

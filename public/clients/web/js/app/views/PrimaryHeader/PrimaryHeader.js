@@ -41,7 +41,7 @@ define(
         var self = this;
 
         var ideasUrl = dojo.byId("ideasUrl").value;
-        console.log("ideas url", ideasUrl);
+        //console.log("ideas url", ideasUrl);
 
         dojo.connect(self.goToIdeas, "click", function(e){
           window.location.href = ideasUrl;

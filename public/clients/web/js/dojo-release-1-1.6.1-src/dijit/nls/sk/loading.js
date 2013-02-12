@@ -1,0 +1,1 @@
+define({loadingState:"Zavádzanie...",errorState:"Nastala chyba"})

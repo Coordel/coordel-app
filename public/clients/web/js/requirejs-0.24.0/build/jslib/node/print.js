@@ -1,0 +1,1 @@
+define(function(){function a(a){console.log(a)}return a})

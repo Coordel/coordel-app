@@ -1,0 +1,1 @@
+require.def(["./pane"],function(a){return{name:"dojox/window",paneName:a.name}})

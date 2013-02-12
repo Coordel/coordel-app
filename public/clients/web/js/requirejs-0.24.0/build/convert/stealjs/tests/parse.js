@@ -1,0 +1,1 @@
+define(["require","parse"],function(a,b){doh.register("parseStealCalls",[function c(a){var c="steal.plugins('foo','bar').views('//abc/init.ejs').then(function(){})",d="steal('one', 'two')";a.is('require(["foo","bar","ejs!abc/init.ejs"]);',b("good1",c)),a.is('require(["one","two"]);',b("good2",d))}]),doh.run()})

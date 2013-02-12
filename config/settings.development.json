@@ -1,7 +1,11 @@
 {
   "version": "",
-	"url":"dev.coordel.com:8090",
-  "ideasUrl": "http://work.coordel.com:8080",
+	"url":"ideas.com:8090",
+  "ideasUrl": "http://ideas.com:8080",
+  "allowedHosts": [
+      "ideas.com:8080",
+      "app.com:8090"
+  ],
   "config": {
     "redisOptions": {
       "host": "dev.coordel.com",
@@ -11,9 +15,9 @@
       "auth": "password"
     },
     "couchOptions":{
-      "host": "localhost",
+      "host": "ideas.coordel.com",
       "port": 5984,
-      "auth": {"username": "admin", "password": "password"},
+      "auth": {"username": "admin", "password": "password", "secure": false},
       "cache": false
     },
     "couchName": "coordel-dev"

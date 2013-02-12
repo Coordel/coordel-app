@@ -1,0 +1,1 @@
+define(function(a,b,c){b.five=a("./data").five,b.exports=c.exports})

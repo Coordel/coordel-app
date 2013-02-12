@@ -1,0 +1,1 @@
+define(["require","exports","module","c"],function(a,b,c){b.foo=a("c").foo})

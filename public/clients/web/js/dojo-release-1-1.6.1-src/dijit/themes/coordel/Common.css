@@ -1,0 +1,61 @@
+
+.coordel .dijitPopup {
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+}
+.coordel .dijitTooltipDialogPopup {
+  
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.coordel .dijitComboBoxHighlightMatch {
+  background-color: #e5e5e5;
+}
+.coordel .dijitFocusedLabel {
+  
+  outline: 1px dotted #3f3f3f;
+}
+.coordel .dojoDndItemBefore, .coordel .dojoDndItemAfter {
+  border-top: 1px solid #a3aab1;
+}
+.coordel .dojoDndItemOver {
+  cursor: pointer;
+}
+.coordel table.dojoDndAvatar {
+  border: 1px solid #a3aab1;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.coordel .dojoDndAvatarHeader td {
+  height: 20px;
+  padding-left: 21px;
+}
+.coordel.dojoDndMove .dojoDndAvatarHeader, .coordel.dojoDndCopy .dojoDndAvatarHeader {
+  background-image: url("images/dnd.png");
+  background-repeat: no-repeat;
+  background-position: 2px -122px;
+}
+.coordel .dojoDndAvatarItem td {
+  padding: 5px;
+}
+.coordel.dojoDndMove .dojoDndAvatarHeader {
+  background-color: #f58383;
+  background-position: 2px -103px;
+}
+.coordel.dojoDndCopy .dojoDndAvatarHeader {
+  background-color: #f58383;
+  background-position: 2px -68px;
+}
+.coordel.dojoDndMove .dojoDndAvatarCanDrop .dojoDndAvatarHeader {
+  background-color: #97e68d;
+  background-position: 2px -33px;
+}
+.coordel.dojoDndCopy .dojoDndAvatarCanDrop .dojoDndAvatarHeader {
+  background-color: #97e68d;
+  background-position: 2px 2px;
+}

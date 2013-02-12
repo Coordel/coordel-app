@@ -166,17 +166,13 @@ var options = {
   prefix: redisOpts.expressSessionPrefix
  };
 
-
 //configure cross domain authorization
 var allowCrossDomain = function(req, res, next) {
   // Add other domains you want the server to give access to
   // WARNING - Be careful with what origins you give access to
-  var allowedHost = [
-    'app.coordel.com:8090',
-    'dev.coordel.com',
-    'dev.coordel.com:8080',
-    'work.coordel.com:8443'
-  ];
+
+  var allowedHost = settings.allowedHosts;
+
   if(allowedHost.indexOf(req.headers.host) !== -1) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.host);
@@ -188,6 +184,16 @@ var allowCrossDomain = function(req, res, next) {
   }
 };
 
+function httpsRedirect(req, res, next) {
+  // see above
+  res.setHeader('Strict-Transport-Security', 'max-age=8640000; includeSubDomains');
+
+  if (app.settings.env === "production" && req.headers['x-forwarded-proto'] !== 'https') {
+    console.log("not https", req.headers['x-forwarded-proto']);
+    return res.redirect(301, 'https://' + req.headers.host + '/');
+  }
+  next();
+}
 
 
 // Configuration
@@ -203,6 +209,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(allowCrossDomain);
+  app.use(httpsRedirect);
   //app.use(express.session({ secret: 'c00rd3lsecretpa$$word' }));
   app.use(everyauth.middleware());
   app.use(app.router);
@@ -214,7 +221,7 @@ app.configure('development', function(){
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler());
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
   app.use(express.logger());
 });
 
@@ -222,14 +229,36 @@ if (app.settings.env === "development") console.log("development environment");
 
 app.register('.html', require('ejs'));
 
+//get the cookie domain
+function getCookieDomain(){
+  //get the cookie domain
+  var parts = settings.ideasUrl.split('.')
+    , host1 = parts[parts.length - 2]
+    , host2 = parts[parts.length - 1]
+    , domain;
+
+  if (host2.split(":").length > 1){
+    host2 = host2.split(":")[0];
+  }
+
+  domain = '.' + host1 + '.' + host2;
+
+  return ".coordel.com";
+}
+
+
 var validate = function(req, res, next){
-  var cookie = JSON.parse(req.cookies.logintoken)
-    , Token = require('./models/token')();
+
+  var cookie
+    , Token = require('./models/token')()
+    , redirect = settings.ideasUrl + '/'
+    , domain = getCookieDomain();
+
 
   function findByUsername(username, fn){
     var key = 'users:' + username;
     store.get(key, function(e, userid){
-      console.log("looked for the username key", key, e, userid);
+      //console.log("looked for the username key", key, e, userid);
       if (e){
         fn('error-user-login');
       } else if (userid === null){
@@ -237,9 +266,9 @@ var validate = function(req, res, next){
       } else {
 
         key = 'users:' + userid;
-        console.log("USER GET KEY", key);
+        //console.log("USER GET KEY", key);
         store.hgetall(key, function(e, user){
-          console.log("USER", e, user);
+          //console.log("USER", e, user);
           if (e){
             //console.log("couldn't load existing user from store",err);
             fn('user-not-found');
@@ -252,40 +281,57 @@ var validate = function(req, res, next){
     });
   }
 
-  Token.find(cookie.username, function(e, token){
+  //console.log('logintoken', req.cookies, req.cookies.logintoken, domain);
 
-    var redirect = settings.ideasUrl + '/intro';
+  if (req.cookies.logintoken){
+    cookie = JSON.parse(req.cookies.logintoken);
+    Token.find(cookie.username, function(e, token){
 
-    if (e){
-      res.redirect(redirect);
-    } else if (!token){
-      res.redirect(redirect);
-    } else if (!token.username) {
-      res.redirect(redirect);
-    } else {
-
-      if (cookie.token === token.token && cookie.series === token.series){
-
-        console.log("USER", User);
-
-        findByUsername(token.username, function(e, o) {
-          console.log("tried to do the account", e, o);
-          if (o) {
-            req.session.username = token.username;
-            req.session.auth = o;
-            token = Token.refresh(cookie);
-            Token.save(token, function(){});
-            res.cookie('logintoken', JSON.stringify(token), {expires: new Date(Date.now() + 2 * 604800000), path: '/', domain: '.coordel.com'});
-            next();
-          } else {
-            res.redirect(redirect);
-          }
-        });
-      } else {
+      //console.log("got token", e, token);
+      if (e){
+        //console.info("error finding token from cookie", e);
         res.redirect(redirect);
+      } else if (!token){
+        //console.info("token not found");
+        res.redirect(redirect);
+      } else if (!token.username) {
+        //console.info("no token username found");
+        res.redirect(redirect);
+      } else {
+        //console.log("before cookie test",cookie,token, cookie.token === token.token && cookie.series === token.series);
+        if (cookie.token === token.token && cookie.series === token.series){
+          //console.info("cookie matched");
+          //console.log("USER", User);
+
+          findByUsername(token.username, function(e, o) {
+            //console.log("tried to do the account");
+            if (o) {
+              req.session.username = token.username;
+              req.session.auth = o;
+              token = Token.refresh(cookie);
+              Token.save(token, function(){});
+              res.cookie('logintoken', JSON.stringify(token), {expires: new Date(Date.now() + 2 * 604800000), path: '/', domain: domain});
+              next();
+            } else {
+              //console.log("didn't find a user");
+              res.redirect(redirect);
+            }
+          });
+        } else {
+          //there was a cookie, but it doesn't match so clear it and destroy the session
+          //console.log("clearing cookie");
+          res.clearCookie('logintoken');
+          req.session.destroy(function() {});
+          res.redirect(redirect);
+        }
       }
-    }
-  });
+    });
+  } else {
+    res.redirect(redirect);
+  }
+
+
+  
   /*
   var idx = req.header('Accept').indexOf('application/json');
   console.log("testing",req.cookies, req.session);

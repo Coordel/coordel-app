@@ -60,10 +60,10 @@ define(['dojo',
       var app = this,
           def = db.init();
 
-          console.log("init");
+          //console.log("init");
 
       def.then(function(res){
-        console.log("DATABASE LOADED: ", res);
+        //console.log("DATABASE LOADED: ", res);
         //db.projectStore.loadExtendedTasks("3c0b0b22b121ab3c3ae522593cbfab6a");
         app.username = db.appStore.username;
         app.showApp();

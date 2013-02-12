@@ -1,0 +1,1 @@
+require.def({name:"fake/alpha/replace"})

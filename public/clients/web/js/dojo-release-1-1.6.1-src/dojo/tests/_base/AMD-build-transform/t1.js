@@ -1,0 +1,1 @@
+define(["your/module","his/module"],function(a,b){var c=1;return++x1})

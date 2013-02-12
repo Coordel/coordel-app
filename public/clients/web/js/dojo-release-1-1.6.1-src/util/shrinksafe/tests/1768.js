@@ -1,0 +1,1 @@
+var result=0;(function(){var a=2,b=3,c=4,d=function(a){var b=c;result=b};d(c)})()

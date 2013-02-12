@@ -1,0 +1,1 @@
+dojo.provide("tests._base._loader.hostenv_rhino"),tests.register("tests._base._loader.hostenv_rhino",[function getText(a){var b=dojo.moduleUrl("tests._base._loader","getText.txt"),c=new String(readText(b));c=c.replace(/[\r\n]+$/,""),a.assertEqual("dojo._getText() test data",c)}])

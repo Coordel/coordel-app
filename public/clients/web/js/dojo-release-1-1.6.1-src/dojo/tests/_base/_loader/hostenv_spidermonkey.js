@@ -1,0 +1,1 @@
+dojo.provide("tests._base._loader.hostenv_spidermonkey"),tests.register("tests._base._loader.hostenv_spidermonkey",[function getText(a){var b=dojo.moduleUrl("tests._base._loader","getText.txt"),c=readText(b);a.assertEqual("dojo._getText() test data",c)}])

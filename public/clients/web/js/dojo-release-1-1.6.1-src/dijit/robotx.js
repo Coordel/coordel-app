@@ -1,0 +1,1 @@
+define("dijit/robotx",["dojo","dijit","dijit/robot","dojo/robotx"],function(a,b){a.experimental("dijit.robotx"),function(){var b=doh.robot._updateDocument;a.mixin(doh.robot,{_updateDocument:function(){b();var c=a.global;c.dijit&&(window.dijit=c.dijit)}})}();return b})

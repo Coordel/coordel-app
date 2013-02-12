@@ -1,0 +1,1 @@
+require.def(function(a){var b=a("a");return{name:"c",aName:b.name}})

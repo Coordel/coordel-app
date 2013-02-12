@@ -1,0 +1,1 @@
+result="",function(){CallMe=function(a){a()};var a=function(){b(),CallMe(function(){b()})},b=function(){result+="hello world"};a()}()

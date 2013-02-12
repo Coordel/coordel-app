@@ -1,0 +1,1 @@
+(function(){var a=function(){debugger};for(var b=0;b<10;b++)b%2===0&&a()})()

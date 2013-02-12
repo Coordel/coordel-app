@@ -1,0 +1,1 @@
+define(["bar","foo","./helper"],function(a,b,c){return{name:"baz",barDepVersion:a.version,fooName:b.name,helperName:c.name}})

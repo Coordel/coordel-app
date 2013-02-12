@@ -1,0 +1,1 @@
+dojo.provide("tests.regexp"),dojo.require("dojo.regexp"),tests.register("tests.regexp",[function test_regexp_escape(a){a.assertTrue((new RegExp(dojo.regexp.escapeString("\f\b\n\t\r+.$?*|{}()[]\\/^"))).test("TEST\f\b\n\t\r+.$?*|{}()[]\\/^TEST")),a.assertTrue((new RegExp(dojo.regexp.escapeString("\f\b\n\t\r+.$?*|{}()[]\\/^","."))).test("TEST\f\b\n\t\r+X$?*|{}()[]\\/^TEST"))}])

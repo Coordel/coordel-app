@@ -1,0 +1,1 @@
+dojo.provide("dojox.form.FileInputBlind"),dojo.require("dojox.form.FileInputAuto")

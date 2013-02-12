@@ -1,0 +1,1 @@
+define(function(){var a=process.argv.slice(2);return a})

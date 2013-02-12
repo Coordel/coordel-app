@@ -1,0 +1,1 @@
+define("dijit/_tree/dndSource",["dojo","dijit","dijit/tree/dndSource"],function(a,b){a.deprecated("dijit._tree.dndSource has been moved to dijit.tree.dndSource, use that instead","","2.0"),b._tree.dndSource=b.tree.dndSource;return b._tree.dndSource})

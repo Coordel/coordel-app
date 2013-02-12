@@ -1,0 +1,1 @@
+define("dijit/PopupMenuBarItem",["dojo","dijit","dijit/PopupMenuItem","dijit/MenuBarItem"],function(a,b){a.declare("dijit.PopupMenuBarItem",[b.PopupMenuItem,b._MenuBarItemMixin],{});return b.PopupMenuBarItem})

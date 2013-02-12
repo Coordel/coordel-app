@@ -1,0 +1,1 @@
+define(["dojo/_base/_loader/hostenv_browser"],function(a){dojo=a;return a})

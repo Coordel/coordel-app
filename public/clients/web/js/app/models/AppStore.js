@@ -82,7 +82,7 @@ define(["dojo",
               });
               
               get.then(function(app){
-                console.log("got the app", app);
+                //console.log("got the app", app);
                 var funcs = [];
                 self._app = app;
                 //console.log("APP LOADED", app);

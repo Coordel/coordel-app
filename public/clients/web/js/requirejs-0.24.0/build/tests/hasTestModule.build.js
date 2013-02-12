@@ -1,0 +1,1 @@
+{baseUrl:"./",optimize:"none",name:"hasTestModule",out:"builds/hasTestModule.js",has:{aTrueValue:!0,aFalseValue:!1}}

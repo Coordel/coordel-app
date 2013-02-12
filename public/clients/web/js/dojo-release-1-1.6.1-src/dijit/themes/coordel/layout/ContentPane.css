@@ -1,0 +1,16 @@
+
+.coordel .dijitContentPane {
+  padding: 8px;
+}
+.coordel .dijitTabContainerTop-dijitContentPane,
+.coordel .dijitTabContainerLeft-dijitContentPane,
+.coordel .dijitTabContainerBottom-dijitContentPane,
+.coordel .dijitTabContainerRight-dijitContentPane,
+.coordel .dijitAccordionContainer-dijitContentPane {
+  background-color: #ffffff;
+  padding: 8px;
+}
+.coordel .dijitSplitContainer-dijitContentPane, .coordel .dijitBorderContainer-dijitContentPane {
+  background-color: #ffffff;
+  padding: 8px;
+}

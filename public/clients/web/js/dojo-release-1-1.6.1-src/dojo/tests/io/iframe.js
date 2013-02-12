@@ -1,0 +1,1 @@
+dojo.provide("tests.io.iframe"),dojo.isBrowser&&doh.registerUrl("tests.io.iframe",dojo.moduleUrl("tests.io","iframe.html"))
